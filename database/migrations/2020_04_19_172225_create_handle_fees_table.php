@@ -21,7 +21,8 @@ class CreateHandleFeesTable extends Migration
             $table->integer('amount')->unsigned()->default(0);
             $table->integer('discount_amount')->unsigned()->default(0);
             $table->integer('after_discount')->unsigned()->default(0);
-            $table->integer('total_paid')->unsigned()->default(0);
+            $table->integer('total_pending')->unsigned()->default(0);
+            $table->integer('current_paid')->unsigned()->default(0);
             $table->string('year',10);
             $table->timestamps();
         });

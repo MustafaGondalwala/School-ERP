@@ -7,8 +7,8 @@ export default class LoginForm extends Component{
     super(props)
     this.state = {
       data: {
-        email_mobile_no:"",
-        password:""
+        email_mobile_no:"9586756273",
+        password:"mustafas"
       },
       errors:""
     }
@@ -45,7 +45,7 @@ export default class LoginForm extends Component{
             <div className="input-group-prepend">
               <span className="input-group-text"><i className="ni ni-email-83" /></span>
             </div>
-            <input value={data.email_mobile_no} name="email_mobile_no" onChange={(e)=>this.onChange(e)} className="form-control" placeholder="Email or Mobile No.
+            <input value={data.email_mobile_no} name="email_mobile_no" onChange={(e)=>this.onChange(e)} className="form-control" placeholder="Email or Mobile No. or Roll No.
 " type="email" />
 {errors.email_mobile_no && <InlineError text={errors.email_mobile_no} />}
 
@@ -62,7 +62,7 @@ export default class LoginForm extends Component{
           </div>
         </div>
         <div className="text-center">
-          <button type="button" onClick={(e)=>this.onSubmit(e)} className="btn btn-primary my-4">Sign in</button>
+          <button type="button" onClick={(e)=>this.onSubmit(e)} className="btn btn-primary my-4">{this.props.login_button_text}</button>
         </div>
       </form>
     )

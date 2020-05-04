@@ -65,7 +65,7 @@ export default class SetInstallmentsForm extends Component{
           </button>
           </div>
           }
-          {this.state.total && this.state.total.map(item => {
+          {this.state.total_installment && this.state.total.map(item => {
             if(this.state.total_installment.indexOf(item) > -1)
             return  <div class="form-group col-md-1">
                       <label className="form-control-label">{item}</label>
@@ -77,7 +77,7 @@ export default class SetInstallmentsForm extends Component{
                         <input type="checkbox" value={item} onChange={(e)=>this.onChange(e)} name={item} />
                       </div>
           })}
-          <button className="btn btn-primary" onClick={ (e) => this.onSubmit(e)}>Save Fees</button>
+          <button className="btn btn-primary" onClick={ (e) => this.onSubmit(e)}>{this.props.add_text_message}</button>
       </form>
     )
   }

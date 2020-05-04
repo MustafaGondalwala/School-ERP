@@ -187,6 +187,18 @@ export default class FeesHomePage extends Component{
               </Link>
             </div>
           </div>
+
+           <div className="card">
+            <div className="card-header bg-transparent">
+              <h2 className="h3 mb-0">View Receipt</h2>
+            </div>
+            <div className="card-body">
+              <p className="card-text mb-4">View The Fees Receipt for Student</p>
+              <Link to={"/admin/fees/view-receipt"} className="btn btn-primary" >
+                View
+              </Link>
+            </div>
+          </div>
         </div>
 
 

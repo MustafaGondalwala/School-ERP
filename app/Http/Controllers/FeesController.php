@@ -8,7 +8,10 @@ use App\FeesDueDate;
 use App\Classes;
 use App\HandleFees;
 use App\FeesType;
+use App\StudentInfo;
 use App\FeesClassWise;
+use App\FeeReceipt;
+use DB;
 class FeesController extends Controller
 {
     //
@@ -48,18 +51,18 @@ class FeesController extends Controller
         'data'=>'array'
       ]);
       foreach ($request->data as $key => $value) {
-        if($value["input_data"] != null){
           $check_exists = FeesDueDate::where("installments",$value["installments"])->where('year',$request->select_year)->count();
           if($check_exists == 0){
             $new_fees_due = new FeesDueDate;
             $new_fees_due->installments = $value["installments"];
             $new_fees_due->year = $request->select_year;
+            if($value["input_data"] == "")
+              $new_fees_due->due_date = null;
             $new_fees_due->due_date = $value["input_data"];
             $new_fees_due->save();
           }else{
             $update_due_date = FeesDueDate::where("installments",$value["installments"])->where('year',$request->select_year)->update(["due_date"=>$value["input_data"]]);
           }
-        }
       }
 
       return response()->json(["success"=>"true"]);
@@ -103,17 +106,28 @@ class FeesController extends Controller
 
         foreach ($each_installment as $key => $value) {
           $from_db = HandleFees::where(["fees_type"=>$value["fees_type"],"year"=>$request->select_year,"installment"=>$each_installment_name,"student_id"=>$request->student_id])->first();
+
+          if($value["amount"] == null)
+              $value["amount"] = 0;
           $from_db->amount = $value["amount"];
+          if($value["discount_amount"] == null)
+              $value["discount_amount"] = 0;
           $from_db->discount_amount = $value["discount_amount"];
+
+          if($value["after_discount"] == null)
+              $value["after_discount"] = 0;
           $from_db->after_discount = $value["after_discount"];
-          $from_db->total_paid = $value["total_paid"];
+           
+          if($value["total_pending"] == null)
+              $value["total_pending"] = 0;
+          $from_db->total_pending = $value["total_pending"];
 
           $from_db->update(); 
         }
       }
 
       foreach ($request->total_installment as $key => $installment) {
-        $get_fees = HandleFees::select(['fees_type','year','amount','discount_amount','after_discount','total_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
+        $get_fees = HandleFees::select(['id','fees_type','year','amount','discount_amount','after_discount','total_pending','current_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
         $total_installments[$installment] = $get_fees;
       }
       return response()->json(["success"=>["total_installments"=>$total_installments,"message"=>"Fees Successfully Updated"]]);
@@ -149,7 +163,7 @@ class FeesController extends Controller
 
       $total_installments = [];
       foreach ($request->installments as $key => $installment) {
-        $get_fees = HandleFees::select(['fees_type','year','amount','discount_amount','after_discount','total_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
+        $get_fees = HandleFees::select(['id','fees_type','year','amount','discount_amount','after_discount','total_pending','current_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
         $total_installments[$installment] = $get_fees;
       }
 
@@ -217,28 +231,55 @@ class FeesController extends Controller
 
     }
 
+
+    public function getStudentReceipts(Request $request){
+      $request->validate([
+        'select_year'=>'required|string',
+        'student_id'=>'required|integer',
+        'installment'=>'required|string'
+      ]);
+      $fee_receipt = FeeReceipt::select('reciept', DB::raw('COUNT(reciept) as count'))->where(['student_id'=>$request->student_id,"select_year"=>$request->select_year])->groupBy('reciept')->get();
+      dd($fee_receipt);
+    }
+
     public function payIndividualFees(Request $request){
       $request->validate([
         'total_fees_type'=>'required',
         'total_installment'=>'required|array',
-        'select_year'=>'required|string'
+        'select_year'=>'required|string',
+        "student_id"=>"required|integer"
       ]);
+      $receipt = rand ( 10000 , 99999 );;
+      foreach ($request->total_fees_type as $each_installment_name => $each_installment) {
+        foreach ($each_installment as $key => $value) {
+          $from_db = HandleFees::where(["fees_type"=>$value["fees_type"],"year"=>$request->select_year,"installment"=>$each_installment_name,"student_id"=>$request->student_id])->first();
+
+          $new_receipt = new FeeReceipt;
+          $new_receipt->reciept = $receipt;
+          $new_receipt->fee_id = $value['id'];
+          $new_receipt->current_paid = $value["current_paid"];
+          $new_receipt->student_id = $request->student_id;
+          $new_receipt->select_year = $request->select_year;
+          $new_receipt->installment = $each_installment_name;
+          $new_receipt->save();
+        }
+      }
+
+
 
       foreach ($request->total_fees_type as $each_installment_name => $each_installment) {
-
         foreach ($each_installment as $key => $value) {
           $from_db = HandleFees::where(["fees_type"=>$value["fees_type"],"year"=>$request->select_year,"installment"=>$each_installment_name,"student_id"=>$request->student_id])->first();
           $from_db->amount = $value["amount"];
           $from_db->discount_amount = $value["discount_amount"];
           $from_db->after_discount = $value["after_discount"];
-          $from_db->total_paid = $value["total_paid"];
-
+          $from_db->total_pending =   $value["total_pending"] - $value["current_paid"];
           $from_db->update(); 
         }
       }
 
       foreach ($request->total_installment as $key => $installment) {
-        $get_fees = HandleFees::select(['fees_type','year','amount','discount_amount','after_discount','total_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
+        $get_fees = HandleFees::select(['id','fees_type','year','amount','discount_amount','after_discount','total_pending','current_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
         $total_installments[$installment] = $get_fees;
       }
       return response()->json(["success"=>["total_installments"=>$total_installments,"message"=>"Fees Successfully Updated"]]);

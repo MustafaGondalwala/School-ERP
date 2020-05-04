@@ -7,12 +7,17 @@ export default class RegisterStudentPage extends Component {
     super(props);
     this.state = {
           register_user_message:"",
-          server_error:""
+          server_error:"",
+          "add_student_button_text":"Register Student",
+          "show_success_message":false
         };
     this.submit = this.submit.bind(this)
   };
   submit(data){
-    self  = this
+    var self  = this
+    this.setState({
+      add_student_button_text:"Add Student ..."
+    })
     const formData = new FormData();
     Object.keys(data).map((item)=>{
       formData.append(item,data[item])
@@ -22,40 +27,27 @@ export default class RegisterStudentPage extends Component {
       method:"post",
       data:formData,
     }).then(response => {
-        var data = response.data[0]
-        console.log(response.status)
-        if(data.success.another_type == 1){
-          var student_link = data.success.student_link;
-          var father_link = data.success.father_link;
-          var message = "<strong>Student Created</strong>    "+"<a href="+student_link+">Student Link</a>   <a href="+father_link+">Father Link</a>";
-          this.setState({
-            register_user_message:message
+          var data = response.data[0]
+          self.setState({
+            show_success_message:true
           })
-        }
-        if( data.success.another_type == 0){
-          var message = "<strong>Student Created</strong> ";
-          this.setState({
-            register_user_message:message
+          self.setState({
+            add_student_button_text:"Register Student"
           })
-        }
-        if(data.success.another_type == 2 ){
-          var message = "<strong>Student Created</strong> ";
-          this.setState({
-            register_user_message:message
-          })
-        }
     }).catch(error=>{
       self.setState({
-        'server_error':error.response.data.errors
+          'server_error':error.response.data.errors,
+      })
+      self.setState({
+          add_student_button_text:"Register Student"
       })
     })
 
   }
      render () {
-
        return (
         <div>
-          <RegisterStudentForm submit={this.submit} server_error={this.state.server_error} register_user_message={this.state.register_user_message} />
+          <RegisterStudentForm errors={this.state.server_error} add_student_button_text={this.state.add_student_button_text} submit={this.submit} server_error={this.state.server_error} show_success_message={this.state.show_success_message} />
         </div>
        )
      }

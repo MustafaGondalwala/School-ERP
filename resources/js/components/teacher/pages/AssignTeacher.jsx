@@ -6,12 +6,24 @@ export default class AssignTeacher extends Component{
     super(props)
     this.state = {
       classes:[],
-      teacher:[]
+      teacher:[],
+      subjects:[]
     }
   }
   componentDidMount(){
       var check = []
       var self  = this;
+
+
+      axios({
+        method:"post",
+        url:"/api/v1/subject/get-all-subjects"
+      }).then(response => {
+          self.setState({
+            subjects:response.data.success.subjects
+          })
+      })
+
 
       axios({
         method:"post",
@@ -50,6 +62,30 @@ export default class AssignTeacher extends Component{
 
     })
   }
+
+
+  checkifavaibleforclasses(class_item,item){
+    var returnString = ""    
+    item.split(",").map(j => {
+      if(j == class_item.id){
+        returnString = returnString+class_item.class_title
+      }
+    })
+    return returnString
+  }
+  checkifavaible(subject_item,item){
+    var returnString = ""    
+    item.split(",").map(j => {
+      if(j == subject_item.id){
+        returnString = returnString+subject_item.subject_name
+      }
+    })
+    return returnString
+  }
+
+  AssignTeacher(e){
+    console.log(e.target.value,e.target.getAttribute('classid'))
+  }
   render(){
     return(
       <div className="container-fluid mt--6">
@@ -74,9 +110,14 @@ export default class AssignTeacher extends Component{
                             return  <tr>
                               <td>{item.id}</td>
                               <td>{item.teacher_name}</td>
-                              <td>{item.teach_class}</td>
-                              <td>{item.teach_subject}</td>
-                              <td>{item.assign_teacher_id}</td>
+                              <td>{this.state.classes.map(i => {
+                                  return <div>{this.checkifavaibleforclasses(i,item.teach_class)}</div>
+                              })}</td>
+                              <td>
+                              {this.state.subjects.map(i => {
+                                  return <div>{this.checkifavaible(i,item.teach_subject)}</div>
+                              })}
+                              </td>
                             </tr>
                         }.bind(this))}
                     </thead>
@@ -97,7 +138,6 @@ export default class AssignTeacher extends Component{
                       <tr><td>ID</td>
                       <td>Class</td>
                       <td>Section</td>
-                      <td>Mustafa</td>
                       <td>Assign Teacher</td></tr>
 
 
@@ -106,10 +146,11 @@ export default class AssignTeacher extends Component{
                         <td>{char.id}</td>
                         <td>{char.class_title}</td>
                         <td>{char.section}</td>
-                        <td>{char.assign_teacher_id}</td>
                         <td>
-                        <select classid={char.id} onChange={(e) => this.onChange(e)} className="form-control">
+                        <select classid={char.id} onChange={(e) => this.AssignTeacher(e)} className="form-control">
                             <option defaultChecked>Select</option>
+                            
+
                             {this.state.teacher.length>1 && this.state.teacher.map(function(item, key) {
                                 return <option value={item.id}>{item.teacher_name}</option>
                             }.bind(this))}

@@ -12,7 +12,9 @@ export default class SetIndividualFees extends Component{
       select_year:"",
       total_installment:[],
       total_fees_type:[],
-      data_updated:""
+      data_updated:"",
+      add_student_button_text_individual:"Fetch Student",
+      add_button_text:"Save"
     }
     this.fetchStudent = this.fetchStudent.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -34,7 +36,9 @@ export default class SetIndividualFees extends Component{
     var self = this
     self.setState({
       student_id:id,
-      select_year:select_year
+      select_year:select_year,
+      add_student_button_text_individual:"Fetching Student ...",
+      total_fees_type:[],
     })
     if(id != ""){
       axios({
@@ -48,7 +52,8 @@ export default class SetIndividualFees extends Component{
       }).then(response=>{
         self.setState({
           total_fees_type:response.data.success.total_installments,
-          data_updated:response.data.success.message
+          data_updated:response.data.success.message,
+          add_student_button_text_individual:"Fetch Student"
         })
       });
     }
@@ -60,18 +65,52 @@ export default class SetIndividualFees extends Component{
       var name = e.target.name;
       var value = e.target.value;
       const temp_state = self.state.total_fees_type
-      
       Object.keys(temp_state).map(item => {
         if(item == installment){
           const updateInput = temp_state[item];
+
           updateInput.map(i => {
           if(i.fees_type == fee_type){
-                i[name] = value
+                if(value == "" || value == NaN){
+                  value = 0
+                }
+
+                if(name == "amount"){
+
+                  if(i['discount_amount'] > 0){
+                    i['amount'] = value;
+                    i['after_discount'] = value - i['after_discount'] - 1;
+                    i['total_pending'] = i['after_discount'] - value - 1; 
+                  }else{
+                    i["amount"] = value;
+                    i['after_discount'] = value;
+                    i['total_pending'] = value;  
+                  }
+                  
+                }
+                if(name == "discount_amount"){
+                    if(value < 0 ){
+                      i['discount_amount'] = 0;
+                      i['after_discount'] = i['amount']
+                      i['total_pending'] = i['amount'];  
+                    }else{
+                      i['discount_amount'] = value;
+                      i['after_discount'] = i['amount'] - value
+                      i['total_pending'] = i['amount'] - value;  
+                    }
+                    
+                }
+                if(name == "total_pending"){
+                  i["total_pending"] = value
+                }
+
+                
               }           
           })
           temp_state[item] = updateInput
         } 
       })
+
 
       this.setState({
         total_fees_type:temp_state  
@@ -80,13 +119,17 @@ export default class SetIndividualFees extends Component{
 
   onSubmit(e){
     var self = this
+    self.setState({
+      add_button_text:"Updating Fees ..."
+    })
     axios({
       url:"/api/v1/fee/update-fee-individual",
       method:"post",
       data: self.state
     }).then(response => {
       self.setState({
-          total_fees_type:response.data.success.total_installments
+          total_fees_type:response.data.success.total_installments,
+          add_button_text:"Save"
       })
     })
   }
@@ -102,13 +145,16 @@ export default class SetIndividualFees extends Component{
               </div>
               }
 
-        <SelectIndividualStudent  title="Select Individual" submit={this.fetchStudent} />
-
+        <SelectIndividualStudent add_student_button_text_individual={this.state.add_student_button_text_individual}  title="Select Individual" submit={this.fetchStudent} />
         {this.state.total_fees_type && Object.keys(this.state.total_fees_type).map(item =>{
             return <InstallmentUpdate onChange={this.onChange} installment={item} total_fees_type={this.state.total_fees_type[item]}/>
           })
         }
-        <button className="btn btn-primary" onClick={(e) => this.onSubmit(e)}>Save</button>
+        <button className="btn btn-primary" onClick={(e) => this.onSubmit(e)}>
+        {this.state.add_button_text ? <span>{this.state.add_button_text}</span> : <span>
+          Save
+        </span>}
+        </button>
       </div>
     )
   }

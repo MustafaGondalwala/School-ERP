@@ -16,8 +16,7 @@ class CreateAdmissionStudentsTable extends Migration
         Schema::create('admission_students', function (Blueprint $table) {
             $table->id();
             $table->string('admission_id')->nullable();
-            $table->string('class',50);
-            $table->string('section',50);
+            $table->integer('class_id');
             $table->string('student_name',50);
             $table->string('father_name',50);
             $table->string('father_contact_no',20);

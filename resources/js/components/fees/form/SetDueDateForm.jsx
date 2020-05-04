@@ -21,6 +21,9 @@ export default class SetDueDateForm extends  Component{
     }).then(response=>{
       var main = []
       response.data.success.total_installment.map(function(item){
+        if(item.due_date == null){
+          item.due_date = ""
+        }
           var data = {"installments":item.installments,"input_data":item.due_date}
           main.push(data)
       })
@@ -30,9 +33,15 @@ export default class SetDueDateForm extends  Component{
     })
   }
   componentDidMount(){
+    this.setState({
+      total_installment_input:""
+    })
     this.fetchYearandInstallments()
   }
   componentWillReceiveProps(){
+    this.setState({
+      total_installment_input:""
+    })
     this.fetchYearandInstallments()
   }
   onChange(e){
@@ -46,7 +55,6 @@ export default class SetDueDateForm extends  Component{
       total_installment_input:total_installment_input
     })
   }
-
   onSubmit(e){
     e.preventDefault()
     this.props.submit(this.state.total_installment_input)
@@ -57,14 +65,15 @@ export default class SetDueDateForm extends  Component{
     return(
       <form>
         {this.state.errors && <InlineError text={this.state.error} />}
-        {this.state.total_installment_input && this.state.total_installment_input.map(function(item){
+        {this.state.total_installment_input ? this.state.total_installment_input.map(function(item){
           return <div className="form-group">
             <label>{item.installments} Due Date</label>
-            <input type="date" defaultValue={item.input_data}  onChange={(e) => self.onChange(e)} name={item.installments} className="form-control"/>
+            <input type="date" defaultValue={item.input_data} data={item.input_data}  onChange={(e) => self.onChange(e)} name={item.installments} className="form-control"/>
           </div>
         })
+         : <h2>Loading ...</h2>
         }
-        <button onClick={(e)=>self.onSubmit(e)} className="btn btn-primary">Update</button>
+        <button onClick={(e)=>self.onSubmit(e)} className="btn btn-primary">{this.props.add_text_button}</button>
       </form>
     )
   }

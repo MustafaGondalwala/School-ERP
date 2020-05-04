@@ -5,13 +5,17 @@ export default class LoginPage extends Component{
   constructor(props){
     super(props)
     this.state = {
-      errors:""
+      errors:"",
+      login_button_text:"Sign in"
     }
 
     this.submit = this.submit.bind(this)
   }
   submit(data){
     var self = this
+    this.setState({
+      login_button_text:"Loading ..."
+    })
     axios({
       method:"post",
       url:"/api/v1/login",
@@ -19,13 +23,23 @@ export default class LoginPage extends Component{
     }).then(response=>{
       localStorage.setItem('token',response.data.success.token);
       localStorage.setItem('user_type',response.data.success.user.user_type);
-      localStorage.setItem('user',response.data.success.user)
-      self.props.history.push('/dashboard')
+      localStorage.setItem('user',JSON.stringify(response.data.success.user));
+      var user_type = response.data.success.user.user_type
+      console.log(user_type)
+      var url = ""
+      if(user_type == "admin")
+        url = "/admin/dashboard"
+      else if(user_type == "parent")
+        url = "/parent/dashboard"
+      else if (user_type == "student")
+        url = "/student/dashboard"
+      if(url != "")
+        self.props.history.push(url)
     }).catch(error=>{
       self.setState({
-        errors:error.response.data.errors.message
+        errors:error.response.data.errors.message,
+        login_button_text:"Sign in"
       })
-      console.log(error.response.data.errors.message)
     })
   }
   render(){
@@ -60,7 +74,7 @@ export default class LoginPage extends Component{
             {this.state.errors  && <label style={{color:"#ae5856"}}>{this.state.errors}</label>}
 
 
-            <LoginForm  submit={this.submit}/>
+            <LoginForm  login_button_text={this.state.login_button_text} submit={this.submit}/>
           </div>
         </div>
         <div className="row mt-3">

@@ -9,22 +9,22 @@ export default class AddTeacherForm extends Component {
   constructor(props) {
     super(props);
         var date = new Date();
-        var today_date = `${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`
+        var today_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
     this.state = {
           data: {
-            empid: "19",
-            teacher_name: "19mmm",
+            empid: "",
+            teacher_name: "",
             gender: "male",
-            relative_name: "19mmm",
-            email: "19",
-            contact_no: "9586756273",
-            qualification: "19",
-            address: "19msmsmsmm",
-            dob: "29039",
+            relative_name: "",
+            email: "",
+            contact_no: "",
+            qualification: "",
+            address: "",
+            dob: "",
             blood_group: "",
-            teach_subject: "19",
-            teach_class: "19",
-            date_of_join: "1111-11-11",
+            teach_subject: "",
+            teach_class: "",
+            date_of_join: today_date,
             pan_card_no: "",
             aadhar_no: "",
             bank_name: "",
@@ -39,14 +39,14 @@ export default class AddTeacherForm extends Component {
             sick_leave: "",
             pay_earn_leave: "",
             other_leave: "",
-            create_account: "1",
             teacher_photo: "",
             id_proof: "",
             experience_letter: "",
             other_document1: "",
             other_document2: "",
-            salary: "19",
-
+            salary: "20000", 
+            create_login:"1",
+            send_sms:true
           },
           subjects:[],
           classes:[],
@@ -54,6 +54,9 @@ export default class AddTeacherForm extends Component {
           register_user_message:"",
           today_date:today_date
         };
+
+        this.toggleSmsChange = this.toggleSmsChange.bind(this)
+        this.ResetForm = this.ResetForm.bind(this)
   };
   onFileChange(e){
     this.setState({
@@ -97,50 +100,55 @@ export default class AddTeacherForm extends Component {
     })
     if (Object.keys(errors).length === 0) {
       this.props.submit(this.state.data)
+      this.ResetForm()
     }
   }
-  ResetForm(e){
+  ResetForm(){
     const data = {
-      empid:"",
-      teacher_name:"",
-      gender:"male",
-      relative_name:"",
-      email:"",
-      contact_no:"",
-      qualification:"",
-      address:"",
-      dob:"",
-      blood_group:"",
-      teach_subject:"",
-      teach_class:"",
-      date_of_join:"",
-      pan_card_no:"",
-      aadhar_no:"",
-      bank_name:"",
-      bank_account_no:"",
-      bank_ifc_no:"",
-      pf_no:"",
-      pf_amount:"",
-      da_amount:"",
-      hra_amount:"",
-      remark:"",
-      casual_leave:"",
-      sick_leave:"",
-      pay_earn_leave:"",
-      other_leave:"",
-      create_account:"1",
-      teacher_photo:"",
-      id_proof:"",
-      experience_letter:"",
-      id_proof:"",
-      other_document1:"",
-      other_document2:"",
-      salary:""
-      };
+            empid: "",
+            teacher_name: "",
+            gender: "male",
+            relative_name: "",
+            email: "",
+            contact_no: "",
+            qualification: "",
+            address: "",
+            dob: "",
+            blood_group: "",
+            teach_subject: "",
+            teach_class: "",
+            date_of_join: today_date,
+            pan_card_no: "",
+            aadhar_no: "",
+            bank_name: "",
+            bank_account_no: "",
+            bank_ifc_no: "",
+            pf_no: "",
+            pf_amount: "",
+            da_amount: "",
+            hra_amount: "",
+            remark: "",
+            casual_leave: "",
+            sick_leave: "",
+            pay_earn_leave: "",
+            other_leave: "",
+            teacher_photo: "",
+            id_proof: "",
+            experience_letter: "",
+            other_document1: "",
+            other_document2: "",
+            salary: "20000", 
+            create_login:"1",
+            send_sms:true
+          };
     this.setState({data:data})
   }
 
-
+  toggleSmsChange(){
+    this.setState({
+      data: {...this.state.data,["send_sms"]:!this.state.data.send_sms}
+    });
+  }
   componentDidMount(){
     var self = this
     axios({
@@ -155,12 +163,9 @@ export default class AddTeacherForm extends Component {
       self.setState({subjects : preferend})
     })
 
-
-
     axios({
       url:"/api/v1/class/get-all-distinct-classes"
     }).then(response => {
-
       var preferend = [];
       response.data.success.classes.map(item => {
         if(item.section == null)
@@ -170,6 +175,13 @@ export default class AddTeacherForm extends Component {
       })
       self.setState({classes : preferend})
     })
+  }
+
+  componentWillReceiveProps(){
+      this.setState({
+        errors:this.props.server_error
+      })
+      console.log(this.props.register_user_message,this.props.server_error)
   }
 
 
@@ -200,7 +212,7 @@ export default class AddTeacherForm extends Component {
            <div className="card-wrapper">
              <div className="card">
                <div className="card-header">
-                 <h3 className="mb-0">Teacher Form <Link  to="/admin/student" class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+                 <h3 className="mb-0">{this.props.title} <Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
                </div>
                <div className="card-body">
                 {this.props.register_user_message &&
@@ -208,8 +220,7 @@ export default class AddTeacherForm extends Component {
                       <div className="alert alert-success alert-dismissible fade show" role="alert">
                         <span className="alert-icon"><i className="ni ni-like-2" /></span>
                         <span className="alert-text">
-                        <div dangerouslySetInnerHTML={{__html: this.props.register_user_message}} >
-                      </div>
+                        Teacher Added in System
                         </span>
                         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                           <span aria-hidden="true">×</span>
@@ -240,9 +251,10 @@ export default class AddTeacherForm extends Component {
                           </span>
                         </div>
                         <input className="form-control" placeholder="Teacher Name"  name="teacher_name" value={data.teacher_name} onChange={(e) =>this.onChange(e)}   type="text" />
-                        {errors.teacher_name && <InlineError text={errors.teacher_name} />}
 
                       </div>
+                        {errors.teacher_name && <InlineError text={errors.teacher_name} />}
+
                       </div>
                    </div>
 
@@ -269,9 +281,10 @@ export default class AddTeacherForm extends Component {
                           </span>
                         </div>
                         <input className="form-control" placeholder="Husband/Father Name"  name="relative_name" value={data.relative_name} onChange={(e) =>this.onChange(e)}   type="text" />
-                        {errors.relative_name && <InlineError text={errors.relative_name} />}
 
                       </div>
+                        {errors.relative_name && <InlineError text={errors.relative_name} />}
+
                       </div>
                    </div>
                  </div>
@@ -287,8 +300,9 @@ export default class AddTeacherForm extends Component {
                           </span>
                         </div>
                         <input className="form-control" placeholder="Email"  name="email" value={data.email} onChange={(e) =>this.onChange(e)}   type="text" />
-                        {errors.email && <InlineError text={errors.email} />}
                       </div>
+                        {errors.email && <InlineError text={errors.email} />}
+
                    </div>
                    </div>
 
@@ -326,7 +340,7 @@ export default class AddTeacherForm extends Component {
                        <input
   className="form-control datepicker"
   placeholder="Select date"
-  type="text" name="dob"  value={data.dob} onChange={(e) =>this.onChange(e)}
+  type="date" name="dob"  value={data.dob} onChange={(e) =>this.onChange(e)}
 />
                        {errors.dob && <InlineError text={errors.dob} />}
                      </div>
@@ -581,31 +595,48 @@ export default class AddTeacherForm extends Component {
                      <div className="row">
                        <div className="col-sm-6 col-md-2">
                          <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
-                           <input type="checkbox" />
+                          
                          </div>
                        </div>
                        </div>
 
                        <div className="row">
                          <div className="col-sm-6 col-md-2">
-                           <div className="form-group">
-                           <input type="radio" value="0"    name="create_account" onChange={(e) =>this.onChange(e)} />
+                         <table className="table table-padding">
+                          <tr>
+                            <td>
+                             <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
+                            </td>
+                            <td>
+                              <input type="checkbox" checked={data.send_sms}
+          onChange={(e) => this.toggleSmsChange()} />  
+                           </td>
 
+                          </tr>
+
+
+                         <tr>
+                         <td>
                              <label className="form-control-label" htmlFor="example2cols1Input">Create Account for Teacher</label>
-                             <input type="radio" defaultChecked name="create_account" value="1" onChange={(e) =>this.onChange(e)} />
-
-                             <label className="form-control-label" htmlFor="example2cols1Input">Create Account Link for Teacher</label>
-                             <input type="radio" value="2" name="create_account" onChange={(e) =>this.onChange(e)} />
-
-                             <label className="form-control-label" htmlFor="example2cols1Input">Do it later</label>
-                           </div>
+                         </td>
+                         <td>
+                             <input type="radio" defaultChecked name="create_login"   value="1" checked={data.create_login == "1"} onChange={(e) =>this.onChange(e)} />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                             <label className="form-control-label"  htmlFor="example2cols1Input">Do it later</label>
+                              </td>
+                              <td>
+                             <input type="radio" defaultChecked name="create_login"   value="0" name="create_login" checked={data.create_login == "0"} onChange={(e) =>this.onChange(e)} selected={data.create_login} />
+                              </td>
+                             </tr>
+                        </table>
                          </div>
-                         </div>
+                      </div>
                      <div className="row">
-                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">Add</button>
+                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_student_button_text}</button>
                       <button class="btn btn-warning" onClick={e => this.ResetForm(e)} type="button">Reset</button>
-
                      </div>
                  </div>
              </div>

@@ -23,6 +23,9 @@ const TeacherHomePage = () => (
             </Link>
           </div>
         </div>
+      </div>
+        <div className="col-lg-4">
+
         <div className="card">
           <div className="card-header">
             <h5 className="h3 mb-0">Assign Teacher</h5>
@@ -36,20 +39,39 @@ const TeacherHomePage = () => (
             </Link>
           </div>
         </div>
-        <div className="card">
-          <div className="card-header">
-            <h5 className="h3 mb-0">Teacher List</h5>
-          </div>
-          <div className="card-body">
-            <p className="card-text mb-4">
-                View Teacher List
-            </p>
-            <Link to={"/admin/teacher/view-all-teacher"} className="btn btn-primary" >
-            View
-            </Link>
+        </div>
+        <div className="col-lg-4">
+          <div className="card">
+            <div className="card-header">
+              <h5 className="h3 mb-0">Teacher List</h5>
+            </div>
+            <div className="card-body">
+              <p className="card-text mb-4">
+                  View Teacher List
+              </p>
+              <Link to={"/admin/teacher/view-all-teacher"} className="btn btn-primary" >
+              View
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+
+
+        <div className="col-lg-4">
+          <div className="card">
+            <div className="card-header">
+              <h5 className="h3 mb-0">Profile Update</h5>
+            </div>
+            <div className="card-body">
+              <p className="card-text mb-4">
+                  Update Profile
+              </p>
+              <Link to={"/admin/teacher/update-profile"} className="btn btn-primary" >
+              Update
+              </Link>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 

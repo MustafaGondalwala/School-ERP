@@ -10,6 +10,7 @@ export default class PayFeesHomePage extends Component{
 	      student_id:"",
 	      select_year:"",
 	      total_installment:[],
+	      add_student_button_text_individual:"Fetch",
 	      total_fees_type:[],
 	      data_updated:""
 	    }
@@ -36,19 +37,21 @@ export default class PayFeesHomePage extends Component{
       var name = e.target.name;
       var value = e.target.value;
       const temp_state = self.state.total_fees_type
-      
       Object.keys(temp_state).map(item => {
         if(item == installment){
           const updateInput = temp_state[item];
           updateInput.map(i => {
           if(i.fees_type == fee_type){
-                i[name] = value
+                if(name == "current_paid"){
+                  if(i['total_pending'] != 0){
+                		i[name] = value
+                  }
+                }
               }           
           })
           temp_state[item] = updateInput
-        } 
+        }
       })
-
       this.setState({
         total_fees_type:temp_state  
       })
@@ -59,7 +62,9 @@ export default class PayFeesHomePage extends Component{
 	    var self = this
 	    self.setState({
 	      student_id:id,
-	      select_year:select_year
+	      select_year:select_year,
+	      add_student_button_text_individual:"Fetching Student ...",
+
 	    })
 	    if(id != ""){
 	      axios({
@@ -73,9 +78,21 @@ export default class PayFeesHomePage extends Component{
 	      }).then(response=>{
 	        self.setState({
 	          total_fees_type:response.data.success.total_installments,
-	          data_updated:response.data.success.message
+	          data_updated:response.data.success.message,
+	      	  add_student_button_text_individual:"Fetch",
 	        })
 	      });
+
+	      axios({
+	      	url:"/api/v1/fee/get-student-receipts",
+	      	method:"post",
+	      	data:{
+	            student_id: id,
+	            select_year: select_year,
+	      	}
+	      }).then(response => {
+	      	console.log(response.data)
+	      })
 	    }
 	  }
 
@@ -99,7 +116,7 @@ export default class PayFeesHomePage extends Component{
 	render(){
 		return(
 			<div className="container-fluid mt--6">
-        		<SelectIndividualStudent title="Select Student" submit={this.fetchStudent} />
+        		<SelectIndividualStudent title="Select Student" add_student_button_text_individual={this.state.add_student_button_text_individual} submit={this.fetchStudent} />
         		{this.state.total_fees_type && Object.keys(this.state.total_fees_type).map(item =>{
 		            return <InstallmentUpdate type="pay_fees" onChange={this.onChange} installment={item} total_fees_type={this.state.total_fees_type[item]}/>
 		          })

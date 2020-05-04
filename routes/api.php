@@ -59,11 +59,12 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
       Route::post('/view-all-admission-list',"UserApiController@viewAdmissionList");
       Route::post('/add-register-student','StudentController@addRegisterStudent');
       Route::get('/get-all-searable-student',"StudentController@getAllStudentsSearchable");
+      Route::get('/get-indivitual-student/{student_id}',"StudentController@getIndividualStudent");
 
   });
 
   Route::group(['prefix'=>'teacher'],function(){
-    Route::post('/add-teacher',"UserApiController@addTeacher");
+    Route::post('/add-teacher',"TeacherController@addTeacher");
     Route::get('/view-all-teacher',"UserApiController@ViewAllTeacher");
     Route::get('/get-all-searable-teacher',"TeacherController@getAllTeacherSearchable");
     Route::post('/view-preferend-data',"UserApiController@getPreferendData");
@@ -93,6 +94,8 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::post('/get-class-wise-fees',"FeesController@getClassWiseFees");
     Route::post('/update-fees-class-wise',"FeesController@updateClassWiseFees");
     Route::post('/pay-fees-individual',"FeesController@payIndividualFees");
+    Route::post('/get-receipt',"FeesController@getStudentReceipts");
+
 
   });
 

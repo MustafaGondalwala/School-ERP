@@ -13,35 +13,33 @@ export default class RegisterStudentForm extends Component {
           distinct_classes:[],
           classes:[],
           data: {
-            roll_no:"102",
+            roll_no:"",
             class:"10th",
-            student_name:"mustafa Gondalwala",
-            father_name:"khuzema Gondalwala",
-            mother_name:"khuzema Gondalwala",
-            father_contact_no1:"9586756273",
-            father_contact_no2:"958675263",
-            student_email:"student@gmail.com",
-            father_email:"father@gmail.com",
-            dob:"2020-03-03",
-            date_of_admission:"",
+            student_name:"",
+            father_name:"",
+            mother_name:"",
+            father_contact_no1:"",
+            father_contact_no2:"",
+            dob:"",
             gender:"male",
-            student_address:"sidhpur",
-            place:"sidhpur",
-            block:"sidhpur",
-            district:"sidhpur",
-            state:"sidhpur",
-            pincode:"384151",
-            landmark:"sidhpur",
+            student_address:"",
+            place:"",
+            block:"",
+            district:"",
+            state:"",
+            pincode:"",
+            landmark:"",
             student_photo:"",
             religion:"hindu",
             caste:"caste",
-            age:"20",
+            age:"",
             father_photo:"",
             mother_photo:"",
-            create_account:"1"
+            create_account:"1",
+            send_sms:"0"
           },
           errors: {},
-          register_user_message:""
+          register_user_message:"",
         };
 
     this.onChangeClasses = this.onChangeClasses.bind(this)
@@ -78,8 +76,8 @@ export default class RegisterStudentForm extends Component {
     return errors;
   };
   onSubmit(e){
-    console.log(this.state.data)
     e.preventDefault();
+    console.log(this.state.data)
     const errors = this.validate(this.state.data);
     this.setState({ errors });
     const formData = new FormData();
@@ -88,13 +86,20 @@ export default class RegisterStudentForm extends Component {
     })
     if (Object.keys(errors).length === 0) {
       this.props.submit(this.state.data)
-
+      this.makeInputValueNull()
+     
     }
   }
 
 
   componentDidMount(){
     var self = this
+
+    if(this.props.student_info){
+      self.setState({
+        data:this.props.student_info
+      })
+    }
     axios({
       method:"post",
       url:"/api/v1/class/get-all-classes"
@@ -121,14 +126,16 @@ export default class RegisterStudentForm extends Component {
         value_by.push(item.section)
       }
     })
-    console.log(value_by,e.target.value)
     this.setState({
       section:value_by
     })
+    this.setState({
+      data: { ...this.state,["class"]:value}
+    })
     this.onChange(e)
-    if(value_by.length > 1){
+    if(value_by.length){
       this.setState({
-        data: {...this.state.data,["section"]:value_by[0]}
+        data: {...this.state.data,["section"]:value_by[0]},
       })
     }else{
       this.setState({
@@ -141,29 +148,54 @@ export default class RegisterStudentForm extends Component {
 
   makeInputValueNull(){
     this.setState({
-      data: {...this.state.data,['registration_no']:""},
-      data: {...this.state.data,['student_name']:""},
-      data: {...this.state.data,['father_name']:""},
-      data: {...this.state.data,['mother_name']:""},
-      data: {...this.state.data,['father_contact_no1']:""},
-      data: {...this.state.data,['father_contact_no2']:""},
-      data: {...this.state.data,['student_email']:""},
-      data: {...this.state.data,['father_email']:""},
-      data: {...this.state.data,['dob']:""},
-      data: {...this.state.data,['date_of_admission']:""},
-      data: {...this.state.data,['registration_fees']:""},
-      data: {...this.state.data,['student_address']:""},
-      data: {...this.state.data,['place']:""},
-      data: {...this.state.data,['district']:""},
-      data: {...this.state.data,['state']:""},
-      data: {...this.state.data,['pincode']:""},
-      data: {...this.state.data,['landmark']:""},
-      data: {...this.state.data,['student_photo']:""},
-      data: {...this.state.data,['father_photo']:""},
-      data: {...this.state.data,['mother_photo']:""},
+      data: {
+            roll_no:"",
+            class:"",
+            student_name:"",
+            father_name:"",
+            mother_name:"",
+            father_contact_no1:"",
+            father_contact_no2:"",
+            dob:"",
+            gender:"male",
+            student_address:"",
+            place:"",
+            block:"",
+            district:"",
+            state:"",
+            pincode:"",
+            landmark:"",
+            student_photo:"",
+            religion:"hindu",
+            caste:"caste",
+            age:"",
+            father_photo:"",
+            mother_photo:"",
+            create_account:"1",
+            send_sms:"0"
+          }
     });
   }
 
+
+  componentWillReceiveProps(){
+    this.setState({
+      errors:this.props.server_error
+    })  
+
+    if(this.props.student_info){
+      console.log(this.props.student_info)
+      this.setState({})
+      this.setState({
+        data:this.props.student_info,
+        errors:{}
+      })
+    }
+
+    if(this.props.show_success_message){
+      this.makeInputValueNull()
+    }
+  }
   onChange(e){
     this.setState({
       data: {...this.state.data,[e.target.name]:e.target.value}
@@ -181,18 +213,25 @@ export default class RegisterStudentForm extends Component {
            <div className="card-wrapper">
              <div className="card">
                <div className="card-header">
-                 <h3 className="mb-0">Register Form <Link  to="/admin/student" class="btn btn-neutral float-right" type="submit">Back</Link>
-</h3>
+                 <h3 className="mb-0">
+
+                 {this.props.title ? <span>{this.props.title}</span> :
+                      <span>Register Form</span> 
+                 }
+
+                 {this.props.hide_button ? <span></span> :
+                    <Link  to="/admin/student" class="btn btn-neutral float-right" type="submit">Back</Link>
+                 }
+            </h3>
 
                </div>
                <div className="card-body">
-                {this.props.register_user_message &&
+                {this.props.show_success_message &&
                   <div className="row">
                       <div className="alert alert-success alert-dismissible fade show" role="alert">
                         <span className="alert-icon"><i className="ni ni-like-2" /></span>
                         <span className="alert-text">
-                        <div dangerouslySetInnerHTML={{__html: this.props.register_user_message}} >
-                      </div>
+                          <div>Student Added Into System.</div>
                         </span>
                         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                           <span aria-hidden="true">×</span>
@@ -205,7 +244,8 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-md-2">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example3cols1Input">Roll No.</label>
-                       <input type="integer" className="form-control" name="roll_no"    value={data.roll_no} onChange={(e) =>this.onChange(e)} placeholder="Roll No." />
+                       <input type="integer" disabled={this.props.student_info}  className="form-control" name="roll_no"    value={data.roll_no} onChange={(e) =>this.onChange(e)} placeholder="Roll No." />
+                        
                        {errors.roll_no && <InlineError text={errors.roll_no} />}
 
                      </div>
@@ -215,7 +255,7 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
-                       <select class="form-control"  name="class" onChange={(e) =>this.onChangeClasses(e)}>
+                       <select class="form-control" value={data.class} name="class" onChange={(e) =>this.onChangeClasses(e)}>
                                           <option value="">Select Class</option>
                                         {this.state.distinct_classes.map(function(item){
                                           return <option value={item}>{item}</option>
@@ -236,7 +276,6 @@ export default class RegisterStudentForm extends Component {
                                         })
                                       }
                                       </select>
-                                      {errors.class && <InlineError text={errors.class} />}
 
                      </div>
                    </div>
@@ -245,7 +284,7 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example4cols1Input">Student Name</label>
-                       <input type="text" className="form-control" name="student_name"    value={data.student_name} onChange={(e) =>this.onChange(e)} />
+                       <input type="text" className="form-control" name="student_name"  placeholder="Student Name" value={data.student_name} onChange={(e) =>this.onChange(e)} />
                        {errors.student_name && <InlineError text={errors.student_name} />}
 
                      </div>
@@ -253,7 +292,7 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example4cols2Input">Father's Name</label>
-                       <input type="text" className="form-control"  name="father_name"    value={data.father_name} onChange={(e) =>this.onChange(e)} />
+                       <input type="text" className="form-control"  name="father_name"  placeholder="Father Name"  value={data.father_name} onChange={(e) =>this.onChange(e)} />
                        {errors.father_name && <InlineError text={errors.father_name} />}
 
                      </div>
@@ -261,9 +300,8 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example4cols3Input">Mother's Name</label>
-                       <input type="text" className="form-control" name="mother_name"    value={data.mother_name} onChange={(e) =>this.onChange(e)} />
+                       <input type="text" className="form-control" name="mother_name"  placeholder="Father Name"  value={data.mother_name} onChange={(e) =>this.onChange(e)} />
                        {errors.mother_name && <InlineError text={errors.mother_name} />}
-
                      </div>
                    </div>
 
@@ -272,7 +310,7 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example2cols1Input">Father's Contact No.1</label>
-                       <input type="decimal" className="form-control" name="father_contact_no1"    value={data.father_contact_no1} onChange={(e) =>this.onChange(e)} />
+                       <input type="decimal" className="form-control" name="father_contact_no1" placeholder="Father's Contact No"   value={data.father_contact_no1} onChange={(e) =>this.onChange(e)} />
                        {errors.father_contact_no1 && <InlineError text={errors.father_contact_no1} />}
 
                      </div>
@@ -285,39 +323,12 @@ export default class RegisterStudentForm extends Component {
 
                      </div>
                    </div>
-
-                   <div className="col-sm-6 col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols2Input">Father's Email</label>
-                       <input type="email" className="form-control" name="father_email"    value={data.father_email} onChange={(e) =>this.onChange(e)} />
-                       {errors.father_email && <InlineError text={errors.father_email} />}
-
-                     </div>
-                   </div>
-                   <div className="col-sm-6 col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols2Input">Student's Email</label>
-                       <input type="email" className="form-control" name="student_email"    value={data.student_email} onChange={(e) =>this.onChange(e)} />
-                       {errors.student_email && <InlineError text={errors.student_email} />}
-
-                     </div>
-                   </div>
-
-
-
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example2cols2Input">DoB</label>
                        <input type="date" className="form-control" name="dob"    value={data.dob} onChange={(e) =>this.onChange(e)} />
                        {errors.dob && <InlineError text={errors.dob} />}
 
-                     </div>
-                   </div>
-
-                   <div className="col-sm-6 col-md-3">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols2Input">Date of Admission</label>
-                       <input type="date" disabled className="form-control" />
                      </div>
                    </div>
                  </div>
@@ -330,7 +341,7 @@ export default class RegisterStudentForm extends Component {
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                           <option value="other">Other</option>
-                </select>
+                       </select>
                 {errors.gender && <InlineError text={errors.gender} />}
 
 
@@ -339,7 +350,7 @@ export default class RegisterStudentForm extends Component {
                    <div className="col-sm-6 col-md-2">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example2cols1Input">Age</label>
-                    <input type="number" name="age"  onChange={(e)=>this.onChange(e)} value={data.age} className="form-control"/>
+                    <input type="number" name="age" placeholder="Student Age" onChange={(e)=>this.onChange(e)} value={data.age} className="form-control"/>
                       {errors.age && <InlineError text={errors.age} />}
                      </div>
                    </div>
@@ -378,7 +389,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-4">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols1Input">Student Address</label>
-                         <input type="text" className="form-control" name="student_address" value={data.student_address} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" placeholder="Student Address" className="form-control" name="student_address" value={data.student_address} onChange={(e) =>this.onChange(e)} />
                          {errors.student_address && <InlineError text={errors.student_address} />}
 
                        </div>
@@ -386,7 +397,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">Village/City</label>
-                         <input type="text" className="form-control" name="place" value={data.place} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" placeholder="Village/City" className="form-control" name="place" value={data.place} onChange={(e) =>this.onChange(e)} />
                          {errors.place && <InlineError text={errors.place} />}
 
                        </div>
@@ -395,7 +406,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">Block</label>
-                         <input type="text" className="form-control" name="block" value={data.block} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" placeholder="Block" className="form-control" name="block" value={data.block} onChange={(e) =>this.onChange(e)} />
                          {errors.block && <InlineError text={errors.block} />}
 
                        </div>
@@ -404,7 +415,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">District</label>
-                         <input type="text" className="form-control" name="district" value={data.district} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" className="form-control" placeholder="District" name="district" value={data.district} onChange={(e) =>this.onChange(e)} />
                          {errors.district && <InlineError text={errors.district} />}
 
                        </div>
@@ -414,7 +425,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">State</label>
-                         <input type="text" className="form-control" name="state" value={data.state} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" className="form-control" placeholder="State" name="state" value={data.state} onChange={(e) =>this.onChange(e)} />
                          {errors.state && <InlineError text={errors.state} />}
 
                        </div>
@@ -423,7 +434,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">Pincode</label>
-                         <input type="text" className="form-control" name="pincode" value={data.pincode} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" className="form-control" placeholder="Pincode" name="pincode" value={data.pincode} onChange={(e) =>this.onChange(e)} />
                          {errors.pincode && <InlineError text={errors.pincode} />}
 
                        </div>
@@ -432,7 +443,7 @@ export default class RegisterStudentForm extends Component {
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
                          <label className="form-control-label" htmlFor="example2cols2Input">Landmark</label>
-                         <input type="text" className="form-control" name="landmark" value={data.landmark} onChange={(e) =>this.onChange(e)} />
+                         <input type="text" className="form-control" placeholder="Landmark" name="landmark" value={data.landmark} onChange={(e) =>this.onChange(e)} />
                          {errors.landmark && <InlineError text={errors.landmark} />}
                        </div>
                      </div>
@@ -465,35 +476,34 @@ export default class RegisterStudentForm extends Component {
 
 
 
-
-                     <div className="row">
+                     {!this.props.student_info && 
+                      <div className="row">
                        <div className="col-sm-6 col-md-2">
                          <div className="form-group">
                            <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
-                           <input type="checkbox" />
+                           <input type="checkbox" name="send_sms" data={data.send_sms} value="1" />
                          </div>
                        </div>
                        </div>
+                     }
+                     {!this.props.student_info && 
 
                        <div className="row">
                          <div className="col-sm-6 col-md-2">
                            <div className="form-group">
-                           <input type="radio" value="0"    name="create_account" onChange={(e) =>this.onChange(e)} />
-
+                           <input type="radio" value="1"    name="create_account" onChange={(e) =>this.onChange(e)} />
                              <label className="form-control-label" htmlFor="example2cols1Input">Create Account for Student and Parent</label>
-                             <input type="radio" defaultChecked name="create_account" value="1" onChange={(e) =>this.onChange(e)} />
-
-                             <label className="form-control-label" htmlFor="example2cols1Input">Create Account Link for Student and Parent</label>
-                             <input type="radio" value="2" name="create_account" onChange={(e) =>this.onChange(e)} />
-
+                             <input type="radio" defaultChecked name="create_account" value="0" onChange={(e) =>this.onChange(e)} />
                              <label className="form-control-label" htmlFor="example2cols1Input">Do it later</label>
                            </div>
                          </div>
                          </div>
+                       }
                      <div className="row">
-                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">Register Student</button>
-                      <button class="btn btn-warning" type="button">Reset</button>
-
+                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_student_button_text}</button>
+                      {!this.props.student_info &&
+                        <button class="btn btn-warning" onClick={e => this.makeInputValueNull(e)} type="button">Reset</button>
+                      }
                      </div>
                  </div>
              </div>

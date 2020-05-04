@@ -15,7 +15,7 @@ class CreateTeachersTable extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->integer('empid')->unsigned()->unique()->nullable();
+            $table->string('empid',50)->unique();
             $table->integer('assigned_class_id')->nullable();
             $table->string('teacher_name',50);
             $table->string('gender',10);

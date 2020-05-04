@@ -37,22 +37,57 @@ class UserApiController extends Controller
         }
         return false;
     }
+
+
+    
+    public function LoginCheckByMobile($mobile_no,$password){
+      return Auth::attempt(['mobile_no' => $mobile_no, 'password' => $password]);
+    }
+    public function LoginCheckByRollNo($roll_no,$password){
+      return Auth::attempt(['roll_no' => $roll_no, 'password' => $password]);
+    }
+    public function LoginCheckByEmail($email,$password){
+        return Auth::attempt(['email' => $email, 'password' => $password]);
+    }
+
     public function login(Request $request){
       $request->validate([
         'email_mobile_no'=>"required",
         'password'=>"required|min:6"
       ]);
-      $email_or_mobile_check = User::where(["email"=>$request->email_mobile_no])->count();
-      if($email_or_mobile_check == 0)
-        return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
 
-      if(Auth::attempt(['email' => $request->email_mobile_no, 'password' => $request->password])){
+      $user_input = $request->email_mobile_no;
+      $check_with_email = User::where(["email"=>$request->email_mobile_no])->count();
+      $check_with_mobile_no = User::where(["mobile_no"=>$request->email_mobile_no])->count();
+      $check_with_rollno = User::where(["roll_no"=>$request->email_mobile_no])->count();
+      $password = $request->password;
+      if($check_with_rollno == 0 && $check_with_email == 0 && $check_with_mobile_no == 0){
+        return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
+      }
+      $login_by_email = false;
+      $login_by_mobile_no = false;
+      $login_by_rollno = false;
+      if($check_with_email)
+        $login_by_email = $this->LoginCheckByEmail($user_input,$password);
+      else if($check_with_mobile_no)
+        $login_by_mobile_no = $this->LoginCheckByMobile($user_input,$password);
+      else
+        $login_by_rollno = $this->LoginCheckByRollNo($user_input,$password);
+      if($login_by_email || $login_by_mobile_no || $login_by_rollno){
         $user = Auth::user();
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['user'] = $user;
         return response()->json(['success' => $success], 200);
       }else{
         return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
+      }
+
+
+
+
+
+      if(Auth::attempt(['email' => $request->email_mobile_no, 'password' => $request->password])){
+        
       }
     }
 
@@ -265,53 +300,7 @@ class UserApiController extends Controller
         }
 
 
-    public function addTeacher(Request $request){
-      $request->validate([
-        'empid'=>'unique:teachers',
-        'teacher_name'=>'required|min:3|max:50',
-        'gender'=>'required',
-        'relative_name'=>'required|min:3|max:50',
-        'email'=>'required|email|unique:teachers',
-        'contact_no'=>'required|min:10|max:10|unique:teachers',
-        'qualification'=>'required|max:50',
-        'address'=>'required|min:5|max:100',
-        'dob'=>'required|date',
-        'teach_subject'=>'required',
-        'teach_class'=>'required',
-        'date_of_join'=>'required|date',
-        'salary'=>'required|integer'
-      ]);
-
-      $new_teacher = new Teacher;
-      $images = array('teacher_photo','id_proof','experience_letter','other_document1','other_document2');
-      $except = array('create_account');
-      foreach ($request->all() as $key => $value) {
-        if(in_array($key,$except))
-            continue;
-
-        if(!in_array($key,$images))
-          $new_teacher->$key = $value;
-
-        if(in_array($key,$images)){
-          if($request->$key == NULL)
-            continue;
-          $name = $key."_photo_img_path";
-          $image = $request->$key;
-          $image_name = Str::random(25);
-          $folder = '/uploads/images';
-          $filepath = $image->storeAs($folder, $image_name.'.'.$image->getClientOriginalExtension(),'public');
-          $new_teacher->$name = $filepath;
-        }
-      }
-      $new_teacher->save();
-      switch($request->create_account){
-        case 1:
-          $teacher_link = $this->tokenLink($new_teacher->email,"3");
-          return response()->json(array(["success"=> ["another_type"=>1,"teacher_info"=>$new_teacher,"teacher_link"=>$teacher_link]]));
-        break;
-      }
-      return $new_teacher;
-    }
+    
 
 
     public function getAllClasses(Request $request){
@@ -467,9 +456,8 @@ class UserApiController extends Controller
           $new_admission->$name = $filepath;
         }
       }
-      $class = Classes::where(['class_title'=>$request->class,"section"=>$request->section])->first();
-      $new_admission->class = $class->class_title;
-      $new_admission->section = $class->section;
+      $class_id = Classes::where(['class_title'=>$request->class,"section"=>$request->section])->first();
+      $new_admission->class_id = $class_id->id;
       $new_admission->save();
       return response()->json(['success'=>["new_admission"=>$new_admission,"message"=>"New Admission Added"]]);
     }

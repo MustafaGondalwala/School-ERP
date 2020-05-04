@@ -8,7 +8,8 @@ export default class SetFeesDueDate extends Component{
     super(props)
     this.state = {
       select_year:"20-21",
-      success:""
+      success:"",
+      add_text_button:"Update Date"
     }
     this.change_year = this.change_year.bind(this)
     this.updateDueDate = this.updateDueDate.bind(this)
@@ -26,13 +27,18 @@ export default class SetFeesDueDate extends Component{
 
   updateDueDate(data){
     var self = this
+    this.setState({
+      add_text_button:"Updating ...",
+      success:"",
+    })
     axios({
       method:"post",
       url:"/api/v1/fee/update-due-date",
       data:{"data":data,"select_year":self.state.select_year}
     }).then(response => {
       self.setState({
-        success:"Data Updated Successfully"
+        success:"Data Updated Successfully",
+        add_text_button:"Update Date"
       })
     })
   }
@@ -72,7 +78,7 @@ export default class SetFeesDueDate extends Component{
           </div>
           }
 
-              <SetDueDateForm select_year={this.state.select_year} submit={this.updateDueDate}  />
+              <SetDueDateForm add_text_button={this.state.add_text_button}  select_year={this.state.select_year} submit={this.updateDueDate}  />
           </div>
         </div>
       </div>

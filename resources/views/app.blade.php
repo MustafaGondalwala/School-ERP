@@ -98,10 +98,14 @@
         </script>
         <script>
         $('#myDropdown .dropdown-menu').on({
-   "click":function(e) {
-       e.stopPropagation();
-    }
-});
+           "click":function(e) {
+               e.stopPropagation();
+            }
+        });
+
+      $(document).ready(function() {
+            $('.datatable').DataTable();
+        } );
         </script>
     </body>
     </html>

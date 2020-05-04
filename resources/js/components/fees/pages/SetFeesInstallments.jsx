@@ -5,12 +5,16 @@ export default class SetFeesInstallments extends Component{
   constructor(props){
     super(props)
     this.state = {
-      updateinstallment_message:""
+      updateinstallment_message:"",
+      add_text_message:"Save Installments"
     }
     this.updateFeesInstallment = this.updateFeesInstallment.bind(this)
   }
   updateFeesInstallment(data){
     var self = this
+    self.setState({
+      add_text_message:"Updating Installments ..."
+    })
     const update_data = {"installments":data}
     axios({
       url:"/api/v1/fee/update-fees-installement",
@@ -18,7 +22,8 @@ export default class SetFeesInstallments extends Component{
       data:update_data
     }).then(response=>{
         self.setState({
-          updateinstallment_message:response.data.success.message
+          updateinstallment_message:response.data.success.message,
+          add_text_message:"Save Installments"
         })
     }).catch(error=>{
       console.log(error)
@@ -28,7 +33,7 @@ export default class SetFeesInstallments extends Component{
     return(
       <div className="container-fluid mt--6">
         <div className="row card-wrapper">
-          <div className="col-lg-4">
+          <div className="col-lg-6">
             <div className="card">
               <div className="card-body">
                 <h3 className="card-title mb-3">Set Fees Installments  <Link  to="/admin/fees" class="btn btn-neutral float-right" type="submit">Back</Link></h3>
@@ -41,8 +46,7 @@ export default class SetFeesInstallments extends Component{
                     </button>
                   </div>
                   }
-
-                  <SetInstallmentsForm  submit={this.updateFeesInstallment}/>
+                  <SetInstallmentsForm add_text_message={this.state.add_text_message} submit={this.updateFeesInstallment}/>
               </div>
             </div>
 

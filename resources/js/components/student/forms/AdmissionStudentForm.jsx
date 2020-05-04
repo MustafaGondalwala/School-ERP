@@ -11,18 +11,18 @@ export default class AdmissionStudentForm extends Component {
     super(props);
     this.state = {
           data: {
-            admission_id:"1003",
-            class:"UKG",
-            student_name:"mustafa Gondalwala",
-            father_name:"khuzema Gondalwala",
-            father_contact_no:"9586756273",
-            dob:"2020-03-03",
+            admission_id:"",
+            class:"",
+            student_name:"",
+            father_name:"",
+            father_contact_no:"",
+            dob:"",
             gender:"male",
-            student_address:"sidhpur",
+            student_address:"",
             student_photo:"",
             religion:"hindu",
             caste:"general",
-            age:"20",
+            age:"",
             section:""
           },
           errors: {},
@@ -38,6 +38,7 @@ export default class AdmissionStudentForm extends Component {
   }
   validate(data){
     const errors = {};
+    if(!data.admission_id) errors.admission_id = "Can't be blank";
     if (!data.student_name) errors.student_name = "Can't be blank";
     if (!data.father_name) errors.father_name = "Can't be blank";
     if (!data.father_contact_no) errors.father_contact_no = "Can't be blank";
@@ -52,7 +53,6 @@ export default class AdmissionStudentForm extends Component {
     if (data.student_address.length < 3) errors.student_address = "Min. Length 5 char."
     if (data.father_contact_no.length != 10) errors.father_contact_no = "Invalid Contact No."
     if (!validator.isMobilePhone(data.father_contact_no) ) errors.father_contact_no = "Invalid Contact No."
-
 
     return errors;
   };
@@ -69,7 +69,28 @@ export default class AdmissionStudentForm extends Component {
     if (Object.keys(errors).length === 0) {
       console.log(this.state.data)
       this.props.submit(formData)
+      this.makeInputNull()
     }
+  }
+
+  makeInputNull(){
+  this.setState({
+      data: {
+            admission_id:"",
+            class:"",
+            student_name:"",
+            father_name:"",
+            father_contact_no:"",
+            dob:"",
+            gender:"male",
+            student_address:"",
+            student_photo:"",
+            religion:"hindu",
+            caste:"general",
+            age:"",
+            section:""
+          }
+    });  
   }
   onChange(e){
     this.setState({
@@ -99,6 +120,15 @@ export default class AdmissionStudentForm extends Component {
     }
 
   }
+
+
+  componentWillReceiveProps(){
+    this.setState({
+      errors:this.props.server_error
+    })  
+
+  }
+
   componentDidMount(){
     var self = this
     axios({
@@ -107,7 +137,6 @@ export default class AdmissionStudentForm extends Component {
         self.setState({
           classes:response.data.success.classes
         })
-      console.log(response.data.success.classes)
     })
   }
   render () {
@@ -126,14 +155,6 @@ export default class AdmissionStudentForm extends Component {
                </div>
                <div className="card-body">
 
-               { this.props.server_error && <div className="alert alert-warning alert-dismissible fade show" role="alert">
-                 <span className="alert-icon"><i className="ni ni-like-2" /></span>
-                 <span className="alert-text"><strong>Warning!</strong> {this.props.server_error}</span>
-                 <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                   <span aria-hidden="true">×</span>
-                 </button>
-                 </div>
-               }
                 {this.props.register_user_message &&
                   <div className="row">
                       <div className="alert alert-success alert-dismissible fade show" role="alert">
@@ -160,6 +181,7 @@ export default class AdmissionStudentForm extends Component {
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
                                     <select class="form-control" value={data.class} name="class" onChange={(e) =>this.changeClassSection(e)}>
+                                      <option>Select Class</option>
                                       {
                                         this.state.classes.length > 1 &&
                                         this.state.classes.map((item)=>{
@@ -168,7 +190,6 @@ export default class AdmissionStudentForm extends Component {
                                       }
                                       </select>
                                       {errors.class && <InlineError text={errors.class} />}
-
                      </div>
                    </div>
                    <div className="col-md-4">
@@ -182,7 +203,6 @@ export default class AdmissionStudentForm extends Component {
                                         })
                                       }
                                       </select>
-                                      {errors.class && <InlineError text={errors.class} />}
 
                      </div>
                    </div>
@@ -191,7 +211,7 @@ export default class AdmissionStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example4cols1Input">Student Name</label>
-                       <input type="text" className="form-control" name="student_name"    value={data.student_name} onChange={(e) =>this.onChange(e)} />
+                       <input type="text" className="form-control" placeholder="Student Name" name="student_name"    value={data.student_name} onChange={(e) =>this.onChange(e)} />
                        {errors.student_name && <InlineError text={errors.student_name} />}
 
                      </div>
@@ -199,15 +219,15 @@ export default class AdmissionStudentForm extends Component {
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example4cols2Input">Father's Name</label>
-                       <input type="text" className="form-control"  name="father_name"    value={data.father_name} onChange={(e) =>this.onChange(e)} />
+                       <input type="text" className="form-control"  placeholder="Father Name" name="father_name"    value={data.father_name} onChange={(e) =>this.onChange(e)} />
                        {errors.father_name && <InlineError text={errors.father_name} />}
 
                      </div>
                    </div>
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols1Input">Father's Contact No.1</label>
-                       <input type="decimal" className="form-control" name="father_contact_no"    value={data.father_contact_no} onChange={(e) =>this.onChange(e)} />
+                       <label className="form-control-label" htmlFor="example2cols1Input">Father's Contact No.</label>
+                       <input type="decimal" className="form-control" name="father_contact_no"  placeholder="Father Contact No."  value={data.father_contact_no} onChange={(e) =>this.onChange(e)} />
                        {errors.father_contact_no && <InlineError text={errors.father_contact_no} />}
 
                      </div>
@@ -303,7 +323,7 @@ export default class AdmissionStudentForm extends Component {
 
 
                      <div className="row">
-                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">Add</button>
+                      <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_button_text}</button>
                       <button class="btn btn-warning" type="button">Reset</button>
 
                      </div>
