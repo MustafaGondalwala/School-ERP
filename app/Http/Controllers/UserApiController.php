@@ -53,7 +53,7 @@ class UserApiController extends Controller
     public function login(Request $request){
       $request->validate([
         'email_mobile_no'=>"required",
-        'password'=>"required|min:6"
+        'password'=>"required|min:2"
       ]);
 
       $user_input = $request->email_mobile_no;

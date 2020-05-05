@@ -28,9 +28,15 @@ Route::group(['middleware' => ['auth:api']],function(){
 
 
 
+
+Route::group(["prefix"=>'v1/parent','middleware'=>["auth:api","api","parentCheck"]],function(){
+  Route::get('/get-childs',"ParentController@getParentChilds");
+});
+
+
+
+
 Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],function(){
-
-
   Route::group(['prefix'=>"exam"],function(){
     Route::post('add-exam-type',"ExamController@addExamType");
     Route::get('get-exam-type',"ExamController@getExamType");
@@ -98,7 +104,6 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
 
 
   });
-
 
 
 });

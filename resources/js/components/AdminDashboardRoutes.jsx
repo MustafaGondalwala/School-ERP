@@ -5,6 +5,10 @@ import AdminDashboard from './dashboard/AdminDashboard'
 
 
 const AdminDashboardRoutes = ({ component: Component, ...rest }) => {
+    const checkAuth = {
+    	isAuthenticated:false
+
+    }
     return (
         <Route {...rest} render={props => (
             <AdminDashboard {...rest}>
