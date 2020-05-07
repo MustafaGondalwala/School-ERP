@@ -1,15 +1,24 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 import ParentDashboard from './dashboard/ParentDashboard'
-const ParentDashboardRoutes = ({ component: Component, ...rest }) => {
+const ParentDashboardRoutes = ({isAuthenticated,component: Component, ...rest }) => {
     return (
-        <Route {...rest} render={props => (
-            <ParentDashboard {...rest}>
-                <Component {...props} />
-            </ParentDashboard>
-        )} />
+    	<Route
+        {...rest}
+        render={props =>
+        isAuthenticated ? <ParentDashboard {...rest}>
+                    <Component {...props} />
+                </ParentDashboard> : <Redirect to="/" />}
+      />
     )
 }
 
-export default ParentDashboardRoutes
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state.user.user_type == "parent"
+  };
+}
+
+export default connect(mapStateToProps)(ParentDashboardRoutes);

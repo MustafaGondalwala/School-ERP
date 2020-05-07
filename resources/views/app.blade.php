@@ -96,16 +96,19 @@
             console.log('Facebook Track Error:', err);
           }
         </script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+            $('.datatable').DataTable();
+        } );
+        </script>
         <script>
         $('#myDropdown .dropdown-menu').on({
            "click":function(e) {
                e.stopPropagation();
             }
         });
-
-      $(document).ready(function() {
-            $('.datatable').DataTable();
-        } );
+       
         </script>
+
     </body>
     </html>

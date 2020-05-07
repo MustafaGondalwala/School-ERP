@@ -1,7 +1,12 @@
 import React,{Component} from "react"
 import LoginForm from "../form/LoginForm"
+import thunk from "redux-thunk";
+import { login } from "../../actions/auth";
+import { connect } from "react-redux";
 
-export default class LoginPage extends Component{
+
+
+class LoginPage extends Component{
   constructor(props){
     super(props)
     this.state = {
@@ -21,11 +26,25 @@ export default class LoginPage extends Component{
       url:"/api/v1/login",
       data:data
     }).then(response=>{
+
+
+      var login_user = this.props.login(response.data.success);
+      var user_type = response.data.success.user.user_type
+      var url = ""
+      if(user_type == "admin")
+        url = "/admin/dashboard"
+      else if(user_type == "parent")
+        url = "/parent/dashboard"
+      else if (user_type == "student")
+        url = "/student/dashboard"
+      if(login_user){
+        self.props.history.push(url)
+      }
+      return false;
       localStorage.setItem('token',response.data.success.token);
       localStorage.setItem('user_type',response.data.success.user.user_type);
       localStorage.setItem('user',JSON.stringify(response.data.success.user));
       var user_type = response.data.success.user.user_type
-      console.log(user_type)
       var url = ""
       if(user_type == "admin")
         url = "/admin/dashboard"
@@ -92,3 +111,6 @@ export default class LoginPage extends Component{
     )
   }
 }
+
+export default connect(null, { login })(LoginPage);
+

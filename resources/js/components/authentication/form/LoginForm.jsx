@@ -8,7 +8,7 @@ export default class LoginForm extends Component{
     this.state = {
       data: {
         email_mobile_no:"9586756273",
-        password:"mustafas"
+        password:"9586756273"
       },
       errors:""
     }

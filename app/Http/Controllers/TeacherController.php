@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Teacher;
 use App\User;
+use App\StaffInfo;
+
 class TeacherController extends Controller
 {
-    //
-
 	public function getAllTeacherSearchable(){
 	  $all_teacher = Teacher::limit(600)->get();
       $label_teacher = array();
@@ -18,6 +18,7 @@ class TeacherController extends Controller
       }
       return response()->json(["success"=>["teacher"=>$label_teacher]]);
 	}
+
 
 
   public function addTeacher(Request $request){
@@ -65,6 +66,20 @@ class TeacherController extends Controller
           return response()->json(["errors"=>array("empid"=>["Emp Login Login Already Exists"])],422);
         }
       }
+
+      $new_staff = new StaffInfo;
+      $new_staff->empid = $request->empid;
+      $new_staff->name = $request->teacher_name;
+      $new_staff->gender = $request->gender;
+      $new_staff->relative_name = $request->relative_name;
+      $new_staff->email = $request->email;
+      $new_staff->contact_no = $request->contact_no;
+      $new_staff->qualification = $request->qualification;
+      $new_staff->address = $request->address;
+      $new_staff->dob = $request->dob;
+      $new_staff->salary = $request->salary;
+      $new_staff->designation = "teacher";
+      $new_staff->save();
       return response()->json(["success"=>["teacher"=>$new_teacher]]);
     }
 

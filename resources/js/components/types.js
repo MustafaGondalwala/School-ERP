@@ -1,0 +1,4 @@
+export const USER_LOGGED_IN = "USER_LOGGED_IN";
+export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
+export const FILE_CREATED = "FILE_CREATED";
+export const PARENT_CHILDREN = "PARENT_CHILDREN";

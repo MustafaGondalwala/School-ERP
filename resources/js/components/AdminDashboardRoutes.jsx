@@ -1,21 +1,28 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
 
 import AdminDashboard from './dashboard/AdminDashboard'
 
 
-const AdminDashboardRoutes = ({ component: Component, ...rest }) => {
-    const checkAuth = {
-    	isAuthenticated:false
-
-    }
+const AdminDashboardRoutes = ({ isAuthenticated,component: Component, ...rest }) => {
     return (
-        <Route {...rest} render={props => (
-            <AdminDashboard {...rest}>
-                <Component {...props} />
-            </AdminDashboard>
-        )} />
+     <Route
+        {...rest}
+        render={props =>
+          isAuthenticated ? <AdminDashboard {...rest}>
+                    <Component {...props} />
+                </AdminDashboard> : <Redirect to="/" />}
+      />
     )
 }
 
-export default AdminDashboardRoutes
+
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state.user.user_type == "admin"
+  };
+}
+
+export default connect(mapStateToProps)(AdminDashboardRoutes);

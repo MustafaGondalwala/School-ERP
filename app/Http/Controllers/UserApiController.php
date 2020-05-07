@@ -74,20 +74,17 @@ class UserApiController extends Controller
       else
         $login_by_rollno = $this->LoginCheckByRollNo($user_input,$password);
       if($login_by_email || $login_by_mobile_no || $login_by_rollno){
+        
         $user = Auth::user();
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['user'] = $user;
+        $success["user_type"] = $user["user_type"];
+
+        $mobile_no = Auth()->user()->mobile_no;
+        $success["students"] = StudentInfo::where('father_contact_no1',$mobile_no)->get();
         return response()->json(['success' => $success], 200);
       }else{
         return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
-      }
-
-
-
-
-
-      if(Auth::attempt(['email' => $request->email_mobile_no, 'password' => $request->password])){
-        
       }
     }
 

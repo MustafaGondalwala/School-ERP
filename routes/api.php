@@ -29,14 +29,21 @@ Route::group(['middleware' => ['auth:api']],function(){
 
 
 
-Route::group(["prefix"=>'v1/parent','middleware'=>["auth:api","api","parentCheck"]],function(){
-  Route::get('/get-childs',"ParentController@getParentChilds");
+Route::group(["prefix"=>'v1','middleware'=>["auth:api","api","parentCheck"]],function(){
+  Route::group(["prefix"=>"parent"],function(){
+    Route::get('/get-childs',"ParentController@getParentChilds");
+  });
+  Route::group(["prefix"=>"leave"],function(){
+    Route::post('',"LeaveController@newLeaveRequest");
+  });
 });
 
-
-
-
 Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],function(){
+ 
+  Route::group(["prefix"=>"leave"],function(){
+    Route::get('',"LeaveController@getLeaveRequest");
+    Route::patch('/update',"LeaveController@updateLeaveRequestAdmin");
+  });
   Route::group(['prefix'=>"exam"],function(){
     Route::post('add-exam-type',"ExamController@addExamType");
     Route::get('get-exam-type',"ExamController@getExamType");
@@ -44,7 +51,7 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::get('get-monthly-test-type',"ExamController@getMonthlyTestType");
     Route::post('get-admit-cards',"ExamController@getAdmitCard");
     Route::post('update-admit-card',"ExamController@updateAdmitCard");
-  Route::post('get-exam-marksheet',"ExamController@getExamMarksheet");
+    Route::post('get-exam-marksheet',"ExamController@getExamMarksheet");
   });
   Route::group(['prefix'=>"time-table"],function(){
     Route::get('/get-class-period',"TimeTableController@getClassPeriod");
@@ -55,8 +62,11 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
   });
 
   Route::group(["prefix"=>"attendance"],function(){
-    Route::post("/get-student-attendance","AttendanceController@getStudentAttendance");
-    Route::post("/update-attendance","AttendanceController@updateStudentAttendance");
+    Route::post("","AttendanceController@getStudentAttendance");
+    Route::patch("","AttendanceController@updateStudentAttendance");
+    Route::post("/staff","AttendanceController@getStaffAttendance");
+    Route::patch("/staff","AttendanceController@updateStaffAttendance");
+
 
   });
 

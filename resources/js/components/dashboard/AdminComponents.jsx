@@ -1,63 +1,126 @@
-
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
-// reactstrap components
-import {
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
-  Navbar,
-  Nav,
-  Container,
-  Media
-} from "reactstrap";
-
-class TopNavbar extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      logout:false,
-      user:{}    
-    }
-    this.logout = this.logout.bind(this)
-  }
+import {Link,Redirect} from "react-router-dom";
 
 
-  componentDidMount(){
-    if(localStorage.getItem('user') == "")
-      this.props.history.push("/login")
-    this.setState({
-      user : JSON.parse(localStorage.getItem('user'))
-    })
-  }
-  logout(e){
-    var self = this
-    axios({
-      method:"post",
-      url:"/api/logout",
-    }).then(function(response){
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("user_type");
-      self.setState({
-        logout:true
-      })
-    })
-  }
-  render() {
-    const {user} = this.state
-    if(this.state.logout){
-      return <Redirect push={true} to="/login"/>
-    }
-    return (
-            <nav className="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
+export const AdminLeftSide = () => (
+  <nav className="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div className="scrollbar-inner">
+      <div className="sidenav-header  d-flex  align-items-center">
+        <a className="navbar-brand" href="dashboard.html">
+          <img src="../../assets/img/brand/blue.png" className="navbar-brand-img" alt="..." />
+        </a>
+        <div className=" ml-auto ">
+          <div className="sidenav-toggler d-none d-xl-block" data-action="sidenav-unpin" data-target="#sidenav-main">
+            <div className="sidenav-toggler-inner">
+              <i className="sidenav-toggler-line"></i>
+              <i className="sidenav-toggler-line"></i>
+              <i className="sidenav-toggler-line"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="navbar-inner">
+        <div className="collapse navbar-collapse" id="sidenav-collapse-main">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link active" to="/admin/student">
+                <i className="ni ni-shop text-primary"></i>
+                <span className="nav-link-text">Student</span>
+              </Link>
+
+
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/teacher" >
+                <i className="ni ni-ungroup text-orange"></i>
+                <span className="nav-link-text">Teacher</span>
+              </Link>
+
+            </li>
+            <li className="nav-item">
+              <Link to="/admin/fees" className="nav-link" href="#navbar-components" >
+                <i className="ni ni-ui-04 text-info"></i>
+                <span className="nav-link-text">Fees</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/time-table">
+                <i className="ni ni-single-copy-04 text-pink"></i>
+                <span className="nav-link-text">Timetable</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/attendance">
+                <i className="ni ni-align-left-2 text-default"></i>
+                <span className="nav-link-text">Attendance</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/admin/exam" className="nav-link" href="#navbar-maps" >
+                <i className="ni ni-map-big text-primary"></i>
+                <span className="nav-link-text">Exam</span>
+              </Link>
+            
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/leave">
+                <i className="ni ni-archive-2 text-green"></i>
+                <span className="nav-link-text">Leave</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="../charts.html">
+                <i className="ni ni-chart-pie-35 text-info"></i>
+                <span className="nav-link-text">Charts</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="../calendar.html">
+                <i className="ni ni-calendar-grid-58 text-red"></i>
+                <span className="nav-link-text">Calendar</span>
+              </a>
+            </li>
+          </ul>
+          <hr className="my-3" />
+          <h6 className="navbar-heading p-0 text-muted">
+            <span className="docs-normal">Documentation</span>
+            <span className="docs-mini">D</span>
+          </h6>
+          <ul className="navbar-nav mb-md-3">
+            <li className="nav-item">
+              <a className="nav-link" href="../../docs/getting-started/overview.html" target="_blank">
+                <i className="ni ni-spaceship"></i>
+                <span className="nav-link-text">Getting started</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="../../docs/foundation/colors.html" target="_blank">
+                <i className="ni ni-palette"></i>
+                <span className="nav-link-text">Foundation</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="../../docs/components/alerts.html" target="_blank">
+                <i className="ni ni-ui-04"></i>
+                <span className="nav-link-text">Components</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="../../docs/plugins/charts.html" target="_blank">
+                <i className="ni ni-chart-pie-35"></i>
+                <span className="nav-link-text">Plugins</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+);
+
+
+export const AdminTopNavbar = ({user,logout}) => (
+    <nav className="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
               <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                   {/* Search form */}
@@ -256,7 +319,11 @@ class TopNavbar extends React.Component {
                             <img alt="Image placeholder" src="/assets/img/img_avatar.png" />
                           </span>
                           <div className="media-body  ml-2  d-none d-lg-block">
-                            <span className="mb-0 text-sm  font-weight-bold">{user.name} | {user.user_type}</span>
+                            {user ?                           
+                            <span className="mb-0 text-sm  font-weight-bold">
+                            {user.name} | {user.user_type}
+                             </span>
+                             : <span>Loading ...</span>}
                           </div>
                         </div>
                       </a>
@@ -283,7 +350,7 @@ class TopNavbar extends React.Component {
                         <div className="dropdown-divider" />
                         <a href="#!" className="dropdown-item">
                           <i className="ni ni-user-run" />
-                          <span onClick={(e) => this.logout(e)}>Logout</span>
+                          <span onClick={(e) => logout(e)}>Logout</span>
                         </a>
                       </div>
                     </li>
@@ -291,9 +358,4 @@ class TopNavbar extends React.Component {
                 </div>
               </div>
             </nav>
-
-    );
-  }
-}
-
-export default TopNavbar;
+  )

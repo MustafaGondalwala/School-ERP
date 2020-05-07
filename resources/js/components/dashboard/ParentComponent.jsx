@@ -23,7 +23,7 @@ export const ParentLeftSide = ({students}) => (
 	        <div className="collapse navbar-collapse" id="sidenav-collapse-main">
 	          <ul className="navbar-nav">
 	          	{students && students.map((student,key) => {
-	          		return <li className="nav-item">
+	             return <li key={key} className="nav-item">
 							  <a className="nav-link collapsed" href={`#${key}`} data-toggle="collapse" role="button" aria-expanded="false" aria-controls={key}>
 							    <i className="ni ni-ungroup text-orange" />
 							    <span className="nav-link-text">{student.student_name}</span>
@@ -72,10 +72,8 @@ export const ParentLeftSide = ({students}) => (
 	    </div>
 	  </nav>
 	)
-
-
 export const ParentTopNavbar = ({user,logout}) => (
-		 <nav className="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
+		        <nav className="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
               <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                   {/* Search form */}
