@@ -22,14 +22,10 @@ import ViewAllTeacher from "./teacher/pages/ViewAllTeacher";
 import SettingHomePage from "./setting/SettingHomePage"
 import AdmissionList from "./student/pages/AdmissionList";
 import LoginPage from "./authentication/pages/LoginPage";
-import FeesHomePage from "./fees/FeesHomePage";
-import SetFeesInstallments from "./fees/pages/SetFeesInstallments"
-import SetFeesDueDate from "./fees/pages/SetFeesDueDate";
-import SetIndividualFees from "./fees/pages/SetIndividualFees";
+
+import PayFeesHomePage,{ FeesHomePage,SetFeesInstallments, SetFeesDueDate, ViewFeeReceipt, SetIndividualFees, ManageClerkLogin } from "./fees/AdminFeesComponent";
 import SetClassWiseFees from "./fees/pages/SetClassWiseFees";
-import PayFeesHomePage from "./fees/pages/PayFeesHomePage";
-import ViewFeeReceipt from "./fees/pages/ViewFeeReceipt";
-    
+
 import TimeTableHomePage from "./time_table/TimeTableHomePage";
 import SetTeacherSubjectClassWise from "./time_table/pages/SetTeacherSubjectClassWise";
 import GenerateTimeTable from "./time_table/pages/GenerateTimeTable"
@@ -89,6 +85,7 @@ class Index extends Component {
                 <AdminDashboardRoutes path="/admin/teacher/update-profile" exact main_header="Student"  header="Student" subheader="Profile Update" component={ProfileUpdateTeacher} />
                 <AdminDashboardRoutes path="/admin/setting" exact main_header="Settings"  header="Settings" subheader="View Settings" component={SettingHomePage} />
                 <AdminDashboardRoutes path="/admin/student/admission-list" exact main_header="Student"  header="Student" subheader="View Admission List" component={AdmissionList} />
+                
                 <AdminDashboardRoutes path="/admin/fees" exact main_header="Fees"  header="Fees" subheader="Fees HomePage" component={FeesHomePage} />
                 <AdminDashboardRoutes path="/admin/fees/set-installments" exact main_header="Fees"  header="Fees" subheader="Set Installments" component={SetFeesInstallments} />
                 <AdminDashboardRoutes path="/admin/fees/set-due-dates" exact main_header="Fees"  header="Fees" subheader="Set Due Date" component={SetFeesDueDate} />
@@ -96,6 +93,9 @@ class Index extends Component {
                 <AdminDashboardRoutes path="/admin/fees/set-fees-class-wise" exact main_header="Fees"  header="Fees" subheader="Set Class Wise Fees" component={SetClassWiseFees} />
                 <AdminDashboardRoutes path="/admin/fees/pay-fees" exact main_header="Fees"  header="Fees" subheader="Pay Fee" component={PayFeesHomePage} />
                 <AdminDashboardRoutes path="/admin/fees/view-receipt" exact main_header="Fees"  header="Fees" subheader="View Fee Receipt" component={ViewFeeReceipt} />
+                <AdminDashboardRoutes path="/admin/fees/manage-clerk-login" exact component={ManageClerkLogin} />
+
+
                 <AdminDashboardRoutes path="/admin/time-table" exact main_header="Time Table"  header="Time Table" subheader="Home" component={TimeTableHomePage} />
                 <AdminDashboardRoutes path="/admin/time-table/set-teacher-subject-classes-wise" exact main_header="Time Table" header="Time Table" subheader="Set Teacher Subject/Class Wise" component={SetTeacherSubjectClassWise} />
                 <AdminDashboardRoutes path="/admin/time-table/generate-time-table" exact main_header="Time Table"  header="Time Table" subheader="Generate Time Table" component={GenerateTimeTable} />

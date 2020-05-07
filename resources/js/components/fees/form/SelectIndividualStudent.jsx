@@ -1,10 +1,6 @@
 import React,{Component} from "react"
-import Select from 'react-select'
-import InlineError from "../messages/InlineError"
-
 import {Link} from "react-router-dom"
-
-
+import Select from "react-select"
 export default class SelectIndividualStudent extends Component{
   constructor(props){
     super(props)

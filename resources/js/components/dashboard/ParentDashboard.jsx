@@ -73,9 +73,6 @@ class ParentDashboard extends Component {
      }
 };
 
-
-
-
 function mapStateToProps(state) {
   return {
     user: state.user,

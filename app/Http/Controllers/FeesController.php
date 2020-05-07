@@ -236,10 +236,9 @@ class FeesController extends Controller
       $request->validate([
         'select_year'=>'required|string',
         'student_id'=>'required|integer',
-        'installment'=>'required|string'
       ]);
-      $fee_receipt = FeeReceipt::select('reciept', DB::raw('COUNT(reciept) as count'))->where(['student_id'=>$request->student_id,"select_year"=>$request->select_year])->groupBy('reciept')->get();
-      dd($fee_receipt);
+      $fee_receipt = FeeReceipt::select('reciept',"created_at",'account_name')->where(['student_id'=>$request->student_id,"select_year"=>$request->select_year])->distinct()->get();
+      return response()->json(["success"=>["receipts"=>$fee_receipt]]);
     }
 
     public function payIndividualFees(Request $request){
@@ -247,25 +246,28 @@ class FeesController extends Controller
         'total_fees_type'=>'required',
         'total_installment'=>'required|array',
         'select_year'=>'required|string',
-        "student_id"=>"required|integer"
+        "student_id"=>"required|integer",
+        "payDetails"=>"required|array",
       ]);
       $receipt = rand ( 10000 , 99999 );;
       foreach ($request->total_fees_type as $each_installment_name => $each_installment) {
         foreach ($each_installment as $key => $value) {
           $from_db = HandleFees::where(["fees_type"=>$value["fees_type"],"year"=>$request->select_year,"installment"=>$each_installment_name,"student_id"=>$request->student_id])->first();
-
-          $new_receipt = new FeeReceipt;
-          $new_receipt->reciept = $receipt;
-          $new_receipt->fee_id = $value['id'];
-          $new_receipt->current_paid = $value["current_paid"];
-          $new_receipt->student_id = $request->student_id;
-          $new_receipt->select_year = $request->select_year;
-          $new_receipt->installment = $each_installment_name;
-          $new_receipt->save();
+          if($value["current_paid"] != 0){
+            $new_receipt = new FeeReceipt;
+            $new_receipt->reciept = $receipt;
+            $new_receipt->fee_id = $value['id'];
+            $new_receipt->current_paid = $value["current_paid"];
+            $new_receipt->student_id = $request->student_id;
+            $new_receipt->select_year = $request->select_year;
+            $new_receipt->installment = $each_installment_name;
+            $new_receipt->account_name = Auth()->user()->name;
+            $new_receipt->payment_type = $request->payDetails["payment_type"];
+            $new_receipt->save();
+          }
+          
         }
       }
-
-
 
       foreach ($request->total_fees_type as $each_installment_name => $each_installment) {
         foreach ($each_installment as $key => $value) {
@@ -282,6 +284,40 @@ class FeesController extends Controller
         $get_fees = HandleFees::select(['id','fees_type','year','amount','discount_amount','after_discount','total_pending','current_paid'])->where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment])->get();
         $total_installments[$installment] = $get_fees;
       }
-      return response()->json(["success"=>["total_installments"=>$total_installments,"message"=>"Fees Successfully Updated"]]);
+
+      $fee_receipt = FeeReceipt::select('reciept',"created_at",'account_name')->where(['student_id'=>$request->student_id,"select_year"=>$request->select_year])->distinct()->get();
+
+      return response()->json(["success"=>["total_installments"=>$total_installments,"message"=>"Fees Successfully Updated","receipts"=>$fee_receipt]]);
+    }
+
+
+    public function getIndividualReceipDetails($receipt_id){
+      $receiptDetails = FeeReceipt::select('fee_id','current_paid','account_name')->where('reciept',$receipt_id)->get();
+      $send_array = [];
+      foreach ($receiptDetails as $key => $receipt) {
+          $feeDetails = HandleFees::select('fees_type','student_id','after_discount','installment','total_pending')->findorFail($receipt->fee_id);
+          $send_array[$feeDetails->installment][$receipt->fee_id]["fee"] = $feeDetails;
+          $send_array[$feeDetails->installment][$receipt->fee_id]["reciept"] = $receipt;
+          
+          try{
+          $send_array[$feeDetails->installment]["total_amount"] += $feeDetails["after_discount"];
+          }catch(\Exception $e){
+            $send_array[$feeDetails->installment]["total_amount"] = $feeDetails["after_discount"];
+          }
+          try{
+            $send_array[$feeDetails->installment]["total_pending"] += $feeDetails["total_pending"];
+          }catch(\Exception $e){
+            $send_array[$feeDetails->installment]["total_pending"] = $feeDetails["total_pending"];
+          }
+          try{
+          $send_array[$feeDetails->installment]["current_paid"] += $receipt["current_paid"];
+          }catch(\Exception $e){
+          $send_array[$feeDetails->installment]["current_paid"] = $receipt["current_paid"];
+          }
+
+      } 
+
+      $studenDetails = StudentInfo::select('roll_no','class','section','student_name','father_name','father_contact_no1')->findorFail($feeDetails['student_id']);
+      return response()->json(["success"=>["studenDetails"=>$studenDetails,"receiptDetails"=>$send_array]]);
     }
 }

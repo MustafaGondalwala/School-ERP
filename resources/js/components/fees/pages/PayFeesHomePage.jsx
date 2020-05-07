@@ -3,7 +3,7 @@ import SelectIndividualStudent from "../form/SelectIndividualStudent"
 import InstallmentUpdate from "../form/InstallmentUpdate";
 
 
-export default class PayFeesHomePage extends Component{
+export class PayFeesHomePage extends Component{
 	constructor(props){
 	    super(props)
 	    this.state = {

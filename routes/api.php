@@ -109,8 +109,9 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::post('/get-individual-student-fees',"FeesController@getIndividualStudentFees");
     Route::post('/get-class-wise-fees',"FeesController@getClassWiseFees");
     Route::post('/update-fees-class-wise',"FeesController@updateClassWiseFees");
-    Route::post('/pay-fees-individual',"FeesController@payIndividualFees");
-    Route::post('/get-receipt',"FeesController@getStudentReceipts");
+    Route::post('/pay',"FeesController@payIndividualFees");
+    Route::post('/receipt',"FeesController@getStudentReceipts");
+    Route::get('/receipt/{receipt_id}',"FeesController@getIndividualReceipDetails");
 
 
   });

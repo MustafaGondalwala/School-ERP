@@ -21,6 +21,8 @@ class CreateFeeReceiptsTable extends Migration
             $table->string('installment');
             $table->string('select_year');
             $table->integer('current_paid');
+            $table->string('account_name');
+            $table->string('payment_type');
             $table->timestamps();
         });
     }
