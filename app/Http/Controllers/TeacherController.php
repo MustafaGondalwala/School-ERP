@@ -5,10 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Teacher;
 use App\User;
+use App\Classes;
 use App\StaffInfo;
 
 class TeacherController extends Controller
 {
+  public function updateAssignTeachertoClass(Request $request){
+    $request->validate([
+      "class_id"=>"required|integer",
+      "teacher_id"=>"required|integer"
+    ]);
+
+    $class = Classes::findorFail($request->class_id);
+    $class->assign_teacher_id = $request->teacher_id;
+    $class->update();
+
+    $teacher = Teacher::findorFail($request->teacher_id);
+    $teacher->assigned_class_id = $request->class_id;
+    $teacher->update();
+
+    $classes = Classes::select('id','class_title','section','assign_teacher_id')->get();
+    $teacher = Teacher::select('id','teacher_name','teach_subject','teach_class')->get();
+    return response()->json(["success"=>["teacher"=>$teacher,"classes"=>$classes]]);
+  }
 	public function getAllTeacherSearchable(){
 	  $all_teacher = Teacher::limit(600)->get();
       $label_teacher = array();
@@ -19,7 +38,9 @@ class TeacherController extends Controller
       return response()->json(["success"=>["teacher"=>$label_teacher]]);
 	}
 
-
+  public function getTeacherDetails($teacher_id){
+    return response()->json(["success"=>["teacher_details"=>Teacher::findorFail($teacher_id)]]);
+  }
 
   public function addTeacher(Request $request){
       $request->validate([

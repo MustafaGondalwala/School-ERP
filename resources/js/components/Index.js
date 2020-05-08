@@ -14,11 +14,12 @@ import RegisterStudentPage from "./student/pages/RegisterStudentPage"
 import AdmissionStudentPage from "./student/pages/AdmissionStudentPage"
 import ViewAllStudentPage from "./student/pages/ViewAllStudentPage"
 import ViewStudentLoginPage from "./student/pages/ViewStudentLoginPage"
-import ProfileUpdateTeacher from "./teacher/pages/ProfileUpdateTeacher"
-import TeacherHomePage from "./teacher/TeacherHomePage";
-import AddTeacherPage from "./teacher/pages/AddTeacherPage";
-import AssignTeacher from "./teacher/pages/AssignTeacher";
-import ViewAllTeacher from "./teacher/pages/ViewAllTeacher";
+
+import  {TeacherHomePage, AddTeacherPage,ViewAllTeacher, AssignTeacher, ProfileUpdateTeacher } from "./teacher/AdminComponents"
+// import ProfileUpdateTeacher from "./teacher/pages/ProfileUpdateTeacher"
+// import TeacherHomePage from "./teacher/TeacherHomePage";
+// import  from "./teacher/pages/AddTeacherPage";
+// import AssignTeacher from "./teacher/pages/AssignTeacher";
 import SettingHomePage from "./setting/SettingHomePage"
 import AdmissionList from "./student/pages/AdmissionList";
 import LoginPage from "./authentication/pages/LoginPage";

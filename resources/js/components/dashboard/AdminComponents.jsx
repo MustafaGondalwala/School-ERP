@@ -68,49 +68,7 @@ export const AdminLeftSide = () => (
                 <span className="nav-link-text">Leave</span>
               </Link>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="../charts.html">
-                <i className="ni ni-chart-pie-35 text-info"></i>
-                <span className="nav-link-text">Charts</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="../calendar.html">
-                <i className="ni ni-calendar-grid-58 text-red"></i>
-                <span className="nav-link-text">Calendar</span>
-              </a>
-            </li>
-          </ul>
-          <hr className="my-3" />
-          <h6 className="navbar-heading p-0 text-muted">
-            <span className="docs-normal">Documentation</span>
-            <span className="docs-mini">D</span>
-          </h6>
-          <ul className="navbar-nav mb-md-3">
-            <li className="nav-item">
-              <a className="nav-link" href="../../docs/getting-started/overview.html" target="_blank">
-                <i className="ni ni-spaceship"></i>
-                <span className="nav-link-text">Getting started</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="../../docs/foundation/colors.html" target="_blank">
-                <i className="ni ni-palette"></i>
-                <span className="nav-link-text">Foundation</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="../../docs/components/alerts.html" target="_blank">
-                <i className="ni ni-ui-04"></i>
-                <span className="nav-link-text">Components</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="../../docs/plugins/charts.html" target="_blank">
-                <i className="ni ni-chart-pie-35"></i>
-                <span className="nav-link-text">Plugins</span>
-              </a>
-            </li>
+            
           </ul>
         </div>
       </div>

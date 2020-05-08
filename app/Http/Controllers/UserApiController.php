@@ -347,21 +347,7 @@ class UserApiController extends Controller
 
     //   return response()->json(["success"=>["teacher"=>$main_array]]);
     }
-    public function assignTeacher(Request $request){
-      $request->validate([
-        "class_id"=>"required|integer",
-        'teacher_id'=>"required|integer"
-      ]);
-      Teacher::findOrFail($request->teacher_id);
-      Classes::findOrFail($request->class_id);
-      $class_value_change = (Classes::where('id',$request->class_id)->update(['assign_teacher_id'=>$request->teacher_id]));
-      $teacher_assigned_to_class = Teacher::where('id',$request->teacher_id)->update(['assigned_class_id'=>$request->class_id]);
-      if($class_value_change == 1 && $teacher_assigned_to_class == 1){
-        $teacher = Teacher::select('id','teacher_name','teach_subject','teach_class')->get();
-        $classes = Classes::select('id','class_title','section','assign_teacher_id')->get();
-        return response()->json(["success"=>["teacher"=>$teacher,"classes"=>$classes]]);
-      }
-    }
+    
 
 
     public function getDistinctClasses(Request $request){

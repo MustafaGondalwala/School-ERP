@@ -66,8 +66,6 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::patch("","AttendanceController@updateStudentAttendance");
     Route::post("/staff","AttendanceController@getStaffAttendance");
     Route::patch("/staff","AttendanceController@updateStaffAttendance");
-
-
   });
 
   Route::group(['prefix'=>"student"],function(){
@@ -76,7 +74,6 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
       Route::post('/add-register-student','StudentController@addRegisterStudent');
       Route::get('/get-all-searable-student',"StudentController@getAllStudentsSearchable");
       Route::get('/get-indivitual-student/{student_id}',"StudentController@getIndividualStudent");
-
   });
 
   Route::group(['prefix'=>'teacher'],function(){
@@ -84,6 +81,8 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::get('/view-all-teacher',"UserApiController@ViewAllTeacher");
     Route::get('/get-all-searable-teacher',"TeacherController@getAllTeacherSearchable");
     Route::post('/view-preferend-data',"UserApiController@getPreferendData");
+    Route::get('/{teacher_id}',"TeacherController@getTeacherDetails");
+    Route::patch('/assign',"TeacherController@updateAssignTeachertoClass");
   });
   Route::group(['prefix'=>'subject'],function(){
     Route::post('get-all-subjects',"UserApiController@getAllSubject");
@@ -91,9 +90,6 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
   });
   Route::group(['prefix'=>'class'],function(){
     Route::post('/get-all-classes',"UserApiController@getAllClasses");
-    Route::post('/assign-teacher-to-class',"UserApiController@assignTeacher");
-
-
     Route::get('/get-all-distinct-classes',"UserApiController@getDistinctClasses");
     Route::post('/add-class',"UserApiController@addClass");
     Route::post('/add-section',"UserApiController@addSection");
@@ -112,8 +108,6 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
     Route::post('/pay',"FeesController@payIndividualFees");
     Route::post('/receipt',"FeesController@getStudentReceipts");
     Route::get('/receipt/{receipt_id}',"FeesController@getIndividualReceipDetails");
-
-
   });
 
 

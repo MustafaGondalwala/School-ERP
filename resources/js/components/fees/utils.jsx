@@ -433,3 +433,63 @@ export class PayFeesPanel extends Component{
     )
   }
 }
+
+
+
+export class ManageClerkForm extends Component{
+  render(){
+    return(
+      <form>
+        <div className="row">
+          <div className="col-md-4">
+            <label>EmpId:</label>
+            <input value="" className="form-control" />
+          </div>
+          <div className="col-md-4">
+            <label>Name:</label>
+            <input value="" className="form-control" />
+          </div>
+        </div>
+      </form>
+    )
+  }
+}
+export class ManageLoginForm extends Component{
+  render(){
+    return(
+      <div className="card">
+              <div className="card-header border-0">
+                <div className="row">
+                  <div className="col-6">
+                    <h3 className="mb-0">Manage Clerk Login</h3>
+                  </div>
+                  <div className="col-6 text-right">
+                    <a href="#" className="btn btn-sm btn-primary btn-round btn-icon" data-toggle="tooltip" data-original-title="Edit User" data-toggle="modal" data-target="#modal-form">
+                      <span className="btn-inner--icon"><i className="fas fa-user-edit" /></span>
+                      <span className="btn-inner--text">Add</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+        
+                <div className="modal fade show" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+                  <div className="modal-dialog modal- modal-dialog-top modal-lg col-md-12" role="document">
+                    <div className="modal-content">
+                      <div className="modal-body p-0 col-md-12">
+                        <div className="card bg-secondary border-0 mb-0">
+                          <div className="card-header bg-transparent pb-5">
+                            <div className=" text-center mt-2 mb-3">Edit Clerk Login</div>
+                          </div>
+                          <div className="card-body">
+                            <ManageClerkForm />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        </div>
+
+    )
+  }
+}

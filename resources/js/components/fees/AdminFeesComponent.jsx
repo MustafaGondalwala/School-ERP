@@ -1,6 +1,6 @@
 import React,{ Component } from "react"
 import { Link } from "react-router-dom"
-import { SetInstallmentsForm , SetDueDateForm, InstallmentUpdate, PayFeesPanel, SelectIndividualStudent } from "./utils"
+import { SetInstallmentsForm , SetDueDateForm, InstallmentUpdate, PayFeesPanel, SelectIndividualStudent, ManageLoginForm } from "./utils"
 import { connect } from "react-redux"; 
 import Moment from 'moment';
 import * as S from "react-select"
@@ -143,8 +143,7 @@ export const ManageClerkLogin = () => (
 	<div>
 		<AdminFeeHeader mainHeader="Fee" header="Manage Logins"/>
 		<div className="container-fluid mt--6">
-	        <div className="row">
-	        </div>
+				<ManageLoginForm />
 	    </div>
 	</div>
 )
