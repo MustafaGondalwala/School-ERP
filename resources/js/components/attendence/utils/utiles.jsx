@@ -5,15 +5,13 @@ import DatePicker from "react-datepicker";
 import moment from "moment"
 import Select from "react-select"
 import "react-datepicker/dist/react-datepicker.css";
+import CanvasJSReact from '../../../assets/canvasjs.react';
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+var CanvasJS = CanvasJSReact.CanvasJS;
 
-
-export class ShowAttendance extends Component{
-	render(){
-		return(
-			<div>Mustafa</div>
-		)
-	}
-}
+export const ShowAttendance = () => (
+	<div>hello</div>
+)
 
 export class SelectStudent extends Component{
 	constructor(props){
@@ -25,8 +23,14 @@ export class SelectStudent extends Component{
 	
 	  componentDidMount(){
 		var self = this
+		var url = ""
+		if(this.props.class_id){
+			url = "/api/v1/student/searchable/"+this.props.class_id
+		}else{
+			url = "/api/v1/student/get-all-searable-student"
+		}
 		axios({
-		  url:"/api/v1/student/searchable/"+this.props.class_id
+		  url:url
 		}).then(response=>{
 		  self.setState({
 			student_list:response.data.success.student
@@ -173,6 +177,7 @@ export  class SelectClass extends Component{
 	    	  date:new Date(),
 	    	  class_:"",
 	    	  section_:"",
+	    	  attendance_type:""
 	    }
 	    this.get_attendance_response = this.get_attendance_response.bind(this)
 	    this.onChangeClasses =this.onChangeClasses.bind(this)
@@ -182,6 +187,10 @@ export  class SelectClass extends Component{
 
 	   onChangeClasses(e){
 	    var value = e.target.value
+	     this.setState({
+	      attendance_type:"",
+	      class_error:""
+	    })
 	    var value_by = []
 	    this.state.classes.map((item)=>{
 	      if(item.class_title == value){
@@ -207,15 +216,21 @@ export  class SelectClass extends Component{
 	  }
 	  onChange(e){
 	    this.setState({
-	      [e.target.name]: e.target.value
+	      [e.target.name]: e.target.value,
 	    });
+	    this.setState({
+	      attendance_type:""
+	    })
 	  }
-
-	  
 	  
 	  get_attendance_response(attendance_type){
-	  	   if(this.state.class_ !== "")
-	  	   		this.props.submit(this.state.class_,this.state.section_,this.state.dateT,attendance_type)
+	  	   if(this.state.class_ !== ""){
+	  	   		this.setState({
+	  	   			class_error:"",
+	  	   			attendance_type:attendance_type
+	  	   		})
+	  	   		// this.props.submit(this.state.class_,this.state.section_,this.state.dateT,attendance_type)
+	  	   }
 	  		else
 	  			this.setState({
 	  				class_error:"Can't be blank"
@@ -225,7 +240,8 @@ export  class SelectClass extends Component{
 	  handleDate(date){
 	    this.setState({
 	      date :date,
-	      dateT:moment(date).format('YYYY-MM-DD')
+	      dateT:moment(date).format('YYYY-MM-DD'),
+	      attendance_type:""
 	    });
 	  };
 	  componentDidMount(){
@@ -250,6 +266,7 @@ export  class SelectClass extends Component{
 	render(){
 		const {errors} = this
 		return(
+		<div>
 		<div className="card mb-4">
 	        <div className="card-header">
 	          <h3 className="mb-0">
@@ -278,6 +295,7 @@ export  class SelectClass extends Component{
                                       {
                                         this.state.section &&
                                         this.state.section.map((item)=>{
+                                          if(item != null)
                                           return <option  value={item}>{item}</option>
                                         })
                                       }
@@ -299,6 +317,8 @@ export  class SelectClass extends Component{
 	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
 	        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
 	        </div>
+      	</div>
+		{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} date={this.state.dateT} classes={this.state.class_} section={this.state.section_} />}
       	</div>
 		)
 	}
@@ -696,4 +716,339 @@ export class FillAttendanceForm extends Component{
 
 		)
 	}
+}
+
+export class ViewParticularAttendance extends Component{
+	constructor(props){
+		super(props)
+		this.state = {
+			student_id:"",
+			staff_id:"23"
+		}
+	}
+	render(){
+		const getStudentID = (data) =>{
+			this.setState({
+				student_id:data.value
+			})
+		}
+		const getStaffID = (data) => {
+			this.setState({
+				staff_id:data.value
+			})
+		}
+		return(
+			<div>
+			  {this.props.user_type == "student" ? (
+			    <div>
+			      <SelectStudent
+			        handleInputChange={getStudentID}
+			        title={this.props.title}
+			        back_link={this.props.back_link}
+			      />
+			    </div>
+			  ) : (
+			    <div>
+			    	<SelectStaff handleInputChange={getStaffID} title={this.props.title} back_link={this.props.back_link} />
+			    </div>
+			  )}
+
+			  {this.state.student_id && <ViewAttendance type="student"  student_id={this.state.student_id}/>}
+			  {this.state.staff_id && <ViewAttendance type="staff" staff_id={this.state.staff_id} />}
+			</div>
+		)
+	}
+}
+
+
+class SelectStaff extends Component{
+	constructor(props){
+		super(props)
+		this.state = {
+			staff_list:[]
+		}
+	}
+	componentDidMount(){
+		var self = this;
+		var url = "/api/v1/staff/searchable"
+		axios({
+			url:url
+		}).then(response=>{
+			self.setState({
+				staff_list:response.data.success.staff
+			})
+		})
+	}
+	render(){
+		return(
+			<div className="card mb-4">
+				<div className="card-header">
+				<h3 className="mb-0">{this.props.title} <Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+				</div>
+				<div className="card-body">
+				<div className="row">
+					<div className="col-md-6">
+					<div className="form-group">
+						<label className="form-control-label" htmlFor="example3cols1Input">Select Student</label>
+						<Select options={this.state.staff_list}  onChange={this.props.handleInputChange} />
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		)
+	}
+}
+export class ViewAttendance extends Component{
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	    	date: moment(new Date()).format('YYYY-MM'),
+	    	attendance_details:"",
+	    	student_details:"",
+	    	total_month_count:"",
+	    	total_present:0,
+	    	total_absent:0,
+	    	total_leave:0,
+	    	none_entry:0
+	    }
+	    this.handleDate = this.handleDate.bind(this)
+	    this.getAttendance = this.getAttendance.bind(this)
+	}
+
+	getAttendance(date = moment(new Date()).format('YYYY-MM')){
+		var url = "";
+		this.setState({
+		  attendance_details: "",
+		  staff_details:"",
+		  total_present: 0,
+		  total_absent: 0,
+		  total_leave: 0,
+		  total_none: 0,
+		  none_entry: 0,
+		});
+		self = this;
+		if (this.props.type == "student"){
+		  url =
+		    "/api/v1/attendance/get_particular/" +
+		    this.props.type +
+		    "/" +
+		    this.props.student_id
+
+
+		    axios({
+		  url: url,
+		  method: "post",
+		  data: {
+		    data: date,
+		  },
+		}).then((response) => {
+		  self.setState({
+		    attendance_details: response.data.success.attendance_details,
+		    student_details: response.data.success.student_details,
+		    total_month_count: response.data.success.total_month_count,
+		    total_count: response.data.success.total_count,
+		  });
+		  var total_count = response.data.success.total_count;
+		  total_count.map((item) => {
+		    switch (item.attendance_type) {
+		      case 1:
+		        this.setState({
+		          total_present: item.total,
+		        });
+		        break;
+		      case 2:
+		        this.setState({
+		          total_absent: item.total,
+		        });
+		        break;
+		      case 3:
+		        this.setState({
+		          total_leave: item.total,
+		        });
+		        break;
+		      case 4:
+		        this.setState({
+		          total_none: item.total,
+		        });
+		        break;
+		    }
+		  });
+		});
+		}
+		else{
+			url = "/api/v1/attendance/get_particular/" +this.props.type + "/" + this.props.staff_id
+			axios({
+				url:url,
+				method:"post",
+				data: {
+				    data: date,
+				  },
+			}).then(response=>{
+				console.log(response.data)
+
+				  self.setState({
+				    attendance_details: response.data.success.attendance_details,
+				    staff_details: response.data.success.student_details,
+				    total_month_count: response.data.success.total_month_count,
+				    total_count: response.data.success.total_count,
+				  });
+				  var total_count = response.data.success.total_count;
+				  total_count.map((item) => {
+				    switch (item.attendance_type) {
+				      case 1:
+				        this.setState({
+				          total_present: item.total,
+				        });
+				        break;
+				      case 2:
+				        this.setState({
+				          total_absent: item.total,
+				        });
+				        break;
+				      case 3:
+				        this.setState({
+				          total_leave: item.total,
+				        });
+				        break;
+				      case 4:
+				        this.setState({
+				          total_none: item.total,
+				        });
+				        break;
+				  }
+				})
+			})
+		}
+	}
+	componentDidMount(){
+		this.getAttendance()
+	}
+	componentWillReceiveProps(){
+		this.getAttendance()
+	}
+	handleDate(e){
+		this.setState({
+			date:e.target.value
+		})
+		this.getAttendance(e.target.value)
+	 };
+
+	render(){
+		const dataPoints = [{"y":this.state.total_present,label:"Total Present"},
+							{"y":this.state.total_absent,label:"Total Absent"},
+							  									   {"y":this.state.total_leave,label:"Total Leave"},
+							  									   {"y":this.state.total_none,label:"Total None Entry"}
+							  										];
+		return(
+			<div className="card mb-4">
+			  <div className="card-body">
+			    <div className="row">
+						<div className="col-md-12">
+			              <div className="form-group">
+			                <label className="form-control-label" htmlFor="example3cols1Input">Select Month</label>
+			                <input value={this.state.date} onChange={(e) => this.handleDate(e)} className="form-control" type="month" id="bdaymonth" name="bdaymonth" />
+	    		          </div>	
+
+			            {this.state.attendance_details && 
+			            	<div>
+			            		<div className="row">
+			            			<table className="table">
+			            				<tr>
+			            				<td><label className="form-control-label">Total Present</label></td>
+			            				<td><input type="number" className="form-control" disabled value={this.state.total_present}/></td>
+			            				<td><label className="form-control-label"> Total Absent</label></td>
+			            				<td><input type="number" className="form-control" disabled value={this.state.total_absent}/></td>
+			            				</tr>
+			            				<tr>
+			            				<td><label className="form-control-label"> Total Leave</label></td>
+			            				<td><input type="number" className="form-control" disabled value={this.state.total_leave}/></td>
+			            				<td><label className="form-control-label"> None Entry</label></td>
+			            				<td><input type="number" className="form-control" disabled value={this.state.total_none}/></td>
+			            				</tr>
+			            				<tr>
+			            				<td><label className="form-control-label"> Total Entry</label></td>
+			            				<td><input type="number" className="form-control" disabled value={this.state.total_month_count}/></td>
+			            				</tr>
+			            			</table>
+			            		</div>
+			            		<br />
+			            		<div className="row">
+								  <div className="table-responsive">
+								    <table className="table">
+								      <thead>
+								        <th>S.NO</th>
+								        <th>DATE</th>
+								        <th>DAY</th>
+								        <th>ATTENDANCE</th>
+								      </thead>
+								      <tbody>
+								        {this.state.attendance_details.map((item, id) => {
+								          return (
+								            <EveryStudentRowForIndividual
+								              id={id + 1}
+								              user={this.state.student_details}
+								              attendance={item}
+								              type="1"
+								            />
+								          );
+								        })}
+								      </tbody>
+								    </table>
+								  </div>
+							  	</div>
+			            		<br />
+			            		<br />
+			            		<br />
+							  	<div className="row">
+							  		<Chart type="pie" title="Student Monthly Attendance" file_name="student_monthly_attendance" dataPoints={dataPoints}/>	
+							  	</div>
+							</div>
+			            }
+			            </div>
+			    </div>
+			  </div>
+			</div>
+		)
+	}
+}
+
+
+export const EveryStudentRowForIndividual = ({id,user,attendance,type}) => {
+	var weekday = new Array(7);
+	weekday[0] = "Sunday";
+	weekday[1] = "Monday";
+	weekday[2] = "Tuesday";
+	weekday[3] = "Wednesday";
+	weekday[4] = "Thursday";
+	weekday[5] = "Friday";
+	weekday[6] = "Saturday";
+	return(
+		<tr>
+		  <td>{id}</td>
+		  <td>{attendance.attendance_date}</td>
+		  <td>{weekday[new Date(attendance.attendance_date).getDay()]}</td>
+		  <td>{renderStudentAttendance(attendance.attendance_type)}</td>
+		</tr>
+	)
+}
+
+
+const Chart  = ({file_name,title,type,dataPoints}) => {
+	const options = {
+      animationEnabled: true,
+      exportFileName: file_name,
+      theme: "light2",
+      title:{
+        text: title
+      },
+      exportEnabled: true,
+      data: [{
+        type: type,
+        dataPoints: dataPoints
+    }]
+    };
+	return(
+    	<CanvasJSChart options = {options} />
+	)
 }

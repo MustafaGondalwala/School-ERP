@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\StudentAttendance;
 use App\StudentInfo;
 use App\Classes;
+use Carbon\Carbon;
 use App\StaffInfo;
+use \DB;
 class AttendanceController extends Controller
 {
 	public function updateStaffAttendance(Request $request){
@@ -17,6 +19,42 @@ class AttendanceController extends Controller
 			StudentAttendance::where('id',$value["id"])->update(["attendance_type"=>$value["attendance_type"]]);
 		}
 		return response()->json(["success"=>["staff_attendance"=>$request->staff_attendance]]);
+	}
+	public function getParticularAttendance(Request $request,$user_type,$id){
+		if($user_type == "student"){
+			$getStudent = StudentInfo::select('id','roll_no','father_name','student_name')->findorFail($id);
+			$carbon_date = Carbon::parse($request->data);
+			$month = $carbon_date->month;
+			$year = $carbon_date->year;
+			
+			$details_fetch = StudentAttendance::whereYear('created_at', '=', $year)
+              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->
+              get();
+            $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                 ->groupBy('attendance_type')
+                 ->whereYear('created_at', '=', $year)
+              	 ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])
+                 ->get();
+
+            return response()->json(["success"=>["student_details"=>$getStudent,"attendance_details"=>$details_fetch,"total_month_count"=>count($details_fetch),"total_count"=>$every_count]]);
+		}
+
+		if($user_type=="staff"){
+			$getStaff = StaffInfo::select('id','empid','designation')->findorFail($id);
+			$carbon_date = Carbon::parse($request->data);
+			$month = $carbon_date->month;
+			$year = $carbon_date->year;
+			$details_fetch = StudentAttendance::whereYear('created_at', '=', $year)
+              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>2])->
+              get();
+            $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                 ->groupBy('attendance_type')
+                 ->whereYear('created_at', '=', $year)
+              	 ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>2])
+                 ->get();
+            return response()->json(["success"=>["staff_details"=>$getStaff,"attendance_details"=>$details_fetch,"total_month_count"=>count($details_fetch),"total_count"=>$every_count]]);
+		}
+
 	}
 	public function getStaffAttendance(Request $request){
 		$request->validate([
@@ -59,10 +97,10 @@ class AttendanceController extends Controller
 				$new_student_attendance->attendance_date = $request->date;
 				$new_student_attendance->class_id = $class_id;
 				$new_student_attendance->save();
-			}else{
-				$check_if_avaible["student"] = $value;
-				array_push($send_array,$check_if_avaible);
+				$check_if_avaible = $new_student_attendance;
 			}
+			$check_if_avaible["student"] = $value;
+			array_push($send_array,$check_if_avaible);
 		}
 		return response()->json(["success"=>["student_attendance"=>$send_array]]);
 	}

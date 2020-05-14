@@ -77,11 +77,16 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('/get-time-table-teacher-wise',"TimeTableController@getTeacherTimeTable");
   });
 
+
+  Route::group(["prefix"=>"staff"],function(){
+    Route::get("/searchable","StaffController@getStaffSearchable");
+  });
   Route::group(["prefix"=>"attendance"],function(){
     Route::post("","AttendanceController@getStudentAttendance");
     Route::patch("","AttendanceController@updateStudentAttendance");
     Route::post("/staff","AttendanceController@getStaffAttendance");
     Route::patch("/staff","AttendanceController@updateStaffAttendance");
+    Route::post("/get_particular/{type}/{id}","AttendanceController@getParticularAttendance");
   });
 
   Route::group(['prefix'=>"student"],function(){

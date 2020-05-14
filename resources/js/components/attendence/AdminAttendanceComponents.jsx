@@ -1,6 +1,11 @@
 import React,{Component} from "react"
 import {Link} from "react-router-dom"
-import {EveryStudentRow,SelectClass,FillAttendanceForm,SelectDate,FillAttendanceFormStaff} from "./utils/utiles"
+import {EveryStudentRow,
+		SelectClass,
+		FillAttendanceForm,
+		SelectDate,
+		ViewParticularAttendance,
+		FillAttendanceFormStaff} from "./utils/utiles"
 
 
 
@@ -156,7 +161,6 @@ export  class EditAttendanceStudent extends Component{
 			<AdminAttendanceHeader mainHeader="Attendance" header="Student Attendance"/>
 	    		<div className="container-fluid mt--6">
 					<SelectClass title="Select Class" back_link={"/admin/attendance"}  submit={this.getClass}/>
-					{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} date={this.state.date} classes={this.state.classes} section={this.state.section} />}
 				</div>
 			</div>
 		)
@@ -169,9 +173,31 @@ export const AttendanceHomePage = ()  => (
 				  <div className="row card-wrapper">
 	            		<ColComponent title={"Student Attendance"} description={"Edit/View Student Attendance in System"} button_text="Enter" link={"/admin/attendance/edit-student-attendance"} />
 	            		<ColComponent title={"Staff Attendance"} description={"Edit/View Staff Attendance in System"} button_text="Enter" link={"/admin/attendance/edit-staff-attendance"} />
-	            		<ColComponent title={"View Particular Student Attendance"} description={"View Particular Student Attendance in System"} button_text="Enter" link={"/admin/attendance/edit-student-attendance"} />
-	            		<ColComponent title={"View Particular Staff Attendance"} description={"View Particular Staff Attendance in System"} button_text="Enter" link={"/admin/attendance/edit-staff-attendance"} />
+	            		<ColComponent title={"View Particular Student Attendance"} description={"View Particular Student Attendance in System"} button_text="Enter" link={"/admin/attendance/view-particular-student-attendance"} />
+	            		<ColComponent title={"View Particular Staff Attendance"} description={"View Particular Staff Attendance in System"} button_text="Enter" link={"/admin/attendance/view-particular-staff-attendance"} />
 			       </div>
 				</div>
 			</div>
+)
+
+export class ViewParticularStudentAttendance extends Component{
+	render(){
+		return(
+			<div>
+				<AdminAttendanceHeader mainHeader="Attendance" header="View Particular" sub_header="Student"/>
+				<div className="container-fluid mt--6">
+					<ViewParticularAttendance access_type="admin" title="View Particular Student" user_type="student" back_link="/admin/attendance" />
+				</div>
+			</div>
+		)
+	}
+}
+
+export const ViewParticularStaffAttendance = () => (
+	<div>
+				<AdminAttendanceHeader mainHeader="Attendance" header="View Particular" sub_header="Staff"/>
+				<div className="container-fluid mt--6">
+					<ViewParticularAttendance access_type="admin" title="View Particular Staff" user_type="staff" back_link="/admin/attendance" />
+				</div>
+			</div>	
 )

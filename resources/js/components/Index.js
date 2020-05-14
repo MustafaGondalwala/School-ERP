@@ -40,7 +40,11 @@ import FillExamMarksheet from "./exam/pages/FillExamMarksheet";
 
 import {AdminLeaveHome,AttendLeaveRequest} from "./leave/AdminLeaveComponent"
 
-import { AttendanceHomePage,EditAttendanceStudent,EditAttendanceTeacher } from "./attendence/AdminAttendanceComponents"
+import { AttendanceHomePage,
+         EditAttendanceStudent,
+        EditAttendanceTeacher,
+        ViewParticularStudentAttendance,
+        ViewParticularStaffAttendance } from "./attendence/AdminAttendanceComponents"
 import { TeacherAttendanceHome,TeacherAttendanceEditView , TeacherAttendanceViewIndividual} from "./attendence/TeacherAttendaneComponent"
 
 import { createStore, applyMiddleware } from "redux";
@@ -111,6 +115,8 @@ class Index extends Component {
                 <AdminDashboardRoutes path="/admin/attendance" exact component={AttendanceHomePage} />
                 <AdminDashboardRoutes path="/admin/attendance/edit-student-attendance" exact component={EditAttendanceStudent} />
                 <AdminDashboardRoutes path="/admin/attendance/edit-staff-attendance" exact component={EditAttendanceTeacher} />
+                <AdminDashboardRoutes path="/admin/attendance/view-particular-student-attendance" exact component={ViewParticularStudentAttendance} />
+                <AdminDashboardRoutes path="/admin/attendance/view-particular-staff-attendance" exact component={ViewParticularStaffAttendance} />
 
 
                 <AdminDashboardRoutes path="/admin/exam" exact main_header="Exam"  header="Exam" subheader="Home" component={ExamHomePage} />
