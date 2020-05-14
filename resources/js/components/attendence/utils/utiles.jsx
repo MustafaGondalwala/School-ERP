@@ -3,9 +3,58 @@ import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import DatePicker from "react-datepicker";
 import moment from "moment"
+import Select from "react-select"
 import "react-datepicker/dist/react-datepicker.css";
 
 
+export class ShowAttendance extends Component{
+	render(){
+		return(
+			<div>Mustafa</div>
+		)
+	}
+}
+
+export class SelectStudent extends Component{
+	constructor(props){
+		super(props)
+		this.state = {
+		  student_list: [],
+		}
+	  }
+	
+	  componentDidMount(){
+		var self = this
+		axios({
+		  url:"/api/v1/student/searchable/"+this.props.class_id
+		}).then(response=>{
+		  self.setState({
+			student_list:response.data.success.student
+		  })
+		})
+	  }
+	 
+	render(){
+		return(
+			<div className="card mb-4">
+				<div className="card-header">
+				<h3 className="mb-0">{this.props.title} <Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+				</div>
+				<div className="card-body">
+				<div className="row">
+					<div className="col-md-6">
+					<div className="form-group">
+						<label className="form-control-label" htmlFor="example3cols1Input">Select Student</label>
+						<Select options={this.state.student_list}  onChange={this.props.handleInputChange} />
+						{/* {errors_student_list && <InlineError  text={errors_student_list}/>} */}
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		)
+	}
+}
 const renderStudentAttendance = (attendance_type) => {
 	switch(attendance_type){
 		case 1:
@@ -62,10 +111,10 @@ export class SelectDate extends Component{
 	    super(props);
 	    this.state = {
 	    	  dateT:moment(new Date()).format('YYYY-MM-DD'),
-	    	  date:new Date(),
+	    	  date:moment(new Date()).format('MM-DD-YYYY'),
 	    }
 	    this.get_attendance_response = this.get_attendance_response.bind(this)
-	    this.handleDate = this.handleDate.bind(this)
+	    this.DatePickerChange = this.DatePickerChange.bind(this)
 	}
 
 	get_attendance_response(attendance_type){
@@ -77,12 +126,13 @@ export class SelectDate extends Component{
 	  			})
 	}
 
-	handleDate(date){
-	    this.setState({
-	      date :date,
-	      dateT:moment(date).format('YYYY-MM-DD')
+	DatePickerChange(data){
+		this.setState({
+	      date :data.target.value,
+	      dateT:moment(data.target.value).format('YYYY-MM-DD')
 	    });
-	  };
+	    this.props.submit(moment(data.target.value).format('YYYY-MM-DD'),"fill")
+	}
 	render(){
 		const {errors} = this
 		return(
@@ -97,13 +147,8 @@ export class SelectDate extends Component{
 					<div className="col-md-4">
 		              <div className="form-group">
 		                <label className="form-control-label" htmlFor="example3cols1Input">Select Date</label>
-    		          	<DatePicker
-    		          		className="form-control"
-					        selected={this.state.date}
-					        onSelect={(e) => this.handleDate(e)}
-					        onChange={(e) => this.handleDate(e)}
-					      />  
-    		          </div>
+				        <input class="form-control datepicker" value={this.state.date} onSelect={this.DatePickerChange} placeholder="Select date" type="text" />
+    		          </div>	
 		            </div>	        		
 				</div>
 	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
@@ -462,8 +507,13 @@ export class FillAttendanceForm extends Component{
 			date:this.props.date,
 			student_attendance:null,
 		})
+
+		var url = "/api/v1/attendance"
+		if(this.props.user_type == "teacher"){
+			url = "/api/v1/attendance/teacher"
+		}
 		axios({
-			url:"/api/v1/attendance",
+			url:url,
 			method:"post",
 			data: {
 				classes:this.props.classes,
@@ -522,9 +572,13 @@ export class FillAttendanceForm extends Component{
 		this.setState({
 			button_text:"Updating Attendance ..."
 		})
+		var url = "/api/v1/attendance"
+		if(this.props.user_type == "teacher"){
+			url = "/api/v1/attendance/teacher"
+		}
 		axios({
 			method:"patch",
-			url:"/api/v1/attendance/",
+			url:url,
 			data: this.state,
 		}).then(response => {
 			var student_attendance = response.data.success.student_attendance
@@ -537,12 +591,21 @@ export class FillAttendanceForm extends Component{
 			var total_leave = 0;
 			student_attendance.map(item => {
 				switch(item.attendance_type){
+					case "1":
+						total_present += 1;
+						break;
 					case 1:
 						total_present += 1;
+						break;
+					case "2":
+						total_absent += 1;
 						break;
 					case 2:
 						total_absent += 1;
 						break;
+					case "3":
+						total_leave += 1
+						break
 					case 3:
 						total_leave += 1
 						break

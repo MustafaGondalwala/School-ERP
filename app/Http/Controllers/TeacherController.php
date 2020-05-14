@@ -7,9 +7,27 @@ use App\Teacher;
 use App\User;
 use App\Classes;
 use App\StaffInfo;
-
+use App\StudentAttendance;
+use \DB;
 class TeacherController extends Controller
 {
+
+  public function getTeacherHeader($header_type){
+    $class = Classes::select('id')->where("assign_teacher_id",Auth()->user()->id)->get();
+    $send_array = [];
+    foreach ($class as $key => $value) {
+      $total_present = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',1)->first()->total;
+      $total_leave = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',2)->first()->total;
+      $total_absent = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',3)->first()->total;
+      $total_pending = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',4)->first()->total;
+
+      $send_array[$value['id']] = array('total_present' => $total_present,'total_leave'=>$total_leave,'total_absent'=>$total_absent,'total_pending'=>$total_pending);
+    }
+    return response()->json(["success"=>["attendance_header"=>$send_array]]);
+  }
+  public function getAssignedClass($teacher_id){
+    return response()->json(["success"=>["assigned_class"=>Classes::where("assign_teacher_id",$teacher_id)->get()]]);
+  }
   public function updateAssignTeachertoClass(Request $request){
     $request->validate([
       "class_id"=>"required|integer",
@@ -30,14 +48,13 @@ class TeacherController extends Controller
   }
 	public function getAllTeacherSearchable(){
 	  $all_teacher = Teacher::limit(600)->get();
-      $label_teacher = array();
+    $label_teacher = array();
       foreach ($all_teacher as $key => $value) {
         $label = $value->teacher_name;
         array_push($label_teacher,array("value"=>$value->id,"label"=>$label));
       }
       return response()->json(["success"=>["teacher"=>$label_teacher]]);
 	}
-
   public function getTeacherDetails($teacher_id){
     return response()->json(["success"=>["teacher_details"=>Teacher::findorFail($teacher_id)]]);
   }
@@ -113,7 +130,8 @@ class TeacherController extends Controller
         $login_teacher->name = $teacher->teacher_name;
         $login_teacher->empid = $teacher->empid;
         $login_teacher->user_type = "teacher";
-        $login_teacher->password = bcrypt($teacher->emp_id);
+        $login_teacher->password = bcrypt($teacher->empid);
+        $login_teacher->login_text = $teacher->empid;
         $login_teacher->save();
         return $login_teacher->id;
       }

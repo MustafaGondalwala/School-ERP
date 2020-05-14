@@ -136,56 +136,9 @@ export default class SelectClass extends Component{
 	          	<Link  to="/admin/exam" class="btn btn-neutral float-right" type="submit">Back</Link></h3>
 			    </div>
 			    <div className="card-body">
-			    	<div className="row">
-			    		<div className="col-md-6">
-			              <div className="form-group">
-		                       <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
-		                       <select class="form-control"  name="class_" onChange={(e) =>this.onChangeClasses(e)}>
-		                       					<option value="">Select Class</option>
-		                                        {this.state.distinct_classes.map(function(item){
-		                                          return <option value={item}>{item}</option>
-		                                        })}
-		                       </select>
-                       			{errors.class_ && <InlineError text={errors.class_} />}
-
-		                     </div>
-			            </div>
-			            <div className="col-md-4">
-			             	<div className="form-group">
-		                       				<label className="form-control-label" htmlFor="example3cols3Input">Section</label>
-		                                    <select class="form-control" value={this.state.section_} name="section_" onChange={(e) =>this.onChange(e)}>
-		                                      {
-		                                        this.state.section &&
-		                                        this.state.section.map((item)=>{
-		                                          return <option  value={item}>{item}</option>
-		                                        })
-		                                      }
-		                                      </select>
-                       			{errors.section_ && <InlineError text={errors.section_} />}
-
-		                     </div>
-			            </div>
-			             <div className="col-md-4">
-			              <div className="form-group">
-			                <label className="form-control-label" htmlFor="example3cols1Input">Select Year</label>
-			              <select name="select_year" value={this.state.select_year} name="select_year" onChange={(e)=>this.onChange(e)} class="form-control"><option value="17-18">2017-18</option><option value="18-19">2018-19</option><option value="19-20">2019-20</option><option value="20-21">2020-21</option><option value="21-22">2021-22</option><option value="22-23">2022-23</option><option value="23-24">2023-24</option></select>
-                       			{errors.select_year && <InlineError text={errors.select_year} />}
-			              
-			              </div>
-			            </div>
-
-
-			            <div className="col-md-4">
-			              <div className="form-group">
-			                  <label className="form-control-label" htmlFor="example3cols1Input">Exam Type</label>
-				              <select name="select_year" value={this.state.exam_type_} name="exam_type_" onChange={(e)=>this.onChange(e)} class="form-control">
-				              		<option value="">Select Exam Type</option>
-			                                        {this.state.exam_type.map(function(item){
-			                                          return <option value={item.id}>{item.exam_type}</option>
-			                                        })}
-				              </select>
-                       			{errors.exam_type_ && <InlineError text={errors.exam_type_} />}
-			              </div>
+			    		<div className="row">
+			    		
+			             <GetClassID />
 			            </div>
 
 			             <div className="col-md-4">
@@ -203,7 +156,6 @@ export default class SelectClass extends Component{
 			            </div>
 			    	</div>
 			    </div>
-			 </div>
 		)
 	}
 }

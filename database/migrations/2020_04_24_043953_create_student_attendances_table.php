@@ -19,6 +19,7 @@ class CreateStudentAttendancesTable extends Migration
             $table->integer('user_id');
             $table->date("attendance_date");
             $table->integer("attendance_type")->comments("1=> Present 2=> Leave 3=> Absence 4 => Blank")->default(4);
+            $table->integer('class_id')->nullable();
             $table->timestamps();
         });
     }

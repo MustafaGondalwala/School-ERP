@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\StudentAttendance;
 use App\StudentInfo;
+use App\Classes;
 use App\StaffInfo;
 class AttendanceController extends Controller
 {
@@ -45,7 +46,9 @@ class AttendanceController extends Controller
 			"classes" => "required",
   			"date" => "required|date"
   		]);
-		$all_students = StudentInfo::select('id','roll_no','father_name','student_name')->where(["class"=>$request->classes,"section"=>$request->section_name])->get();
+		$all_students = StudentInfo::select('id','roll_no','father_name','student_name')->where(["class"=>$request->classes,"section"=>$request->section])->get();
+		
+		$class_id = Classes::where(["class_title"=>$request->classes,"section"=>$request->section])->first()->id;
 		$send_array = [];
 		foreach ($all_students as $key => $value) {
 			$check_if_avaible = StudentAttendance::where(["user_type"=>1,"user_id"=>$value["id"],"attendance_date"=>$request->date])->first();
@@ -54,6 +57,7 @@ class AttendanceController extends Controller
 				$new_student_attendance->user_type = 1;
 				$new_student_attendance->user_id = $value["id"];
 				$new_student_attendance->attendance_date = $request->date;
+				$new_student_attendance->class_id = $class_id;
 				$new_student_attendance->save();
 			}else{
 				$check_if_avaible["student"] = $value;

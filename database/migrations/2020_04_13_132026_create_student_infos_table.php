@@ -27,8 +27,8 @@ class CreateStudentInfosTable extends Migration
             $table->string('student_name',70);
             $table->string('father_name',70);
             $table->string('mother_name',70)->nullable();
-            $table->string('father_contact_no1',15);
-            $table->string('father_contact_no2',15)->nullable();
+            $table->string('father_contact_no1');
+            $table->string('father_contact_no2')->nullable();
             $table->string('father_email')->nullable();
             $table->string('student_email')->nullable();
             $table->date('dob');

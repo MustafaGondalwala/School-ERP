@@ -14,7 +14,7 @@ export default class ViewStudentLoginPage extends Component {
   componentDidMount(){
     self = this
     axios({
-      url:"/api/v1/student/view-all-students-login-info"
+      url:"/api/v1/student/get/logininfo"
     }).then((response) => {
         self.setState({
             rows:response.data

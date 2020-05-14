@@ -77,7 +77,6 @@ export default class RegisterStudentForm extends Component {
   };
   onSubmit(e){
     e.preventDefault();
-    console.log(this.state.data)
     const errors = this.validate(this.state.data);
     this.setState({ errors });
     const formData = new FormData();
@@ -184,8 +183,6 @@ export default class RegisterStudentForm extends Component {
     })  
 
     if(this.props.student_info){
-      console.log(this.props.student_info)
-      this.setState({})
       this.setState({
         data:this.props.student_info,
         errors:{}
@@ -205,7 +202,6 @@ export default class RegisterStudentForm extends Component {
 
   render () {
     const { data, errors } = this.state;
-
     return (
       <div className="container-fluid mt--6">
        <div className="row">

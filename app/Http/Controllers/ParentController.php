@@ -9,8 +9,8 @@ class ParentController extends Controller
     //
 
     public function getParentChilds(Request $request){
-    	$mobile_no = Auth()->user()->mobile_no;
-    	$geStudents = StudentInfo::where('father_contact_no1',$mobile_no)->get();
+    	$id = Auth()->user()->id;
+    	$geStudents = StudentInfo::where('father_login_id',$id)->get();
     	return response()->json(["success"=>["students"=>$geStudents]]);
     }	
 }

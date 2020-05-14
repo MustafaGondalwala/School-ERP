@@ -107,15 +107,14 @@ export class EditAttendanceTeacher extends Component{
 		}
 		this.getDate = this.getDate.bind(this)
 	}
-
+	componentDidMount(){
+	}
 	getDate(date,attendance_type){
-		console.log(date,attendance_type)
 		this.setState({
 			date:date,
 			attendance_type:attendance_type
 		})
 	}
-
 	render(){
 		return(
 			<div>

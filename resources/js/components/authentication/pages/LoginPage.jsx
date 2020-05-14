@@ -26,8 +26,6 @@ class LoginPage extends Component{
       url:"/api/v1/login",
       data:data
     }).then(response=>{
-
-
       var login_user = this.props.login(response.data.success);
       var user_type = response.data.success.user.user_type
       var url = ""
@@ -37,23 +35,12 @@ class LoginPage extends Component{
         url = "/parent/dashboard"
       else if (user_type == "student")
         url = "/student/dashboard"
+      else if(user_type == "teacher")
+        url = "/teacher/dashboard"
       if(login_user){
         self.props.history.push(url)
       }
       return false;
-      localStorage.setItem('token',response.data.success.token);
-      localStorage.setItem('user_type',response.data.success.user.user_type);
-      localStorage.setItem('user',JSON.stringify(response.data.success.user));
-      var user_type = response.data.success.user.user_type
-      var url = ""
-      if(user_type == "admin")
-        url = "/admin/dashboard"
-      else if(user_type == "parent")
-        url = "/parent/dashboard"
-      else if (user_type == "student")
-        url = "/student/dashboard"
-      if(url != "")
-        self.props.history.push(url)
     }).catch(error=>{
       self.setState({
         errors:error.response.data.errors.message,

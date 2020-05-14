@@ -38,7 +38,23 @@ Route::group(["prefix"=>'v1','middleware'=>["auth:api","api","parentCheck"]],fun
   });
 });
 
-Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],function(){
+Route::group(["prefix"=>"v1","middleware"=>["auth:api","teacherCheck"]],function(){
+  Route::group(["prefix"=>"teacher"],function(){
+    Route::get("/assign/{teacher_id}","TeacherController@getAssignedClass");
+    Route::get('/{get_type}/header',"TeacherController@getTeacherHeader");    
+  });
+
+  Route::group(["prefix"=>"student"],function(){
+    Route::get('/searchable/{class_id}',"StudentController@getAllStudentsSearchableByClassId");
+  });
+  Route::group(["prefix"=>"attendance"],function(){
+    Route::post("/teacher","AttendanceController@getStudentAttendance");
+    Route::patch("/teacher","AttendanceController@updateStudentAttendance");
+
+  });
+});
+
+Route::group(['prefix'=>'v1'],function(){
  
   Route::group(["prefix"=>"leave"],function(){
     Route::get('',"LeaveController@getLeaveRequest");
@@ -74,6 +90,13 @@ Route::group(['prefix'=>'v1','middleware' => ['auth:api','api','adminCheck']],fu
       Route::post('/add-register-student','StudentController@addRegisterStudent');
       Route::get('/get-all-searable-student',"StudentController@getAllStudentsSearchable");
       Route::get('/get-indivitual-student/{student_id}',"StudentController@getIndividualStudent");
+      Route::put("/changepassword","StudentController@changePassword");
+      Route::get('/{class_id}',"StudentController@studentByClassId");
+      Route::post("/bycaste","StudentController@studentByCaste");
+      Route::get('/get/all',"StudentController@ViewAllStudents");
+      Route::get('/get/logininfo',"StudentController@viewAllStudentLoginInfo");
+      Route::get('/admin/header',"StudentController@studentAdminHeader");
+
   });
 
   Route::group(['prefix'=>'teacher'],function(){

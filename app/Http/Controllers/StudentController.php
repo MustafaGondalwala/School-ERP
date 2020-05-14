@@ -7,11 +7,39 @@ use App\StudentInfo;
 use App\TokenStore;
 use App\ParentInfo;
 use App\User;
+use App\AdmissionStudent;
+use App\Classes;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
+    public function ViewAllStudents(){
+      return StudentInfo::select(['roll_no','class','section','student_name','father_name','father_contact_no1','father_email','gender','place'])->get();
+    }
+    public function studentByCaste(Request $request){
+      $request->validate([
+        "religion"=>"string|required",
+        "caste"=>"string|required"
+      ]);
+      $students = StudentInfo::where(["religion"=>$request->religion,"caste"=>$request->caste])->get();
+      return response()->json(["success"=>["students"=>$students]]);
+    }
+    public function studentByClassId($class_id){
+      $class = Classes::select('class_title','section')->findOrFail($class_id);
+      return response()->json(["success"=>["students"=>StudentInfo::where(["class"=>$class->class_title,"section"=>$class->section])->get()]]);
+    }
+
+    public function getAllStudentsSearchableByClassId($class_id){
+      $classes = Classes::select('id',"class_title","section")->findOrFail($class_id);
+      $all_student = StudentInfo::select('student_name','roll_no','class','section','father_name')->limit(600)->where(["class"=>$classes->class_title,"section"=>$classes->section])->get();
+      $label_student = array();
+      foreach ($all_student as $key => $value) {
+        $label = $value->student_name." [".$value->roll_no."] [".$value->class."-".$value->section."] [".$value->father_name."]";
+        array_push($label_student,array("value"=>$value->id,"label"=>$label));
+      }
+      return response()->json(["success"=>["student"=>$label_student]]); 
+    }
     public function getAllStudentsSearchable(){
       $all_student = StudentInfo::limit(600)->get();
       $label_student = array();
@@ -145,5 +173,26 @@ class StudentController extends Controller
           $randomString .= $characters[rand(0, $charactersLength - 1)];
       }
       return $randomString;
+    }
+
+    public function changePassword(Request $request){
+      $request->validate([
+        "new_password"=>"string|min:4|required",
+        "student_id"=>"required|integer"
+      ]);
+      if(User::find($request->student_id)->update(["password"=>bcrypt($request->new_password)]))
+        return response()->json(["success"=>["password_change"=>true]]);
+      else
+        return response()->json(["success"=>["password_change"=>false]]);
+    }
+
+    public function studentAdminHeader(){
+      $total_students = StudentInfo::count();
+      $total_admission = AdmissionStudent::count();
+      return response()->json(["success"=>["header"=>["total_students"=>$total_students,"total_admission"=>$total_admission]]]);
+    }
+
+     public function viewAllStudentLoginInfo(Request $request){
+      return User::select(['id','name','roll_no'])->where('user_type',"student")->get();
     }
 }

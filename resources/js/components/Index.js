@@ -3,25 +3,26 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import DashboardHomePage from "./dashboard/HomePage"
 import ParentHomePage from "./dashboard/ParentHomePage"
+import TeacherLoginHomePage from "./dashboard/teacher/TeacherLoginHomePage"
 import AdminDashboardRoutes from "./AdminDashboardRoutes"
 import ParentDashboardRoutes from "./ParentDashboardRoutes"
+import GuestRoute from "./GuestRoute"
+import TeacherDashboardRoutes from "./TeacherDashboardRoutes"
 
 import { ParentLeaveHome } from "./leave/parent/ParentLeaveComponent"
 import  RequestLeave  from "./leave/parent/RequestLeave"
-
-import StudentHomePage from "./student/StudentHomePage"
-import RegisterStudentPage from "./student/pages/RegisterStudentPage"
-import AdmissionStudentPage from "./student/pages/AdmissionStudentPage"
-import ViewAllStudentPage from "./student/pages/ViewAllStudentPage"
-import ViewStudentLoginPage from "./student/pages/ViewStudentLoginPage"
-
+import { AdminStudentHomePage, 
+         RegisterStudentPage,
+         ViewAllStudentPage, 
+         AdmissionStudentPage, 
+         AdmissionList, 
+         UploadStudentInfo, 
+         ViewStudentLoginPage,
+         ReportClassSectionWise,
+         ReportStudentClassWise } from "./student/AdminStudentComponents"
 import  {TeacherHomePage, AddTeacherPage,ViewAllTeacher, AssignTeacher, ProfileUpdateTeacher } from "./teacher/AdminComponents"
-// import ProfileUpdateTeacher from "./teacher/pages/ProfileUpdateTeacher"
-// import TeacherHomePage from "./teacher/TeacherHomePage";
-// import  from "./teacher/pages/AddTeacherPage";
-// import AssignTeacher from "./teacher/pages/AssignTeacher";
+
 import SettingHomePage from "./setting/SettingHomePage"
-import AdmissionList from "./student/pages/AdmissionList";
 import LoginPage from "./authentication/pages/LoginPage";
 
 import PayFeesHomePage,{ FeesHomePage,SetFeesInstallments, SetFeesDueDate, ViewFeeReceipt, SetIndividualFees, ManageClerkLogin } from "./fees/AdminFeesComponent";
@@ -36,12 +37,11 @@ import ViewTimeTableTeacher from "./time_table/pages/ViewTimeTableTeacher"
 import ExamHomePage from "./exam/ExamHomePage";
 import AddAdmitCard from "./exam/pages/AddAdmitCard";
 import FillExamMarksheet from "./exam/pages/FillExamMarksheet";
-import UploadStudentInfo from "./student/pages/UploadStudentInfo";
 
 import {AdminLeaveHome,AttendLeaveRequest} from "./leave/AdminLeaveComponent"
 
 import { AttendanceHomePage,EditAttendanceStudent,EditAttendanceTeacher } from "./attendence/AdminAttendanceComponents"
-
+import { TeacherAttendanceHome,TeacherAttendanceEditView , TeacherAttendanceViewIndividual} from "./attendence/TeacherAttendaneComponent"
 
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -73,19 +73,25 @@ class Index extends Component {
             <Provider store={store}>
 
                 <AdminDashboardRoutes path="/admin/dashboard"  exact main_header="Dashboard"  header="Dashboard" subheader="Home" component={DashboardHomePage} />
-                <AdminDashboardRoutes path="/admin/student" exact main_header="Student"  header="Student" subheader="Home" component={StudentHomePage} />
-                <AdminDashboardRoutes path="/admin/student/add-new-student" exact main_header="Student"  header="Student" subheader="Register Student" component={RegisterStudentPage} />
-                <AdminDashboardRoutes path="/admin/student/add-new-admission-student" exact main_header="Student"  header="Student" subheader="Admission Student" component={AdmissionStudentPage} />
-                <AdminDashboardRoutes path="/admin/student/view-student" exact main_header="Student"  header="Student" subheader="View All Student" component={ViewAllStudentPage} />
-                <AdminDashboardRoutes path="/admin/student/view-student-login" exact main_header="Student"  header="Student" subheader="View Student Login" component={ViewStudentLoginPage} />
-                <AdminDashboardRoutes path="/admin/student/update-student-info" exact main_header="Student"  header="Student" subheader="Profile Update" component={UploadStudentInfo} />
+                <AdminDashboardRoutes path="/admin/student" exact component={AdminStudentHomePage} />
+                <AdminDashboardRoutes path="/admin/student/add-new-student" exact component={RegisterStudentPage} />
+                <AdminDashboardRoutes path="/admin/student/add-new-admission-student" exact component={AdmissionStudentPage} />
+                <AdminDashboardRoutes path="/admin/student/view-student" exact component={ViewAllStudentPage} />
+                <AdminDashboardRoutes path="/admin/student/view-student-login" exact component={ViewStudentLoginPage} />
+                <AdminDashboardRoutes path="/admin/student/update-student-info" component={UploadStudentInfo} />
+                <AdminDashboardRoutes path="/admin/student/admission-list" exact component={AdmissionList} />
+                <AdminDashboardRoutes path="/admin/student/student-class-section-wise" component={ReportClassSectionWise} />
+                <AdminDashboardRoutes path="/admin/student/student-caste-wise" component={ReportStudentClassWise} />
+
+
+
+
                 <AdminDashboardRoutes path="/admin/teacher" exact main_header="Teacher"  header="Teacher" subheader="Home" component={TeacherHomePage} />
                 <AdminDashboardRoutes path="/admin/teacher/add-teacher" exact main_header="Teacher"  header="Teacher" subheader="Add Teacher" component={AddTeacherPage} />
                 <AdminDashboardRoutes path="/admin/teacher/assign-teacher" exact main_header="Teacher"  header="Teacher" subheader="Assign Teacher to Class" component={AssignTeacher} />
                 <AdminDashboardRoutes path="/admin/teacher/view-all-teacher" exact main_header="Teacher"  header="Teacher" subheader="View Teacher" component={ViewAllTeacher} />
                 <AdminDashboardRoutes path="/admin/teacher/update-profile" exact main_header="Student"  header="Student" subheader="Profile Update" component={ProfileUpdateTeacher} />
                 <AdminDashboardRoutes path="/admin/setting" exact main_header="Settings"  header="Settings" subheader="View Settings" component={SettingHomePage} />
-                <AdminDashboardRoutes path="/admin/student/admission-list" exact main_header="Student"  header="Student" subheader="View Admission List" component={AdmissionList} />
                 
                 <AdminDashboardRoutes path="/admin/fees" exact main_header="Fees"  header="Fees" subheader="Fees HomePage" component={FeesHomePage} />
                 <AdminDashboardRoutes path="/admin/fees/set-installments" exact main_header="Fees"  header="Fees" subheader="Set Installments" component={SetFeesInstallments} />
@@ -102,11 +108,9 @@ class Index extends Component {
                 <AdminDashboardRoutes path="/admin/time-table/generate-time-table" exact main_header="Time Table"  header="Time Table" subheader="Generate Time Table" component={GenerateTimeTable} />
                 <AdminDashboardRoutes path="/admin/time-table/view-time-table" exact main_header="Time Table"  header="Time Table" subheader="View Time Table" component={ViewTimeTable} />
                 <AdminDashboardRoutes path="/admin/time-table/view-time-table-for-teacher" exact main_header="Time Table"  header="Time Table" subheader="View Time Table for Teacher" component={ViewTimeTableTeacher} />
-                
                 <AdminDashboardRoutes path="/admin/attendance" exact component={AttendanceHomePage} />
                 <AdminDashboardRoutes path="/admin/attendance/edit-student-attendance" exact component={EditAttendanceStudent} />
                 <AdminDashboardRoutes path="/admin/attendance/edit-staff-attendance" exact component={EditAttendanceTeacher} />
-                
 
 
                 <AdminDashboardRoutes path="/admin/exam" exact main_header="Exam"  header="Exam" subheader="Home" component={ExamHomePage} />
@@ -120,9 +124,15 @@ class Index extends Component {
                 <ParentDashboardRoutes path="/parent/dashboard" exact main_header="Parent" header="Home" component={ParentHomePage} />
                 <ParentDashboardRoutes path="/parent/leave/:student_id"  exact  component={ParentLeaveHome} />
                 <ParentDashboardRoutes path="/leave/:student_id/request-leave" exact  component={RequestLeave} />        
+                
 
+                <TeacherDashboardRoutes path="/teacher/attendance/:class_id" exact component={TeacherAttendanceHome} />
+                <TeacherDashboardRoutes path="/attendance/:class_id/edit" exact component={TeacherAttendanceEditView} />
+                <TeacherDashboardRoutes path="/teacher/dashboard" exact component={TeacherLoginHomePage}/>
+                <TeacherDashboardRoutes path="/attendance/:class_id/view" exact component={TeacherAttendanceViewIndividual} />
+                <GuestRoute path="/login" exact component={LoginPage}/>
+                <GuestRoute path="/" exact component={LoginPage}/>
 
-                <Route path="/login" component={LoginPage}/>
             </Provider>
          </BrowserRouter>
 

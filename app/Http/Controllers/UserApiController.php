@@ -49,6 +49,9 @@ class UserApiController extends Controller
     public function LoginCheckByEmail($email,$password){
         return Auth::attempt(['email' => $email, 'password' => $password]);
     }
+    public function LoginCheckByEmpID($empid,$password){
+        return Auth::attempt(['empid' => $empid, 'password' => $password]);
+    }
 
     public function login(Request $request){
       $request->validate([
@@ -57,31 +60,34 @@ class UserApiController extends Controller
       ]);
 
       $user_input = $request->email_mobile_no;
-      $check_with_email = User::where(["email"=>$request->email_mobile_no])->count();
-      $check_with_mobile_no = User::where(["mobile_no"=>$request->email_mobile_no])->count();
-      $check_with_rollno = User::where(["roll_no"=>$request->email_mobile_no])->count();
       $password = $request->password;
-      if($check_with_rollno == 0 && $check_with_email == 0 && $check_with_mobile_no == 0){
-        return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
-      }
-      $login_by_email = false;
-      $login_by_mobile_no = false;
-      $login_by_rollno = false;
-      if($check_with_email)
-        $login_by_email = $this->LoginCheckByEmail($user_input,$password);
-      else if($check_with_mobile_no)
-        $login_by_mobile_no = $this->LoginCheckByMobile($user_input,$password);
-      else
-        $login_by_rollno = $this->LoginCheckByRollNo($user_input,$password);
-      if($login_by_email || $login_by_mobile_no || $login_by_rollno){
-        
+
+      // $check_with_email = User::where(["email"=>$request->email_mobile_no])->count();
+      // $check_with_mobile_no = User::where(["mobile_no"=>$request->email_mobile_no])->count();
+      // $check_with_rollno = User::where(["roll_no"=>$request->email_mobile_no])->count();
+      // $check_with_empid = User::where(["empid"=>$request->email_mobile_no])->count();
+      // if($check_with_rollno == 0 && $check_with_email == 0 && $check_with_mobile_no == 0 && $check_with_empid == 0){
+      //   return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
+      // }
+      // $login_by_email = false;
+      // $login_by_mobile_no = false;
+      // $login_by_rollno = false;
+      // $login_by_empid = false;
+      // if($check_with_email)
+      //   $login_by_email = $this->LoginCheckByEmail($user_input,$password);
+      // else if($check_with_mobile_no)
+      //   $login_by_mobile_no = $this->LoginCheckByMobile($user_input,$password);
+      // else if($check_with_empid)
+      //   $login_by_empid = $this->LoginCheckByEmpID($user_input,$password);
+      // else
+      //   $login_by_rollno = $this->LoginCheckByRollNo($user_input,$password);
+
+      $check =  Auth::attempt(['login_text' => $user_input, 'password' => $password]);
+      if($check){
         $user = Auth::user();
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
+        $success['token'] =  $user->createToken('School ERP')->accessToken;
         $success['user'] = $user;
         $success["user_type"] = $user["user_type"];
-
-        $mobile_no = Auth()->user()->mobile_no;
-        $success["students"] = StudentInfo::where('father_contact_no1',$mobile_no)->get();
         return response()->json(['success' => $success], 200);
       }else{
         return response()->json(["errors"=>["message"=>"Cannot Found User"]],422);
@@ -272,7 +278,7 @@ class UserApiController extends Controller
     }
 
     public function viewAllStudentLoginInfo(Request $request){
-      return User::select(['id','name','email'])->where('user_type',"student")->get();
+      return User::select(['id','name','roll_no'])->where('user_type',"student")->get();
     }
     public function registerStudent(Request $request){
           $request->validate([

@@ -2,7 +2,6 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 export const ParentLeftSide = ({students}) => (
-
 	 <nav className="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
 	    <div className="scrollbar-inner">
 	      <div className="sidenav-header  d-flex  align-items-center">

@@ -65,7 +65,7 @@ class ParentDashboard extends Component {
          <div>
             <ParentLeftSide students={this.state.students} />
             <div className="main-content" id="panel">
-              <ParentTopNavbar/>
+              <ParentTopNavbar user={this.props.user} logout={this.props.logout}/>
                {this.props.children}
             </div>
          </div>
