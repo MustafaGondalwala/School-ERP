@@ -65,8 +65,6 @@
         ],
          "post-install-cmd": [
              "php artisan clear-compiled",
-             "npm install",
-             "npm run production",
              "chmod -R 777 public/",
              "php artisan passport:install",
              "php artisan migrate:sync"
