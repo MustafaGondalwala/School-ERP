@@ -4,6 +4,7 @@ import { USER_LOGGED_IN,
          PARENT_CHILDREN,
          ASSIGNED_TEACHER_CLASS,
          TEACHER_CLASS_ATTENDANCE,
+         ADMIN_ATTENDANCE_HEADER,
          ADMIN_STUDENT_HEADER } from "../types";
 import api from "../api";
 import setAuthorizationHeader from "../utils/setAuthorizationHeader";
@@ -44,6 +45,11 @@ export const adminStudentHeader = adminStudentHeader => ({
   adminStudentHeader
 })
 
+export const adminAttendanceHeader = adminAttendanceHeader => ({
+  type:ADMIN_ATTENDANCE_HEADER,
+  adminAttendanceHeader
+})
+
 export const login = response_data => dispatch => {
       localStorage.userAccount = JSON.stringify(response_data.user)
       localStorage.SMS = response_data.token
@@ -76,6 +82,10 @@ export const newAdminStudentHeader = data => dispatch => {
 }
 export const newTeacherAttendance = data => dispatch => {
   dispatch(attendanceTeacherHeader(data))
+}
+
+export const newAdminAttendancetHeader = data => dispatch => {
+  dispatch(adminAttendanceHeader(data))
 }
 
 export const newParentChildren = data => dispatch => {

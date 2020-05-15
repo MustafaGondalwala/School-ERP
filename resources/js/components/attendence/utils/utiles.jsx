@@ -109,228 +109,10 @@ const InlineError = ({ text }) => (
 );
 
 
-
-export class SelectDate extends Component{
-	constructor(props) {
-	    super(props);
-	    this.state = {
-	    	  dateT:moment(new Date()).format('YYYY-MM-DD'),
-	    	  date:moment(new Date()).format('MM-DD-YYYY'),
-	    }
-	    this.get_attendance_response = this.get_attendance_response.bind(this)
-	    this.DatePickerChange = this.DatePickerChange.bind(this)
-	}
-
-	get_attendance_response(attendance_type){
-	  	    if(this.state.class_ !== "")
-	  	   		this.props.submit(this.state.dateT,attendance_type)
-	  		else
-	  			this.setState({
-	  				class_error:"Can't be blank"
-	  			})
-	}
-
-	DatePickerChange(data){
-		this.setState({
-	      date :data.target.value,
-	      dateT:moment(data.target.value).format('YYYY-MM-DD')
-	    });
-	    this.props.submit(moment(data.target.value).format('YYYY-MM-DD'),"fill")
-	}
-	render(){
-		const {errors} = this
-		return(
-		<div className="card mb-4">
-	        <div className="card-header">
-	          <h3 className="mb-0">
-	          		{ this.props.title }
-	          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
-	        </div>
-	        <div className="card-body">
-	          <div className="row">
-					<div className="col-md-4">
-		              <div className="form-group">
-		                <label className="form-control-label" htmlFor="example3cols1Input">Select Date</label>
-				        <input class="form-control datepicker" value={this.state.date} onSelect={this.DatePickerChange} placeholder="Select date" type="text" />
-    		          </div>	
-		            </div>	        		
-				</div>
-	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
-	        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
-	        </div>
-      	</div>
-		)
-	}
-}
-
-
-
-export  class SelectClass extends Component{
-	constructor(props) {
-	    super(props);
-	    this.state = {
-	          section:[],
-	          distinct_classes:[],
-	          classes:[],
-	    	  classs_error:"",
-	    	  dateT:moment(new Date()).format('YYYY-MM-DD'),
-	    	  date:new Date(),
-	    	  class_:"",
-	    	  section_:"",
-	    	  attendance_type:""
-	    }
-	    this.get_attendance_response = this.get_attendance_response.bind(this)
-	    this.onChangeClasses =this.onChangeClasses.bind(this)
-	    this.handleDate = this.handleDate.bind(this)
-	}
-		   
-
-	   onChangeClasses(e){
-	    var value = e.target.value
-	     this.setState({
-	      attendance_type:"",
-	      class_error:""
-	    })
-	    var value_by = []
-	    this.state.classes.map((item)=>{
-	      if(item.class_title == value){
-	        value_by.push(item.section)
-	      }
-	    })
-	    this.setState({
-	      section:value_by
-	    })
-	    this.setState({
-	    	class_:e.target.value
-	    })
-	    if(value_by.length >= 1){
-	      this.setState({
-	        section_: value_by[0]
-	      })
-	    }else{
-	      this.setState({
-	        section_: "",
-	        section:[]
-	      })
-	    }
-	  }
-	  onChange(e){
-	    this.setState({
-	      [e.target.name]: e.target.value,
-	    });
-	    this.setState({
-	      attendance_type:""
-	    })
-	  }
-	  
-	  get_attendance_response(attendance_type){
-	  	   if(this.state.class_ !== ""){
-	  	   		this.setState({
-	  	   			class_error:"",
-	  	   			attendance_type:attendance_type
-	  	   		})
-	  	   		// this.props.submit(this.state.class_,this.state.section_,this.state.dateT,attendance_type)
-	  	   }
-	  		else
-	  			this.setState({
-	  				class_error:"Can't be blank"
-	  			})
-	  }
-
-	  handleDate(date){
-	    this.setState({
-	      date :date,
-	      dateT:moment(date).format('YYYY-MM-DD'),
-	      attendance_type:""
-	    });
-	  };
-	  componentDidMount(){
-	    var self = this
-	
-	    axios({
-	      method:"post",
-	      url:"/api/v1/class/get-all-classes"
-	    }).then(response=>{
-	      const uniqueClasses = [];
-	      response.data.success.classes.map(item => {
-	          if (uniqueClasses.indexOf(item.class_title) === -1) {
-	              uniqueClasses.push(item.class_title)
-	          }
-	      });
-	      self.setState({
-	        classes:response.data.success.classes,
-	        distinct_classes:uniqueClasses
-	      });
-	    })
-	  }
-	render(){
-		const {errors} = this
-		return(
-		<div>
-		<div className="card mb-4">
-	        <div className="card-header">
-	          <h3 className="mb-0">
-	          		{ this.props.title }
-	          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
-	        </div>
-	        <div className="card-body">
-	          <div className="row">
-	            <div className="col-md-6">
-	              <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
-                       <select class="form-control"  name="class" onChange={(e) =>this.onChangeClasses(e)}>
-                       					<option value="">Select Class</option>
-                                        {this.state.distinct_classes.map(function(item){
-                                          return <option value={item}>{item}</option>
-                                        })}
-                       </select>
-                       {this.state.class_error && <InlineError text={this.state.class_error} />}
-                     </div>
-	            </div>
-
-	            <div className="col-md-4">
-	             <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Section</label>
-                                    <select class="form-control" value={this.section_} name="section_" onChange={(e) =>this.onChange(e)}>
-                                      {
-                                        this.state.section &&
-                                        this.state.section.map((item)=>{
-                                          if(item != null)
-                                          return <option  value={item}>{item}</option>
-                                        })
-                                      }
-                                      </select>
-                     </div>
-	            </div>
-					<div className="col-md-4">
-		              <div className="form-group">
-		                <label className="form-control-label" htmlFor="example3cols1Input">Select Date<br /></label>
-    		          	<DatePicker
-    		          		className="form-control"
-					        selected={this.state.date}
-					        onSelect={(e) => this.handleDate(e)}
-					        onChange={(e) => this.handleDate(e)}
-					      />  
-    		          </div>
-		            </div>	        		
-				</div>
-	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
-	        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
-	        </div>
-      	</div>
-		{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} date={this.state.dateT} classes={this.state.class_} section={this.state.section_} />}
-      	</div>
-		)
-	}
-}
-
-
 export class FillAttendanceFormStaff extends Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			classes:null,
-			section:null,
 			date:null,
 			button_text:"Update Attendance"
 		}
@@ -348,7 +130,7 @@ export class FillAttendanceFormStaff extends Component{
 		var self = this
 		this.setState({
 			date:this.props.date,
-			staff_attendace:null,
+			staff_attendace:"",
 		})
 		axios({
 			url:"/api/v1/attendance/staff",
@@ -501,6 +283,233 @@ export class FillAttendanceFormStaff extends Component{
 		)
 	}
 }
+
+export class SelectDate extends Component{
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	    	dateT:moment(new Date()).format('YYYY-MM-DD'),
+	    	date:new Date(),
+	    	attendance_type:""
+	    }
+	    this.get_attendance_response = this.get_attendance_response.bind(this)
+	    this.DatePickerChange = this.DatePickerChange.bind(this)
+	}
+
+	get_attendance_response(attendance_type){
+	  	    if(this.state.dateT !== ""){
+	  	    	this.setState({
+	  	    		attendance_type
+	  	    	})
+	  	    }
+	  		else
+	  		this.setState({
+	  			date:"Can't be blank"
+	  		})
+	}
+
+	DatePickerChange(data){
+		this.setState({
+	      date :new Date(data),
+	      dateT:moment(data).format('YYYY-MM-DD')
+	    });
+	}
+	render(){
+		const {errors} = this
+		return(
+		<div>
+		<div className="card mb-4">
+	        <div className="card-header">
+	          <h3 className="mb-0">
+	          		{ this.props.title }
+	          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+	        </div>
+	        <div className="card-body">
+	          <div className="row">
+					<div className="col-md-4">
+		              <div className="form-group">
+		                <label className="form-control-label" htmlFor="example3cols1Input">Select Date</label>
+				        <DatePicker
+    		          		className="form-control"
+					        selected={this.state.date}
+					        onSelect={this.DatePickerChange}
+					        onChange={this.DatePickerChange}
+					      />  
+    		          </div>	
+		            </div>	        		
+				</div>
+	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
+	        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
+	        </div>
+      	</div>
+      	{this.state.attendance_type && <FillAttendanceFormStaff attendance_type={this.state.attendance_type} date={this.state.dateT}/>}
+      	</div>
+		)
+	}
+}
+
+
+
+export  class SelectClass extends Component{
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	          section:[],
+	          distinct_classes:[],
+	          classes:[],
+	    	  classs_error:"",
+	    	  dateT:moment(new Date()).format('YYYY-MM-DD'),
+	    	  date:new Date(),
+	    	  class_:"",
+	    	  section_:"",
+	    	  attendance_type:""
+	    }
+	    this.get_attendance_response = this.get_attendance_response.bind(this)
+	    this.onChangeClasses =this.onChangeClasses.bind(this)
+	    this.handleDate = this.handleDate.bind(this)
+	}
+		   
+
+	   onChangeClasses(e){
+	    var value = e.target.value
+	     this.setState({
+	      attendance_type:"",
+	      class_error:""
+	    })
+	    var value_by = []
+	    this.state.classes.map((item)=>{
+	      if(item.class_title == value){
+	        value_by.push(item.section)
+	      }
+	    })
+	    this.setState({
+	      section:value_by
+	    })
+	    this.setState({
+	    	class_:e.target.value
+	    })
+	    if(value_by.length >= 1){
+	      this.setState({
+	        section_: value_by[0]
+	      })
+	    }else{
+	      this.setState({
+	        section_: "",
+	        section:[]
+	      })
+	    }
+	  }
+	  onChange(e){
+	    this.setState({
+	      [e.target.name]: e.target.value,
+	    });
+	    this.setState({
+	      attendance_type:""
+	    })
+	  }
+	  
+	  get_attendance_response(attendance_type){
+	  	   if(this.state.class_ !== ""){
+	  	   		this.setState({
+	  	   			class_error:"",
+	  	   			attendance_type:attendance_type
+	  	   		})
+	  	   }
+	  		else
+	  			this.setState({
+	  				class_error:"Can't be blank"
+	  			})
+	  }
+
+	  handleDate(date){
+	    this.setState({
+	      date :date,
+	      dateT:moment(date).format('YYYY-MM-DD'),
+	      attendance_type:""
+	    });
+	  };
+	  componentDidMount(){
+	    var self = this
+	
+	    axios({
+	      method:"post",
+	      url:"/api/v1/class/get-all-classes"
+	    }).then(response=>{
+	      const uniqueClasses = [];
+	      response.data.success.classes.map(item => {
+	          if (uniqueClasses.indexOf(item.class_title) === -1) {
+	              uniqueClasses.push(item.class_title)
+	          }
+	      });
+	      self.setState({
+	        classes:response.data.success.classes,
+	        distinct_classes:uniqueClasses
+	      });
+	    })
+	  }
+	render(){
+		const {errors} = this
+		return(
+		<div>
+		<div className="card mb-4">
+	        <div className="card-header">
+	          <h3 className="mb-0">
+	          		{ this.props.title }
+	          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+	        </div>
+	        <div className="card-body">
+	          <div className="row">
+	            <div className="col-md-6">
+	              <div className="form-group">
+                       <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
+                       <select class="form-control"  name="class" onChange={(e) =>this.onChangeClasses(e)}>
+                       					<option value="">Select Class</option>
+                                        {this.state.distinct_classes.map(function(item){
+                                          return <option value={item}>{item}</option>
+                                        })}
+                       </select>
+                       {this.state.class_error && <InlineError text={this.state.class_error} />}
+                     </div>
+	            </div>
+
+	            <div className="col-md-4">
+	             <div className="form-group">
+                       <label className="form-control-label" htmlFor="example3cols3Input">Section</label>
+                                    <select class="form-control" value={this.section_} name="section_" onChange={(e) =>this.onChange(e)}>
+                                      {
+                                        this.state.section &&
+                                        this.state.section.map((item)=>{
+                                          if(item != null)
+                                          return <option  value={item}>{item}</option>
+                                        })
+                                      }
+                                      </select>
+                     </div>
+	            </div>
+					<div className="col-md-4">
+		              <div className="form-group">
+		                <label className="form-control-label" htmlFor="example3cols1Input">Select Date<br /></label>
+    		          	<DatePicker
+    		          		className="form-control"
+					        selected={this.state.date}
+					        onSelect={(e) => this.handleDate(e)}
+					        onChange={(e) => this.handleDate(e)}
+					      />  
+    		          </div>
+		            </div>	        		
+				</div>
+	          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
+	        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
+	        </div>
+      	</div>
+		{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} date={this.state.dateT} classes={this.state.class_} section={this.state.section_} />}
+      	</div>
+		)
+	}
+}
+
+
+
 
 export class FillAttendanceForm extends Component{
 	constructor(props){
@@ -885,8 +894,6 @@ export class ViewAttendance extends Component{
 				    data: date,
 				  },
 			}).then(response=>{
-				console.log(response.data)
-
 				  self.setState({
 				    attendance_details: response.data.success.attendance_details,
 				    staff_details: response.data.success.student_details,

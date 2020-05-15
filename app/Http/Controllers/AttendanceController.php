@@ -11,6 +11,15 @@ use App\StaffInfo;
 use \DB;
 class AttendanceController extends Controller
 {
+	public function getAttendanceHeader(Request $request){
+		$student = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                 ->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>1])->get();
+        $staff = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                 ->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>2])->get();
+        return response()->json(["success"=>["header"=>["student"=>$student,"staff"=>$staff]]]);
+
+	}
+
 	public function updateStaffAttendance(Request $request){
 		$request->validate([
   			"date" => "required|date"
@@ -28,7 +37,7 @@ class AttendanceController extends Controller
 			$year = $carbon_date->year;
 			
 			$details_fetch = StudentAttendance::whereYear('created_at', '=', $year)
-              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->
+              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->orderBy('created_at')->
               get();
             $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
                  ->groupBy('attendance_type')
@@ -45,8 +54,7 @@ class AttendanceController extends Controller
 			$month = $carbon_date->month;
 			$year = $carbon_date->year;
 			$details_fetch = StudentAttendance::whereYear('created_at', '=', $year)
-              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>2])->
-              get();
+              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>2])->orderBy('created_at')->get();
             $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
                  ->groupBy('attendance_type')
                  ->whereYear('created_at', '=', $year)

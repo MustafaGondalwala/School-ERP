@@ -87,6 +87,7 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post("/staff","AttendanceController@getStaffAttendance");
     Route::patch("/staff","AttendanceController@updateStaffAttendance");
     Route::post("/get_particular/{type}/{id}","AttendanceController@getParticularAttendance");
+    Route::get('/header',"AttendanceController@getAttendanceHeader");
   });
 
   Route::group(['prefix'=>"student"],function(){
