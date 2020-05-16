@@ -104,6 +104,7 @@ class AttendanceController extends Controller
 				$new_student_attendance->user_id = $value["id"];
 				$new_student_attendance->attendance_date = $request->date;
 				$new_student_attendance->class_id = $class_id;
+				$new_student_attendance->attendance_type = 4;
 				$new_student_attendance->save();
 				$check_if_avaible = $new_student_attendance;
 			}

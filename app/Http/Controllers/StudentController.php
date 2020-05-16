@@ -32,7 +32,7 @@ class StudentController extends Controller
 
     public function getAllStudentsSearchableByClassId($class_id){
       $classes = Classes::select('id',"class_title","section")->findOrFail($class_id);
-      $all_student = StudentInfo::select('student_name','roll_no','class','section','father_name')->limit(600)->where(["class"=>$classes->class_title,"section"=>$classes->section])->get();
+      $all_student = StudentInfo::select('id','student_name','roll_no','class','section','father_name')->limit(600)->where(["class"=>$classes->class_title,"section"=>$classes->section])->get();
       $label_student = array();
       foreach ($all_student as $key => $value) {
         $label = $value->student_name." [".$value->roll_no."] [".$value->class."-".$value->section."] [".$value->father_name."]";

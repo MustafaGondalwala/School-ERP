@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 import DatePicker from "react-datepicker";
 import moment from "moment"
 import Select from "react-select"
+import FillAttendanceForm from "./FillAttendanceForm"
 import "react-datepicker/dist/react-datepicker.css";
 import CanvasJSReact from '../../../assets/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -24,7 +25,7 @@ export class SelectStudent extends Component{
 	  componentDidMount(){
 		var self = this
 		var url = ""
-		if(this.props.class_id){
+		if(this.props.class_id && this.props.access_type==="teacher"){
 			url = "/api/v1/student/searchable/"+this.props.class_id
 		}else{
 			url = "/api/v1/student/get-all-searable-student"
@@ -511,228 +512,13 @@ export  class SelectClass extends Component{
 
 
 
-export class FillAttendanceForm extends Component{
-	constructor(props){
-		super(props)
-		this.state = {
-			classes:null,
-			section:null,
-			date:null,
-			button_text:"Update Attendance",
-			total_present:0,
-			total_absent:0,
-			total_leave:0
-		}
-		this.fetchProps = this.fetchProps.bind(this)
-		this.onChange = this.onChange.bind(this)
-		this.onSubmit = this.onSubmit.bind(this)
-	}
-
-	fetchProps(){
-		var self = this
-		this.setState({
-			classes:this.props.classes,
-			section:this.props.section,
-			date:this.props.date,
-			student_attendance:null,
-		})
-
-		var url = "/api/v1/attendance"
-		if(this.props.user_type == "teacher"){
-			url = "/api/v1/attendance/teacher"
-		}
-		axios({
-			url:url,
-			method:"post",
-			data: {
-				classes:this.props.classes,
-				section:this.props.section,
-				date:this.props.date
-			},
-		}).then( response => {
-			var student_attendance = response.data.success.student_attendance
-			self.setState({
-				student_attendance: student_attendance
-			})
-			var total_present = 0;
-			var total_absent = 0;
-			var total_leave = 0;
-			student_attendance.map(item => {
-				switch(item.attendance_type){
-					case 1:
-						total_present += 1;
-						break;
-					case 2:
-						total_absent += 1;
-						break;
-					case 3:
-						total_leave += 1
-						break
-				}
-			})
-			self.setState({
-				total_leave,total_present,total_absent
-			})
-
-		})
-	}
-	componentDidMount(){
-		this.fetchProps()
-	}
-	componentWillReceiveProps(){
-		this.fetchProps()
-	}
-
-	onChange(e){
-		var id  = e.target.getAttribute('data-id');
-		var temp_state = this.state.student_attendance
-		temp_state.map( item => {
-			if(item.id == id){
-				item.attendance_type = e.target.value 
-			}
-		})
-		this.setState({
-			student_attendance:temp_state
-		})
-	}
-
-	onSubmit(e){
-		var self = this;
-		this.setState({
-			button_text:"Updating Attendance ..."
-		})
-		var url = "/api/v1/attendance"
-		if(this.props.user_type == "teacher"){
-			url = "/api/v1/attendance/teacher"
-		}
-		axios({
-			method:"patch",
-			url:url,
-			data: this.state,
-		}).then(response => {
-			var student_attendance = response.data.success.student_attendance
-			self.setState({
-				student_attendance: student_attendance,
-				button_text:"Update Attendance"
-			})
-			var total_present = 0;
-			var total_absent = 0;
-			var total_leave = 0;
-			student_attendance.map(item => {
-				switch(item.attendance_type){
-					case "1":
-						total_present += 1;
-						break;
-					case 1:
-						total_present += 1;
-						break;
-					case "2":
-						total_absent += 1;
-						break;
-					case 2:
-						total_absent += 1;
-						break;
-					case "3":
-						total_leave += 1
-						break
-					case 3:
-						total_leave += 1
-						break
-				}
-			})
-			self.setState({
-				total_leave,total_present,total_absent
-			})
-		})
-	}
-
-	render(){
-		return(
-		  <div className="card mb-4">
-		    <div className="card-header">
-		      <h3 className="mb-0">
-
-		      {this.props.attendance_type == "fill" ? <span>Fill </span> : <span>View </span>}
-		       Attendance</h3>
-		    </div>
-		    <div className="card-body">
-		    	<div className="row">
-		    		<div className="col">
-		    			Attendance Date: {this.state.date}
-		    		</div>
-		    		<div className="col">
-		    			<div className="col">
-		    			<span>Class: {this.state.classes}</span>
-		    			</div>
-
-		    			{this.state.section && 
-		    				<div className="col"><span>Section: {this.state.section}</span></div>
-		    			}
-		    		</div>
-		    	</div>
-		    	<div className="row">
-		    		<div className="col">
-		    		<label><h5>Present Student:</h5></label>
-		    		<input type="text" disabled value={this.state.total_present} className="form-control" />
-		    		</div>
-		    		<div className="col">
-		    		<label><h5>Leave Student:</h5></label>
-		    		<input type="text" disabled value={this.state.total_leave} className="form-control" />
-		    		</div>
-		    		<div className="col">
-		    		<label><h5>Absent Student:</h5></label>
-		    		<input type="text" disabled value={this.state.total_absent} className="form-control" />
-		    		</div>
-		    	</div>
-		    	<br />
-		    	<br />
-
-		    	{this.state.student_attendance ? <span>
-		    		
-		    		<div classNameName="row">
-			    	<div className="table-responsive">
-				    	<table className="table datatable">
-				    		<thead>
-			    				<tr>
-					    			<th>S.no</th>
-					    			<th>Roll No</th>
-					    			<th>Student Name</th>
-					    			<th>Father Name</th>
-					    			<th>Attendance</th>
-					    			{this.props.attendance_type == "fill" &&
-					    				<th><input type="checkbox" className="custom-control-input"/>Check</th>
-					    			}
-			    				</tr>
-				    		</thead>
-				    		<tbody>
-				    		{this.state.student_attendance && this.state.student_attendance.map((item,id) => {
-				    			return <EveryStudentRow attendance_type={this.props.attendance_type} onChange={this.onChange} type="student" user={item} id={id}/>
-				    		})}
-				    		</tbody>
-				    	</table>
-			    	</div>
-		    	</div>
-		    	
-		    	{this.props.attendance_type == "fill" &&
-			    	<div className="row">
-			    		<button className="btn btn-primary" onClick={this.onSubmit}>{this.state.button_text}</button>
-			    	</div>
-		    	}
-		    	</span> : <h2>Loading ...</h2>}
-		    	
-		    </div>
-		  </div>
-
-		)
-	}
-}
 
 export class ViewParticularAttendance extends Component{
 	constructor(props){
 		super(props)
 		this.state = {
 			student_id:"",
-			staff_id:"23"
+			staff_id:""
 		}
 	}
 	render(){
@@ -753,6 +539,8 @@ export class ViewParticularAttendance extends Component{
 			      <SelectStudent
 			        handleInputChange={getStudentID}
 			        title={this.props.title}
+			        access_type={this.props.access_type}
+			        class_id={this.props.class_id}
 			        back_link={this.props.back_link}
 			      />
 			    </div>
@@ -761,9 +549,9 @@ export class ViewParticularAttendance extends Component{
 			    	<SelectStaff handleInputChange={getStaffID} title={this.props.title} back_link={this.props.back_link} />
 			    </div>
 			  )}
-
 			  {this.state.student_id && <ViewAttendance type="student"  student_id={this.state.student_id}/>}
 			  {this.state.staff_id && <ViewAttendance type="staff" staff_id={this.state.staff_id} />}
+				
 			</div>
 		)
 	}
@@ -1041,7 +829,7 @@ export const EveryStudentRowForIndividual = ({id,user,attendance,type}) => {
 }
 
 
-const Chart  = ({file_name,title,type,dataPoints}) => {
+export const Chart  = ({file_name,title,type,dataPoints}) => {
 	const options = {
       animationEnabled: true,
       exportFileName: file_name,
@@ -1058,4 +846,69 @@ const Chart  = ({file_name,title,type,dataPoints}) => {
 	return(
     	<CanvasJSChart options = {options} />
 	)
+}
+
+
+
+export class AddEditTeacherAttendance extends Component{
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	    	dateT:moment(new Date()).format('YYYY-MM-DD'),
+	    	date:new Date(),
+	    	attendance_type:""
+	    }
+	    this.get_attendance_response = this.get_attendance_response.bind(this)
+	    this.DatePickerChange = this.DatePickerChange.bind(this)
+	}
+	get_attendance_response(attendance_type){
+	  	    if(this.state.dateT !== ""){
+	  	    	this.setState({
+	  	    		attendance_type
+	  	    	})
+	  	    }
+	  		else
+	  		this.setState({
+	  			date:"Can't be blank"
+	  		})
+	}
+
+	DatePickerChange(data){
+		this.setState({
+	      date :new Date(data),
+	      dateT:moment(data).format('YYYY-MM-DD')
+	    });
+	}
+	render(){
+		return(
+			<div>
+				<div className="card mb-4">
+			        <div className="card-header">
+			          <h3 className="mb-0">
+			          		{ this.props.title }
+			          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+			        </div>
+			        <div className="card-body">
+			          <div className="row">
+							<div className="col-md-4">
+				              <div className="form-group">
+				                <label className="form-control-label" htmlFor="example3cols1Input">Select Date</label>
+						        <DatePicker
+		    		          		className="form-control"
+							        selected={this.state.date}
+							        onSelect={this.DatePickerChange}
+							        onChange={this.DatePickerChange}
+							      />  
+		    		          </div>	
+				            </div>	        		
+						</div>
+			          	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("view")}>View Attendance</button>
+			        	<button className="btn btn-primary" onClick={(e) => this.get_attendance_response("fill")}>Fill Attendance</button>
+			        </div>
+		      	</div>
+
+			{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} date={this.state.dateT} classes={this.props.classes} section={this.state.section} />}
+		    </div>
+		)
+	}
 }

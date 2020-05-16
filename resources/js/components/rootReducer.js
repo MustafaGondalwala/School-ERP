@@ -7,6 +7,7 @@ import attendanceTeacherHeader from "./reducers/teacherAttendanceHeader"
 import assignTeacherClass from "./reducers/assignTeacherClass"
 import adminStudentHeader from "./reducers/adminStudentHeader"
 import adminAttendanceHeader from "./reducers/adminAttendanceHeader"
+import teacherLeaveHeader from "./reducers/teacherLeaveHeader"
 
 export default combineReducers({
   user,
@@ -15,5 +16,6 @@ export default combineReducers({
   assignTeacherClass,
   attendanceTeacherHeader,
   adminStudentHeader,
-  adminAttendanceHeader
+  adminAttendanceHeader,
+  teacherLeaveHeader
 });

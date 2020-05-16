@@ -47,6 +47,24 @@ export const TeacherLeftSide = ({assigned_class}) => (
                       </Link>
                     </li>
                     <li className="nav-item">
+                      <Link to={`/teacher/timetable/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> T </span>
+                        <span className="sidenav-normal"> TimeTable </span>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={`/teacher/chatstudent/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> T </span>
+                        <span className="sidenav-normal"> Chat Student </span>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={`/teacher/chatparent/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> T </span>
+                        <span className="sidenav-normal"> Chat Parent </span>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
                       <Link to={`/teacher/exam/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> E </span>
                         <span className="sidenav-normal"> Exam </span>

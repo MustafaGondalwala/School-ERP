@@ -6,26 +6,68 @@ use Illuminate\Http\Request;
 use App\Teacher;
 use App\User;
 use App\Classes;
+use App\StudentInfo;
 use App\StaffInfo;
+use App\Leave;
 use App\StudentAttendance;
 use \DB;
+use \Carbon\Carbon;
 class TeacherController extends Controller
 {
 
   public function getTeacherHeader($header_type){
-    $class = Classes::select('id')->where("assign_teacher_id",Auth()->user()->id)->get();
-    $send_array = [];
-    foreach ($class as $key => $value) {
-      $total_present = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',1)->first()->total;
-      $total_leave = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',2)->first()->total;
-      $total_absent = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',3)->first()->total;
-      $total_pending = StudentAttendance::select(DB::raw('count(*) as total'))->where("class_id",$value['id'])->where('attendance_type',4)->first()->total;
+    $empid = Auth()->user()->empid;
+    $teacher_info_id = Teacher::where("empid",$empid)->first()->id;    
+    $class = Classes::select('id')->where("assign_teacher_id",$teacher_info_id)->get();
+    switch($header_type){
+      case "attendance":
+        $send_array = [];
+        foreach ($class as $key => $value) {
+          $total_present = 0;
+          $total_leave = 0;
+          $total_absent = 0;
+          $total = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                     ->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>1,"class_id"=>$value['id']])->get();
+          foreach ($total as $key => $item) {
+            switch ($item->attendance_type) {
+              case '1':
+                $total_present = $item->total;
+                break;
+              case '2':
+                $total_absent = $item->total;
+                break;
+              case '3':
+                $total_leave = $item->total;
+                break;
+            }
+          }
+          $send_array[$value['id']] = array('total_present' => $total_present,'total_leave'=>$total_leave,'total_absent'=>$total_absent);
+          return response()->json(["success"=>["attendance_header"=>$send_array]]);
+        }
+        break;
+        case "leave":
+              $send_array = [];
+              $leave_request = Leave::all();
+              $classes = Classes::findOrFail($class_id);
+              $send_array = [];
+              foreach ($leave_request as $key => $value) {
+                  if($value["user_type"] == 1){
+                      $student_info = StudentInfo::select(['id','class','section','student_name',"father_name"])->find($value["user_id"]);
+                      if($student_info->class == $classes->class_title && $student_info->section == $classes->section){
+                          $value["student_info"] = $student_info;
+                          array_push($send_array, $value);
+                      }
+                  }
+              }
 
-      $send_array[$value['id']] = array('total_present' => $total_present,'total_leave'=>$total_leave,'total_absent'=>$total_absent,'total_pending'=>$total_pending);
+
+
+        break;
     }
-    return response()->json(["success"=>["attendance_header"=>$send_array]]);
   }
-  public function getAssignedClass($teacher_id){
+  public function getAssignedClass($teacher_login_id){
+    $empid = User::findorFail($teacher_login_id)->empid;
+    $teacher_id = Teacher::where("empid",$empid)->first()->id;
     return response()->json(["success"=>["assigned_class"=>Classes::where("assign_teacher_id",$teacher_id)->get()]]);
   }
   public function updateAssignTeachertoClass(Request $request){

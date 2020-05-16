@@ -1,7 +1,7 @@
 import React,{Component} from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
-import { SelectDate, FillAttendanceForm, SelectStudent, ShowAttendance } from "./utils/utiles"
+import { SelectDate, FillAttendanceForm, SelectStudent, ViewParticularAttendance, AddEditTeacherAttendance } from "./utils/utiles"
 import { newAssignedTeacherClass,newTeacherAttendance } from "../actions/auth"
 import moment from "moment"
 import TeacherAttendanceHeader from "./utils/TeacherAttendanceHeader";
@@ -45,7 +45,6 @@ export class TeacherAttendanceViewIndividual extends Component{
 			student_id:""
 		}
 	}
-
 	handleInputChange(e){
 		this.setState({
 		  student_id:e.value
@@ -56,11 +55,7 @@ export class TeacherAttendanceViewIndividual extends Component{
 			<div>
 				<TeacherAttendanceHeader class_id={this.props.match.params.class_id} mainHeader="Teacher Attendance" header="Home" />
 				<div className="container-fluid mt--6">
-					<SelectStudent title="Select Student" back_link={"/teacher/attendance/"+this.props.match.params.class_id}  handleChange={this.handleChange} class_id={this.props.match.params.class_id}/>
-					<ShowAttendance />
-					<FullCalendar  defaultView="dayGridMonth" plugins={[ dayGridPlugin ]} />
-
-					
+					<ViewParticularAttendance user_type="student" class_id={this.props.match.params.class_id} access_type="teacher" title="Select Student" back_link={`/teacher/attendance/${this.props.match.params.class_id}`}/>
 				</div>
 			</div>
 		)
@@ -72,12 +67,9 @@ class TeacherAttendanceEditView extends Component{
 	constructor(props){
 		super(props)
 		this.state = {
-			date:moment(new Date()).format('YYYY-MM-DD'),
-			attendance_type:"",
 			classes:"",
 			section:""
 		}
-		this.getDate = this.getDate.bind(this)
 		this.updateClassSection = this.updateClassSection.bind(this)
 	}
 
@@ -114,25 +106,17 @@ class TeacherAttendanceEditView extends Component{
         }
 	}
 	componentDidMount(){
-
 		this.updateClassSection()
 	}
 	componentWillReceiveProps(){
 		this.updateClassSection()
-	}
-	getDate(date,attendance_type){
-		this.setState({
-			date:date,
-			attendance_type:attendance_type
-		})
 	}
 	render(){
 		return(
 			<div>
 			<TeacherAttendanceHeader class_id={this.props.match.params.class_id} mainHeader="Teacher Attendance" header="Home" />
 				<div className="container-fluid mt--6">
-					<SelectDate  title="Select Date" back_link={`/teacher/attendance/${this.props.match.params.class_id}`}  submit={this.getDate}/>
-					{this.state.attendance_type && <FillAttendanceForm attendance_type={this.state.attendance_type} user_type={"teacher"} date={this.state.date} classes={this.state.classes} section={this.state.section} />}
+					<AddEditTeacherAttendance classes={this.state.classes} title="Select Date" back_link={`/teacher/attendance/${this.props.match.params.class_id}`} section={this.state.section}/>
 				</div>
 			</div>
 		)

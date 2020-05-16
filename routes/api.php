@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:api']],function(){
 
 
 Route::group(["prefix"=>'v1','middleware'=>["auth:api","api","parentCheck"]],function(){
+
   Route::group(["prefix"=>"parent"],function(){
     Route::get('/get-childs',"ParentController@getParentChilds");
   });
@@ -50,8 +51,14 @@ Route::group(["prefix"=>"v1","middleware"=>["auth:api","teacherCheck"]],function
   Route::group(["prefix"=>"attendance"],function(){
     Route::post("/teacher","AttendanceController@getStudentAttendance");
     Route::patch("/teacher","AttendanceController@updateStudentAttendance");
-
   });
+
+  Route::group(["prefix"=>"leave"],function(){
+    Route::get("/attend-leave-request/teacher/{class_id}","LeaveController@getClassLeaveRequest");
+    Route::patch("/update/teacher/{class_id}","LeaveController@updateLeaveRequestTeacher");
+    Route::get('/teacher/all/{class_id}',"LeaveController@getLeaveRequestTeacher");
+  });
+
 });
 
 Route::group(['prefix'=>'v1'],function(){

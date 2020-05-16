@@ -80,7 +80,7 @@ class AdminAttendanceHeader extends Component{
 			url:"/api/v1/attendance/header"
 	}).then(response => {
 			self.props.newAdminAttendancetHeader(response.data.success.header);
-			self.updateHeader(response.data.success.header)
+		self.updateHeader(response.data.success.header)
 		})
 		}else{
 			self.updateHeader(this.props.adminAttendanceHeader)

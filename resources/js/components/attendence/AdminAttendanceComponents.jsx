@@ -22,8 +22,6 @@ export const ColComponent = ({title,description,link,button_text}) => (
 		            </div>
 )
 
-
-
 export class EditAttendanceTeacher extends Component{
 	constructor(props){
 		super(props)

@@ -125,10 +125,6 @@ export const AdminLeaveHome = () => (
 		    </div>
 		)
 
-
-
-
-
 const renderSwitchUserType = (user_type) => {
 	switch(user_type){
 		case 1:
@@ -150,7 +146,7 @@ const renderSwitchStatus = (status) => {
 	}
 }
 
-class RequestPant extends Component{
+export class RequestPant extends Component{
 	constructor(props){
 		super(props)
 		this.state = {
@@ -186,6 +182,11 @@ class RequestPant extends Component{
 							    </div>
 							  </div>
 							</div>
+						<div className="card-header">
+						      <h3 className="mb-0">
+						      {this.props.title}
+						      	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+						    </div>
 				        <div className="card-body">	
 							<div className="table-responsive">
 								<table className="table datatable">
@@ -196,7 +197,7 @@ class RequestPant extends Component{
 										<th>To</th>
 										<th>Reason</th>
 										<th>Status</th>
-										<th>Action</th>
+										{!this.props.view && <th>Action</th>}
 									</tr>
 									{this.props.student_request && this.props.student_request.map((item,key) => {
 										return <tr key={key}>
@@ -211,12 +212,15 @@ class RequestPant extends Component{
 											<td>
 											<button type="button" data-reason={item.reason} onClick={(e) => this.updateModelReason(e)} class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">Reason</button></td>
 											<td>{renderSwitchStatus(item.accepted)}</td>
-											<td>
-												<div className="btn btn-group">
-													<button className="btn btn-success btn-sm" data-id={item.id} data-user-type={item.user_type} data-action-type="accept" data-status={item.accepted} onClick={(e) => this.props.ChangeLeaveStatus(e)}>Accept</button>
-													<button className="btn btn-warning btn-sm" data-id={item.id} data-user-type={item.user_type} data-action-type="reject" data-status={item.accepted} onClick={(e) => this.props.ChangeLeaveStatus(e)}>Reject</button>
-												</div>
-											</td>
+											
+											{!this.props.view && 
+												<td>
+													<div className="btn btn-group">
+														<button className="btn btn-success btn-sm" data-id={item.id} data-user-type={item.user_type} data-action-type="accept" data-status={item.accepted} onClick={(e) => this.props.ChangeLeaveStatus(e)}>Accept</button>
+														<button className="btn btn-warning btn-sm" data-id={item.id} data-user-type={item.user_type} data-action-type="reject" data-status={item.accepted} onClick={(e) => this.props.ChangeLeaveStatus(e)}>Reject</button>
+													</div>
+												</td>
+											 }
 										</tr>
 									})}
 								</table>
@@ -243,23 +247,25 @@ export class AttendLeaveRequest extends Component{
 			self.setState({
 				student_request: response.data.success.leave_request
 			})
-			console.log(response.data.success.leave_request)
 		})
 	}
 
 	ChangeLeaveStatus(e){
+		var self = this;
 		var id = e.target.getAttribute('data-id')
 		var status = e.target.getAttribute('data-status')
 		var actiontoTaken = e.target.getAttribute("data-action-type");
 		var user_type = e.target.getAttribute('data-user-type')
 		axios({
-			url:"/api/v1/leave/update",
+			url:"/api/v1/leave/update/teacher",
 			method:"patch",
 			data:{
 				id,status,user_type,actiontoTaken
 			}
 		}).then(response => {
-			console.log(response.data)
+			self.setState({
+				student_request: response.data.success.leave_request
+			})
 		})
 	}
 	render(){

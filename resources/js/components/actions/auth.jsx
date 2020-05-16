@@ -5,7 +5,10 @@ import { USER_LOGGED_IN,
          ASSIGNED_TEACHER_CLASS,
          TEACHER_CLASS_ATTENDANCE,
          ADMIN_ATTENDANCE_HEADER,
-         ADMIN_STUDENT_HEADER } from "../types";
+         ADMIN_STUDENT_HEADER,
+          TEACHER_LEAVE_HEADER,
+          TEACHER_LEAVE_HEADER_EMPTY,
+         TEACHER_CLASS_ATTENDANCE_EMPTY } from "../types";
 import api from "../api";
 import setAuthorizationHeader from "../utils/setAuthorizationHeader";
 
@@ -35,6 +38,11 @@ export const assignedTeacherClass = assignTeacherClass => ({
   assignTeacherClass
 })
 
+
+export const makeEmptyTeacherAttendance = () => ({
+  type:TEACHER_CLASS_ATTENDANCE_EMPTY,
+})
+
 export const attendanceTeacherHeader = attendanceTeacherHeader => ({
   type:TEACHER_CLASS_ATTENDANCE,
   attendanceTeacherHeader
@@ -48,6 +56,15 @@ export const adminStudentHeader = adminStudentHeader => ({
 export const adminAttendanceHeader = adminAttendanceHeader => ({
   type:ADMIN_ATTENDANCE_HEADER,
   adminAttendanceHeader
+})
+
+export const teacherLeaveHeader = teacherLeaveHeader => ({
+  type:TEACHER_LEAVE_HEADER,
+  teacherLeaveHeader
+})
+
+export const teacherLeaveHeaderEmpty = () => ({
+  type:TEACHER_LEAVE_HEADER_EMPTY
 })
 
 export const login = response_data => dispatch => {
@@ -68,6 +85,8 @@ export const logout = () => dispatch => {
   dispatch(userLoggedOut());
 };
 
+
+
 export const fileCreated = files => dispatch => {
   dispatch(newFileCreate(files))
 }
@@ -80,8 +99,19 @@ export const newAssignedTeacherClass = classes => dispatch => {
 export const newAdminStudentHeader = data => dispatch => {
   dispatch(adminStudentHeader(data))
 }
+export const removeTeacherAttendance = () => dispatch => {
+  dispatch(makeEmptyTeacherAttendance())
+}
 export const newTeacherAttendance = data => dispatch => {
   dispatch(attendanceTeacherHeader(data))
+}
+
+
+export const newTeacherLeave = data => dispatch => {
+  dispatch(teacherLeaveHeader(data))
+}
+export const emptyTeacherLeave = () => dispatch => {
+  dispatch(teacherLeaveHeaderEmpty())
 }
 
 export const newAdminAttendancetHeader = data => dispatch => {
