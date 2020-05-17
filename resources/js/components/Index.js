@@ -77,6 +77,13 @@ import {
   TeacherAttendanceViewIndividual,
 } from "./attendence/TeacherAttendaneComponent";
 
+
+
+import {
+  TeacherHomeWorkHome,
+  TeacherAddEditHomeWork,
+} from "./homework/TeacherHomeWorkComponent"
+
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
@@ -428,7 +435,17 @@ class Index extends Component {
             exact
             component={TeacherLeaveViewRequest}
           />
+          <TeacherDashboardRoutes
+            path="/teacher/homework/:class_id"
+            exact
+            component={TeacherHomeWorkHome}
+          />
 
+          <TeacherDashboardRoutes 
+            path="/homework/add-edit-homework/:class_id"
+            exact
+            component={TeacherAddEditHomeWork}
+          />
           <GuestRoute path="/login" exact component={LoginPage} />
           <GuestRoute path="/" exact component={LoginPage} />
         </Provider>
