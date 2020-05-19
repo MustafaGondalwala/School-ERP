@@ -17,11 +17,11 @@
         "laravel/passport": "^8.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "tymon/jwt-auth": "^1.0"
+        "tymon/jwt-auth": "^1.0",
+        "fzaninotto/faker": "^1.9",
     },
     "require-dev": {
         "facade/ignition": "^2.0",
-        "fzaninotto/faker": "^1.9",
         "mockery/mockery": "^1.3.1",
         "nunomaduro/collision": "^4.1",
         "phpunit/phpunit": "^8.5"
@@ -66,10 +66,7 @@
          "post-install-cmd": [
              "php artisan clear-compiled",
              "chmod -R 777 public/",
-             "php artisan migrate:fresh",
-             "php artisan db:seed",
-             "php artisan passport:install",
-             "php artisan migrate:sync"
+             "php artisan migrate:refresh --seed --force"
          ]
     }
 }
