@@ -6,6 +6,8 @@ import ParentHomePage from "./dashboard/ParentHomePage";
 import TeacherLoginHomePage from "./dashboard/teacher/TeacherLoginHomePage";
 import AdminDashboardRoutes from "./AdminDashboardRoutes";
 import ParentDashboardRoutes from "./ParentDashboardRoutes";
+import StudentDashboardRoutes from "./StudentDashboardRoutes";
+
 import GuestRoute from "./GuestRoute";
 import TeacherDashboardRoutes from "./TeacherDashboardRoutes";
 
@@ -41,9 +43,15 @@ import PayFeesHomePage, {
   SetIndividualFees,
   ManageClerkLogin,
 } from "./fees/AdminFeesComponent";
+
+import {ParentFeesHomePage,ParentPendingFees,ParentViewReceipts} from "./fees/ParentFeesComponent"
+
 import SetClassWiseFees from "./fees/pages/SetClassWiseFees";
 
-import TimeTableHomePage from "./time_table/TimeTableHomePage";
+
+
+import AdminTimeTableHomePage,{ParentStudentViewTimeTable} from "./time_table/TimeTableHomePage";
+
 import SetTeacherSubjectClassWise from "./time_table/pages/SetTeacherSubjectClassWise";
 import GenerateTimeTable from "./time_table/pages/GenerateTimeTable";
 import ViewTimeTable from "./time_table/pages/ViewTimeTable";
@@ -75,14 +83,27 @@ import {
   TeacherAttendanceHome,
   TeacherAttendanceEditView,
   TeacherAttendanceViewIndividual,
-} from "./attendence/TeacherAttendaneComponent";
+} from "./attendence/TeacherAttendanceComponent";
 
+import {
+  ParentStudentViewAttendance,
+  ParentStudentViewAttendanceMonthwise
+} from "./attendence/ParentStudentAttendanceComponent"
 
 
 import {
   TeacherHomeWorkHome,
   TeacherAddEditHomeWork,
 } from "./homework/TeacherHomeWorkComponent"
+
+import {
+  ParentHomeWorkHome,
+  ParentViewOnGoingHomeWork
+} from "./homework/ParentHomeWorkComponent"
+
+
+import {StudentHomePage,StudentTimeTable,StudentAttendance} from "./dashboard/StudentHomePage"
+
 
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -100,6 +121,7 @@ const store = createStore(
 
 if (localStorage.SMS) {
   var payload = JSON.parse(localStorage.userAccount);
+  setAuthorizationHeader(localStorage.SMS,JSON.parse(localStorage.userAccount).user_type);
   store.dispatch(userLoggedIn(payload));
 }
 
@@ -270,14 +292,13 @@ class Index extends Component {
             component={ManageClerkLogin}
           />
 
-          <AdminDashboardRoutes
+          
+           <AdminDashboardRoutes
             path="/admin/time-table"
             exact
-            main_header="Time Table"
-            header="Time Table"
-            subheader="Home"
-            component={TimeTableHomePage}
+            component={AdminTimeTableHomePage}
           />
+
           <AdminDashboardRoutes
             path="/admin/time-table/set-teacher-subject-classes-wise"
             exact
@@ -446,6 +467,59 @@ class Index extends Component {
             exact
             component={TeacherAddEditHomeWork}
           />
+
+          <ParentDashboardRoutes
+            path="/parent/homework/:student_id"
+            exact
+            component={ParentHomeWorkHome}
+          />
+
+          <ParentDashboardRoutes
+            path="/parent/view-pending/:student_id"
+            exact
+            component={ParentViewOnGoingHomeWork}
+          />
+
+          <ParentDashboardRoutes
+            path="/parent/timetable/:student_id"
+            exact
+            component={ParentStudentViewTimeTable}
+          />
+
+          <ParentDashboardRoutes
+            path="/parent/attendance/:student_id"
+            exact
+            component={ParentStudentViewAttendance}
+          />
+
+          <ParentDashboardRoutes
+            path="/attendance/view_monthwise/:student_id"
+            exact
+            component={ParentStudentViewAttendanceMonthwise}
+          />
+
+          <ParentDashboardRoutes
+            path="/parent/fees/:student_id"
+            exact
+            component={ParentFeesHomePage}
+          />
+          <ParentDashboardRoutes
+            path="/parent/pending-fees/:student_id"
+            exact
+            component={ParentPendingFees}
+          />
+          <ParentDashboardRoutes
+            path="/parent/view-receipts/:student_id"
+            exact
+            component={ParentViewReceipts}
+          />
+
+
+          <StudentDashboardRoutes path="/student/dashboard" exact component={StudentHomePage} />
+          <StudentDashboardRoutes path="/student/time-table" exact component={StudentTimeTable} />
+          <StudentDashboardRoutes path="/student/attendance" exact component={StudentAttendance} />
+
+          
           <GuestRoute path="/login" exact component={LoginPage} />
           <GuestRoute path="/" exact component={LoginPage} />
         </Provider>

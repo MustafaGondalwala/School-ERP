@@ -73,6 +73,13 @@ export default class SetTeacherSubjectClassWiseForm extends Component{
 								})
 							}
 								</td>
+								<td>
+									
+									{this.state.classes.map(i => {
+									return <span> , {i['label']} </span>
+								})
+							}
+								</td>
 						</tr>
 
 					})}

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch,Redirect } from 'react-router-dom'
 import {ParentLeftSide,ParentTopNavbar} from "./ParentComponent"
 import { connect } from "react-redux";
-
-
 import { newParentChildren,logout } from "../actions/auth"
 
 class ParentDashboard extends Component {

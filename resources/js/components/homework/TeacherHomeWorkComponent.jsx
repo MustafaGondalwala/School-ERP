@@ -103,7 +103,6 @@ const TeacherHomeWorkHeader = (props) => {
       </div>
     );
 }
-
 const ColComponent = ({title,description,link,button_text}) => (
     <div className="col-lg-4">
           <div className="card">
@@ -154,9 +153,9 @@ export class TeacherAddEditHomeWork extends React.Component{
 			<div>
 				<TeacherHomeWorkHeader mainHeader="HomeWork" header="Add/Edit" />
 			    <div className="container-fluid mt--6">
-					{class_id &&
-						<AddEditHomeWork title="Add/Edit HomeWork" back_link={`/homework/${class_id}`} class_id={ class_id }/>
-					}
+    					{class_id &&
+    						<AddEditHomeWork title="Add/Edit HomeWork" back_link={`/homework/${class_id}`} class_id={ class_id }/>
+    					}
 				</div>
 			</div>
 		)		

@@ -631,7 +631,11 @@ export class ViewAttendance extends Component{
 		    this.props.type +
 		    "/" +
 		    this.props.student_id
-
+		   	if(this.props.access_type == "parent"){
+		   		url="/api/v1/parent/get_particular/"+ this.props.type +
+		    "/" +
+		    this.props.student_id
+		   	}
 
 		    axios({
 		  url: url,

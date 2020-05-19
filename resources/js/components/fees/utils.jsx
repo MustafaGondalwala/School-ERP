@@ -165,6 +165,32 @@ export  class SetInstallmentsForm extends Component{
 }
 
 
+export const GetYear = ({title,back_link,onChange}) => {
+  return(
+     <div className="card mb-4">
+        <div className="card-header">
+          <h3 className="mb-0">{title} <Link  to={back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
+        </div>
+        <div className="card-body">
+          <div className="row">
+            <div className="form-group">
+              <label>Select Year: </label>
+              <select name="select_year" name="select_year" onChange={(e) => onChange(e)} className="form-control">
+                  <option value="17-18">2017-18</option>
+                  <option value="18-19">2018-19</option>
+                  <option value="19-20">2019-20</option>
+                  <option selected value="20-21">2020-21</option>
+                  <option value="21-22">2021-22</option>
+                  <option value="22-23">2022-23</option>
+                  <option value="23-24">2023-24</option>
+                </select>
+            </div>
+          </div>
+        </div>
+    </div>
+  )
+}
+
 export class SelectIndividualStudent extends Component{
   constructor(props){
     super(props)
@@ -356,7 +382,15 @@ export class InstallmentUpdate extends Component{
                             <td> <input min="0" type="number"  disabled value={type.total_pending} className="form-control disabled" data-fee_type={type.fees_type} name="total_paid" max={type.after_discount}  /> </td>
                           <td> <input min="0" type="number" value={type.current_paid} className="form-control" data-fee_type={type.fees_type} name="current_paid" max={type.after_discount} onChange={(e)=>this.props.onChange(e,this.props.installment)} /> </td>
                        </tr>
-                  }else{
+                  }else if (this.props.type == "view_fees"){
+                      return <tr>
+                            <td> {type.fees_type} </td>
+                            <td> <input min="0" type="number" disabled value={type.amount} data-fee_type={type.fees_type}  name="amount" className="form-control disabled"  /> </td>
+                            <td> <input min="0" type="number" disabled value={type.discount_amount} className="form-control disabled" data-fee_type={type.fees_type} name="discount_amount"   />  </td>
+                            <td> <input min="0" type="number" disabled value={type.after_discount} className="form-control disabled" data-fee_type={type.fees_type} name="after_discount"  /> </td>
+                            <td> <input min="0" type="number"  disabled value={type.total_pending} className="form-control disabled" data-fee_type={type.fees_type} name="total_paid" max={type.after_discount}  /> </td>
+                       </tr>
+                  }else{ 
                     return <tr>
                         <td> {type.fees_type} </td>
                         <td> <input min="0" type="number" value={type.amount} data-fee_type={type.fees_type}  name="amount" className="form-control" onChange={(e)=>this.props.onChange(e,this.props.installment)} /> </td>

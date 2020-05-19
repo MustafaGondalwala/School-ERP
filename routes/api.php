@@ -27,15 +27,29 @@ Route::group(['middleware' => ['auth:api']],function(){
 });
 
 
-
+Route::group(["prefix"=>"v1","middleware"=>["auth:api","api","studentCheck"]],function(){
+  Route::get('/student/time-table',"TimeTableController@getStudentsTimeTable");
+  Route::post('/student/attendance',"AttendanceController@getStudentAttendanceStudentModule");
+});
 
 Route::group(["prefix"=>'v1','middleware'=>["auth:api","api","parentCheck"]],function(){
-
   Route::group(["prefix"=>"parent"],function(){
     Route::get('/get-childs',"ParentController@getParentChilds");
+    Route::get("/subjects","UserApiController@getAllSubject");
+    Route::get("/time_table/{student_id}","TimeTableController@getStudentTimeTable");
+    Route::post("/get_particular/{type}/{id}","AttendanceController@getParticularAttendance");
+    Route::get('/fees/get-total-installments-only-installments',"FeesController@getOnlyTotalInstallment");
+    Route::post('/view-pending-fees',"FeesController@getIndividualStudentFees");
+    Route::post('/fee/receipt',"FeesController@getStudentReceipts");
+    Route::get('/fee/receipt/{receipt_id}',"FeesController@getIndividualReceipDetails");
   });
   Route::group(["prefix"=>"leave"],function(){
     Route::post('',"LeaveController@newLeaveRequest");
+  });
+  Route::group(["prefix"=>"homework"],function(){
+    Route::get("/student/{student_id}","HomeWorkController@getStudentPendingHomeWork");
+    Route::post("/raise-issue/parent","HomeWorkController@createEditIssue");
+    Route::post("raise-issue/parent/ongoing","HomeWorkController@getOpenRaiseIssue");
   });
 });
 
@@ -43,6 +57,7 @@ Route::group(["prefix"=>"v1","middleware"=>["auth:api","teacherCheck"]],function
   Route::group(["prefix"=>"teacher"],function(){
     Route::get("/assign/{teacher_id}","TeacherController@getAssignedClass");
     Route::get('/{get_type}/header',"TeacherController@getTeacherHeader");    
+    Route::get('/subject',"UserApiController@getAllSubject");
   });
 
   Route::group(["prefix"=>"student"],function(){
@@ -59,9 +74,15 @@ Route::group(["prefix"=>"v1","middleware"=>["auth:api","teacherCheck"]],function
     Route::get('/teacher/all/{class_id}',"LeaveController@getLeaveRequestTeacher");
   });
 
+  Route::group(["prefix"=>"homework"],function(){
+    Route::post("","HomeWorkController@createEditHomeWork");
+    Route::get("{class_id}","HomeWorkController@getCurrentHomeWork");
+    Route::patch("","HomeWorkController@createEditHomeWork");
+    Route::delete("{homework_id}","HomeWorkController@deleteHomeWork");
+  });
 });
 
-Route::group(['prefix'=>'v1'],function(){
+Route::group(['prefix'=>'v1',"middleware"=>["auth:api","adminCheck"]],function(){
  
   Route::group(["prefix"=>"leave"],function(){
     Route::get('',"LeaveController@getLeaveRequest");
@@ -145,8 +166,6 @@ Route::group(['prefix'=>'v1'],function(){
     Route::post('/receipt',"FeesController@getStudentReceipts");
     Route::get('/receipt/{receipt_id}',"FeesController@getIndividualReceipDetails");
   });
-
-
 });
 
 

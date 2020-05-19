@@ -73,6 +73,6 @@ class Kernel extends HttpKernel
         'adminCheck' =>  \App\Http\Middleware\AdminUserTypeCheck::class,
         'parentCheck' => \App\Http\Middleware\ParentUserTypeCheck::class,
         'teacherCheck' => \App\Http\Middleware\TeacherUserTypeCheck::class,
-
+        'studentCheck' => \App\Http\Middleware\StudentTypeCheck::class,
     ];
 }

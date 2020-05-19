@@ -1,5 +1,7 @@
 import React,{Component} from "react"
 import SelectTeachers from "../form/SelectTeachers"
+import {AdminTableTableHeader} from "../TimeTableHomePage"
+
 export default class ViewTimeTableTeacher extends Component{
 	
 	constructor(props){
@@ -34,8 +36,11 @@ export default class ViewTimeTableTeacher extends Component{
 
 	render(){
 		return(
+			<div>
+			<AdminTableTableHeader mainHeader="Time Table" header="View Time Table" sub_header="Teacher" />
 			<div className="container-fluid mt--6">
-				<SelectTeachers submit={this.getTeacherID} />
+				<SelectTeachers back_link="/admin/time-table" submit={this.getTeacherID} />
+			</div>
 			</div>
 		)
 	}

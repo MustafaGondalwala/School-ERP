@@ -36,6 +36,12 @@ export const ParentLeftSide = ({students}) => (
 							          <span className="sidenav-normal"> Attendance </span>
 							        </Link>
 							      </li>
+                    <li className="nav-item">
+                      <Link to={`/parent/homework/${student.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> H </span>
+                        <span className="sidenav-normal"> HomeWork </span>
+                      </Link>
+                    </li>
 							      <li className="nav-item">
 							        <Link to={`/parent/leave/${student.id}`} className="nav-link">
 								          <span className="sidenav-mini-icon"> L </span>
@@ -43,11 +49,17 @@ export const ParentLeftSide = ({students}) => (
 							        </Link>
 							      </li>
 							      <li className="nav-item">
-							        <a href="../examples/lock.html" className="nav-link">
+                      <Link to={`/parent/timetable/${student.id}`} className="nav-link">
 							          <span className="sidenav-mini-icon"> T </span>
 							          <span className="sidenav-normal"> TimeTable </span>
-							        </a>
+							        </Link>
 							      </li>
+                    <li className="nav-item">
+                      <Link to={`/parent/fees/${student.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> T </span>
+                        <span className="sidenav-normal"> Fees </span>
+                      </Link>
+                    </li>
 							      <li className="nav-item">
 							        <a href="../examples/timeline.html" className="nav-link">
 							          <span className="sidenav-mini-icon"> E </span>

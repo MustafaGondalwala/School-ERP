@@ -71,8 +71,9 @@ export const login = response_data => dispatch => {
       localStorage.userAccount = JSON.stringify(response_data.user)
       localStorage.SMS = response_data.token
       localStorage.user_type = response_data.user.user_type
+      localStorage.user_type = response_data.user_type
       dispatch(userLoggedIn(response_data.user));
-      setAuthorizationHeader(response_data.token,response_data.user_type);
+      setAuthorizationHeader(response_data.token,response_data.user.user_type);
       return true;
 }
   

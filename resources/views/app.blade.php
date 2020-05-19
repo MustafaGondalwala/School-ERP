@@ -66,7 +66,9 @@
         <script src="../../assets/vendor/fullcalendar/dist/fullcalendar.min.js"></script>
         <script src="../../assets/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
         <!-- Demo JS - remove this in your project -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script>
+
           // Facebook Pixel Code Don't Delete
           ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;

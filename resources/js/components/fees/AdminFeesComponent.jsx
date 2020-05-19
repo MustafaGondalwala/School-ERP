@@ -363,7 +363,7 @@ export class ViewFeeReceipt extends Component{
 	}
 }
 
-const ShowReceipt = ({receiptDetails,selectedReceiptId,studentDetail}) => (
+export const ShowReceipt = ({receiptDetails,selectedReceiptId,studentDetail}) => (
 	<div className="card mb-4">
 		<div className="card-header">
 			<h3 className="mb-0">Receipt: {selectedReceiptId}</h3>
@@ -427,7 +427,7 @@ const ShowReceipt = ({receiptDetails,selectedReceiptId,studentDetail}) => (
 	</div>
 )
 
-const ShowReceiptList = ({Receipts,receiptClick,view_receipt_button_text,print_receipt_button_text}) => (
+export const ShowReceiptList = ({Receipts,receiptClick,view_receipt_button_text,print_receipt_button_text}) => (
       <div className="card mb-4">
         <div className="card-header">
         	<h3 className="mb-0">Students Receipts</h3>

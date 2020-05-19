@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
         //             $student_user = new User;
         //             $student_user->name = $student_info->student_name;
         //             $student_user->email = $student_info->student_email;
-        //             $student_user->password = bcrypt($password);
+        //             $student_user->password = bcrypt($student_info->roll_no);
         //             $student_user->user_type = "student";
         //             $student_user->login_text = $student_info->roll_no;
         //             $student_user->save();

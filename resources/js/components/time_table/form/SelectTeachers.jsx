@@ -1,5 +1,6 @@
 import React,{ Component } from "react"
 import Select from 'react-select'
+import {Link} from "react-router-dom"
 
 export default class SelectTeachers extends Component{
 	
@@ -42,7 +43,8 @@ export default class SelectTeachers extends Component{
 		return(
 			 <div className="card mb-4">
 		        <div className="card-header">
-		          <h3 className="mb-0">Select Teacher </h3>
+		          <h3 className="mb-0">Select Teacher 
+		          	<Link  to={this.props.back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
 		        </div>
 		        <div className="card-body">
 		          <div className="row">

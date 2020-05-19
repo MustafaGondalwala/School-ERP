@@ -10,14 +10,29 @@ use Carbon\Carbon;
 use App\StaffInfo;
 use \DB;
 class AttendanceController extends Controller
-{
-	public function getAttendanceHeader(Request $request){
-		$student = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
-                 ->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>1])->get();
-        $staff = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
-                 ->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>2])->get();
-        return response()->json(["success"=>["header"=>["student"=>$student,"staff"=>$staff]]]);
+{	
+	public function getStudentAttendanceStudentModule(Request $request){
+		$id = StudentInfo::where("user_login_id",Auth()->user()->id)->first()->id;
+		$getStudent = StudentInfo::select('id','roll_no','father_name','student_name')->findorFail($id);
+			$carbon_date = Carbon::parse($request->data);
+			$month = $carbon_date->month;
+			$year = $carbon_date->year;
+			$details_fetch = StudentAttendance::whereYear('attendance_date', '=', $year)
+              ->whereMonth('attendance_date', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->orderBy('attendance_date')->
+              get();
+            $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
+                 ->groupBy('attendance_type')
+                 ->whereYear('attendance_date', '=', $year)
+              	 ->whereMonth('attendance_date', '=', $month)->where(["user_id"=>$id,"user_type"=>1])
+                 ->get();
 
+            return response()->json(["success"=>["student_details"=>$getStudent,"attendance_details"=>$details_fetch,"total_month_count"=>count($details_fetch),"total_count"=>$every_count]]);
+
+	}
+	public function getAttendanceHeader(Request $request){
+	$student = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>1])->get();
+        $staff = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>2])->get();
+        return response()->json(["success"=>["header"=>["student"=>$student,"staff"=>$staff]]]);
 	}
 
 	public function updateStaffAttendance(Request $request){
@@ -36,13 +51,13 @@ class AttendanceController extends Controller
 			$month = $carbon_date->month;
 			$year = $carbon_date->year;
 			
-			$details_fetch = StudentAttendance::whereYear('created_at', '=', $year)
-              ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->orderBy('created_at')->
+			$details_fetch = StudentAttendance::whereYear('attendance_date', '=', $year)
+              ->whereMonth('attendance_date', '=', $month)->where(["user_id"=>$id,"user_type"=>1])->orderBy('attendance_date')->
               get();
             $every_count = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))
                  ->groupBy('attendance_type')
-                 ->whereYear('created_at', '=', $year)
-              	 ->whereMonth('created_at', '=', $month)->where(["user_id"=>$id,"user_type"=>1])
+                 ->whereYear('attendance_date', '=', $year)
+              	 ->whereMonth('attendance_date', '=', $month)->where(["user_id"=>$id,"user_type"=>1])
                  ->get();
 
             return response()->json(["success"=>["student_details"=>$getStudent,"attendance_details"=>$details_fetch,"total_month_count"=>count($details_fetch),"total_count"=>$every_count]]);

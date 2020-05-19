@@ -6,11 +6,46 @@ use Illuminate\Http\Request;
 use App\ClassPeriod;
 use App\HandleTimeTable;
 use App\Classes;
+use App\StudentInfo;
 use App\Teacher;
 
 class TimeTableController extends Controller
 {
-    //
+    public function getStudentsTimeTable(){
+       $student = StudentInfo::where("user_login_id",Auth()->user()->id)->first();
+       $class_id = Classes::where(["class_title"=>$student->class,"section"=>$student->section])->first();
+        if($class_id == null)
+            return response()->json(["errors"=>"Invalid Classes"],422);
+
+        $time_table = [];
+
+        $get_all_classperiod = ClassPeriod::select(['period_id','start_time','end_time'])->get();
+
+
+        foreach ($get_all_classperiod as $key => $period) {
+            $get_details = HandleTimeTable::where(['period_id'=>$period->period_id,"class"=>$student->class,"section"=>$student->section])->first();
+            $time_table[$period->period_id] = $get_details;
+        }
+        return response()->json(["success"=>["time_table"=>$time_table]]);
+
+    }
+    public function getStudentTimeTable($student_id){
+        $student = StudentInfo::find($student_id);
+        $class_id = Classes::where(["class_title"=>$student->class,"section"=>$student->section])->first();
+        if($class_id == null)
+            return response()->json(["errors"=>"Invalid Classes"],422);
+
+        $time_table = [];
+
+        $get_all_classperiod = ClassPeriod::select(['period_id','start_time','end_time'])->get();
+
+
+        foreach ($get_all_classperiod as $key => $period) {
+            $get_details = HandleTimeTable::where(['period_id'=>$period->period_id,"class"=>$student->class,"section"=>$student->section])->first();
+            $time_table[$period->period_id] = $get_details;
+        }
+        return response()->json(["success"=>["time_table"=>$time_table]]);
+    }
     public function updateTimeTable(Request $request){
         $request->validate([
             "classes"=>'required',
@@ -108,10 +143,7 @@ class TimeTableController extends Controller
             return response()->json(["errors"=>"Invalid Classes"],422);
 
         $time_table = [];
-
         $get_all_classperiod = ClassPeriod::select(['period_id','start_time','end_time'])->get();
-
-
         foreach ($get_all_classperiod as $key => $period) {
             $get_details = HandleTimeTable::where(['period_id'=>$period->period_id,"class"=>$request->classes,"section"=>$request->section])->first();
             $time_table[$period->period_id] = $get_details;

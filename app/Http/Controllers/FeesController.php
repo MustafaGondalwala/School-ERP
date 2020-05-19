@@ -139,14 +139,15 @@ class FeesController extends Controller
       $request->validate([
         'student_id'=>'required|integer',
         'select_year'=>'required|string',
-        'installments'=>'required|array'
       ]);
       $all_fees_type = FeesType::all();
-
-
+      if(!$request->installment)
+      {
+        $total_installment =  FeesInstallment::first();
+        $request->installments = explode(",",$total_installment->total_installments);
+      }
       foreach ($all_fees_type as $key => $value) {
           $fees_type = $value->fees_type;
-
         foreach ($request->installments as $key => $installment) {  
             $check_avaible = HandleFees::where(['student_id'=>$request->student_id,'year'=>$request->select_year,'installment'=>$installment,'fees_type'=>$fees_type])->count();
             if($check_avaible <= 0){
@@ -261,7 +262,11 @@ class FeesController extends Controller
             $new_receipt->student_id = $request->student_id;
             $new_receipt->select_year = $request->select_year;
             $new_receipt->installment = $each_installment_name;
-            $new_receipt->account_name = Auth()->user()->name;
+            try{
+              $new_receipt->account_name = Auth()->user()->name;
+            }catch(\Exception $e){
+              $new_receipt->account_name = "admin";
+            }
             $new_receipt->payment_type = $request->payDetails["payment_type"];
             $new_receipt->save();
           }
