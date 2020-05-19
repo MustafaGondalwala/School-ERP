@@ -19,7 +19,7 @@ class CreateStudentHomeWorksTable extends Migration
             $table->integer("student_id");
             $table->date('submition_date');
             $table->integer('status')->default(1)->comment("1=> Pending 2=> Completed 3=> Raise Issue");
-            $table->integr("class_id");
+            $table->integer("class_id");
             $table->timestamps();
         });
     }

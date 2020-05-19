@@ -5,8 +5,14 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\StudentInfo;
 use App\User;
+use App\Classes;
+use App\Subject;
 use App\StaffInfo;
 use App\Teacher;
+use App\ClassPeriod;
+use App\FeesType;
+use App\ExamType;
+use App\FeesInstallment;
 use Faker\Factory as Faker;
 class DatabaseSeeder extends Seeder
 {
@@ -17,14 +23,59 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {   
-
-
+        $faker = Faker::create();
         $password = "mustafas1";
         $gender_array = array('male','female','other');
         $class_array = array('5th','7th','8th','9th','10th','11th','12th');
         $religion = array('hindu','muslim','sikh','jain');
         $caste = array('general','sc','st','obc','other');
-        $faker = Faker::create();
+
+        FeesInstallment::insert(["total_installments"=>"Installment1,Installment2,Installment3"]);
+        Classes::insert(
+            array(
+                array("class_title"=>"5th"),
+                array("class_title"=>"6th"),
+                array("class_title"=>"7th"),
+                array("class_title"=>"8th"),
+                array("class_title"=>"9th"),
+                array("class_title"=>"10th"),
+                array("class_title"=>"11th"),
+                array("class_title"=>"12th"),
+            )
+        );
+
+        Subject::insert(
+            array(
+                array("subject_name"=>"English"),
+                array("subject_name"=>"Math"),
+                array("subject_name"=>"Gujarati"),
+                array("subject_name"=>"Science"),
+                array("subject_name"=>"General"),
+            )
+        );
+
+        FeesType::insert(
+            array(
+                array("fees_type"=>"Sport Fees"),
+                array("fees_type"=>"Tution Fees"),
+                array("fees_type"=>"Computer Fees"),
+            )
+        );
+
+        ExamType::insert(
+            array(
+                array("exam_type"=>"1st Sem"),
+                array("exam_type"=>"2st Sem"),
+                array("exam_type"=>"Annul Exam"),
+            )
+        );
+        ClassPeriod::insert(
+            array(
+                array("period_id"=>"1","start_time"=>"08:30:00","end_time"=>"09:00:00"),
+                array("period_id"=>"2","start_time"=>"09:30:00","end_time"=>"10:00:00"),
+                array("period_id"=>"3","start_time"=>"10:30:00","end_time"=>"11:00:00"),
+            )
+        );
 
         // Teacher Faker
         foreach (range(1,5) as $index) {
@@ -74,55 +125,62 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        //student and parent faker
+          foreach (range(1,100) as $index) {
+            try{
+                    $student_info = new StudentInfo;
+                    $student_info->roll_no = $faker->numberBetween($min = 3000, $max = 90000);
+                    $student_info->class = $class_array[$faker->numberBetween($min = 0, $max = 6)];
+                    $student_info->student_name = $faker->name;
+                    $student_info->father_name = $faker->name;
+                    $student_info->mother_name = $faker->name;
 
-        //   foreach (range(1,100) as $index) {
-        //     try{
-        //             $student_info = new StudentInfo;
-        //             $student_info->roll_no = $faker->numberBetween($min = 3000, $max = 90000);
-        //             $student_info->class = $class_array[$faker->numberBetween($min = 0, $max = 6)];
-        //             $student_info->student_name = $faker->name;
-        //             $student_info->father_name = $faker->name;
-        //             $student_info->mother_name = $faker->name;
+                    $student_info->father_contact_no1 = $faker->phoneNumber;
+                    $student_info->student_email = $faker->unique()->email;
+                    $student_info->father_email = $faker->unique()->email;
+                    $student_info->dob = $faker->date($format = 'Y-m-d', $max = 'now');
+                    $student_info->gender = $gender_array[$faker->numberBetween($min = 0, $max = 1)];
+                    $student_info->religion = $religion[$faker->numberBetween($min = 0, $max = 3)];
+                    $student_info->caste = $caste[$faker->numberBetween($min = 0, $max = 3)];
+                    $student_info->age = $faker->numberBetween($min = 5, $max = 25);
+                    $student_info->student_address = $faker->city;
+                    $student_info->place = $faker->city;
+                    $student_info->block = $faker->city;
+                    $student_info->district = $faker->city;
+                    $student_info->state = $faker->city;
+                    $student_info->landmark = $faker->city;
+                    $student_info->pincode = $faker->numberBetween($min = 3000, $max = 9000);
+                    $student_info->student_photo_img_path = "uploads/images/ckHpVvLs0VN4mKIK3YQJcfw7A.png";
+                    $student_info->save();
+                    $student_user = new User;
+                    $student_user->name = $student_info->student_name;
+                    $student_user->email = $student_info->student_email;
+                    $student_user->password = bcrypt($student_info->roll_no);
+                    $student_user->user_type = "student";
+                    $student_user->login_text = $student_info->roll_no;
+                    $student_user->save();
+                    $student_info->user_login_id = $student_user->id;
 
-        //             $student_info->father_contact_no1 = $faker->phoneNumber;
-        //             $student_info->student_email = $faker->unique()->email;
-        //             $student_info->father_email = $faker->unique()->email;
-        //             $student_info->dob = $faker->date($format = 'Y-m-d', $max = 'now');
-        //             $student_info->gender = $gender_array[$faker->numberBetween($min = 0, $max = 1)];
-        //             $student_info->religion = $religion[$faker->numberBetween($min = 0, $max = 3)];
-        //             $student_info->caste = $caste[$faker->numberBetween($min = 0, $max = 3)];
-        //             $student_info->age = $faker->numberBetween($min = 5, $max = 25);
-        //             $student_info->student_address = $faker->city;
-        //             $student_info->place = $faker->city;
-        //             $student_info->block = $faker->city;
-        //             $student_info->district = $faker->city;
-        //             $student_info->state = $faker->city;
-        //             $student_info->landmark = $faker->city;
-        //             $student_info->pincode = $faker->numberBetween($min = 3000, $max = 9000);
-        //             $student_info->student_photo_img_path = "uploads/images/ckHpVvLs0VN4mKIK3YQJcfw7A.png";
-        //             $student_info->save();
-        //             $student_user = new User;
-        //             $student_user->name = $student_info->student_name;
-        //             $student_user->email = $student_info->student_email;
-        //             $student_user->password = bcrypt($student_info->roll_no);
-        //             $student_user->user_type = "student";
-        //             $student_user->login_text = $student_info->roll_no;
-        //             $student_user->save();
-        //             $student_info->user_login_id = $student_user->id;
-
-        //             $father_login = new User;
-        //             $father_login->name = $student_info->father_name;
-        //             $father_login->email = $student_info->father_email;
-        //             $father_login->password = bcrypt($password);
-        //             $father_login->user_type = "parent";
-        //             $father_login->login_text = $student_info->father_name;
-        //             $father_login->save();
-        //             $student_info->father_login_id = $father_login->id;
-        //             $student_info->save();
-        //       }catch (\Exception $e) {
-        //         print($e->getMessage());
-        //     }
-        // }
+                    $father_login = new User;
+                    $father_login->name = $student_info->father_name;
+                    $father_login->email = $student_info->father_email;
+                    $father_login->password = bcrypt($student_info->father_contact_no1);
+                    $father_login->user_type = "parent";
+                    $father_login->login_text = $student_info->father_contact_no1;
+                    $father_login->save();
+                    $student_info->father_login_id = $father_login->id;
+                    $student_info->save();
+              }catch (\Exception $e) {
+                print($e->getMessage());
+            }
+        }
+        $adminUser = new User;
+        $adminUser->name = "Ankit Kumar";
+        $adminUser->email = "ankitkumaraj349@gmail.com";
+        $adminUser->password = bcrypt("ankitkumaraj349@gmail.com");
+        $adminUser->login_text = "ankitkumaraj349@gmail.com";
+        $adminUser->user_type = "admin";
+        $adminUser->save();
         // $this->call(UsersTableSeeder::class);
     }
 }
