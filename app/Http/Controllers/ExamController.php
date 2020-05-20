@@ -8,6 +8,9 @@ use App\Classes;
 use App\MonthlyTestType;
 use App\Subject;
 use App\ExamAdmitCard;
+use App\ExamMarksheet;
+use App\SystemYear;
+
 class ExamController extends Controller
 {
     //
@@ -118,7 +121,73 @@ class ExamController extends Controller
             array_push($main_array,[$subject_name,$admit_card]);
         }
         return response()->json(["success"=>["admit_card"=>$main_array]]);
+    }
 
+
+    public function getExamMarksheet(Request $request){
+        $request->validate([
+            "exam_type"=>"required|integer",
+            "subject"=>'required|array',
+            "class_id"=>"required|integer",
+            "student_id"=>"required|integer",
+            "exam_type_type"=>"required|integer"
+        ]);
+        $exam_type_type = $request->exam_type_type;
+        $exam_id = $request->exam_type;
+        $class_id = $request->class_id;
+        $student_id = $request->student_id;
+
+        if($request->select_year == ""){
+            $select_year = SystemYear::where("selected_year",1)->first()->id;
+        }
+        $send_array = [];
+        foreach ($request->subject as $key => $subject) {
+            $check_exist = ExamMarksheet::where([
+                "exam_type"=>$exam_type_type,
+                "exam_id"=>$exam_id,
+                "class_id"=>$class_id,
+                "student_id"=>$student_id,
+                "subject_id"=>$subject,
+                "year_id"=>$select_year
+            ])->first();
+            if($check_exist == NULL){
+
+                $new_exam_item = new ExamMarksheet;
+                $new_exam_item->exam_type = 1;
+                $new_exam_item->exam_id = $exam_id;
+                $new_exam_item->year_id = $select_year;
+                $new_exam_item->class_id = $class_id;
+                $new_exam_item->subject_id = $subject;
+                $new_exam_item->max_marks = 100;
+                $new_exam_item->min_marks = 0;
+                $new_exam_item->grace_marks = 0;
+                $new_exam_item->marks = 0;
+                $new_exam_item->student_id = $student_id;
+                $new_exam_item->save();
+                $check_exist = $new_exam_item;
+            }
+        $send_array[Subject::find($subject)->subject_name] = $check_exist;
+        }
+        return response()->json(["success"=>["exam_marksheet"=>$send_array]]);
+    }   
+
+    public function updateExamMarksheet(Request $request){
+        $request->validate([
+            "exam_marksheet"=>"required|array"
+        ]);
+
+        $exam_marksheet = $request->exam_marksheet;
+
+        foreach ($exam_marksheet as $key => $value) {
+            $get_item = ExamMarksheet::find($value['id']);
+            $get_item->max_marks = $value["max_marks"];
+            $get_item->min_marks = $value["min_marks"];
+            $get_item->grace_marks = $value["grace_marks"];
+            $get_item->marks = $value["marks"];
+            $get_item->update();
+            $value = $get_item;
+        }
+        return response()->json(["success"=>["exam_marksheet"=>$exam_marksheet]]);
     }
 }
 

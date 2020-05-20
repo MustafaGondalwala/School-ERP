@@ -57,9 +57,12 @@ import GenerateTimeTable from "./time_table/pages/GenerateTimeTable";
 import ViewTimeTable from "./time_table/pages/ViewTimeTable";
 import ViewTimeTableTeacher from "./time_table/pages/ViewTimeTableTeacher";
 
-import ExamHomePage from "./exam/ExamHomePage";
+
+import { ExamHomePage,FillExamMarksheet } from "./exam/AdminExamComponent"
+import { TeacherExamHomePage, TeacherFillExamMarksheet } from "./exam/TeacherExamComponent"
+// import ExamHomePage from "./exam/ExamHomePage";
 import AddAdmitCard from "./exam/pages/AddAdmitCard";
-import FillExamMarksheet from "./exam/pages/FillExamMarksheet";
+// import FillExamMarksheet from "./exam/pages/FillExamMarksheet";
 
 import {
   AdminLeaveHome,
@@ -365,6 +368,8 @@ class Index extends Component {
             subheader="Home"
             component={ExamHomePage}
           />
+
+
           <AdminDashboardRoutes
             path="/admin/exam/add-admit-card"
             exact
@@ -377,16 +382,6 @@ class Index extends Component {
             path="/admin/exam/fill-exam-marksheet"
             exact
             main_header="Exam"
-            header="Fill Exam Marksheet"
-            subheader="Fill Marksheet"
-            component={FillExamMarksheet}
-          />
-          <AdminDashboardRoutes
-            path="/admin/exam/fill-exam-marksheet"
-            exact
-            main_header="Exam"
-            header="Fill Exam Marksheet"
-            subheader="Fill Marksheet"
             component={FillExamMarksheet}
           />
 
@@ -467,6 +462,20 @@ class Index extends Component {
             exact
             component={TeacherAddEditHomeWork}
           />
+
+          <TeacherDashboardRoutes 
+            path="/teacher/exam/:class_id"
+            exact
+            component={TeacherExamHomePage}
+          />
+
+          <TeacherDashboardRoutes 
+            path="/teacher/fill-exam-marksheet/:class_id"
+            exact
+            component={TeacherFillExamMarksheet}
+          />
+          
+
 
           <ParentDashboardRoutes
             path="/parent/homework/:student_id"

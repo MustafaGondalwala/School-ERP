@@ -31,7 +31,7 @@ class FillAttendanceForm extends Component{
 		})
 
 		var url = "/api/v1/attendance"
-		if(this.props.user_type == "teacher"){
+		if(localStorage.user_type == "teacher"){
 			url = "/api/v1/attendance/teacher"
 		}
 		axios({
@@ -100,7 +100,7 @@ class FillAttendanceForm extends Component{
 			button_text:"Updating Attendance ..."
 		})
 		var url = "/api/v1/attendance"
-		if(this.props.user_type == "teacher"){
+		if(localStorage.user_type == "teacher"){
 			url = "/api/v1/attendance/teacher"
 		}
 		axios({

@@ -95,7 +95,6 @@ export default class SelectClass extends Component{
 	        section:[]
 	      })
 	    }
-
 	  }
 	
 	validate(data){
@@ -138,7 +137,6 @@ export default class SelectClass extends Component{
 			    <div className="card-body">
 			    		<div className="row">
 			    		
-			             <GetClassID />
 			            </div>
 
 			             <div className="col-md-4">
