@@ -84,9 +84,7 @@ export default class AddTeacherForm extends Component {
     if (data.relative_name.length < 3) errors.relative_name = "Min. Length 3 char."
     if (data.address.length < 3) errors.address = "Min. Length 5 char."
     if (data.contact_no.length != 10) errors.contact_no = "Invalid Contact No."
-    if (!validator.isMobilePhone(data.contact_no) ) errors.contact_no = "Invalid Contact No."
-
-
+    // if (!validator.isMobilePhone(data.contact_no) ) errors.contact_no = "Invalid Contact No."
 
     return errors;
   };
@@ -233,7 +231,7 @@ export default class AddTeacherForm extends Component {
                 <div className="row">
                    <div className="col-md-2">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols1Input">Emp Id</label>
+                       <label className="form-control-label" htmlFor="example3cols1Input">Emp Id*</label>
                        <input type="integer" className="form-control" name="empid"    value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." />
                        {errors.empid && <InlineError text={errors.empid} />}
                      </div>
@@ -242,7 +240,7 @@ export default class AddTeacherForm extends Component {
 
                    <div className="col-md-3">
                       <div className="form-group">
-                   <label className="form-control-label" htmlFor="example3cols1Input">Teacher Name</label>
+                   <label className="form-control-label" htmlFor="example3cols1Input">Teacher Name*</label>
                       <div className="input-group input-group-merge">
 
                         <div className="input-group-prepend">
@@ -260,7 +258,7 @@ export default class AddTeacherForm extends Component {
 
                    <div className="col-sm-3 col-md-2">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols1Input">Gender</label>
+                       <label className="form-control-label" htmlFor="example2cols1Input">Gender*</label>
                           <select class="form-control" name="gender" value={data.gender} onChange={(e) =>this.onChange(e)} >
                               <option value="male">Male</option>
                               <option value="female">Female</option>
@@ -272,7 +270,7 @@ export default class AddTeacherForm extends Component {
 
                    <div className="col-md-3">
                       <div className="form-group">
-                      <label className="form-control-label" htmlFor="example3cols1Input">Husband/Father Name</label>
+                      <label className="form-control-label" htmlFor="example3cols1Input">Husband/Father Name*</label>
                       <div className="input-group input-group-merge">
 
                         <div className="input-group-prepend">

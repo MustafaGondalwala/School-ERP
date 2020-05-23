@@ -146,6 +146,16 @@ class TimeTableController extends Controller
         $get_all_classperiod = ClassPeriod::select(['period_id','start_time','end_time'])->get();
         foreach ($get_all_classperiod as $key => $period) {
             $get_details = HandleTimeTable::where(['period_id'=>$period->period_id,"class"=>$request->classes,"section"=>$request->section])->first();
+            if($get_details == NULL){
+                $new_handle_time = new HandleTimeTable;
+                $new_handle_time->period_id = $period->period_id;
+                $new_handle_time->start_time = $period->start_time;
+                $new_handle_time->end_time = $period->end_time;
+                $new_handle_time->class = $request->class;
+                $new_handle_time->section = $request->section;
+                $new_handle_time->save();
+                $get_details = $new_handle_time;
+            }
             $time_table[$period->period_id] = $get_details;
         }
         return response()->json(["success"=>["time_table"=>$time_table]]);

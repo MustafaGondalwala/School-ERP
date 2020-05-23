@@ -23,6 +23,7 @@ import {
   ViewStudentLoginPage,
   ReportClassSectionWise,
   ReportStudentClassWise,
+  ViewTotalRegisterAdmission
 } from "./student/AdminStudentComponents";
 import {
   TeacherHomePage,
@@ -175,6 +176,11 @@ class Index extends Component {
             exact
             component={AdmissionList}
           />
+          <AdminDashboardRoutes 
+            path="/admin/student/view-total-:view_type"
+            exact 
+            component={ViewTotalRegisterAdmission}
+          />
           <AdminDashboardRoutes
             path="/admin/student/student-class-section-wise"
             component={ReportClassSectionWise}
@@ -219,8 +225,6 @@ class Index extends Component {
           <AdminDashboardRoutes
             path="/admin/teacher/update-profile"
             exact
-            main_header="Student"
-            header="Student"
             subheader="Profile Update"
             component={ProfileUpdateTeacher}
           />

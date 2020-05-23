@@ -17,6 +17,7 @@ use App\Classes;
 use App\Subject;
 use App\AdmissionStudent;
 use Illuminate\Support\Facades\Hash;
+use \Str;
 
 class UserApiController extends Controller
 {
@@ -414,7 +415,7 @@ class UserApiController extends Controller
 
     public function addAdmissionStudent(Request $request){
       $request->validate([
-        'class'=>"required",
+        'class_id'=>"required|integer",
         "student_name"=>"required|min:3|max:50",
         "father_name"=>"required|min:3|max:50",
         "father_contact_no"=>"required|min:3|max:50|unique:admission_students",
@@ -437,7 +438,7 @@ class UserApiController extends Controller
         if(in_array($key,$images)){
           if($request->$key == NULL)
             continue;
-          $name = $key."_photo_img_path";
+          $name = $key."_img_path";
           $image = $request->$key;
           $image_name = Str::random(25);
           $folder = '/uploads/images';
@@ -445,14 +446,13 @@ class UserApiController extends Controller
           $new_admission->$name = $filepath;
         }
       }
-      $class_id = Classes::where(['class_title'=>$request->class,"section"=>$request->section])->first();
-      $new_admission->class_id = $class_id->id;
+      $new_admission->class_id = $request->class_id;
       $new_admission->save();
       return response()->json(['success'=>["new_admission"=>$new_admission,"message"=>"New Admission Added"]]);
     }
 
     public function viewAdmissionList(Request $request){
-      $list = AdmissionStudent::select(['admission_id','class','section','student_name','father_name','father_contact_no','dob','student_address','religion','caste'])->get();
+      $list = AdmissionStudent::select(['id','admission_id','class_id','student_name','father_name','father_contact_no','dob','gender','student_address','religion','caste'])->get();
       return response()->json(["success"=>["admission_list"=>$list]]);
     }
 }

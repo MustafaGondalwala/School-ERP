@@ -12,9 +12,29 @@ use App\Leave;
 use App\StudentAttendance;
 use \DB;
 use \Carbon\Carbon;
+use App\HomeWork;
+use App\RaiseIssue;
+use App\RaiseIssueChat;
 class TeacherController extends Controller
 {
-
+  public function removeTeacher(Request $request){
+    $teacher = Teacher::find($request->id);
+    if($teacher->assigned_class_id != NULL){
+      return response()->json(["errors"=>["message"=>"Teacher is Already Assigned to Class. Please Re-Assigned!"]],400);
+    }
+    $teacher_id = $teacher->id;
+    StudentAttendance::where(["user_type"=>2,"user_id"=>$teacher_id])->delete();
+    // HomeWork::where("teacher_id",$teacher_id)->delete();
+    RaiseIssue::where("teacher_id",$teacher_id)->delete();
+    RaiseIssueChat::where("user_type",2)->where("user_id",$teacher_id)->delete();
+    $teacher->delete();
+    return response()->json(["success"=>["message"=>"Teacher Deleted!"]]);
+  }
+  public function getAdminHeader(){
+    $teacher_ids = Teacher::select('id')->pluck('id');
+    $total_teacher_present = StudentAttendance::select('attendance_type', DB::raw('count(*) as total'))->whereIn('user_id',$teacher_ids)->groupBy('attendance_type')->whereDate('created_at', Carbon::today())->where(["user_type"=>2])->get();
+    return response()->json(["success"=>["total_teacher"=>Teacher::count(),"total_assigned_class"=>Teacher::where('assigned_class_id',"!=",NULL)->count(),"total_attendance"=>$total_teacher_present]]);
+  }
   public function getTeacherHeader($header_type){
     $empid = Auth()->user()->empid;
     $teacher_info_id = Teacher::where("empid",$empid)->first()->id;    

@@ -6,11 +6,12 @@ import { RegisterStudentForm,
           ChangePassword, 
           StudentClassSectionWise,
           StudentCasteWise} from "./utils/AdminUtils"
-import { MDBDataTable } from 'mdbreact';
 import CanvasJSReact from '../../assets/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 var CanvasJS = CanvasJSReact.CanvasJS;
 import AdminStudentHeader from "./utils/AdminStudentHeader"
+import DataTable, { createTheme } from 'react-data-table-component';
+import Swal from 'sweetalert2'
 
 const ColComponent = ({title,description,link,button_text}) => (
     <div className="col-lg-4">
@@ -50,7 +51,7 @@ export const AdminStudentHomePage = () => (
                 <ColComponent title="Student Class and Section Wise" link="/admin/student/student-class-section-wise" button_text="View"/>
                 <ColComponent title="Student Caste Wise" link="/admin/student/student-caste-wise" button_text="View"/>
                 <ColComponent title="Total New Admission of Student" link="/admin/student/add-new-student" button_text="View"/>
-                <ColComponent title="Total New Registration of Student" link="/admin/student/add-new-student" button_text="View"/>
+                <ColComponent title="Total New Registration of Student" link="/admin/student/view-total-register" button_text="View"/>
               </div>
             </div>
           </div>
@@ -277,6 +278,7 @@ export  class AdmissionList extends Component {
           };
     };
     componentDidMount(){
+      var self = this;
       axios({
         method:"post",
         url:"/api/v1/student/view-all-admission-list"
@@ -286,76 +288,152 @@ export  class AdmissionList extends Component {
           })
         console.log(response.data.success.admission_list)
       });
+      axios({
+        method: "post",
+        url: "/api/v1/class/get-all-classes",
+      }).then((response) => {
+        const uniqueClasses = [];
+        response.data.success.classes.map((item) => {
+          if (uniqueClasses.indexOf(item.class_title) === -1) {
+            uniqueClasses.push(item.class_title);
+          }
+        });
+        self.setState({
+          classes: response.data.success.classes,
+          distinct_classes: uniqueClasses,
+        },() => {
+          console.log(this.state.classes)
+        });
+      });
+    }
+    makeAdmission(row){
+      var self = this;
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Give Student Admission",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Register Student'
+        }).then((result) => {
+          if (result.value) {
+            axios({
+              url:"/api/v1/student/make_admission",
+              method:"post",
+              data:row
+            }).then(response => {
+              self.setState({
+                rows:response.data.success.admission_list
+              })
+              Swal.fire(
+                'Added !',
+                'New Student Added to System',
+                'success'
+              )
+            })
+          }
+        })
+      console.log(row)
     }
      render () {
-       const data = {
-         columns: [
+       const columns = [
+       {
+            name: 'Admission Id.',
+            selector: 'admission_id',
+            sortable: true,
+            width: 150
+       },
+       {
+             name: 'Class',
+             selector: 'class',
+             sortable: true,
+             cell: row => <div>
+                      {this.state.classes && this.state.classes.map(item => {
+                          if(row.class_id == item.id){
+                              return <div>
+                                  {item.class_title}
+                                  </div>
+                          }
+                      })}  
+                    </div>
+           },
            {
-             label: 'Admission Id.',
-             field: 'admission_id',
+             name: 'Section',
+             selector: 'section',
+            sortable: true,
+             cell: row => <div>
+                      {this.state.classes && this.state.classes.map(item => {
+                          if(row.class_id == item.id){
+                              return <div>
+                                  {item.section}
+                                  </div>
+                          }
+                      })}  
+                    </div>
+           },
+           {
+             name: 'Student Name',
+             selector: 'student_name',
              sort: 'asc',
+            sortable: true,
+
              width: 150
            },
            {
-             label: 'Class',
-             field: 'class',
+             name: 'Father Name',
+             selector: 'father_name',
              sort: 'asc',
-             width: 80
-           },
-           {
-             label: 'Section',
-             field: 'section',
-             sort: 'asc',
-             width: 80
-           },
-           {
-             label: 'Student Name',
-             field: 'student_name',
-             sort: 'asc',
-             width: 150
-           },
-           {
-             label: 'Father Name',
-             field: 'father_name',
-             sort: 'asc',
+            sortable: true,
+
              width: 100
            },
 
            {
-             label: 'Father Contact No',
-             field: 'father_contact_no',
+             name: 'Father Contact No',
+             selector: 'father_contact_no',
              sort: 'asc',
+            sortable: true,
+
              width: 100
            },
 
            {
-             label: 'Dob',
-             field: 'dob',
+             name: 'Dob',
+             selector: 'dob',
              sort: 'asc',
+            sortable: true,
+
              width: 100
            },
            {
-             label: 'Address',
-             field: 'address',
+             name: 'Address',
+             selector: 'student_address',
              sort: 'asc',
+            sortable: true,
              width: 100
            },
 
            {
-             label: 'Religion',
-             field: 'religion',
+             name: 'Religion',
+             selector: 'religion',
              sort: 'asc',
+            sortable: true,
              width: 100
            },
            {
-             label: 'caste',
-             field: 'caste',
+             name: 'caste',
+             selector: 'caste',
              sort: 'asc',
+             sortable: true,
              width: 100
            },
-         ],
-         rows: this.state.rows
-       };
+           {
+            name:"Make Register",
+            width:100,
+            cell: row => <div><button onClick={(e)=> this.makeAdmission(row)} className="btn btn-sm btn-primary">View</button></div>,
+           }
+      ];
        return (
         <div>
            <AdminStudentHeader mainHeader="Student" header="Admission List"/>
@@ -363,20 +441,17 @@ export  class AdmissionList extends Component {
             <div className="row">
               <div className="col">
                 <div className="card">
-                  {/* card-header header */}
                   <div className="card-header">
                     <h3 className="mb-0">Admission List
                     <Link  to="/admin/student" class="btn btn-neutral float-right" type="submit">Back</Link>
                     </h3>
                   </div>
                   <div className="card-body">
-                    <MDBDataTable exportToCSV
-                    striped
-                    responsive
-                    bordered
-                    small
-                    data={data}
-                    />
+                     <DataTable
+                      title="Admission Student List"
+                      columns={columns}
+                      data={this.state.rows}
+                      />
                 </div>
               </div>
             </div>
@@ -401,16 +476,6 @@ export  class UploadStudentInfo extends Component{
     this.update_student_info = this.update_student_info.bind(this)
   }
 
-  componentDidMount(){
-    var self = this
-    axios({
-      url:"/api/v1/student/get-indivitual-student/5"
-    }).then(response => {
-      self.setState({
-        student_info:response.data.success
-      })
-    })
-  }
   update_student_info(data){
     var self = this
       this.setState({
@@ -432,7 +497,18 @@ export  class UploadStudentInfo extends Component{
       })
     })
   }
-
+  componentDidMount(){
+    var self = this
+    axios({
+      url:"/api/v1/student/get-indivitual-student/5"
+    }).then(response => {
+      self.setState({
+        student_info:response.data.success,
+        show_success_message:false,
+        add_student_button_text_individual:"Fetch"
+      })
+    })
+  }
   getStudent(student_id,select_year){
     this.setState({
         student_info:"",
@@ -708,39 +784,55 @@ export class ReportClassSectionWise extends Component{
   }
 }
 
-
-class Chart extends Component{
+export class ViewTotalRegisterAdmission extends Component{
+  constructor(props){
+    super(props)
+    this.state = {
+      type:""
+    }
+  }
+  componentDidMount(){
+    var type = this.props.match.params.view_type
+    if(type == "register" || type=="admission"){
+      this.setState({
+        type        
+      })
+      axios({
+        url:"/api/v1/student/get-total/"+type
+      }).then(response => {
+        console.log(response.data)
+      })
+    }
+  }
   render(){
-    const options = {
-      animationEnabled: true,
-      exportFileName: "student-class-section-wise",
-      theme: "light2",
-      title:{
-        text: "Student Class and Section Wise"
-      },
-      exportEnabled: true,
-      data: [{
-        type: this.props.type,
-        dataPoints: [
-          { y: 32, label: "Health" },
-          { y: 22, label: "Finance" },
-          { y: 15, label: "Education" },
-          { y: 19, label: "Career" },
-          { y: 5, label: "Family" },
-          { y: 7, label: "Real Estate" }
-        ]
-      }]
-    };
     return(
-        <div className="row">
-                <div className="col">
-                    <div className="card">
-                      <div className="card-body">
-                          <CanvasJSChart options = {options} />
-                      </div>
-                    </div>
-                  </div>
-          </div>
+     <div>
+       <AdminStudentHeader
+          mainHeader="Student"
+          header="Report"
+          sub_header="Student Class and Section Wise"
+        />
+
+     </div>
     )
   }
 }
+export const Chart  = ({file_name,title,type,dataPoints}) => {
+  const options = {
+      animationEnabled: true,
+      exportFileName: file_name,
+      theme: "light2",
+      title:{
+        text: title
+      },
+      exportEnabled: true,
+      data: [{
+        type: type,
+        dataPoints: dataPoints
+    }]
+    };
+  return(
+      <CanvasJSChart options = {options} />
+  )
+}
+

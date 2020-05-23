@@ -1,7 +1,12 @@
 import React,{Component} from "react"
 import {Link} from "react-router-dom"
 import Select from 'react-select'
+import validator from "validator"
 import { MDBDataTable } from 'mdbreact';
+
+const InlineError = ({ text }) => (
+  <span style={{ color: "#ae5856" }}>{text}</span>
+);
 
 export class SelectTeacher extends Component{
   constructor(props){
@@ -59,18 +64,18 @@ export class AddTeacherForm extends Component {
         var today_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
         this.state = {
           data: {
-            empid: "",
-            teacher_name: "",
+            empid: "EE120",
+            teacher_name: "Mukesh",
             gender: "male",
-            relative_name: "",
-            email: "",
-            contact_no: "",
-            qualification: "",
-            address: "",
-            dob: "",
+            relative_name: "mukesh",
+            email: "mukesh@gmail.com",
+            contact_no: "9586756273",
+            qualification: "b.com",
+            address: "hasanpura",
+            dob: "2020-03-20",
             blood_group: "",
-            teach_subject: "",
-            teach_class: "",
+            teach_subject: "1,3",
+            teach_class: "2,3,4",
             date_of_join: today_date,
             pan_card_no: "",
             aadhar_no: "",
@@ -92,7 +97,6 @@ export class AddTeacherForm extends Component {
             other_document1: "",
             other_document2: "",
             salary: "20000", 
-            create_login:"1",
             send_sms:true
           },
           subjects:[],
@@ -143,9 +147,9 @@ export class AddTeacherForm extends Component {
     Object.keys(this.state.data).map((item)=>{
       formData.append(item,this.state.data[item])
     })
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors)
+      .length === 0) {
       this.props.submit(this.state.data)
-      this.ResetForm()
     }
   }
   ResetForm(){
@@ -198,7 +202,6 @@ export class AddTeacherForm extends Component {
   }
   componentDidMount(){
     var self = this
-    
     if(this.props.teacher_details){
       this.setState({
         data: this.props.teacher_details
@@ -231,9 +234,22 @@ export class AddTeacherForm extends Component {
   }
 
   componentWillReceiveProps(){
+    if(this.props.server_error){
       this.setState({
         errors:this.props.server_error
       })
+    }
+    if(this.props.register_user_message){
+      this.ResetForm();
+    }
+    if(this.props.teacher_details){
+      this.setState({
+        data:this.props.teacher_details,
+        errors:{}
+      },()=>{
+        console.log(this.state.data)
+      })
+    }
   }
 
 
@@ -285,8 +301,10 @@ export class AddTeacherForm extends Component {
                 <div className="row">
                    <div className="col-md-2">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols1Input">Emp Id</label>
-                       <input type="integer" className="form-control" name="empid"    value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." />
+                       <label className="form-control-label" htmlFor="example3cols1Input">Emp Id*</label>
+                       {data.id ? <input type="integer" className="form-control" name="empid" disabled   value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." /> :
+                      <input type="integer" className="form-control" name="empid"    value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." />}
+                       
                        {errors.empid && <InlineError text={errors.empid} />}
                      </div>
 
@@ -294,7 +312,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-md-3">
                       <div className="form-group">
-                   <label className="form-control-label" htmlFor="example3cols1Input">Teacher Name</label>
+                   <label className="form-control-label" htmlFor="example3cols1Input">Teacher Name*</label>
                       <div className="input-group input-group-merge">
 
                         <div className="input-group-prepend">
@@ -312,7 +330,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-sm-3 col-md-2">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols1Input">Gender</label>
+                       <label className="form-control-label" htmlFor="example2cols1Input">Gender*</label>
                           <select class="form-control" name="gender" value={data.gender} onChange={(e) =>this.onChange(e)} >
                               <option value="male">Male</option>
                               <option value="female">Female</option>
@@ -324,7 +342,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-md-3">
                       <div className="form-group">
-                      <label className="form-control-label" htmlFor="example3cols1Input">Husband/Father Name</label>
+                      <label className="form-control-label" htmlFor="example3cols1Input">Husband/Father Name*</label>
                       <div className="input-group input-group-merge">
 
                         <div className="input-group-prepend">
@@ -343,7 +361,7 @@ export class AddTeacherForm extends Component {
                  <div className="row">
                    <div className="col-sm-6 col-md-4">
                       <div className="form-group">
-                      <label className="form-control-label" htmlFor="example3cols1Input">Email</label>
+                      <label className="form-control-label" htmlFor="example3cols1Input">Email*</label>
                       <div className="input-group input-group-merge">
 
                         <div className="input-group-prepend">
@@ -360,7 +378,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols1Input">Contact No.</label>
+                       <label className="form-control-label" htmlFor="example2cols1Input">Contact No.*</label>
                        <input type="decimal" className="form-control" name="contact_no" placeholder="Contact No."  value={data.contact_no} onChange={(e) =>this.onChange(e)} />
                        {errors.contact_no && <InlineError text={errors.contact_no} />}
 
@@ -371,7 +389,7 @@ export class AddTeacherForm extends Component {
                  <div className="row">
                  <div className="col-sm-6 col-md-4">
                    <div className="form-group">
-                     <label className="form-control-label" htmlFor="example2cols2Input">Address</label>
+                     <label className="form-control-label" htmlFor="example2cols2Input">Address*</label>
                      <input type="text" className="form-control" name="address"  placeholder="Address"  value={data.address} onChange={(e) =>this.onChange(e)} />
                      {errors.address && <InlineError text={errors.address} />}
 
@@ -380,7 +398,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols1Input">Qualification</label>
+                       <label className="form-control-label" htmlFor="example2cols1Input">Qualification*</label>
                        <input type="decimal" className="form-control" name="qualification"  placeholder="Qualification"  value={data.qualification} onChange={(e) =>this.onChange(e)} />
                        {errors.qualification && <InlineError text={errors.qualification} />}
                      </div>
@@ -388,7 +406,7 @@ export class AddTeacherForm extends Component {
 
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols2Input">Dob</label>
+                       <label className="form-control-label" htmlFor="example2cols2Input">Dob*</label>
                        <input
   className="form-control datepicker"
   placeholder="Select date"
@@ -465,9 +483,11 @@ export class AddTeacherForm extends Component {
                          {errors.date_of_join && <InlineError text={errors.date_of_join} />}
                        </div>
                      </div>
+                     {!data.id &&
+                      <div>
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">Teaching Class</label>
+                         <label className="form-control-label" htmlFor="example2cols2Input">Teaching Class*</label>
                           <Select
                           isMulti
                           name="teach_class"
@@ -484,7 +504,7 @@ export class AddTeacherForm extends Component {
 
                      <div className="col-sm-6 col-md-3">
                        <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">Teaching Subject</label>
+                         <label className="form-control-label" htmlFor="example2cols2Input">Teaching Subject*</label>
                          
                          <Select
                           isMulti
@@ -498,6 +518,8 @@ export class AddTeacherForm extends Component {
 
                        </div>
                      </div>
+                     </div>
+                   }
 
                    </div>
 
@@ -513,7 +535,7 @@ export class AddTeacherForm extends Component {
                      </div>
                      <div className="col-sm-6 col-md-4">
                        <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">Salary</label>
+                         <label className="form-control-label" htmlFor="example2cols2Input">Salary*</label>
                          <input type="text" className="form-control" name="salary" value={data.salary} placeholder="Salary" onChange={(e) =>this.onChange(e)} />
                          {errors.salary && <InlineError text={errors.salary} />}
                        </div>
@@ -651,44 +673,29 @@ export class AddTeacherForm extends Component {
                          </div>
                        </div>
                        </div>
+                       {!data.id &&
+                               <div className="row">
+                                 <div className="col-sm-6 col-md-2">
+                                 <table className="table table-padding">
+                                  <tr>
+                                    <td>
+                                     <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
+                                    </td>
+                                    <td>
+                                      <input type="checkbox" checked={data.send_sms}
+                  onChange={(e) => this.toggleSmsChange()} />  
+                                   </td>
 
-                       <div className="row">
-                         <div className="col-sm-6 col-md-2">
-                         <table className="table table-padding">
-                          <tr>
-                            <td>
-                             <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
-                            </td>
-                            <td>
-                              <input type="checkbox" checked={data.send_sms}
-          onChange={(e) => this.toggleSmsChange()} />  
-                           </td>
+                                  </tr>
+                                </table>
+                                 </div>
+                              </div>
 
-                          </tr>
-
-
-                         <tr>
-                         <td>
-                             <label className="form-control-label" htmlFor="example2cols1Input">Create Account for Teacher</label>
-                         </td>
-                         <td>
-                             <input type="radio" defaultChecked name="create_login"   value="1" checked={data.create_login == "1"} onChange={(e) =>this.onChange(e)} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                             <label className="form-control-label"  htmlFor="example2cols1Input">Do it later</label>
-                              </td>
-                              <td>
-                             <input type="radio" defaultChecked name="create_login"   value="0" name="create_login" checked={data.create_login == "0"} onChange={(e) =>this.onChange(e)} selected={data.create_login} />
-                              </td>
-                             </tr>
-                        </table>
-                         </div>
-                      </div>
+                    }
                      <div className="row">
                       <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_student_button_text}</button>
                       <button class="btn btn-warning" onClick={e => this.ResetForm(e)} type="button">Reset</button>
+                      {data.id && <button className="btn btn-danger" onClick={e => this.props.removeTeacher()}>Remove Teacher</button>}
                      </div>
                  </div>
              </div>

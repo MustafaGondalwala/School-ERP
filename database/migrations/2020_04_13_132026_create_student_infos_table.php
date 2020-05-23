@@ -21,6 +21,7 @@ class CreateStudentInfosTable extends Migration
 
             $table->string('class',20);
             $table->string('section',20)->nullable();
+            $table->integer('class_id');
             $table->string('religion',20);
             $table->string('caste',20);
 

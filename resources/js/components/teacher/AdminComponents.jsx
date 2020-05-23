@@ -4,91 +4,10 @@ import InlineError from "./messages/InlineError"
 import validator from 'validator'
 import Select from 'react-select'
 import { AddTeacherForm, SelectTeacher } from "./utils"
+import Swal from 'sweetalert2'
+import DataTable, { createTheme } from 'react-data-table-component';
+import AdminTeacherHeader from "./AdminTeacherHeader"
 
-
-export const AdminTeacherHeader =  ({mainHeader,header,sub_header}) => (
-    <div className="header bg-primary pb-6">
-      <div className="container-fluid">
-        <div className="header-body">
-          <div className="row align-items-center py-4">
-            <div className="col-lg-6 col-7">
-              <h6 className="h2 text-white d-inline-block mb-0">{mainHeader}</h6>
-              <nav aria-label="breadcrumb" className="d-none d-md-inline-block ml-md-4">
-                <ol className="breadcrumb breadcrumb-links breadcrumb-dark">
-                  <li className="breadcrumb-item"><a href="#"><i className="fas fa-home" /></a></li>
-                  <li className="breadcrumb-item"><a href="#">{header}</a></li>
-                  {sub_header && 
-                      <li className="breadcrumb-item active" aria-current="page">{sub_header}</li>
-                    }
-                </ol>
-              </nav>
-            </div>
-            <div className="col-lg-6 col-5 text-right">
-              <a href="#" className="btn btn-sm btn-neutral">New</a>
-              <a href="#" className="btn btn-sm btn-neutral">Filters</a>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xl-3 col-md-6">
-              <div className="card card-stats">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col">
-                      <h5 className="card-title text-uppercase text-muted mb-0">Total Teachers</h5>
-                      <span className="h2 font-weight-bold mb-0">350</span>
-                    </div>
-                    <div className="col-auto">
-                      <div className="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                        <i className="ni ni-active-40" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-md-6">
-              <div className="card card-stats">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col">
-                      <h5 className="card-title text-uppercase text-muted mb-0">Total Teacher Assigned</h5>
-                      <span className="h2 font-weight-bold mb-0">2,356</span>
-                    </div>
-                    <div className="col-auto">
-                      <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                        <i className="ni ni-chart-pie-35" />
-                      </div>
-                    </div>
-                  </div>
-                 
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-md-6">
-              <div className="card card-stats">
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col">
-                      <h5 className="card-title text-uppercase text-muted mb-0">Total Teacher Present Today</h5>
-                      <span className="h2 font-weight-bold mb-0">924</span>
-                    </div>
-                    <div className="col-auto">
-                      <div className="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                        <i className="ni ni-money-coins" />
-                      </div>
-                    </div>
-                  </div>
-               
-                </div>
-              </div>
-            </div>
-           
-          </div>
-        </div>
-      </div>
-    </div>
-)
 
 export const ColComponent = ({title,description,link,button_text}) => (
     <div className="col-lg-4">
@@ -285,16 +204,44 @@ export class ProfileUpdateTeacher extends Component{
       "teacher_id":""
     }
     this.onSelectTeacher = this.onSelectTeacher.bind(this)
-    
+    this.removeTeacher = this.removeTeacher.bind(this) 
   }
   onSelectTeacher(teacher_id){
-    var self = this;
     axios({
       url:"/api/v1/teacher/"+teacher_id
     }).then(response => {
-      self.setState({
+      this.setState({
         teacher_details:response.data.success.teacher_details
       })
+    })
+  }
+
+  removeTeacher(){
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "All the Details Related Teacher will be Removed!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Remove Teacher!'
+    }).then((result) => {
+      if (result.value) {
+        axios({
+          url:"/api/v1/teacher",
+          method:"delete",
+          data: this.state.teacher_details
+        }).then(response => {
+            Swal.fire(response.data.success.message,"success");
+            this.setState({teacher_details:""});
+        }).catch(errors => {
+          Swal.fire(
+            'Validation Error !',
+            errors.response.data.errors.message,
+            'warning'
+          )
+        })
+      }
     })
   }
   render(){
@@ -306,9 +253,7 @@ export class ProfileUpdateTeacher extends Component{
           <br />
           <br />
           <br />
-          {this.state.teacher_details && <AddTeacherForm add_student_button_text={"Update"} title={"Teacher Update Profile"} back_link={"/admin/teacher"} teacher_details={this.state.teacher_details} />}
-          
-
+          {this.state.teacher_details && <AddTeacherForm  removeTeacher={this.removeTeacher} add_student_button_text={"Update"} title={"Teacher Update Profile"} back_link={"/admin/teacher"} teacher_details={this.state.teacher_details} />}
         </div>
       </div>
     )
@@ -334,42 +279,31 @@ export class ViewAllTeacher extends Component{
     })
   }
   render(){
-    const data = {
-      columns: [
-        
-        {
-          label: 'Emp ID.',
-          field: 'id',
-          sort: 'asc',
-          width: 80
-        },
-        {
-          label: 'Name',
-          field: 'teacher_name',
-          sort: 'asc',
-          width: 150
-        },
-        {
-          label: 'Email',
-          field: 'email',
-          sort: 'asc',
-          width: 100
-        },
-        {
-          label: 'Contact No.',
-          field: 'contact_no',
-          sort: 'asc',
-          width: 100
-        },
-        {
-          label: 'Salary',
-          field: 'email',
-          sort: 'asc',
-          width: 100
-        },
-      ],
-      rows: this.state.rows
-    };
+    const columns = [
+         {
+              name: 'Emp Id.',
+              selector: 'empid',
+              sortable: true,
+              width: 150
+         },
+         {
+             name: 'Teacher Name',
+             selector: 'teacher_name',
+             sortable: true,
+           },
+           {
+             name: 'Contact no.',
+             selector: 'contact_no',
+            sortable: true,
+           },
+           {
+             name: 'Salary',
+             selector: 'salary',
+             sort: 'asc',
+             sortable: true,
+             width: 150
+           }
+      ];
     return(
       <div>
         <AdminTeacherHeader mainHeader="Teacher" header="View List"/>
@@ -380,13 +314,12 @@ export class ViewAllTeacher extends Component{
                 <div className="card-header">
                   <h3 className="mb-0">View Teacher Info <Link  to="/admin/teacher" class="btn btn-neutral float-right" type="submit">Back</Link></h3>
                   <div class="table-responsive py-4">
-                  <MDBDataTable
-                    striped
-                    responsive
-                    bordered
-                    small
-                    data={data}
-                    />
+                     <DataTable
+                      title="Teacher List"
+                      columns={columns}
+                      pagination
+                      data={this.state.rows}
+                      />
                   </div>
                 </div>
               </div>  
@@ -431,17 +364,32 @@ export class AddTeacherPage extends Component{
         add_student_button_text:"Register Teacher",
         server_error:{},
         register_user_message:true,
-
+      },() => {
+        Swal.fire(
+          'Added !',
+          'New Teacher Added to System',
+          'success'
+        )
+      })
+      self.setState({
+        'server_error': "",
+      })
+      self.setState({
+        data:""
       })
     }).catch((error) => {
+      self.setState({
+        'server_error':error.response.data.errors,
+      })
         self.setState({
-            'server_error':error.response.data.errors,
-        })
-        self.setState({
-            register_user_message:false
-        })
-        self.setState({
+            register_user_message:false,
             add_student_button_text:"Register Teacher",
+        },() => {
+          Swal.fire(
+            'Validation Error !',
+            'Validation Error occured in Form Submit',
+            'warning'
+          )
         })
     })
   }
@@ -467,8 +415,7 @@ export const TeacherHomePage = () => (
                 <ColComponent title="Add Teacher" description="Add Teacher in System" button_text="Add" link="/admin/teacher/add-teacher" />
                 <ColComponent title="Assign Teacher" description="Assign Teacher to Class" button_text="Assign" link="/admin/teacher/assign-teacher" />
                 <ColComponent title="Teacher List" description="View Total Teacher in System" button_text="View" link="/admin/teacher/view-all-teacher" />
-                <ColComponent title="Profile Update" description="Update the Profile of Teacher" button_text="View" link="/admin/teacher/update-profile" />
-                <ColComponent title="View Attendence" description="View Attendance" button_text="View" link="/admin/teacher/view-attendance" />
+                <ColComponent title="Profile Update" description="Update the Profile of Teacher" button_text="Update" link="/admin/teacher/update-profile" />
             </div>
         </div>
     </div>

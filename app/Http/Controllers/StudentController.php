@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,188 +10,270 @@ use App\AdmissionStudent;
 use App\Classes;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-
+use \DB;
 class StudentController extends Controller
 {
-    public function ViewAllStudents(){
-      return StudentInfo::select(['roll_no','class','section','student_name','father_name','father_contact_no1','father_email','gender','place'])->get();
+    public function getAge($dob){
+        return \Carbon\Carbon::parse($dob)->diff(\Carbon\Carbon::now())->format('%y');
     }
-    public function studentByCaste(Request $request){
-      $request->validate([
-        "religion"=>"string|required",
-        "caste"=>"string|required"
-      ]);
-      $students = StudentInfo::where(["religion"=>$request->religion,"caste"=>$request->caste])->get();
-      return response()->json(["success"=>["students"=>$students]]);
+    public function makeStudentAdmission(Request $request){
+        $request->validate([
+            'id'=>'required|integer'
+        ]);
+        $roll_no = "12999";
+        $new_student = new StudentInfo;
+        $new_student->roll_no = $roll_no;
+        $classInstance = Classes::find($request->class_id);
+        $new_student->class = $classInstance->class_title;
+        $new_student->section = $classInstance->section;
+        $new_student->religion = $request->religion;
+        $new_student->caste = $request->caste;
+        $new_student->student_name = $request->student_name;
+        $new_student->father_name = $request->father_name;
+        $new_student->father_contact_no1 = $request->father_contact_no;
+        $new_student->dob = $request->dob;
+        $new_student->age = $this->getAge($request->dob);
+        $new_student->gender = $request->gender;
+        $new_student->student_address = $request->student_address;
+        $new_student->pincode= " ";
+        $new_student->place = " ";
+        $new_student->class_id = $request->class_id;
+        $father_id = $this->create_parent_account($new_student);
+        $student_id = $this->create_student_account($new_student);
+
+        $new_student->father_login_id = $father_id;
+        $new_student->user_login_id = $student_id;
+        $new_student->save();
+        AdmissionStudent::find($request->id)->delete();
+        $list = AdmissionStudent::select(['id','admission_id','class_id','student_name','father_name','father_contact_no','dob','gender','student_address','religion','caste'])->get();
+       return response()->json(["success"=>["admission_list"=>$list,"new_student"=>$new_student]]);
+
     }
-    public function studentByClassId($class_id){
-      $class = Classes::select('class_title','section')->findOrFail($class_id);
-      return response()->json(["success"=>["students"=>StudentInfo::where(["class"=>$class->class_title,"section"=>$class->section])->get()]]);
+    public function ViewAllStudents()
+    {
+        return StudentInfo::select(['roll_no', 'class', 'section', 'student_name', 'father_name', 'father_contact_no1','gender','father_email', 'gender', 'place'])->get();
+    }
+    public function studentByCaste(Request $request)
+    {
+        $request->validate(["religion" => "string|required", "caste" => "string|required"]);
+        $students = StudentInfo::where(["religion" => $request->religion, "caste" => $request
+            ->caste])
+            ->get();
+        return response()
+            ->json(["success" => ["students" => $students]]);
+    }
+    public function studentByClassId($class_id)
+    {
+        $class = Classes::select('class_title', 'section')->findOrFail($class_id);
+        return response()->json(["success" => ["students" => StudentInfo::where(["class" => $class->class_title, "section" => $class
+            ->section])
+            ->get() ]]);
     }
 
-    public function getAllStudentsSearchableByClassId($class_id){
-      $classes = Classes::select('id',"class_title","section")->findOrFail($class_id);
-      $all_student = StudentInfo::select('id','student_name','roll_no','class','section','father_name')->limit(600)->where(["class"=>$classes->class_title,"section"=>$classes->section])->get();
-      $label_student = array();
-      foreach ($all_student as $key => $value) {
-        $label = $value->student_name." [".$value->roll_no."] [".$value->class."-".$value->section."] [".$value->father_name."]";
-        array_push($label_student,array("value"=>$value->id,"label"=>$label));
-      }
-      return response()->json(["success"=>["student"=>$label_student]]); 
+    public function getAllStudentsSearchableByClassId($class_id)
+    {
+        $classes = Classes::select('id', "class_title", "section")->findOrFail($class_id);
+        $all_student = StudentInfo::select('id', 'student_name', 'roll_no', 'class', 'section', 'father_name')->limit(600)
+            ->where(["class" => $classes->class_title, "section" => $classes
+            ->section])
+            ->get();
+        $label_student = array();
+        foreach ($all_student as $key => $value)
+        {
+            $label = $value->student_name . " [" . $value->roll_no . "] [" . $value->class . "-" . $value->section . "] [" . $value->father_name . "]";
+            array_push($label_student, array(
+                "value" => $value->id,
+                "label" => $label
+            ));
+        }
+        return response()->json(["success" => ["student" => $label_student]]);
     }
-    public function getAllStudentsSearchable(){
-      $all_student = StudentInfo::limit(600)->get();
-      $label_student = array();
-      foreach ($all_student as $key => $value) {
-        $label = $value->student_name." [".$value->roll_no."] [".$value->class."-".$value->section."] [".$value->father_name."]";
-        array_push($label_student,array("value"=>$value->id,"label"=>$label));
-      }
-      return response()->json(["success"=>["student"=>$label_student]]);
-    }
-
-
-    
-
-    public function getIndividualStudent(Request $request,$student_id){
-      return response()->json(["success" => StudentInfo::findOrFail($student_id)]);
-    }
-    public function create_student_account($student_info){
-       $check_if_already = User::where(["name"=>$student_info->student_name,"roll_no"=>$student_info->roll_no])->first();
-
-      if($check_if_already != NULL){
-        return $check_if_already->id;
-      }else{
-        $login_student = new User;
-        $login_student->name = $student_info->student_name;
-        $login_student->roll_no = $student_info->roll_no;
-        $login_student->password = bcrypt($student_info->roll_no);
-        $login_student->user_type = "student";
-        $login_student->save();
-        return $login_student->id;
-      } 
+    public function getAllStudentsSearchable()
+    {
+        $all_student = StudentInfo::limit(600)->get();
+        $label_student = array();
+        foreach ($all_student as $key => $value)
+        {
+            $label = $value->student_name . " [" . $value->roll_no . "] [" . $value->class . "-" . $value->section . "] [" . $value->father_name . "]";
+            array_push($label_student, array(
+                "value" => $value->id,
+                "label" => $label
+            ));
+        }
+        return response()->json(["success" => ["student" => $label_student]]);
     }
 
-    public function create_parent_account($student_info){
-      $new_parent_info = new ParentInfo;
-      $new_parent_info->name = $student_info->father_name;
-      $new_parent_info->mobile_no = $student_info->father_contact_no1;
-      $new_parent_info->save();
-
-      $check_if_already = User::where(["name"=>$student_info->father_name,"mobile_no"=>$student_info->father_contact_no1])->first();
-
-      if($check_if_already != NULL){
-        return $check_if_already->id;
-      }else{
-        $login_parent = new User;
-        $login_parent->name = $student_info->father_name;
-        $login_parent->mobile_no = $student_info->father_contact_no1;
-        $login_parent->password = bcrypt($student_info->father_contact_no1);
-        $login_parent->user_type = "parent";
-        $login_parent->save();
-        return $login_parent->id;
-      }
+    public function getIndividualStudent(Request $request, $student_id)
+    {
+        return response()->json(["success" => StudentInfo::findOrFail($student_id) ]);
     }
-    public function addRegisterStudent(Request $request){
+    public function create_student_account($student_info)
+    {
+        $check_if_already = User::where(["name" => $student_info->student_name, "roll_no" => $student_info
+            ->roll_no])
+            ->first();
+
+        if ($check_if_already != NULL)
+        {
+            return $check_if_already->id;
+        }
+        else
+        {
+            $login_student = new User;
+            $login_student->name = $student_info->student_name;
+            $login_student->roll_no = $student_info->roll_no;
+            $login_student->password = bcrypt($student_info->roll_no);
+            $login_student->user_type = "student";
+            $login_student->login_text = $student_info->roll_no;
+            $login_student->save();
+            return $login_student->id;
+        }
+    }
+
+    public function create_parent_account($student_info)
+    {
+        $new_parent_info = new ParentInfo;
+        $new_parent_info->name = $student_info->father_name;
+        $new_parent_info->mobile_no = $student_info->father_contact_no1;
+        $new_parent_info->save();
+
+        $check_if_already = User::where(["name" => $student_info->father_name, "mobile_no" => $student_info
+            ->father_contact_no1])
+            ->first();
+
+        if ($check_if_already != NULL)
+        {
+            return $check_if_already->id;
+        }
+        else
+        {
+            $login_parent = new User;
+            $login_parent->name = $student_info->father_name;
+            $login_parent->mobile_no = $student_info->father_contact_no1;
+            $login_parent->password = bcrypt($student_info->father_contact_no1);
+            $login_parent->user_type = "parent";
+            $login_parent->login_text = $student_info->father_contact_no1;
+            $login_parent->save();
+            return $login_parent->id;
+        }
+    }
+    public function addRegisterStudent(Request $request)
+    {
         $update_id = $request->id;
 
-        if(!$update_id){
-        $request->validate([
-          'class' => 'required|string',
-          'roll_no'=>"required|unique:student_infos|unique:users",
-          'student_name' => 'required|string|max:100',
-          'father_name' => 'required|string|max:100',
-          'mother_name' => 'required|string|max:100',
-          'father_contact_no1' => 'required|string|max:10|min:10',
-          'dob' => 'required|string',
-          'gender' => 'required|string',
-          'student_address' => 'required|string|max:50|min:5',
-          'place' => 'required|string|max:50',
-          'pincode' => 'required|string|max:50',
-        ]);
+        if (!$update_id)
+        {
+            $request->validate(['class_id' => 'required|integer', 'roll_no' => "required|unique:student_infos|unique:users", 'student_name' => 'required|string|max:100', 'father_name' => 'required|string|max:100', 'mother_name' => 'required|string|max:100', 'father_contact_no1' => 'required|string|max:10|min:10', 'dob' => 'required|string', 'gender' => 'required|string', 'student_address' => 'required|string|max:50|min:5', 'place' => 'required|string|max:50', 'pincode' => 'required|string|max:50', ]);
         }
 
-        if($update_id)
-          $student_info = StudentInfo::find($update_id);
+        if ($update_id) $student_info = StudentInfo::find($update_id);
+        else $student_info = new StudentInfo;
+        $except = array(
+            'send_sms',
+            'user_login_id',
+            'father_login_id',
+            'date_of_admission'
+        );
+        $images = array(
+            'student_photo',
+            'father_photo',
+            'mother_photo'
+        );
+        foreach ($request->all() as $key => $value)
+        {
+            if (in_array($key, $images))
+            {
+                if ($request->$key == NULL) continue;
+                $name = $key . "_img_path";
+                $image = $request->$key;
+                $image_name = Str::random(25);
+                $folder = '/uploads/images';
+                $filepath = $image->storeAs($folder, $image_name . '.' . $image->getClientOriginalExtension() , 'public');
+                $student_info->$name = $filepath;
+            }
+            if (in_array($key, $images)) continue;
+            if (!in_array($key, $except)) if ($value == "null") $student_info->$key = "";
+            else $student_info->$key = $value;
+        }
+
+        $classInstance = Classes::find($request->class_id);
+        $student_info->class = $classInstance->class_title;
+        $student_info->section = $classInstance->section;
+
+        if (!$update_id)
+        {
+            $father_id = $this->create_parent_account($student_info);
+            $student_id = $this->create_student_account($student_info);
+            $student_info->father_login_id = $father_id;
+            $student_info->user_login_id = $student_id;
+        }
+        if ($update_id) $student_info->update();
         else
-          $student_info = new StudentInfo;
-        $except = array('create_account','send_sms','user_login_id','father_login_id','date_of_admission');
-        $images = array('student_photo','father_photo','mother_photo');
-        foreach ($request->all() as $key => $value) {
-              if(in_array($key,$images)){
-                  if($request->$key == NULL)
-                    continue;
-                  $name = $key."_img_path";
-                  $image = $request->$key;
-                  $image_name = Str::random(25);
-                  $folder = '/uploads/images';
-                  $filepath = $image->storeAs($folder, $image_name.'.'.$image->getClientOriginalExtension(),'public');
-                  $student_info->$name = $filepath;
-              }
-          if(in_array($key,$images))
-            continue;
-          if(!in_array($key,$except))
-            if($value == "null")
-              $student_info->$key = "";
-            else
-              $student_info->$key = $value;
-        }
-
-        if($request->create_account == 1){
-          $father_id = $this->create_parent_account($student_info);
-          $student_id = $this->create_student_account($student_info);
-          $student_info->father_login_id = $father_id;
-          $student_info->user_login_id = $student_id;
-        }
-          if($update_id)
-            $student_info->update();
-          else{
             $student_info->save();
-          }
-        return response()->json(array(["success"=>$student_info]));
+        return response()
+            ->json(array(
+            ["success" => $student_info]
+        ));
     }
 
-
-    public function tokenLink($email,$token_for){
+    public function tokenLink($email, $token_for)
+    {
         $token = $this->randomStrgenerator();
         $startDateTime = date("Y-m-d H:i:s");
-        $expiry_date = date('Y-m-d H:i:s',strtotime('+24 hour',strtotime($startDateTime)));
+        $expiry_date = date('Y-m-d H:i:s', strtotime('+24 hour', strtotime($startDateTime)));
         $tokenStore = new TokenStore;
         $tokenStore->user_email = $email;
         $tokenStore->token_for = $token_for;
         $tokenStore->token = $token;
         $tokenStore->expiry_date = $expiry_date;
         $tokenStore->save();
-        $link = "/verifytoken?token=".$token."&token_for=".$token_for."&email=".$email;
+        $link = "/verifytoken?token=" . $token . "&token_for=" . $token_for . "&email=" . $email;
         return $link;
     }
-    public function randomStrgenerator($length = 25){
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < $length; $i++) {
-          $randomString .= $characters[rand(0, $charactersLength - 1)];
-      }
-      return $randomString;
+    public function randomStrgenerator($length = 25)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0;$i < $length;$i++)
+        {
+            $randomString .= $characters[rand(0, $charactersLength - 1) ];
+        }
+        return $randomString;
     }
 
-    public function changePassword(Request $request){
-      $request->validate([
-        "new_password"=>"string|min:4|required",
-        "student_id"=>"required|integer"
-      ]);
-      if(User::find($request->student_id)->update(["password"=>bcrypt($request->new_password)]))
-        return response()->json(["success"=>["password_change"=>true]]);
-      else
-        return response()->json(["success"=>["password_change"=>false]]);
+    public function changePassword(Request $request)
+    {
+        $request->validate(["new_password" => "string|min:4|required", "student_id" => "required|integer"]);
+        if (User::find($request->student_id)
+            ->update(["password" => bcrypt($request->new_password) ])) return response()
+            ->json(["success" => ["password_change" => true]]);
+        else return response()
+            ->json(["success" => ["password_change" => false]]);
     }
 
-    public function studentAdminHeader(){
-      $total_students = StudentInfo::count();
-      $total_admission = AdmissionStudent::count();
-      return response()->json(["success"=>["header"=>["total_students"=>$total_students,"total_admission"=>$total_admission]]]);
+    public function studentAdminHeader()
+    {
+        $total_students = StudentInfo::count();
+        $total_admission = AdmissionStudent::count();
+        return response()->json(["success" => ["header" => ["total_students" => $total_students, "total_admission" => $total_admission]]]);
     }
 
-     public function viewAllStudentLoginInfo(Request $request){
-      return User::select(['id','name','roll_no'])->where('user_type',"student")->get();
+    public function viewAllStudentLoginInfo(Request $request)
+    {
+        return User::select(['id', 'name', 'roll_no'])->where('user_type', "student")
+            ->get();
+    }
+    public function getTotalReport($type){
+        if($type == "register"){
+
+            $getData = StudentInfo::select('total', DB::raw('count(*) as total'))->groupBy(function($val) {
+                  return Carbon::parse($val->created_at)->format('Y');
+            });
+            $getData = StudentInfo::select(DB::raw('count(id) as `data`'),DB::raw('YEAR(created_at) year'),DB::raw('MONTH(created_at) month'))
+       ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+       ->get();
+            return response()->json($getData);
+        }
     }
 }

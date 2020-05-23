@@ -8,6 +8,7 @@ import { USER_LOGGED_IN,
          ADMIN_STUDENT_HEADER,
           TEACHER_LEAVE_HEADER,
           TEACHER_LEAVE_HEADER_EMPTY,
+          ADMIN_TEACHER_HEADER,
          TEACHER_CLASS_ATTENDANCE_EMPTY } from "../types";
 import api from "../api";
 import setAuthorizationHeader from "../utils/setAuthorizationHeader";
@@ -63,6 +64,11 @@ export const teacherLeaveHeader = teacherLeaveHeader => ({
   teacherLeaveHeader
 })
 
+
+export const adminTeacherHeader = adminTeacherHeader => ({
+  type:ADMIN_TEACHER_HEADER,
+  adminTeacherHeader
+})
 export const teacherLeaveHeaderEmpty = () => ({
   type:TEACHER_LEAVE_HEADER_EMPTY
 })
@@ -85,6 +91,7 @@ export const logout = () => dispatch => {
   setAuthorizationHeader();
   dispatch(userLoggedOut());
 };
+
 
 
 
@@ -121,4 +128,8 @@ export const newAdminAttendancetHeader = data => dispatch => {
 
 export const newParentChildren = data => dispatch => {
     dispatch(parentChildren(data))
+}
+
+export const newAdminTeacherHeader = data => dispatch => {
+  dispatch(adminTeacherHeader(data))
 }

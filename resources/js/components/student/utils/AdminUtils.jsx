@@ -89,16 +89,143 @@ export  class SelectIndividualStudent extends Component{
   }
 }
 
+class GetClassIdForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      section: [],
+      distinct_classes: [],
+      classes: [],
+      class_: "",
+      section_: "",
+    };
+    this.onChange = this.onChange.bind(this);
+    this.getClassSection = this.getClassSection.bind(this);
+  }
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: "post",
+      url: "/api/v1/class/get-all-classes",
+    }).then((response) => {
+      const uniqueClasses = [];
+      response.data.success.classes.map((item) => {
+        if (uniqueClasses.indexOf(item.class_title) === -1) {
+          uniqueClasses.push(item.class_title);
+        }
+      });
+      self.setState({
+        classes: response.data.success.classes,
+        distinct_classes: uniqueClasses,
+      });
+    });
+  }
+
+  getClassSection(class_name, section) {
+    this.state.classes.map((item) => {
+      if ((item.class_title == class_name) & (item.section == section)) {
+        this.props.sendClassId(item.id);
+      }
+    });
+  }
+
+  onChangeClasses(e) {
+    var value = e.target.value;
+    var value_by = [];
+    this.state.classes.map((item) => {
+      if (item.class_title == value) {
+        value_by.push(item.section);
+      }
+    });
+    this.setState({
+      section: value_by,
+    });
+    this.setState({
+      class_: e.target.value,
+    });
+    if (value_by.length > 0) {
+      this.setState(
+        {
+          section_: value_by[0],
+        },
+        () => {
+          this.getClassSection(this.state.class_, this.state.section_);
+        }
+      );
+    } else {
+      this.setState({
+        section_: "",
+        section: [],
+      });
+    }
+  }
+
+  onChange(e) {
+    this.setState(
+      {
+        [e.target.name]: e.target.value,
+      },
+      () => {
+        this.getClassSection(this.state.class_, this.state.section_);
+      }
+    );
+  }
+  render() {
+    const { errors,class_id } = this.props;
+    return (
+      <div>
+      <div className="row">
+        <div className="col-sm-6 col-md-4">
+          <div className="form-group">
+            <label className="form-control-label" htmlFor="example3cols3Input">
+              Class
+            </label>
+            <select
+              class="form-control"
+              name="class"
+              onChange={(e) => this.onChangeClasses(e)}
+              value={class_id}
+            >
+              <option value="">Select Class</option>
+              {this.state.distinct_classes.map(function (item) {
+                return <option value={item}>{item}</option>;
+              })}
+            </select>
+            {errors.class_id && <InlineError text={errors.class_id} />}
+          </div>
+        </div>
+        </div>
+        <div className="row">
+        <div className="col-sm-6 col-md-4">
+          <div className="form-group">
+            <label className="form-control-label" htmlFor="example3cols3Input">
+              Section
+            </label>
+            <select
+              class="form-control"
+              value={this.section_}
+              name="section_"
+              onChange={(e) => this.onChange(e)}
+            >
+              {this.state.section &&
+                this.state.section.map((item) => {
+                  if (item != null) return <option value={item}>{item}</option>;
+                })}
+            </select>
+          </div>
+        </div>
+      </div>
+      </div>
+    );
+  }
+}
+
 export class RegisterStudentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-          section:[],
-          distinct_classes:[],
-          classes:[],
           data: {
             roll_no:"",
-            class:"10th",
             student_name:"",
             father_name:"",
             mother_name:"",
@@ -115,18 +242,17 @@ export class RegisterStudentForm extends Component {
             landmark:"",
             student_photo:"",
             religion:"hindu",
-            caste:"caste",
+            caste:"general",
             age:"",
             father_photo:"",
             mother_photo:"",
-            create_account:"1",
-            send_sms:"0"
+            send_sms:"true",
+            class_id:""
           },
           errors: {},
           register_user_message:"",
         };
-
-    this.onChangeClasses = this.onChangeClasses.bind(this)
+    this.getClassIDFromGetClassId = this.getClassIDFromGetClassId.bind(this)
   };
   onFileChange(e){
     this.setState({
@@ -149,7 +275,8 @@ export class RegisterStudentForm extends Component {
     if (!data.student_address) errors.student_address = "Can't be blank";
     if (!data.place) errors.place = "Can't be blank";
     if (!data.pincode) errors.pincode = "Can't be blank";
-    if (!data.class) errors.class = "Can't be blank";
+    if(this.props.student_info)
+      if (!data.class_id) errors.class_id = "Can't be blank";
 
     if (data.student_name.length < 3) errors.student_name = "Min. Length 3 char."
     if (data.father_name.length < 3) errors.father_name = "Min. Length 3 char."
@@ -163,6 +290,7 @@ export class RegisterStudentForm extends Component {
     e.preventDefault();
     const errors = this.validate(this.state.data);
     this.setState({ errors });
+    console.log(errors,this.props.student_info)
     const formData = new FormData();
     Object.keys(this.state.data).map((item)=>{
       formData.append(item,this.state.data[item])
@@ -175,56 +303,13 @@ export class RegisterStudentForm extends Component {
 
   componentDidMount(){
     var self = this
-
     if(this.props.student_info){
       self.setState({
         data:this.props.student_info
+      },() => {
+        console.log(this.state.data,this.props.student_info)
       })
     }
-    axios({
-      method:"post",
-      url:"/api/v1/class/get-all-classes"
-    }).then(response=>{
-
-      const uniqueClasses = [];
-      response.data.success.classes.map(item => {
-          if (uniqueClasses.indexOf(item.class_title) === -1) {
-              uniqueClasses.push(item.class_title)
-          }
-      });
-      self.setState({
-        classes:response.data.success.classes,
-        distinct_classes:uniqueClasses
-      });
-    })
-  }
-
-  onChangeClasses(e){
-    var value = e.target.value
-    var value_by = []
-    this.state.classes.map((item)=>{
-      if(item.class_title == value){
-        value_by.push(item.section)
-      }
-    })
-    this.setState({
-      section:value_by
-    })
-    this.setState({
-      data: { ...this.state,["class"]:value}
-    })
-    this.onChange(e)
-    if(value_by.length){
-      this.setState({
-        data: {...this.state.data,["section"]:value_by[0]},
-      })
-    }else{
-      this.setState({
-        data: {...this.state.data,["section"]:""},
-        section:[]
-      })
-    }
-
   }
 
   makeInputValueNull(){
@@ -257,8 +342,6 @@ export class RegisterStudentForm extends Component {
           }
     });
   }
-
-
   componentWillReceiveProps(){
     this.setState({
       errors:this.props.server_error
@@ -280,8 +363,16 @@ export class RegisterStudentForm extends Component {
       data: {...this.state.data,[e.target.name]:e.target.value}
     });
   }
-
-
+  getClassIDFromGetClassId(class_id){
+    this.setState({
+      data: {...this.state.data,"class_id":class_id}
+    });
+  }
+  onChangeCheckbox(e){
+    this.setState({
+      data: {...this.state.data,"send_sms": e.target.checked}
+    })
+  }
   render () {
     const { data, errors } = this.state;
     return (
@@ -323,41 +414,35 @@ export class RegisterStudentForm extends Component {
                      <div className="form-group">
                        <label className="form-control-label" htmlFor="example3cols1Input">Roll No.</label>
                        <input type="integer" disabled={this.props.student_info}  className="form-control" name="roll_no"    value={data.roll_no} onChange={(e) =>this.onChange(e)} placeholder="Roll No." />
-                        
                        {errors.roll_no && <InlineError text={errors.roll_no} />}
-
-                     </div>
-
-                   </div>
-
-                   <div className="col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
-                       <select class="form-control" value={data.class} name="class" onChange={(e) =>this.onChangeClasses(e)}>
-                                          <option value="">Select Class</option>
-                                        {this.state.distinct_classes.map(function(item){
-                                          return <option value={item}>{item}</option>
-                                        })}
-                       </select>
-                                      {errors.class && <InlineError text={errors.class} />}
-
-                     </div>
-                   </div>
-                   <div className="col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Section</label>
-                                    <select class="form-control" value={data.section} name="section" onChange={(e) =>this.onChange(e)}>
-                                      {
-                                        this.state.section &&
-                                        this.state.section.map((item)=>{
-                                          return <option  value={item}>{item}</option>
-                                        })
-                                      }
-                                      </select>
-
                      </div>
                    </div>
                  </div>
+                {data.id ? <div>
+                      <div className="row">
+                       <div className="col-sm-6 col-md-4">
+                         <div className="form-group">
+                            <label>Class:</label>
+                            <input disabled type="text" value={data.class} className="form-control"/>
+                         </div>
+                       </div>
+                      </div>
+                      <div className="row">
+                       <div className="col-sm-6 col-md-4">
+                         <div className="form-group">
+                            <label>Section:</label>
+                            <input disabled type="text" value={data.section} className="form-control"/>
+                         </div>
+                       </div>
+                      </div>
+                      
+                      </div>
+                : <div><GetClassIdForm 
+                    errors={errors}
+                    sendClassId={this.getClassIDFromGetClassId}
+                  /></div>
+                   }
+                 
                  <div className="row">
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
@@ -458,8 +543,6 @@ export class RegisterStudentForm extends Component {
 
                       </select>
                       {errors.caste && <InlineError text={errors.caste} />}
-
-
                      </div>
                    </div>
                 </div>
@@ -559,24 +642,11 @@ export class RegisterStudentForm extends Component {
                        <div className="col-sm-6 col-md-2">
                          <div className="form-group">
                            <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
-                           <input type="checkbox" name="send_sms" data={data.send_sms} value="1" />
+                           <input type="checkbox" name="send_sms" onChange={e => this.onChangeCheckbox(e)} data={data.send_sms} value="1" />
                          </div>
                        </div>
                        </div>
                      }
-                     {!this.props.student_info && 
-
-                       <div className="row">
-                         <div className="col-sm-6 col-md-2">
-                           <div className="form-group">
-                           <input type="radio" value="1"    name="create_account" onChange={(e) =>this.onChange(e)} />
-                             <label className="form-control-label" htmlFor="example2cols1Input">Create Account for Student and Parent</label>
-                             <input type="radio" defaultChecked name="create_account" value="0" onChange={(e) =>this.onChange(e)} />
-                             <label className="form-control-label" htmlFor="example2cols1Input">Do it later</label>
-                           </div>
-                         </div>
-                         </div>
-                       }
                      <div className="row">
                       <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_student_button_text}</button>
                       {!this.props.student_info &&
@@ -600,6 +670,7 @@ export class AdmissionStudentForm extends Component {
           data: {
             admission_id:"",
             class:"",
+            class_id:"",
             student_name:"",
             father_name:"",
             father_contact_no:"",
@@ -610,13 +681,12 @@ export class AdmissionStudentForm extends Component {
             religion:"hindu",
             caste:"general",
             age:"",
-            section:""
           },
           errors: {},
           register_user_message:"",
-          classes:[],
-          section:[]
         };
+    this.getClassIDFromGetClassId = this.getClassIDFromGetClassId.bind(this)
+    this.makeInputNull = this.makeInputNull.bind(this)
   };
   onFileChange(e){
     this.setState({
@@ -631,7 +701,7 @@ export class AdmissionStudentForm extends Component {
     if (!data.father_contact_no) errors.father_contact_no = "Can't be blank";
     if (!data.dob) errors.dob = "Can't be blank";
     if (!data.student_address) errors.student_address = "Can't be blank";
-    if (!data.class) errors.class = "Can't be blank";
+    if (!data.class_id) errors.class_id = "Can't be blank";
     if (!data.age) errors.age = "Can't be blank";
 
 
@@ -648,18 +718,23 @@ export class AdmissionStudentForm extends Component {
     e.preventDefault();
     const errors = this.validate(this.state.data);
     this.setState({ errors });
+    console.log(errors)
     const formData = new FormData();
     Object.keys(this.state.data).map((item)=>{
       formData.append(item,this.state.data[item])
     })
     if (Object.keys(errors).length === 0) {
       this.props.submit(formData)
+      this.makeInputNull()
     }
   }
-
+  getClassIDFromGetClassId(class_id){
+    this.setState({
+      data: {...this.state.data,"class_id":class_id}
+    });
+  }
   makeInputNull(){
-     this.setState({
-        data: {
+    const data = {
               admission_id:"",
               class:"",
               student_name:"",
@@ -672,9 +747,11 @@ export class AdmissionStudentForm extends Component {
               religion:"hindu",
               caste:"general",
               age:"",
+              class_id:"",
               section:""
-            },
-            errors:{}
+            }
+     this.setState({
+        data:data
       });  
   }
   onChange(e){
@@ -683,29 +760,7 @@ export class AdmissionStudentForm extends Component {
     });
   }
 
-  changeClassSection(e){
-    var value = e.target.value
-    var value_by = []
-    this.state.classes.map((item)=>{
-      if(item.class_title == value){
-        value_by.push(item.section)
-      }
-    })
-    this.setState({
-      section:value_by
-    })
-    this.setState({
-      data: {...this.state.data,["class"]:value}
-    })
-    if(value_by.length > 1){
-      this.setState({
-        data: {...this.state.data,["section"]:value_by[0]}
-      })
-    }
-
-  }
-
-
+  
   componentWillReceiveProps(){
     this.setState({
       errors:this.props.server_error
@@ -715,16 +770,6 @@ export class AdmissionStudentForm extends Component {
     }
   }
 
-  componentDidMount(){
-    var self = this
-    axios({
-      url:"/api/v1/class/get-all-distinct-classes"
-    }).then(response=>{
-        self.setState({
-          classes:response.data.success.classes
-        })
-    })
-  }
   render () {
     const { data, errors } = this.state;
     return (
@@ -759,36 +804,11 @@ export class AdmissionStudentForm extends Component {
                        {errors.admission_id && <InlineError text={errors.admission_id} />}
                      </div>
                    </div>
-                   <div className="col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Class</label>
-                                    <select class="form-control" value={data.class} name="class" onChange={(e) =>this.changeClassSection(e)}>
-                                      <option>Select Class</option>
-                                      {
-                                        this.state.classes.length > 1 &&
-                                        this.state.classes.map((item)=>{
-                                          return <option  value={item.class_title}>{item.class_title}</option>
-                                        })
-                                      }
-                                      </select>
-                                      {errors.class && <InlineError text={errors.class} />}
-                     </div>
-                   </div>
-                   <div className="col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example3cols3Input">Section</label>
-                                    <select class="form-control" value={data.section} name="section" onChange={(e) =>this.onChange(e)}>
-                                      {
-                                        this.state.section &&
-                                        this.state.section.map((item)=>{
-                                          return <option  value={item}>{item}</option>
-                                        })
-                                      }
-                                      </select>
-
-                     </div>
-                   </div>
                  </div>
+                 <GetClassIdForm 
+                    errors={errors}
+                    sendClassId={this.getClassIDFromGetClassId}
+                  />
                  <div className="row">
                    <div className="col-sm-6 col-md-4">
                      <div className="form-group">
@@ -902,8 +922,7 @@ export class AdmissionStudentForm extends Component {
                      </div>
                      <div className="row">
                       <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.add_button_text}</button>
-                      <button class="btn btn-warning" type="button">Reset</button>
-
+                      <button class="btn btn-warning" type="button" onClick={e => this.makeInputNull()}>Reset</button>
                      </div>
                  </div>
              </div>
