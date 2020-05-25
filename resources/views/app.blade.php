@@ -39,7 +39,7 @@
     </head>
     <body >
         <div id="app"></div>
-        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ secure_asset('js/app.js') }}"></script>
         <script src="../../assets/vendor/jquery/dist/jquery.min.js"></script>
         <script src="../../assets/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
         <script src="../../assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
