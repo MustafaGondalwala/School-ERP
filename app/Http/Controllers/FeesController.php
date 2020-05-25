@@ -11,10 +11,131 @@ use App\FeesType;
 use App\StudentInfo;
 use App\FeesClassWise;
 use App\FeeReceipt;
+use App\StaffInfo;
+use App\User;
+use App\ClerkPermission;
 use DB;
+use \Str;
 class FeesController extends Controller
-{
-    //
+{ 
+    public function getClerkInfo($clerk_id){
+      $clerk_info = StaffInfo::where('designation','clerk')->find($clerk_id);
+      $clerk_info["permission"] = ClerkPermission::where('staff_id',$clerk_id)->first();
+      return response()->json(["success"=>["clerk_info"=>$clerk_info]]);
+    }
+    public function getManageLoginUser(){
+      $staff_info = StaffInfo::select('id','name','empid','email','contact_no')->where('designation','clerk')->get();
+      $i = 1;
+      foreach ($staff_info as $key => $value) {
+        $value["sr_no"] = $i++;
+        $value["permission"] = ClerkPermission::where("staff_id",$value['id'])->get();
+      }
+      return response()->json(["success"=>["staff_info"=>$staff_info]]);
+    }
+    private function fileUpload($image){
+      if($image == NULL)
+        return NULL;
+      $image_name = Str::random(25);
+      $folder = '/uploads/images';
+      $filepath = $image->storeAs($folder, $image_name . '.' . $image->getClientOriginalExtension() , 'public');
+      return $filepath;
+    }
+    public function addManageLoginUser(Request $request){
+      if($request->id){}
+      else
+        $request->validate([
+          'empid'=>"required|string|unique:staff_infos|unique:users",
+          'clerk_name'=>"required|string",
+          "gender"=>"required|string",
+          "relative_name"=>"required|string",
+          "email"=>"required|string|unique:staff_infos|unique:users",
+          "contact_no"=>"required|string|unique:staff_infos",
+          "address"=>"required|string",
+          "dob"=>"required|string",
+          "salary"=>"required|string",
+      ]);
+      
+      DB::beginTransaction();
+      try{
+        if($request->id)
+          $new_staff = StaffInfo::find($request->id);
+        else
+          $new_staff = new StaffInfo;
+        $new_staff->empid = $request->empid;
+        $new_staff->name = $request->clerk_name;
+        $new_staff->gender = $request->gender;
+        $new_staff->relative_name = $request->relative_name;
+        $new_staff->email = $request->email;
+        $new_staff->contact_no = $request->contact_no;
+        $new_staff->address = $request->address;
+        $new_staff->dob = $request->dob;
+        $new_staff->salary = $request->salary;
+        $new_staff->blood_group = $request->blood_group;
+        $new_staff->pan_card_no = $request->pan_card_no;
+        $new_staff->aadhar_no = $request->aadhar_no;
+        $new_staff->bank_name = $request->bank_name;
+        $new_staff->bank_account_no = $request->bank_account_no;
+        $new_staff->bank_ifc_no = $request->bank_ifc_no;
+        $new_staff->pf_no = $request->pf_no;
+        $new_staff->pf_amount = $request->pf_amount;
+        $new_staff->da_amount = $request->da_amount;
+        $new_staff->hra_amount = $request->hra_amount;
+        $new_staff->remark = $request->remark;
+        $new_staff->casual_leave = $request->casual_leave;
+        $new_staff->sick_leave = $request->sick_leave;
+        $new_staff->pay_earn_leave = $request->pay_earn_leave;
+        $new_staff->other_leave = $request->other_leave;
+        $new_staff->designation = "clerk";
+
+        $new_staff->staff_photo_img_path = $this->fileUpload($request->clerk_photo);
+        $new_staff->id_proof_img_path = $this->fileUpload($request->id_proof);
+        $new_staff->experience_letter_photo_img_path = $this->fileUpload($request->experience_letter);
+        $new_staff->other_document1_photo_img_path = $this->fileUpload($request->other_document1);
+        $new_staff->other_document2_photo_img_path = $this->fileUpload($request->other_document2);
+        $new_staff->salary  = $request->salary;
+        if($request->id)
+          $new_staff->update();
+        else
+          $new_staff->save();
+
+        if($request->id)
+          $new_user = User::where('empid',$new_staff->empid)->first();
+        else
+          $new_user = new User;
+        $new_user->name = $request->clerk_name;
+        $new_user->email = $request->email;
+        $new_user->mobile_no = $request->contact_no;
+        $new_user->empid = $request->empid;
+        $new_user->password = bcrypt($request->empid);
+        $new_user->user_type = "clerk";
+        $new_user->login_text = $request->empid;
+        $new_user->profile_pic = $new_staff->clerk_photo;
+        if($request->id)
+          $new_user->update();
+        else
+          $new_user->save();
+        if($request->id){
+          $new_clerk_permission = ClerkPermission::where('staff_id',$new_staff->id)->first();
+        }else
+          $new_clerk_permission = new ClerkPermission;
+        $new_clerk_permission->set_fee_installments = (int)(bool)$request->set_fee_installments;
+        $new_clerk_permission->set_fee_due_date = (int)(bool)$request->set_fee_due_date;
+        $new_clerk_permission->set_fee = (int)(bool)$request->set_fee;
+        $new_clerk_permission->set_fee_class_wise = (int)(bool)$request->set_fee_class_wise;
+        $new_clerk_permission->pay_fees = (int)(bool)$request->pay_fees;
+        $new_clerk_permission->staff_id = $new_staff->id;
+        $new_clerk_permission->user_login_id = $new_user->id;
+        if($request->id)
+          $new_clerk_permission->update();
+        else
+          $new_clerk_permission->save();
+        DB::commit();
+        return response()->json(["success"=>["message"=>"New Clerk Added","clerk_permission"=>$new_clerk_permission,"user"=>$new_user,"staff"=>$new_staff]]);
+      }catch (\Exception $e) {
+          DB::rollback();
+          return response()->json(["error"=>["message"=>$e->getMessage()]],400);
+      }
+    }
     public function updateFeesInstallment(Request $request){
       $request->validate([
         'installments'=>'required|array'
@@ -27,7 +148,6 @@ class FeesController extends Controller
         FeesInstallment::first()->update(["total_installments"=>implode(",",$request->installments)]);
         return response()->json(["success"=>["message"=>"Data Updated"]]);
     }
-
     public function getAllInstallment(Request $request){
       $total_installment =  FeesInstallment::first();
       $array_of_total_installment = explode(",",$total_installment->total_installments);
@@ -44,7 +164,6 @@ class FeesController extends Controller
       $total_fees_due = FeesDueDate::where(["year"=>$request->select_year])->get();
       return response()->json(["success"=>["total_installment"=>$total_fees_due]]);
     }
-
     public function updateDueDate(Request $request){
       $request->validate([
         'select_year'=>'required',
@@ -67,8 +186,6 @@ class FeesController extends Controller
 
       return response()->json(["success"=>"true"]);
     }
-
-
     public function getOnlyTotalInstallment(){
       if(FeesInstallment::count()){
           $total_installment =  FeesInstallment::first();
@@ -78,7 +195,6 @@ class FeesController extends Controller
           return response()->json(["success"=>["total_installment"=>[]]]);
       }
     }
-
     public function AddFeesType(Request $request){
         $request->validate([
           'fees_type'=>'required|min:3|unique:fees_types'

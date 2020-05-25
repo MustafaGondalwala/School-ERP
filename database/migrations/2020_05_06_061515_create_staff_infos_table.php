@@ -22,11 +22,11 @@ class CreateStaffInfosTable extends Migration
             $table->string('email',60)->unique();
             $table->string('contact_no',50)->unique();
             $table->string('address',150);
-            $table->string('qualification',50);
+            $table->string('qualification',50)->nullable();
             $table->string('blood_group',10)->nullable();
             $table->date('dob');
 
-            $table->string('teacher_photo_img_path',100)->nullable();
+            $table->string('staff_photo_img_path',100)->nullable();
             $table->string('experience_letter_photo_img_path',100)->nullable();
             $table->string('id_proof_img_path',100)->nullable();
             $table->string('other_document1_photo_img_path',100)->nullable();

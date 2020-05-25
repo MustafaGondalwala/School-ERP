@@ -159,7 +159,7 @@ Route::group(['prefix' => 'v1', "middleware" => ["auth:api", "adminCheck"]], fun
         Route::get('/get-all-searable-student', "StudentController@getAllStudentsSearchable");
         Route::get('/get-indivitual-student/{student_id}', "StudentController@getIndividualStudent");
         Route::put("/changepassword", "StudentController@changePassword");
-        Route::get('/{class_id}', "StudentController@getAllStudentsSearchableByClassId");
+        Route::get('/get/students/{class_id}', "StudentController@getAllStudentsSearchableByClassId");
         Route::post("/bycaste", "StudentController@studentByCaste");
         Route::get('/get/all', "StudentController@ViewAllStudents");
         Route::get('/get/logininfo', "StudentController@viewAllStudentLoginInfo");
@@ -205,6 +205,13 @@ Route::group(['prefix' => 'v1', "middleware" => ["auth:api", "adminCheck"]], fun
         Route::post('/pay', "FeesController@payIndividualFees");
         Route::post('/receipt', "FeesController@getStudentReceipts");
         Route::get('/receipt/{receipt_id}', "FeesController@getIndividualReceipDetails");
+        Route::group(["prefix"=>"manage_login"],function(){
+            Route::post("","FeesController@addManageLoginUser");
+            Route::get("","FeesController@getManageLoginUser");
+            Route::put("","FeesController@addManageLoginUser");
+
+            Route::get("/info/{clerk_id}","FeesController@getClerkInfo");
+        });
     });
 });
 

@@ -206,16 +206,70 @@ export class ProfileUpdateTeacher extends Component{
     this.onSelectTeacher = this.onSelectTeacher.bind(this)
     this.removeTeacher = this.removeTeacher.bind(this) 
   }
-  onSelectTeacher(teacher_id){
-    axios({
-      url:"/api/v1/teacher/"+teacher_id
-    }).then(response => {
-      this.setState({
-        teacher_details:response.data.success.teacher_details
-      })
-    })
-  }
 
+  onSelectTeacher(teacher_id){
+    var date = new Date();
+    var self = this
+    var today_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+    const data = {
+            empid: "",
+            teacher_name: "",
+            gender: "male",
+            relative_name: "",
+            email: "",
+            contact_no: "",
+            qualification: "",
+            address: "",
+            dob: "",
+            blood_group: "",
+            teach_subject: "",
+            teach_class: "",
+            date_of_join: today_date,
+            pan_card_no: "",
+            aadhar_no: "",
+            bank_name: "",
+            bank_account_no: "",
+            bank_ifc_no: "",
+            pf_no: "",
+            pf_amount: "",
+            da_amount: "",
+            hra_amount: "",
+            remark: "",
+            casual_leave: "",
+            sick_leave: "",
+            pay_earn_leave: "",
+            other_leave: "",
+            teacher_photo: "",
+            id_proof: "",
+            experience_letter: "",
+            other_document1: "",
+            other_document2: "",
+            salary: "20000", 
+            create_login:"1",
+            send_sms:true
+          };
+        this.setState({
+          teacher_details:{
+              data:data
+          }
+        },() => {
+          axios({
+            url:"/api/v1/teacher/"+teacher_id
+          }).then(response => {
+            self.setState({
+            teacher_details:response.data.success.teacher_details
+          })
+        })
+      })
+        
+      axios({
+          url:"/api/v1/teacher/"+teacher_id
+        }).then(response => {
+          self.setState({
+          teacher_details:response.data.success.teacher_details
+          })
+        })
+  }
   removeTeacher(){
     Swal.fire({
       title: 'Are you sure?',
@@ -249,7 +303,7 @@ export class ProfileUpdateTeacher extends Component{
       <div>
         <AdminTeacherHeader mainHeader="Teacher" header="Profile Update"/>
         <div className="container-fluid mt--6">
-          <SelectTeacher submit={this.onSelectTeacher} title="Select Teacher" back_link="/admin/teacher"/>
+          <SelectTeacher  submit={this.onSelectTeacher} title="Select Teacher" back_link="/admin/teacher"/>
           <br />
           <br />
           <br />

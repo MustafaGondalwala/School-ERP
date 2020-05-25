@@ -1188,11 +1188,13 @@ export class StudentClassSectionWise extends Component{
       students:""
     })
     axios({
-      url:"/api/v1/student/"+class_id
+      url:"/api/v1/student/get/students/"+class_id
     }).then(response => {
       this.setState({
         button_text:"Fetch",
-        students:response.data.success.students
+        students:response.data.success.student
+      },()=>{
+        console.log(this.state)
       })
     })
   }
