@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import DashboardHomePage from "./dashboard/HomePage";
-import ParentHomePage from "./dashboard/ParentHomePage";
-import TeacherLoginHomePage from "./dashboard/teacher/TeacherLoginHomePage";
+import {ParentHomePage} from "./dashboard/ParentComponent";
+import {TeacherLoginHomePage} from "./dashboard/TeacherComponent";
 import AdminDashboardRoutes from "./AdminDashboardRoutes";
 import ParentDashboardRoutes from "./ParentDashboardRoutes";
 import StudentDashboardRoutes from "./StudentDashboardRoutes";
@@ -47,7 +47,6 @@ import PayFeesHomePage, {
 
 import {ParentFeesHomePage,ParentPendingFees,ParentViewReceipts} from "./fees/ParentFeesComponent"
 
-import SetClassWiseFees from "./fees/pages/SetClassWiseFees";
 
 
 
@@ -61,14 +60,13 @@ import ViewTimeTableTeacher from "./time_table/pages/ViewTimeTableTeacher";
 
 import { ExamHomePage,FillExamMarksheet } from "./exam/AdminExamComponent"
 import { TeacherExamHomePage, TeacherFillExamMarksheet } from "./exam/TeacherExamComponent"
-// import ExamHomePage from "./exam/ExamHomePage";
 import AddAdmitCard from "./exam/pages/AddAdmitCard";
-// import FillExamMarksheet from "./exam/pages/FillExamMarksheet";
 
 import {
   AdminLeaveHome,
   AttendLeaveRequest,
 } from "./leave/AdminLeaveComponent";
+
 import {
   TeacherLeaveHome,
   TeacherLeaveAttendRequest,
@@ -269,14 +267,7 @@ class Index extends Component {
             subheader="Set Individual Fees"
             component={SetIndividualFees}
           />
-          <AdminDashboardRoutes
-            path="/admin/fees/set-fees-class-wise"
-            exact
-            main_header="Fees"
-            header="Fees"
-            subheader="Set Class Wise Fees"
-            component={SetClassWiseFees}
-          />
+         
           <AdminDashboardRoutes
             path="/admin/fees/pay-fees"
             exact

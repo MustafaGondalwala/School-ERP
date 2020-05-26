@@ -9,6 +9,8 @@ import { RegisterStudentForm,
 import CanvasJSReact from '../../assets/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 var CanvasJS = CanvasJSReact.CanvasJS;
+
+import { MDBDataTable } from 'mdbreact';
 import AdminStudentHeader from "./utils/AdminStudentHeader"
 import DataTable, { createTheme } from 'react-data-table-component';
 import Swal from 'sweetalert2'
@@ -30,7 +32,6 @@ export const AdminStudentHomePage = () => (
     <AdminStudentHeader mainHeader="Student" header="Home"/>
     <div className="container-fluid mt--6">
       <div className="row card-wrapper">
-
       		<ColComponent title="Registration" description="Add New Student in System" link="/admin/student/add-new-student" button_text="Add"/>
       		<ColComponent title="Student List" description="View Student in System" link="/admin/student/view-student" button_text="View"/>
       		<ColComponent title="Profile Update" description="Update the Profile of Student" link="/admin/student/update-student-info" button_text="Update"/>
@@ -39,7 +40,6 @@ export const AdminStudentHomePage = () => (
       		<ColComponent title="One Click Info" description="View Particular Student" link="/admin/student/add-new-student" button_text="View"/>
       		<ColComponent title="Manage Student Login" description="Mantain Student Login" link="/admin/student/view-student-login" button_text="Check"/>
       		<ColComponent title="Student Prmotion" description="Promate the Student to Higer Class" link="" button_text="Check"/>
-        	
         </div>
         <div className="card-deck flex-column flex-xl-row">
           <div className="card">

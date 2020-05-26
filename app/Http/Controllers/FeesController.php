@@ -247,9 +247,7 @@ class FeesController extends Controller
         $total_installments[$installment] = $get_fees;
       }
       return response()->json(["success"=>["total_installments"=>$total_installments,"message"=>"Fees Successfully Updated"]]);
-
     }
-
 
     public function getIndividualStudentFees(Request $request){
       $request->validate([
@@ -286,7 +284,6 @@ class FeesController extends Controller
 
       return response()->json(["success"=>["total_installments"=>$total_installments]]);
     }
-
 
     public function getClassWiseFees(Request $request){
       $request->validate([

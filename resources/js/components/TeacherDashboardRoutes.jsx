@@ -2,7 +2,7 @@ import React,{ Component } from "react"
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import TeacherDashboard from './dashboard/teacher/TeacherDashboard'
+import TeacherDashboard from './dashboard/TeacherComponent'
 
 const TeacherDashboardRoutes = ({isAuthenticated,component: Component, ...rest }) => {
     return (

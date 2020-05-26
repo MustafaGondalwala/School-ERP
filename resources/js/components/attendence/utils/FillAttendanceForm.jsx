@@ -237,5 +237,4 @@ class FillAttendanceForm extends Component{
 		)
 	}
 }
-
 export default connect(null,{ removeTeacherAttendance })(FillAttendanceForm);

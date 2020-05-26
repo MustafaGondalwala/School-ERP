@@ -34,7 +34,6 @@ export default class FeesHomePage extends Component{
       <div>
         <ParentFeesHeader mainHeader="Fee" header="Home"/>
           <div className="container-fluid mt--6">
-            
           </div>
       </div>
     )

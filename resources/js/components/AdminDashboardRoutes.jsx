@@ -1,9 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-
-
-import AdminDashboard from './dashboard/AdminDashboard'
+import AdminDashboard from './dashboard/AdminComponents'
 
 
 const AdminDashboardRoutes = ({ isAuthenticated,component: Component, ...rest }) => {
@@ -17,7 +15,6 @@ const AdminDashboardRoutes = ({ isAuthenticated,component: Component, ...rest })
       />
     )
 }
-
 
 function mapStateToProps(state) {
   return {

@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import InlineError from "./messages/InlineError";
+
+const InlineError = ({ text }) => (
+  <span style={{ color: "#ae5856" }}>{text}</span>
+);
 
 export class SetDueDateForm extends Component {
   constructor(props) {

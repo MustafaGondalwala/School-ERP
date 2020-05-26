@@ -62,10 +62,10 @@ Route::group(["prefix" => "v1", "middleware" => ["auth:api", "teacherCheck"]], f
     Route::group(["prefix" => "teacher"], function ()
     {
         Route::get("/assign/{teacher_id}", "TeacherController@getAssignedClass");
-        Route::post('get-all-subjects', "UserApiController@getAllSubject");
+        Route::post('/get-all-subjects', "UserApiController@getAllSubject");
         Route::get('/get-exam-type', "ExamController@getExamType");
         Route::get('/{get_type}/header', "TeacherController@getTeacherHeader");
-        Route::post('subject/get-all-subjects', "UserApiController@getAllSubject");
+        Route::get('/subject/get-all-subjects', "UserApiController@getAllSubject");
         Route::get("/year", "YearController@getAllYear");
         Route::post('/exam/exam_marksheet', "ExamController@getExamMarksheet");
         Route::put('/exam/exam_marksheet', "ExamController@updateExamMarksheet");
@@ -93,14 +93,14 @@ Route::group(["prefix" => "v1", "middleware" => ["auth:api", "teacherCheck"]], f
         Route::post("", "HomeWorkController@createEditHomeWork");
         Route::get("{class_id}", "HomeWorkController@getCurrentHomeWork");
         Route::patch("", "HomeWorkController@createEditHomeWork");
-        Route::delete("{homework_id}", "HomeWorkController@deleteHomeWork");
+        Route::delete("{homework_id}/{class_id}", "HomeWorkController@deleteHomeWork");
     });
 });
 
 
 Route::get('/teacher/get/header',"TeacherController@getAdminHeader");
 
-Route::group(['prefix' => 'v1', "middleware" => ["auth:api", "adminCheck"]], function ()
+Route::group(['prefix' => 'v1', "middleware" => ["auth:api"]], function ()
 {   
     Route::group(["prefix"=>"admin"],function(){
         Route::get("","AdminController@getDetails");

@@ -1,7 +1,10 @@
 import React, { Component } from "react"
 import {Link} from "react-router-dom"
-import InlineError from "../messages/InlineError"
 import Select from 'react-select'
+
+const InlineError = ({ text }) => (
+  <span style={{ color: "#ae5856" }}>{text}</span>
+);
 
 
 export default class SelectClass extends Component{

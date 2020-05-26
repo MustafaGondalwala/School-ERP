@@ -1,5 +1,8 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
+import { logout, newAssignedTeacherClass } from "../actions/auth"
+import { connect } from "react-redux";
+
 export const TeacherLeftSide = ({assigned_class}) => (
 	  <nav className="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
 	    <div className="scrollbar-inner">
@@ -93,8 +96,6 @@ export const TeacherLeftSide = ({assigned_class}) => (
 	    </div>
 	  </nav>
 	)
-
-
 export const TeacherTopNavbar = ({user,logout}) => (
 		        <nav className="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
               <div className="container-fluid">
@@ -335,3 +336,68 @@ export const TeacherTopNavbar = ({user,logout}) => (
               </div>
             </nav>
 	)
+export class TeacherDashboard extends Component{
+  constructor(props){
+      super(props)
+      this.state = {
+        logout:false,
+        assigned_class:""
+      }
+      this.logout = this.logout.bind(this)
+    }
+
+    componentDidMount(){
+        if(Object.keys(this.props.assignTeacherClass).length == 0){
+          axios({
+            url:"/api/v1/teacher/assign/"+this.props.user.id
+          }).then(response => {
+            this.props.newAssignedTeacherClass(response.data.success.assigned_class)
+            this.setState({
+              assigned_class: response.data.success.assigned_class
+            })
+          })
+        }else{
+          this.setState({
+            assigned_class:this.props.assignTeacherClass
+          })
+        }
+    }
+      
+
+    logout(e){
+    var self = this
+      axios({
+        method:"post",
+        url:"/api/logout",
+      }).then(function(response){
+         self.props.logout()
+        })
+    }
+
+  render(){
+    return(
+      <div>
+              <TeacherLeftSide assigned_class={this.state.assigned_class} /> 
+              <div className="main-content" id="panel">
+                <TeacherTopNavbar user={this.props.user} logout={this.logout}/>
+                 {this.props.children}
+              </div>
+      </div>
+    )
+  }
+}
+
+export const TeacherLoginHomePage = () => {
+  return(
+    <h1>TeacherLoginHomePage</h1>
+  )
+}
+
+function mapStateToProps(state) {
+  return {
+    assignTeacherClass: state.assignTeacherClass,
+    user: state.user,
+  };
+}
+
+export default connect(mapStateToProps,{ logout, newAssignedTeacherClass })(TeacherDashboard);

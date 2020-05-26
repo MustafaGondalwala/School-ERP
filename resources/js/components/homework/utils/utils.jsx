@@ -31,6 +31,7 @@ export class AddEditHomeWork extends Component {
     this.submit = this.submit.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.editSave = this.editSave.bind(this);
+    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
@@ -49,7 +50,8 @@ export class AddEditHomeWork extends Component {
     });
 
      axios({
-      url: "/api/v1/teacher/subject",
+      url: "/api/v1/teacher/subject/get-all-subjects",
+
     }).then((response) => {
       self.setState({
         subjects: response.data.success.subjects,
@@ -99,7 +101,7 @@ export class AddEditHomeWork extends Component {
     }).then((result) => {
       if (result.value) {
         axios({
-          url: "/api/v1/homework/" + homework_id,
+          url: "/api/v1/homework/" + homework_id+"/"+ this.props.class_id,
           method: "delete",
         }).then((response) => {
           self.setState({

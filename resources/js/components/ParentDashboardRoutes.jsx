@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import ParentDashboard from './dashboard/ParentDashboard'
+import ParentDashboard from './dashboard/ParentComponent'
 const ParentDashboardRoutes = ({isAuthenticated,component: Component, ...rest }) => {
     return (
     	<Route

@@ -49,7 +49,7 @@ class HomeWorkController extends Controller
     }
 
 
-    public function deleteHomeWork($homework_id){
+    public function deleteHomeWork($homework_id,$class_id){
         $teacher_id = Teacher::where("empid",Auth()->user()->empid)->first()->id;
         HomeWork::where(["teacher_id"=>$teacher_id,"id"=>$homework_id])->delete();
         StudentHomeWork::where(["homework_id"=>$homework_id])->delete();
