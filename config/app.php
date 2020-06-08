@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => 'http://insta-develop-sms.herokuapp.com/',
+    'url' => env('APP_URL', 'http://insta-develop-sms.herokuapp.com/'),
 
     'asset_url' => env('ASSET_URL', null),
 
