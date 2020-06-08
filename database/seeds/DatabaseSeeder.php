@@ -94,6 +94,7 @@ class DatabaseSeeder extends Seeder
             )
         );
         foreach(range(1,6) as $index){
+            try{
             $new_staff = new Staff;
             $new_staff->empid = "E".$faker->numberBetween($min = 3000, $max = 90000);
             $new_staff->relative_name = $faker->name;
@@ -127,7 +128,9 @@ class DatabaseSeeder extends Seeder
             $new_staff->user_type = "App\Teacher";
             $new_staff->user_id = $new_teacher->id;
             $new_staff->save();
-            
+            }catch(\Exception $e){
+                continue;
+            }
         }
         foreach (range(1,600) as $index) {
             try{
