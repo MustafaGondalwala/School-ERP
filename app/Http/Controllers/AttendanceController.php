@@ -1,0 +1,129 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Classes;
+use App\StudentInfo;
+use App\StudentAttendance;
+use App\StaffAttendance;
+use App\Staff;
+use \DB;
+
+class AttendanceController extends Controller
+{
+    public function updateAttendanceStaff(Request $request){
+        $request->validate([
+            'staff_attendance'=>'required|array'
+        ]);
+        $staff_attendance = $request->staff_attendance;
+        try{
+            DB::beginTransaction();
+            foreach($staff_attendance as $type){
+                if($type != null){
+                    $id = $type[0];
+                    $new_status = $type[1];
+                    StaffAttendance::find($id)->update([
+                        'status'=>$new_status
+                    ]);
+                }
+            }
+        }catch(\Exception $e){
+            DB::rollback();
+            return $this->ReE(["message"=>$e->getMessage()],400);
+        }finally{
+            DB::commit();
+        }
+        return $this->ReS(['message'=>"Staff Attendance Updated"]);
+    }
+    public function getAttendanceStaff(Request $request){
+        $request->validate([
+            'select_date'=>'required|date'
+        ]);
+        $school_id = $this->getSchoolId($request);
+        $select_date = $request->select_date;
+        $checkIfExist = StaffAttendance::select('staff_id','status')->where(['school_id'=>$school_id,"attendance_date"=>$select_date])->count();
+        if(!$checkIfExist){
+            $student_ids = Staff::select('id')->where(['school_info_id'=>$school_id])->pluck('id');
+            $staffAttendances = [];
+            try{
+                DB::beginTransaction();
+                foreach($student_ids as $ids){
+                    $new_attendance = new StaffAttendance;
+                    $new_attendance->staff_id = $ids;
+                    $new_attendance->school_id = $school_id;
+                    $new_attendance->attendance_date = $select_date;
+                    $new_attendance->save();
+                }
+            }catch(\Exception $e){
+                DB::rollback();
+                return $this->ReE(["message"=>$e->getMessage()],400);
+            }
+            DB::commit();
+        }
+        
+        $staffAttendances = $this->getAttendanceStaffP($school_id,$select_date);
+        return $this->ReS(["staff_attendance"=>$staffAttendances]);
+    }
+    private function getAttendance($school_id,$class_id,$select_date){
+        return StudentAttendance::with('studentInfo','class')->select('id','student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->get();
+    }
+    public function getAttendanceStaffP($school_id,$select_date){
+        return StaffAttendance::with('staff')->where(['school_id'=>$school_id,"attendance_date"=>$select_date])->get();
+    }
+    public function updateAttendanceStudent(Request $request){
+        $request->validate([
+            'student_attendance'=>'required|array'
+        ]);
+        $student_attendance = $request->student_attendance;
+        try{
+            DB::beginTransaction();
+            foreach($student_attendance as $type){
+                if($type != null){
+                    $id = $type[0];
+                    $new_status = $type[1];
+                    StudentAttendance::find($id)->update([
+                        'status'=>$new_status
+                    ]);
+                }
+            }
+        }catch(\Exception $e){
+            DB::rollback();
+            return $this->ReE(["message"=>$e->getMessage()],400);
+        }finally{
+            DB::commit();
+        }
+        return $this->ReS(['message'=>"Student Attendance Updated"]);
+    }
+    public function getStudent(Request $request){
+        $request->validate([
+            'class_id'=>'required|integer',
+            'select_date'=>'required|date'
+        ]);
+        $school_id = $this->getSchoolId($request);
+        $class_id = $request->class_id;
+        $select_date = $request->select_date;
+        $checkIfExist = StudentAttendance::select('student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->count();
+        if(!$checkIfExist){
+            $student_ids = StudentInfo::select('id')->where(['school_info_id'=>$school_id,"class_id"=>$request->class_id])->pluck('id');
+            $studentAttendances = [];
+            try{
+                DB::beginTransaction();
+                foreach($student_ids as $ids){
+                    $new_attendance = new StudentAttendance;
+                    $new_attendance->student_id = $ids;
+                    $new_attendance->school_id = $school_id;
+                    $new_attendance->class_id = $class_id;
+                    $new_attendance->attendance_date = $select_date;
+                    $new_attendance->save();
+                }
+            }catch(\Exception $e){
+                DB::rollback();
+                return $this->ReE(["message"=>$e->getMessage()],400);
+            }
+        }
+        DB::commit();
+        $studentAttendances = $this->getAttendance($school_id,$class_id,$select_date);
+        return $this->ReS(["student_attendance"=>$studentAttendances]);
+    }
+}
