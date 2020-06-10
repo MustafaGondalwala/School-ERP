@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://insta-develop-sms.herokuapp.com/'),
+    'url' => env('APP_URL',"admin.schoolerp.test"),
 
     'asset_url' => env('ASSET_URL', null),
 

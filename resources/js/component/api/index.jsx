@@ -33,8 +33,20 @@ export default {
         rename_class: (new_class_name,old_classname) => axios.put("/api/v1/admin/class",{new_class_name,old_classname}).then(response => response.data.success),
         delete_class: (class_title) => axios.delete("/api/v1/admin/class/"+class_title,{class_title}).then(response => response.data.success),
         add_section: data => axios.post("/api/v1/admin/class/section",data).then(response => response.data.success),
-        
-        
+        exam:{
+            exam_type:{
+                add: exam_type => axios.post("/api/v1/admin/exam/type",{exam_type}).then(response => response.data.success),
+                get: () => axios("/api/v1/admin/exam/type").then(response => response.data.success),
+                remove: exam_type_id => axios.delete("/api/v1/admin/exam/type/"+exam_type_id).then(response => response.data.success),
+            },
+            hall_ticket:{
+                get: (data) => axios.post("/api/v1/admin/exam/hallticket",data).then(response => response.data.success),
+                update: (class_hallticket)  => axios.put("/api/v1/admin/exam/hallticket",{class_hallticket}).then(response => response.data.success),
+            },
+            marksheet:{
+                get: (data) => axios.post("/api/v1/admin/exam/marksheet",data).then(response => response.data.success),
+            }
+        },
         class_period:{
             add_update: data => axios.put("/api/v1/admin/class/class_period",data).then(response => response.data.success),
             get: () => axios("/api/v1/admin/class/class_period").then(response => response.data.success),
@@ -50,6 +62,9 @@ export default {
         student_attendance:{
             get: data => axios.post("/api/v1/admin/attendance/student",data).then(response => response.data.success),
             update: student_attendance => axios.put("/api/v1/admin/attendance/student",{student_attendance}).then(response => response.data.success),
+            get_classwise: (class_id,select_month) => axios.post("/api/v1/admin/attendance/student/getclasswise",{class_id,select_month}).then(response => response.data.success),
+            get_individual: (student_id,select_month) => axios.post("/api/v1/admin/attendance/student/getindividual",{student_id,select_month}).then(response => response.data.success),
+            
         },
         staff_attendance:{
             get: data => axios.post("/api/v1/admin/attendance/staff",data).then(response => response.data.success),

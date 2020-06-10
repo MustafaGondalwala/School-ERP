@@ -67,7 +67,6 @@ export const AdminLeftSide = () => (
               <Link to="/admin/exam" className="nav-link" >
                 <i className="ni ni-map-big text-primary"></i>
                 <span className="sidenav-mini-icon"> E </span>
-
                 <span className="nav-link-text">Exam</span>
               </Link>
             

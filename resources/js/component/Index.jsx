@@ -55,6 +55,8 @@ import FeePayFees from "./fees/pages/FeePayFees"
 import AdminAttendanceHomePage from "./attendance/pages/AdminAttendanceHomePage"
 import AdminAttendanceStudentEdit from "./attendance/pages/AdminAttendanceStudentEdit"
 import AdminAttendanceStaffEdit from "./attendance/pages/AdminAttendanceStaffEdit"
+import AdminAttendanceClassWiseEdit from "./attendance/pages/AdminAttendanceClassWiseEdit"
+import AdminAttendanceIndividualStudent from "./attendance/pages/AdminAttendanceIndividualStudent"
 
 
 import AdminSettingHomePage from "./setting/pages/AdminHomePage"
@@ -63,6 +65,14 @@ import {TeacherDashboardHome} from "./dashboard/Teacher"
 import TeacherHomeWorkHomePage from "./homework/pages/TeacherHomeWorkHomePage"
 import ViewHomeWork from "./homework/pages/ViewHomeWork"
 import ViewHomeWorkParent from "./homework/pages/ViewHomeWorkParent"
+
+
+import AdminExamHome from "./exam/pages/AdminHomePage"
+import AdminClassHallTicket from "./exam/pages/AdminClassHallTicket"
+import AdminExamFillMarksheet from "./exam/pages/AdminExamFillMarksheet"
+
+
+
 
 
 import {ParentDashboardHome} from "./dashboard/Parent"
@@ -127,6 +137,16 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/attendance" component={AdminAttendanceHomePage} />
             <AdminDashboardRoutes exact path="/admin/attendance/edit-student" component={AdminAttendanceStudentEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/edit-staff" component={AdminAttendanceStaffEdit} />
+            <AdminDashboardRoutes exact path="/admin/attendance/view-class-wise-student-attendance" component={AdminAttendanceClassWiseEdit} />
+            <AdminDashboardRoutes exact path="/admin/attendance/view-particular-student-attendance" component={AdminAttendanceIndividualStudent} />
+            
+            
+            <AdminDashboardRoutes exact path="/admin/exam" component={AdminExamHome} />
+            <AdminDashboardRoutes exact path="/admin/hallticket/class" component={AdminClassHallTicket} />
+            <AdminDashboardRoutes exact path="/admin/fillmarksheet/exam" component={AdminExamFillMarksheet} />
+
+            
+            
             <AdminDashboardRoutes exact path="/admin/setting" component={AdminSettingHomePage} />
           </Provider>
         </BrowserRouter>

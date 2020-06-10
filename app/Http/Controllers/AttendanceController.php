@@ -9,9 +9,47 @@ use App\StudentAttendance;
 use App\StaffAttendance;
 use App\Staff;
 use \DB;
+use Carbon\Carbon;
+
 
 class AttendanceController extends Controller
 {
+    public function getStudentIndividualReport(Request $request){
+        $request->validate([
+            'student_id'=>"required|integer",
+            'select_month'=>'required|date'
+        ]);
+
+        $carbon_date = Carbon::parse($request->select_month);
+        $month = $carbon_date->month;
+        $school_id = $this->getSchoolId($request);
+        $year = $carbon_date->year;
+        $student_id = $request->student_id;
+        $every_count = StudentAttendance::select('status', DB::raw('count(*) as total'))
+                 ->groupBy('status')
+                 ->whereYear('attendance_date', '=', $year)
+              	 ->whereMonth('attendance_date', '=', $month)->where(["class_id"=>$student_id,"school_id"=>$school_id])
+                 ->get();
+
+        $details_fetch = StudentAttendance::select('attendance_date','status')->whereYear('attendance_date', '=', $year)
+              ->whereMonth('attendance_date', '=', $month)->where(["student_id"=>$student_id,"school_id"=>$school_id])->orderBy('attendance_date')->
+              get();
+        $school_details = StudentInfo::with('class')->find($student_id);     
+
+        return $this->ReS(["attendance_details"=>$every_count,"details_fetch"=>$details_fetch,"student_details"=>$school_details]);
+    }
+    public function getClasswiseReport(Request $request){
+        $carbon_date = Carbon::parse($request->select_month);
+        $month = $carbon_date->month;
+        $school_id = $this->getSchoolId($request);
+		$year = $carbon_date->year;
+        $every_count = StudentAttendance::select('status', DB::raw('count(*) as total'))
+                 ->groupBy('status')
+                 ->whereYear('attendance_date', '=', $year)
+              	 ->whereMonth('attendance_date', '=', $month)->where(["class_id"=>$request->class_id,"school_id"=>$school_id])
+                 ->get();
+        return $this->ReS(["attendance_details"=>$every_count]);
+    }
     public function updateAttendanceStaff(Request $request){
         $request->validate([
             'staff_attendance'=>'required|array'

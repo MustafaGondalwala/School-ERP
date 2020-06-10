@@ -84,6 +84,17 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::delete("/fee_type/{fee_type_id}","FeeController@deleteFeeType");
 
        });
+       Route::group(["prefix"=>"exam"],function(){
+        Route::post("type","ExamController@addExamType");
+        Route::get("type","ExamController@getExamType");
+        Route::delete("type/{exam_type_id}","ExamController@removeExamType");
+
+        Route::post("hallticket","ExamController@fetchExamHallTicket");
+        Route::put("hallticket","ExamController@fetchExamHallTicket");
+
+        Route::post("marksheet","ExamController@fetchExamMarksheet");
+
+       });
 
        Route::group(["prefix"=>"timetable"],function(){
             Route::post("","TimeTableController@addTimeTable");
@@ -91,12 +102,16 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::get("","TimeTableController@getTimeTableName");
             Route::post("/get","TimeTableController@getTimeTableMain");
         });
-        Route::group(["prefix"=>"attendance"],function(){
-            Route::post("student","AttendanceController@getStudent");
-            Route::put("student","AttendanceController@updateAttendanceStudent");
-            Route::post("staff","AttendanceController@getAttendanceStaff");
-            Route::put("staff","AttendanceController@updateAttendanceStaff");
-        });
+
+
+            Route::group(["prefix"=>"attendance"],function(){
+                Route::post("student","AttendanceController@getStudent");
+                Route::put("student","AttendanceController@updateAttendanceStudent");
+                Route::post("staff","AttendanceController@getAttendanceStaff");
+                Route::put("staff","AttendanceController@updateAttendanceStaff");
+                Route::post("student/getclasswise","AttendanceController@getClasswiseReport");
+                Route::post("student/getindividual","AttendanceController@getStudentIndividualReport");
+            });
         });
 
 

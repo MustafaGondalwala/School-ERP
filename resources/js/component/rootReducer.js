@@ -10,6 +10,7 @@ import {setTeachers as teachers} from "./reducers/teachers"
 import {setTimetable as timetables} from "./reducers/timetable"
 import {class_homeworks} from "./reducers/homework"
 import {parent_childs,parent_homework} from "./reducers/parent"
+import {examType} from "./reducers/exam"
 
 export default combineReducers({
     user,
@@ -26,5 +27,6 @@ export default combineReducers({
     class_homeworks,
     parent_childs,
     parent_homework,
-    classwise_timetable
+    classwise_timetable,
+    examType
   });

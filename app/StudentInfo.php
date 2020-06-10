@@ -21,9 +21,9 @@ class StudentInfo extends Model
     public function parent(){
         return $this->belongsTo('App\ParentInfo');
     }
-    public function classes()
+    public function class()
     {
-        return $this->belongsTo(Classes::class,'classes_id','id');
+        return $this->belongsTo(Classes::class,'class_id');
     }
     
 }

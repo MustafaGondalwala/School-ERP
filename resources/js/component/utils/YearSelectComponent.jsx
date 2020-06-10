@@ -10,7 +10,7 @@ class YearSelectComponent extends Component{
         }
     }
     render(){
-        const {label,years,onChange,name,colType,errors} = this.props
+        const {label,years,onChange,name,colType,errors,value} = this.props
         return(
                 <div className="form-group">
                     <label className="form-control-label">{label}</label>

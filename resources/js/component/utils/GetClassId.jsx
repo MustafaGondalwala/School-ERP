@@ -93,9 +93,8 @@ class GetClassId extends Component {
     render() {
       const { errors,class_id } = this.props;
       return (
-        <div>
         <div className="row">
-          <div className="col-sm-6 col-md-4">
+          <div className="col-md-4">
             <div className="form-group">
               <label className="form-control-label" htmlFor="example3cols3Input">
                 Class
@@ -114,9 +113,7 @@ class GetClassId extends Component {
               {errors.class_id && <InlineError text={errors.class_id} />}
             </div>
           </div>
-          </div>
-          <div className="row">
-          <div className="col-sm-6 col-md-4">
+          <div className="col-md-4">
             <div className="form-group">
               <label className="form-control-label" htmlFor="example3cols3Input">
                 Section
@@ -134,7 +131,6 @@ class GetClassId extends Component {
               </select>
             </div>
           </div>
-        </div>
         </div>
       );
     }
