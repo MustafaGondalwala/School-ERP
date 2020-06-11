@@ -68,8 +68,6 @@
             "chmod -R 777 public/",
             "composer dumpautoload -o",
             "php artisan optimize",
-            "php artisan route:clear",
-            "php artisan route:cache",
             "php artisan passport:install",
             "php artisan config:clear"
         ]
