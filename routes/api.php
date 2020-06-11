@@ -92,9 +92,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::post("hallticket","ExamController@fetchExamHallTicket");
         Route::put("hallticket","ExamController@fetchExamHallTicket");
 
-        Route::post("marksheet","ExamController@fetchExamMarksheet");
-
-       });
+        Route::post("marksheet/classwise","ExamController@fetchExamMarksheet");
+        Route::post("marksheet/individual","ExamController@fetchMarksheetIndividual");
+        Route::put("marksheet/individual","ExamController@fetchMarksheetIndividual");
+    });
 
        Route::group(["prefix"=>"timetable"],function(){
             Route::post("","TimeTableController@addTimeTable");

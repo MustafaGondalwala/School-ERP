@@ -23,6 +23,8 @@ class CreateExamMarksheetsTable extends Migration
             $table->integer('max_marks')->nullable();
             $table->integer('total_marks')->nullable();
             $table->char('grade')->nullable();
+            $table->integer('exam_type');
+            $table->integer('year_id');
             $table->morphs('user');
             $table->timestamps();
         });

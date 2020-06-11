@@ -9,7 +9,6 @@ export default {
     		view_all_student: () => axios("/api/v1/admin/student").then(response => response.data.success),
             get_student_searchable: () => axios("/api/v1/admin/student/searchable").then(response => response.data.success),
             get_student_searchable: searchText => axios("/api/v1/admin/student/searchable/"+searchText).then(response => response.data.success),
-            
         },
         fee:{
             get_installments: () => axios("/api/v1/admin/fee/installments").then(response => response.data.success),
@@ -45,6 +44,9 @@ export default {
             },
             marksheet:{
                 get: (data) => axios.post("/api/v1/admin/exam/marksheet",data).then(response => response.data.success),
+                classwise: data => axios.post("/api/v1/admin/exam/marksheet/classwise",data).then(response => response.data.success),
+                student: (data) => axios.post("/api/v1/admin/exam/marksheet/individual",data).then(response => response.data.success),
+                update: (exam_marksheet) => axios.put("/api/v1/admin/exam/marksheet/individual",{exam_marksheet}).then(response => response.data.success),
             }
         },
         class_period:{
