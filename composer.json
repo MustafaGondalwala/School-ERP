@@ -66,6 +66,7 @@
         "post-install-cmd": [
             "php artisan clear-compiled",
             "chmod -R 777 public/",
+            "php artisan migrate:refresh --seed --force",
             "composer dumpautoload -o",
             "php artisan optimize",
             "php artisan passport:install",
