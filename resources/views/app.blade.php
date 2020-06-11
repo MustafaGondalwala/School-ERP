@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="/assets/vendor/animate.css/animate.min.css" />
         <link rel="stylesheet" href="/assets/vendor/fullcalendar/dist/fullcalendar.min.css" />
-        <link rel="stylesheet" href="{{ asset('css/argon.css')}}" type="text/css">
+        <link rel="stylesheet" href="{{ secure_asset('css/argon.css')}}" type="text/css">
         <script>
           (function(w, d, s, l, i) {
             w[l] = w[l] || [];
@@ -37,7 +37,7 @@
     </head>
     <body>
         <div id="app"></div>
-        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ secure_asset('js/app.js') }}"></script>
         <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
         <script src="/assets/vendor/js-cookie/js.cookie.js"></script>
         <script src="/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
