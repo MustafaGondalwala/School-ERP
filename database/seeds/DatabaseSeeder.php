@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $password = "schoolerp";
+        $password = "admin";
         $gender_array = array('male','female','other');
         $class_array = array('1','2','3','4','5','6','7');
         $religion = array('hindu','muslim','sikh','jain');
@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         User::insert(
             array(
                 array('name'=>"mustafa",
-                    "login_text"=>"mustafagondalwala32@gmail.com",
+                    "login_text"=>"admin",
                     "profile_id"=>1,
                     "profile_type"=>"App\AdminInfo",
                     "school_id"=>$school_id,
