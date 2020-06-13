@@ -28,9 +28,6 @@ const store = createStore(
 
 
 import StudentAdminHomePage from "./student/pages/StudentAdminHomePage"
-import StudentNewRegisterStudent from "./student/pages/NewRegisterStudent"
-import StudentViewStudent from "./student/pages/StudentViewStudent"
-import StudentProfileUpdate from "./student/pages/StudentProfileUpdate"
 
 
 import TeacherAdminHomePage from "./teacher/pages/TeacherAdminHomePage"
@@ -39,7 +36,6 @@ import TeacherViewTeacher from "./teacher/pages/TeacherViewTeacher"
 
 
 import TeacherClassWiseTimeTable from "./timetable/pages/TeacherClassWiseTimeTable"
-
 
 import TimeTableAdminHomePage from "./timetable/pages/TimeTableAdminHomePage"
 import TimeTableViewStudent from "./timetable/pages/TimeTableViewStudent"
@@ -78,6 +74,30 @@ import AdminExamFillMarksheet from "./exam/pages/AdminExamFillMarksheet"
 import {ParentDashboardHome} from "./dashboard/Parent"
 import ParentHomeWorkHomePage from "./homework/pages/ParentHomeWorkHomePage"
 
+
+/**
+ * Student Import
+ */
+import RegisterPage from "./student/pages/RegisterPage"
+import RegisterListPage from "./student/pages/RegisterListPage"
+import BulkStudentRegister from "./student/pages/BulkStudentRegister" 
+import AdmissionStudent from "./student/pages/AdmissionStudent"
+import AdmissionStudentList from "./student/pages/AdmissionStudentList"
+import BulkStudentAdmission from "./student/pages/BulkStudentAdmission"
+import BulkStudentProfile from "./student/pages/BulkStudentProfile"
+import StudentProfileImages from "./student/pages/StudentProfileImages"
+import StudentProfileUpdate from "./student/pages/StudentProfileUpdate"
+import BulkStudentProfileImages from "./student/pages/BulkStudentProfileImages"
+import StudentList from "./student/pages/StudentList"
+import StudentAdvancedSearch from "./student/pages/StudentAdvancedSearch"
+import StudentOneClickInfo from "./student/pages/StudentOneClickInfo"
+import StudentMedicalInfo from "./student/pages/StudentMedicalInfo"
+import StudentPhysicalFitness from "./student/pages/StudentPhysicalFitness"
+import StudentGenerateIdCard from "./student/pages/StudentGenerateIdCard"
+import PromoteStudent from "./student/pages/PromoteStudent"
+import { Button } from "./utils/Components";
+
+
 if (localStorage.token) {
   var payload = JSON.parse(localStorage.userAccount);
   if(localStorage.user_type == 4){
@@ -112,9 +132,30 @@ class Index extends Component {
 
             <AdminDashboardRoutes exact path="/admin/dashboard" component={AdminDashboardHome} />
             <AdminDashboardRoutes exact path="/admin/student" component={StudentAdminHomePage} />
-            <AdminDashboardRoutes exact path="/admin/student/add-new-student" component={StudentNewRegisterStudent} />
-            <AdminDashboardRoutes exact path="/admin/student/view-student" component={StudentViewStudent} />
-            <AdminDashboardRoutes exact path="/admin/student/update-student-info" component={StudentProfileUpdate}/>
+            
+            <AdminDashboardRoutes exact path="/admin/student/register-student" component={RegisterPage} />
+            <AdminDashboardRoutes exact path="/admin/student/register-student-list" component={RegisterListPage} />
+            <AdminDashboardRoutes exact path="/admin/student/register-student-bulk" component={BulkStudentRegister} />
+            <AdminDashboardRoutes exact path="/admin/student/admission-student" component={AdmissionStudent} />
+            <AdminDashboardRoutes exact path="/admin/student/student-admission-list" component={AdmissionStudentList} />
+            <AdminDashboardRoutes exact path="/admin/student/student-admission-bulk" component={BulkStudentAdmission} />
+            <AdminDashboardRoutes exact path="/admin/student/student-profile-update" component={StudentProfileUpdate} />
+            <AdminDashboardRoutes exact path="/admin/student/student-profile-update-bulk" component={BulkStudentProfile} />
+            <AdminDashboardRoutes exact path="/admin/student/student-profile-image" component={StudentProfileImages} />
+            <AdminDashboardRoutes exact path="/admin/student/student-profile-update-images-bulk" component={BulkStudentProfileImages} />
+            <AdminDashboardRoutes exact path="/admin/student/student-list" component={StudentList} />
+            <AdminDashboardRoutes exact path="/admin/student/student-advanced-search" component={StudentAdvancedSearch} />
+            <AdminDashboardRoutes exact path="/admin/student/student-oneclick-info" component={StudentOneClickInfo} />
+            <AdminDashboardRoutes exact path="/admin/student/medical-info" component={StudentMedicalInfo} />
+            <AdminDashboardRoutes exact path="/admin/student/student-physical-fitness" component={StudentPhysicalFitness} />
+            <AdminDashboardRoutes exact path="/admin/student/student-generate-id-card" component={StudentGenerateIdCard} />
+            <AdminDashboardRoutes exact path="/admin/student/promote-student" component={PromoteStudent} />
+
+
+            
+
+            
+
 
 
             <AdminDashboardRoutes exact path="/admin/teacher" component={TeacherAdminHomePage} />

@@ -41,10 +41,10 @@ class LoginPage extends Component{
           }
           this.props.history.push(redirect_url)
         }).catch(error => {
-          // self.setState({
-          //   login_button_text:"Login",
-          //   errors:error.response.data.error.message
-          // })
+          self.setState({
+            login_button_text:"Login",
+            errors:error.response.data.error.message
+          })
         })
       }
     render(){

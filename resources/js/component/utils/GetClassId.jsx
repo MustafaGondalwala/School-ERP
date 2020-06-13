@@ -3,6 +3,8 @@ import InlineError from "./InlineError"
 import api from "../api"
 import { connect } from "react-redux";
 import {setDistinctClasses,setClasses} from "../actions/classes"
+import { Col, FormLabel } from "./Components";
+import Row from "./Row";
 class GetClassId extends Component {
     constructor(props) {
       super(props);
@@ -93,13 +95,12 @@ class GetClassId extends Component {
     render() {
       const { errors,class_id } = this.props;
       return (
-        <div className="row">
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="form-control-label" htmlFor="example3cols3Input">
-                Class
-              </label>
-              <select
+        <Row>
+          <Col md="6" sm="6">
+            <FormLabel>
+              Class
+            </FormLabel>
+            <select
                 className="form-control"
                 name="class"
                 onChange={(e) => this.onChangeClasses(e)}
@@ -111,13 +112,9 @@ class GetClassId extends Component {
                 })}
               </select>
               {errors.class_id && <InlineError text={errors.class_id} />}
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="form-control-label" htmlFor="example3cols3Input">
-                Section
-              </label>
+          </Col>
+          <Col md="6" sm="6">
+              <FormLabel>Section</FormLabel>
               <select
                 className="form-control"
                 value={this.section_}
@@ -129,9 +126,8 @@ class GetClassId extends Component {
                     if (item != null) return <option key={key} value={item}>{item}</option>;
                   })}
               </select>
-            </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       );
     }
 }

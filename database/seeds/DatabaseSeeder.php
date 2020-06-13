@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $password = "mustafas1";
+        $password = "schoolerp";
         $gender_array = array('male','female','other');
         $class_array = array('1','2','3','4','5','6','7');
         $religion = array('hindu','muslim','sikh','jain');
