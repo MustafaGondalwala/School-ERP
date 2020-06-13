@@ -57,5 +57,7 @@ export const logout = () => dispatch => {
     localStorage.removeItem("school_id");
     setAuthorizationHeader();
     dispatch(userLoggedOut());
+  }).catch(error => {
+    console.log(error.response)
   })
 };

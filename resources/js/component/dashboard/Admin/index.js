@@ -120,22 +120,35 @@ export class AdminTopNavbar extends Component{
       })
     }
   }
-  /**
-   * Set the wrapper ref
-   */
+
   setWrapperRef(node) {
     this.wrapperRef = node;
   }
 
-  /**
-   * Alert if clicked on outside of element
-   */
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({
         show_logout_view:false
       })
    }
+  }
+  convertUserType(type){
+    switch(type){
+      case 1:
+        return "admin"
+      case 2:
+        return "parent"
+      case 3:
+        return "student"
+      case 4:
+        return "teacher"
+      case 5:
+        return "clerk"
+      case 6:
+        return "staff"
+      case 7:
+        return "trust"
+    }
   }
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -412,7 +425,7 @@ export class AdminTopNavbar extends Component{
                         </span>
                         <div className="media-body  ml-2  d-none d-lg-block">
                           <span className="mb-0 text-sm  font-weight-bold">
-                            {this.props.user.name} | {this.props.user.user_type}
+                            {this.props.user.name} | {this.convertUserType(this.props.user.user_type)}
                           </span>
                         </div>
                       </div>
@@ -473,12 +486,13 @@ class AdminDashboard extends Component {
       if(this.state.logout){
         return <Redirect push={true} to="/login"/>
       }
+      const {user,children,logout} = this.props
        return (
          <div>
          <AdminLeftSide/>
            <div className="main-content" id="panel">
-             <AdminTopNavbar user={this.props.user} logout={this.props.logout}/>
-             {this.props.children}
+             <AdminTopNavbar user={user} logout={logout}/>
+             {children}
            </div>
          </div>
        )
