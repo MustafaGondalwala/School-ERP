@@ -6,8 +6,8 @@ export default class LoginForm extends Component{
       super(props)
       this.state = {
         data: {
-          email_mobile_no:"E122",
-          password:"mustafas"
+          email_mobile_no:"",
+          password:""
         },
         errors:""
       }
