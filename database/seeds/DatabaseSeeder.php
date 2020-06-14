@@ -93,6 +93,41 @@ class DatabaseSeeder extends Seeder
                 array('school_info_id'=>$school_id,"installment"=>"Installment4"),
             )
         );
+        $new_staff = new Staff;
+        $new_staff->empid = "teacher";
+        $new_staff->relative_name = "teacher";
+        $new_staff->staff_name = "teacher";
+        $new_staff->gender = "male";
+        $new_staff->email = "teacher@gmail.com";
+        $new_staff->address = "hyderabad";
+        $new_staff->dob = "2020-03-04";
+        $new_staff->contact_no = "9586756273";
+        $new_staff->salary = "0";
+        $new_staff->designation = "1";
+        $new_staff->school_info_id = $school_id;
+                
+        $new_teacher = new Teacher;
+        $new_teacher->empid = "teacher";
+        $new_teacher->teacher_name = "teacher";
+        $new_teacher->teacher_subject = "1,2";
+        $new_teacher->teacher_class = "1,2";
+        $new_teacher->assign_class_id = "1";
+        $new_teacher->school_info_id = $school_id;
+        $new_teacher->save();
+        
+        $new_user = new User;
+        $new_user->name = "teacher";
+        $new_user->password = bcrypt("teacher");
+        $new_user->user_type = "4";
+        $new_user->login_text = "teacher";
+        $new_user->school_id = $school_id;
+        $new_user->profile_type = "App\Teacher";
+        $new_user->profile_id = $new_teacher->id;
+        $new_user->save();
+        $new_staff->user_type = "App\Teacher";
+        $new_staff->user_id = $new_teacher->id;
+        $new_staff->save();
+
         foreach(range(1,6) as $index){
             try{
             $new_staff = new Staff;
