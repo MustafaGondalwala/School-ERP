@@ -1,6 +1,7 @@
 import React,{Component} from "react"
 import ParentHeader from "../header/ParentHeader"
 import ColComponent from "../../utils/ColComponent"
+import CardComponent from "../../utils/CardComponent"
 
 const ParentHomeWorkHomePage = (props) => {
     const {student_id} = props.match.params
@@ -35,9 +36,34 @@ const ParentHomeWorkHomePage = (props) => {
                         button_text="Set"
                     />
                 </div>
+                <div className="card-deck flex-column flex-xl-row">
+          <CardComponent title="Report">
+            <div className="row card-wrapper">
+                        <ColComponent
+                        title="View Home Report"
+                        description="View/Print HomeWork Report"
+                        link={`/parent/homework/view/${student_id}`}
+                        button_text="Set"
+                        />
+                        <ColComponent
+                        title="View Assignment Report"
+                        description="View/Print Assignment Report"
+                        link={`/parent/homework/view/${student_id}`}
+                        button_text="Set"
+                        />
+                        <ColComponent
+                        title="View Project Report"
+                        description="View/Print Project Report"
+                        link={`/parent/homework/view/${student_id}`}
+                        button_text="Set"
+                        />
+            
+            </div>
+            </CardComponent>
+            </div>
+
             </div>
             </div>
-        
     )
 }
 

@@ -480,7 +480,13 @@ class AdminDashboard extends Component {
     }
     logout(e){
       var self = this
-      this.props.logout()
+      this.props.logout().catch(error => {
+          localStorage.removeItem("userAccount");
+          localStorage.removeItem("token");
+          localStorage.removeItem("user_type");
+          localStorage.removeItem("school_id");
+          setAuthorizationHeader();
+      })
     }
      render () {
       if(this.state.logout){

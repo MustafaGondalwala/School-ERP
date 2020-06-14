@@ -1,12 +1,11 @@
-let api = axios.create({
-    baseURL: 'http://admin.schoolerp.test',
-    timeout: 2000,
-});
+let api = axios
 import Swal from "sweetalert2"
+import setAuthorizationHeader from "../utils/setAuthorizationHeader";
+
 api.interceptors.response.use((response) => response, (error) => {
     const {status,data} = error.response
     if(status == 401){
-        Swal.fire("Error",data.message+". Redirecting to Login Page",'error')
+        Swal.fire("Error",data.message+". Please Login Page.",'error')
         localStorage.removeItem("userAccount");
         localStorage.removeItem("token");
         localStorage.removeItem("user_type");
@@ -17,7 +16,6 @@ api.interceptors.response.use((response) => response, (error) => {
     }else if(status == 404){
         Swal.fire("Error","Can Find the Route",'error')
     }
-    throw error;
   });
 
 export default {

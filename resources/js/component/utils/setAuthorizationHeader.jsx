@@ -8,6 +8,5 @@ export default (token = null,user_type = null,school_id=null) => {
     delete axios.defaults.headers.common['Authorization'];
     delete axios.defaults.headers.common['Auth-User-Type'];
     delete axios.defaults.headers.common['Auth-School-Id'];
-
   }
 };

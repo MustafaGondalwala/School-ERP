@@ -15,6 +15,7 @@ class AdminCheck
      */
     public function handle($request, Closure $next)
     {
+      
         $user_type = $request->header('Auth-User-Type');
         if($user_type != "1"){
           $response = [

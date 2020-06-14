@@ -14,4 +14,10 @@ const mix = require('laravel-mix');
 
 mix.browserSync('admin.schoolerp.test'); 
 
+mix.webpackConfig({
+    output:{
+        chunkFilename:'js/react/[name].js',
+    }
+});
+
 mix.react('resources/js/app.js', 'public/js');

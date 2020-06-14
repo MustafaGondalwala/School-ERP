@@ -61,7 +61,8 @@ import {TeacherDashboardHome} from "./dashboard/Teacher"
 import TeacherHomeWorkHomePage from "./homework/pages/TeacherHomeWorkHomePage"
 import ViewHomeWork from "./homework/pages/ViewHomeWork"
 import ViewHomeWorkParent from "./homework/pages/ViewHomeWorkParent"
-
+import TeacherAllHomeWorkHome from "./homework/pages/TeacherAllHomeWorkHome"
+import TeacherQuestionPaperHome from "./question/pages/TeacherQuestionPaperHome"
 
 import AdminExamHome from "./exam/pages/AdminHomePage"
 import AdminClassHallTicket from "./exam/pages/AdminClassHallTicket"
@@ -98,6 +99,24 @@ import PromoteStudent from "./student/pages/PromoteStudent"
 import { Button } from "./utils/Components";
 
 
+/**
+ * Leave Import for Admin
+ */
+import AdminLeaveHome from "./leave/pages/AdminHomePage"
+
+
+import ParentAttendanceHomePage from "./attendance/pages/ParentAttendanceHomePage"
+
+import ParentExamHomePage from "./exam/pages/ParentExamHomePage"
+
+import ParentTimeTable from "./timetable/pages/ParentTimeTable"
+
+import ParentEventHomePage from "./event/pages/ParentEventHomePage"
+import ParentMeetingsHomePage from "./meetings/pages/ParentMeetingsHomePage"
+import ParentNoticeBoardHomePage from "./noticeboard/pages/ParentNoticeBoardHomePage"
+import ParentStudentInfoPage from "./student_info/pages/ParentStudentInfoPage"
+import ParentVirtualClassHomePage from "./virtual_class/pages/ParentVirtualClassHomePage"
+
 if (localStorage.token) {
   var payload = JSON.parse(localStorage.userAccount);
   if(localStorage.user_type == 4){
@@ -121,12 +140,21 @@ class Index extends Component {
             <TeacherDashboardRoutes extact path="/teacher/homework/view/:class_id" component={ViewHomeWork} />
             <TeacherDashboardRoutes extact path="/teacher/homework/class/:class_id" component={TeacherHomeWorkHomePage} />
             <TeacherDashboardRoutes extact path="/teacher/timetable/:class_id" component={TeacherClassWiseTimeTable} />
-
+            <TeacherDashboardRoutes extact path="/teacher/homework" component={TeacherAllHomeWorkHome} />
+            <TeacherDashboardRoutes extact path="/teacher/questionpaper" component={TeacherQuestionPaperHome} />
 
 
             <ParentDashboardRoutes extact path="/parent/dashboard" component={ParentDashboardHome} />
             <ParentDashboardRoutes extact path="/parent/homework/view/:student_id" component={ViewHomeWorkParent} />
             <ParentDashboardRoutes extact path="/parent/homework/student/:student_id" component={ParentHomeWorkHomePage} />
+            <ParentDashboardRoutes extact path="/parent/attendance/:student_id" component={ParentAttendanceHomePage} />
+            <ParentDashboardRoutes extact path="/parent/timetable/:student_id" component={ParentTimeTable} />
+            <ParentDashboardRoutes extact path="/parent/exam/:student_id" component={ParentExamHomePage} />
+            <ParentDashboardRoutes extact path="/parent/student_info/:student_id" component={ParentStudentInfoPage} />
+            <ParentDashboardRoutes extact path="/parent/virtual_class/:student_id" component={ParentVirtualClassHomePage} />
+            <ParentDashboardRoutes extact path="/parent/events" component={ParentEventHomePage} />
+            <ParentDashboardRoutes extact path="/parent/meetings" component={ParentMeetingsHomePage} />
+            <ParentDashboardRoutes extact path="/parent/noticeboard" component={ParentNoticeBoardHomePage} />
 
 
 
@@ -152,10 +180,6 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/student/promote-student" component={PromoteStudent} />
 
 
-            
-
-            
-
 
 
             <AdminDashboardRoutes exact path="/admin/teacher" component={TeacherAdminHomePage} />
@@ -173,20 +197,16 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/timetable/view-student" component={TimeTableViewStudent} />
             <AdminDashboardRoutes exact path="/admin/timetable/publish-student-timetable" component={TimeTablePublishStudentTimeTable} />
 
-
-            
             <AdminDashboardRoutes exact path="/admin/attendance" component={AdminAttendanceHomePage} />
             <AdminDashboardRoutes exact path="/admin/attendance/edit-student" component={AdminAttendanceStudentEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/edit-staff" component={AdminAttendanceStaffEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/view-class-wise-student-attendance" component={AdminAttendanceClassWiseEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/view-particular-student-attendance" component={AdminAttendanceIndividualStudent} />
             
-            
             <AdminDashboardRoutes exact path="/admin/exam" component={AdminExamHome} />
             <AdminDashboardRoutes exact path="/admin/hallticket/class" component={AdminClassHallTicket} />
             <AdminDashboardRoutes exact path="/admin/fillmarksheet/exam" component={AdminExamFillMarksheet} />
-
-            
+            <AdminDashboardRoutes exact path="/admin/leave" component={AdminLeaveHome} />
             
             <AdminDashboardRoutes exact path="/admin/setting" component={AdminSettingHomePage} />
           </Provider>

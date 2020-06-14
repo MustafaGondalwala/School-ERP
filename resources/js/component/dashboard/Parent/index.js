@@ -50,16 +50,25 @@ export const ParentLeftSide = ({parent_childs}) => {
                                 <span className="sidenav-normal"> Timetable </span>
                               </Link>
                             </li>
-                            <li className="nav-item">
-                              <Link to={`/parent/reports/${item.id}`} className="nav-link">
-                                <span className="sidenav-mini-icon"> R </span>
-                                <span className="sidenav-normal"> Report </span>
-                              </Link>
-                            </li>
+                            
                             <li className="nav-item">
                               <Link to={`/parent/exam/${item.id}`} className="nav-link">
                                 <span className="sidenav-mini-icon"> E </span>
                                 <span className="sidenav-normal"> Exam </span>
+                              </Link>
+                            </li>
+
+                            <li className="nav-item">
+                              <Link to={`/parent/virtual_class/${item.id}`} className="nav-link">
+                                <span className="sidenav-mini-icon"> V </span>
+                                <span className="sidenav-normal"> Virtual Class </span>
+                              </Link>
+                            </li>
+
+                            <li className="nav-item">
+                              <Link to={`/parent/student_info/${item.id}`} className="nav-link">
+                                <span className="sidenav-mini-icon"> S </span>
+                                <span className="sidenav-normal"> Student Info </span>
                               </Link>
                             </li>
                           </ul>
@@ -74,9 +83,15 @@ export const ParentLeftSide = ({parent_childs}) => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/parent/events" className="nav-link" >
+                  <Link to="/parent/meetings" className="nav-link" >
                     <i className="ni ni-ungroup text-orange" />
                     <span className="nav-link-text">Meeting</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/parent/noticeboard" className="nav-link" >
+                    <i className="ni ni-ungroup text-orange" />
+                    <span className="nav-link-text">Noticeboard</span>
                   </Link>
                 </li>
               </ul>
