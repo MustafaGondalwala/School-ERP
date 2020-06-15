@@ -16,13 +16,17 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/v1/login',"UserApiController@login");
-Route::post('/v1/logout',"UserApiController@logout");
 
 Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
+    Route::post('logout',"UserApiController@logout");
     Route::get('year',"YearController@getSystemYears");
     Route::get("/subject","SubjectController@getAllSubjects");
     Route::get("/classwise_timetable/{class_id}","TimeTableController@getClassWiseTimeTable");
     Route::get("/teacher","TeacherController@viewAllTeacher");
+    Route::get("/student/searchable/{searchText}","StudentController@studentsSearchable");
+    Route::get("/student/searchable","StudentController@studentsSearchableLimit");
+
+    
     Route::group(["prefix"=>"parent","middleware"=>"parentCheck"],function(){
         Route::group(["prefix"=>"homework"],function(){
             Route::post("","HomeWorkController@getChildHomeWork");

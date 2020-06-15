@@ -38,13 +38,13 @@ class UserApiController extends Controller
            }
     }
     public function logout(Request $request){
-        $accessToken = $request->user()->token();
-        DB::table('oauth_refresh_tokens')
-            ->where('access_token_id', $accessToken->id)
-            ->update([
-                'revoked' => true
-            ]);
-        $accessToken->revoke();
-        return $this->ReS(["message"=>"User Logout"]);
+            $accessToken = $request->user()->token();
+            DB::table('oauth_refresh_tokens')
+                ->where('access_token_id', $accessToken->id)
+                ->update([
+                    'revoked' => true
+                ]);
+            $accessToken->revoke();
+            return $this->ReS(["message"=>"User Logout"]);
     }
 }

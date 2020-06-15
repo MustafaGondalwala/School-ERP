@@ -63,6 +63,12 @@ import ViewHomeWork from "./homework/pages/ViewHomeWork"
 import ViewHomeWorkParent from "./homework/pages/ViewHomeWorkParent"
 import TeacherAllHomeWorkHome from "./homework/pages/TeacherAllHomeWorkHome"
 import TeacherQuestionPaperHome from "./question/pages/TeacherQuestionPaperHome"
+import TeacherAttendanceHome from "./attendance/pages/teacher/TeacherAttendanceHome"
+import TeacherAttendanceEditView from "./attendance/pages/teacher/TeacherAttendanceEditView"
+import TeacherAttendancIndividualStudent from "./attendance/pages/teacher/TeacherAttendancIndividualStudent"
+import TeacherLeaveHomePage from "./leave/pages/teacher/TeacherLeaveHomePage"
+import TeacherExamHomePage from "./exam/pages/teacher/TeacherExamHomePage"
+
 
 import AdminExamHome from "./exam/pages/AdminHomePage"
 import AdminClassHallTicket from "./exam/pages/AdminClassHallTicket"
@@ -137,12 +143,22 @@ class Index extends Component {
             <GuestRoute path="/" exact component={LoginPage} />
 
             <TeacherDashboardRoutes extact path="/teacher/dashboard" component={TeacherDashboardHome} />
+            <TeacherDashboardRoutes extact path="/teacher/attendance/class/:class_id" component={TeacherAttendanceHome} />
+            <TeacherDashboardRoutes extact path="/teacher/attendance/edit-view/:class_id" component={TeacherAttendanceEditView} />
+            <TeacherDashboardRoutes extact path="/teacher/attendance/view-particular-student-attendance/:class_id" component={TeacherAttendancIndividualStudent} />
+
+            <TeacherDashboardRoutes extact path="/teacher/leave/:class_id" component={TeacherLeaveHomePage} />
+
+
+            
             <TeacherDashboardRoutes extact path="/teacher/homework/view/:class_id" component={ViewHomeWork} />
             <TeacherDashboardRoutes extact path="/teacher/homework/class/:class_id" component={TeacherHomeWorkHomePage} />
             <TeacherDashboardRoutes extact path="/teacher/timetable/:class_id" component={TeacherClassWiseTimeTable} />
             <TeacherDashboardRoutes extact path="/teacher/homework" component={TeacherAllHomeWorkHome} />
             <TeacherDashboardRoutes extact path="/teacher/questionpaper" component={TeacherQuestionPaperHome} />
 
+            <TeacherDashboardRoutes extact path="/teacher/exam/class/:class_id" component={TeacherExamHomePage} />
+            
 
             <ParentDashboardRoutes extact path="/parent/dashboard" component={ParentDashboardHome} />
             <ParentDashboardRoutes extact path="/parent/homework/view/:student_id" component={ViewHomeWorkParent} />

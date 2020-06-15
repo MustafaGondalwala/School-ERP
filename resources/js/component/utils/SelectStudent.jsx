@@ -13,7 +13,7 @@ export default class SelectStudent extends Component{
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount(){
-        api.admin.student.get_student_searchable().then(data => {
+        api.student.get_student_searchable().then(data => {
             this.setState({
                 student_list:data.student,
                 isLoading:false

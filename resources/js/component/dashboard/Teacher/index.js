@@ -34,13 +34,13 @@ export const TeacherLeftSide = (assigned_class) => {
                 <div className="collapse show" id={key} >
                   <ul className="nav nav-sm flex-column">
                     <li className="nav-item">
-                      <Link to={`/teacher/attendance/${classes.id}`} className="nav-link">
+                      <Link to={`/teacher/attendance/class/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> A </span>
                         <span className="sidenav-normal"> Attendance </span>
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={`/teacher/leave/${classes.id}`} className="nav-link">
+                      <Link to={`/teacher/leave/class/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> L </span>
                         <span className="sidenav-normal"> Leave </span>
                       </Link>
@@ -58,7 +58,7 @@ export const TeacherLeftSide = (assigned_class) => {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={`/teacher/exam/${classes.id}`} className="nav-link">
+                      <Link to={`/teacher/exam/class/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> E </span>
                         <span className="sidenav-normal"> Exam </span>
                       </Link>
@@ -67,6 +67,12 @@ export const TeacherLeftSide = (assigned_class) => {
                       <Link to={`/teacher/class-info/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> C </span>
                         <span className="sidenav-normal"> Class Info </span>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={`/teacher/virtual-classes/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> C </span>
+                        <span className="sidenav-normal"> Virtual Class </span>
                       </Link>
                     </li>
                     
@@ -160,6 +166,24 @@ export class TeacherTopNavbar extends Component{
         show_logout_view:false
       })
    }
+  }
+  convertUserType(type){
+    switch(type){
+      case 1:
+        return "admin"
+      case 2:
+        return "parent"
+      case 3:
+        return "student"
+      case 4:
+        return "teacher"
+      case 5:
+        return "clerk"
+      case 6:
+        return "staff"
+      case 7:
+        return "trust"
+    }
   }
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
@@ -437,7 +461,7 @@ export class TeacherTopNavbar extends Component{
                         </span>
                         <div className="media-body  ml-2  d-none d-lg-block">
                           <span className="mb-0 text-sm  font-weight-bold">
-                            {this.props.user.name} | {this.props.user.user_type}
+                            {this.props.user.name} | {this.convertUserType(this.props.user.user_type)}
                           </span>
                         </div>
                       </div>

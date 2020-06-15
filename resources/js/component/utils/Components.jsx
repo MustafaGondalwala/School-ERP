@@ -1,4 +1,5 @@
-import React from "react"
+import React, { Component } from "react"
+import InlineError from "./InlineError"
 
 export const Button = ({primary,success,warning,danger,neutral,sm,lg,children,onClick,right,left}) => {
     var className=""
@@ -34,6 +35,40 @@ export const UploadFile = () => (
     <input type="file" className="form-control" />
 )
 
+export class UploadImage extends Component{
+    constructor(props){
+        super(props)
+        this.state = {
+            url:"",
+            file:""
+        }
+        this.changeData = this.changeData.bind(this)
+    }
+    componentDidMount(){
+        const {value,name} = this.props
+        this.setState({
+            url:value
+        })
+    }
+    changeData(e){
+        const file = e.target.files[0]
+        var url = URL.createObjectURL(e.target.files[0])
+        this.setState({url})
+        this.props.onChange(e)
+    }
+    render(){
+        const {onChange,name} = this.props
+        const {url} = this.state
+        return(
+            <span>
+                <input type="file" name={name} onChange={e => this.changeData(e)} accept='image/*' className="form-control" />
+                {url  && 
+                    <img src={url} className="img img-fluid img-thumbnail"/>
+                }
+            </span>
+        )
+    }
+}
 
 export const FormGroup = ({children}) => (
     <div className="form-group">
@@ -47,10 +82,12 @@ export const ButtonGroup = ({children}) => (
     </div>
 )
 
-export const Input = ({type="text",name,placeholder,value,onChange,disabled}) => {
-    
+export const Input = ({type="text",name,placeholder,value,onChange,disabled,errors={}}) => {
     return(
+        <span>
         <input type={type} disabled={disabled} value={value} name={name} placeholder={placeholder} onChange={e => onChange(e)} className="form-control"/>
+        {errors[name] && <InlineError text={errors[name]}/>}
+        </span>
     )
 }
 export const Select = ({children,onChange,name,value}) => (

@@ -19,6 +19,11 @@ api.interceptors.response.use((response) => response, (error) => {
   });
 
 export default {
+    student:{
+        get_student_searchable: () => api("/api/v1/student/searchable").then(response => response.data.success),
+        get_student_searchable: searchText => api("/api/v1/student/searchable/"+searchText).then(response => response.data.success),
+    
+    },
     admin: {
         get_subjects: () => api("/api/v1/admin/subject").then(response => response.data.success),
         get_distinct_class: () => api("/api/v1/admin/class/distinct").then(response=> response.data.success),
