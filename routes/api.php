@@ -40,6 +40,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     });
     Route::group(["prefix"=>"admin","middleware"=>"adminCheck"],function(){
         Route::group(["prefix"=>"student"],function(){
+            Route::post("admission","StudentController@addStudentAdmission");
             Route::get("","StudentController@getAllStudents");
             Route::post("","StudentController@addNewStudent");
             Route::get("/searchable/{searchText}","StudentController@studentsSearchable");

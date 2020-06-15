@@ -6,17 +6,18 @@ import CardComponent from "../../utils/CardComponent"
 import GetClassId from "../../utils/GetClassId"
 import Row from "../../utils/Row"
 import { RedLabel, Col, FormGroup, FormLabel, Input , Select, SelectOption, UploadImage, Button } from "../../utils/Components"
-
+import api from "../../api"
+import Swal from "sweetalert2-react"
 class AdmissionStudent extends Component{
     constructor(props){
         super(props)
         this.state = {
             data: {
-                roll_no:'',
-                class_id:"",
-                student_name:'',
-                father_name:'',
-                mother_name:'',
+                roll_no:'BS-1000',
+                class_id:"1",
+                student_name:'Mustafa',
+                father_name:'Mustafa',
+                mother_name:'Mustafa',
                 father_qualification:'',
                 mother_qualification:'',
                 handicapped:"",
@@ -26,9 +27,9 @@ class AdmissionStudent extends Component{
                 student_bank_name:'',
                 father_bank_number:'',
                 mother_bank_number:'',
-                father_contactno1:'',
+                father_contactno1:'9586756273',
                 father_contactno2:'',
-                sms_number:'',
+                sms_number:'9586756273',
                 father_email:'',
                 mother_email:'',
                 father_occupation:'',
@@ -46,6 +47,7 @@ class AdmissionStudent extends Component{
                 student_aadhar_card_photo:'',
                 father_aadhar_card_photo:'',
             },
+            button_text:"Add Admission",
             errors:{}
         }
         this.onChange = this.onChange.bind(this)
@@ -86,11 +88,22 @@ class AdmissionStudent extends Component{
         const errors = this.validate(data)
         this.setState({errors})
         if(Object.keys(errors).length == 0){
-            
+            this.setState({
+                button_text:"Adding ..."
+            })
+            let formData = new FormData();    //formdata object
+
+            Object.keys(data).map(item => {
+                formData.append(item,data[item])
+            })
+            console.log(formData)
+            api.admin.student.admission(formData).then(data => console.log(data)).catch(error => {
+                console.log(error.data);
+            })
         }
     }
     render(){
-        const {data,errors} = this.state
+        const {data,errors,button_text} = this.state
         return(
             <div>
                 <TopBreadCrumb mainHeader="Student" header="Admission" sub_header="Add">
@@ -336,7 +349,7 @@ class AdmissionStudent extends Component{
                             </Col>
                         </Row>
                         <Row>
-                            <Button primary onClick={e => this.submit()}>Add Admission</Button>
+                            <Button primary onClick={e => this.submit()}>{button_text}</Button>
                             <Button warning>Reset</Button>
                         </Row>
                     </CardComponent>

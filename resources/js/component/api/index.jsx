@@ -1,4 +1,9 @@
 let api = axios
+let formDataConfig = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}
 import Swal from "sweetalert2"
 import setAuthorizationHeader from "../utils/setAuthorizationHeader";
 
@@ -22,7 +27,6 @@ export default {
     student:{
         get_student_searchable: () => api("/api/v1/student/searchable").then(response => response.data.success),
         get_student_searchable: searchText => api("/api/v1/student/searchable/"+searchText).then(response => response.data.success),
-    
     },
     admin: {
         get_subjects: () => api("/api/v1/admin/subject").then(response => response.data.success),
@@ -31,6 +35,7 @@ export default {
         view_all_teacher: () => api("/api/v1/admin/teacher").then(response => response.data.success),
         view_particular_teacher: teacher_id => api("/api/v1/admin/teacher/"+teacher_id).then(response => response.data.success),
     	student:{
+            admission: (data) => api.post('/api/v1/admin/student/admission',data,formDataConfig).then(response => response.data.success),
     		view_all_student: () => api("/api/v1/admin/student").then(response => response.data.success),
             get_student_searchable: () => api("/api/v1/admin/student/searchable").then(response => response.data.success),
             get_student_searchable: searchText => api("/api/v1/admin/student/searchable/"+searchText).then(response => response.data.success),

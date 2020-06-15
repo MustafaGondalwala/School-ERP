@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    public function addStudentAdmission(Request $request){
+        if($request->hasFile('student_photo')){  
+            \Cloudder::upload($request->file('student_photo'));
+            $c=\Cloudder::getResult();         
+            dd($c);    
+            if($c){
+               return back()
+                    ->with('success','You have successfully upload images.')
+                    ->with('image',$c['url']);
+            }
+            
+        }
+    }
     public function studentsSearchableLimit(Request $request){
         $school_id = $this->getSchoolId($request);
         $all_student = StudentInfo::where('school_info_id',$school_id)->
