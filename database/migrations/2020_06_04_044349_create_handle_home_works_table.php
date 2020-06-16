@@ -19,6 +19,7 @@ class CreateHandleHomeWorksTable extends Migration
             $table->integer('student_id');
             $table->integer('homework_id');
             $table->integer('status')->comment('1 => Pending 2=>Completed 3=> Raise Issue')->default(1);
+            $table->integer('file_id')->nullable();
             $table->integer('raise_issue_id')->nullable();
             $table->timestamps();
         });

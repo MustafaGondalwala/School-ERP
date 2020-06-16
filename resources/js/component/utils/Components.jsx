@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import InlineError from "./InlineError"
+import Row from "./Row"
 
 export const Button = ({primary,success,warning,danger,neutral,sm,lg,children,onClick,right,left}) => {
     var className=""
@@ -81,6 +82,26 @@ export const ButtonGroup = ({children}) => (
         {children}
     </div>
 )
+
+export const UploadMutitpleMutiples = ({type="file",name,onChange,disabled,errors={}}) => {
+    return(
+        <input type={type} disabled={disabled} multiple name={name} onChange={e => onChange(e)} className="form-control"/>
+    )
+}
+
+export const PreviewFiles = ({download=false,files}) => {
+    console.log(files)
+    return(
+        <Row>
+            {files && files.map(item => {
+                return  <Col md="6" sm="6" lg="3">
+                <img src={item} className="img img-thumbnail img-fluid"/>
+            </Col>
+            })}
+           
+        </Row>
+    )
+}
 
 export const Input = ({type="text",name,placeholder,value,onChange,disabled,errors={}}) => {
     return(

@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use App\SystemYear;
 use App\FeeInstallments;
 use App\ClassPeriod;
+use \Cloudder;
 trait HelperTrait{
     public function ReS($data){
         return response()->json(["success"=>$data]);
@@ -20,6 +21,11 @@ trait HelperTrait{
     }
     public function getClassPeriods($school_id){
         return ClassPeriod::select('id','period_id','start_time','end_time')->where("school_id",$school_id)->orderBy('period_id')->get();
+    }
+    public function uploadFile($file){
+        Cloudder::upload($file);
+        $c=Cloudder::getResult();
+        return $c;
     }
     public function getCurrentYear($request){
         $school_id = $request->header('Auth-School-Id');
@@ -65,12 +71,12 @@ trait HelperTrait{
         ]);
         return $new_parent->id;
     }
-    public function uploadFile($file){
-        $image_name = Str::random(25);
-        $folder = '/uploads/images';
-        $filepath = $file->storeAs($folder, $image_name . '.' . $file->getClientOriginalExtension() , 'public');
-        return $filepath;
-    }
+    // public function uploadFile($file){
+    //     $image_name = Str::random(25);
+    //     $folder = '/uploads/images';
+    //     $filepath = $file->storeAs($folder, $image_name . '.' . $file->getClientOriginalExtension() , 'public');
+    //     return $filepath;
+    // }
 }
 
     

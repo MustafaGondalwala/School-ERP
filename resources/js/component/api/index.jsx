@@ -105,7 +105,7 @@ export default {
     },
     teacher:{
         homework:{
-            add: (data) => api.post("/api/v1/teacher/homework",data).then(response => response.data.success),
+            add: (data) => api.post("/api/v1/teacher/homework",data,formDataConfig).then(response => response.data.success),
             get: (class_id) => api("/api/v1/teacher/homework/"+class_id).then(response => response.data.success),
         }
     },

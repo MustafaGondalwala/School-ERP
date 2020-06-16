@@ -16,4 +16,8 @@ class StudentHomeWork extends Model
     public function subject(){
         return $this->belongsTo(Subjects::class,'subject');
     }
+    public function files() 
+    { 
+        return $this->morphMany(File::class, 'type');
+    }
 }

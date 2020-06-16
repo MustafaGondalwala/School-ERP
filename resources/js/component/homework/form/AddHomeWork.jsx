@@ -6,6 +6,7 @@ import InlineError from "../../utils/InlineError"
 import {setSubjectDispatch} from "../../actions/subjects"
 import { connect } from "react-redux";
 import Swal from 'sweetalert2'
+import { UploadMutitpleMutiples, PreviewFiles } from "../../utils/Components";
 
 class AddFormHomeWork extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class AddFormHomeWork extends Component {
           subtitle: "Science",
           description: "<p>Science HomeWork</p>",
           submition_date: "2020-03-03",
-          images_url: [],
+          image_url: [],
           subject: "1",
           class_id:""
         },
@@ -25,6 +26,7 @@ class AddFormHomeWork extends Component {
       };
       this.onSubmit = this.onSubmit.bind(this);
       this.makeInputNull = this.makeInputNull.bind(this);
+      this.onFileChange = this.onFileChange.bind(this)
     }
   
     onChange(e) {
@@ -57,13 +59,21 @@ class AddFormHomeWork extends Component {
     }
     onSubmit(e) {
       e.preventDefault();
+      const {data,files} = this.state 
       const errors = this.validate(this.state.data);
       this.setState({ errors });
       if (Object.keys(errors).length === 0) {
         this.setState({
           add_button:"Adding HomeWork ..."
         })
-        this.props.submit(this.state.data).then(() => {
+        let formData = new FormData();    //formdata object
+        Object.keys(data).map(item => {
+          formData.append(item,data[item])
+        })
+        for (let i = 0; i < files.length; i++) {
+          formData.append(`files[${i}]`, files[i])
+        }
+        this.props.submit(formData).then(() => {
           this.setState({
             add_button:"Add HomeWork"
           })
@@ -93,8 +103,30 @@ class AddFormHomeWork extends Component {
         data: data,
       });
     }
+    onFileChange(e){
+      const {name,files} = e.target
+      var files_array = []
+      Object.keys(files).map(item => {
+        files_array.push(files[item])
+      })
+      // let formData = new FormData();    //formdata object
+      
+      this.setState({
+        files:files_array
+      })
+     
+      const image_url = []
+      if(Object.keys(files).length > 0){
+        Object.keys(files).map(item => {
+          image_url.push(URL.createObjectURL(files[item]))
+        })
+      }
+      this.setState({
+        data: { ...this.state.data, ["image_url"]: image_url },
+      });
+    }
     render() {
-      const { data, errors,add_button  } = this.state;
+      const { data, errors,add_button } = this.state;
       const { insert_success,subject } = this.props;
       return (
         <CardComponent title="Add HomeWork">
@@ -180,6 +212,8 @@ class AddFormHomeWork extends Component {
   
               <div className="form-group">
                 <label>Update Files: </label>
+                <UploadMutitpleMutiples onChange={this.onFileChange} name="files"/>
+                <PreviewFiles files={data.image_url}/>
               </div>
               <div className="form-group">
                 <label>Submition Date:</label>

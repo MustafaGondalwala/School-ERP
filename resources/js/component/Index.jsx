@@ -154,7 +154,7 @@ class Index extends Component {
             <TeacherDashboardRoutes extact path="/teacher/homework/view/:class_id" component={ViewHomeWork} />
             <TeacherDashboardRoutes extact path="/teacher/homework/class/:class_id" component={TeacherHomeWorkHomePage} />
             <TeacherDashboardRoutes extact path="/teacher/timetable/:class_id" component={TeacherClassWiseTimeTable} />
-            <TeacherDashboardRoutes extact path="/teacher/homework" component={TeacherAllHomeWorkHome} />
+            <TeacherDashboardRoutes extact path="/teacher/homework/all" component={TeacherAllHomeWorkHome} />
             <TeacherDashboardRoutes extact path="/teacher/questionpaper" component={TeacherQuestionPaperHome} />
 
             <TeacherDashboardRoutes extact path="/teacher/exam/class/:class_id" component={TeacherExamHomePage} />
