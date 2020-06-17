@@ -9,4 +9,11 @@ class HandleHomeWork extends Model
     public function homework(){
         return $this->belongsTo(StudentHomeWork::class,'homework_id');
     }
+    public function student(){
+        return $this->belongsTo(StudentInfo::class,'student_id');
+    }
+    public function files() 
+    { 
+        return $this->morphMany(File::class, 'type');
+    }
 }

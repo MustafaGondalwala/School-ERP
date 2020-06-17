@@ -10,6 +10,61 @@ use App\HandleHomeWork;
 use App\File;
 class HomeWorkController extends Controller
 {
+    public function getStudentStatus(Request $request,$homework_id){
+        $school_id = $this->getSchoolId($request);
+        $submission = HandleHomeWork::with(['student','files'])->where(['school_id'=>$school_id,'homework_id'=>$homework_id])->get();
+        return $this->ReS(["student_status"=>$submission]);
+    }
+    public function checkHomeWorkSubmission(Request $request){
+        $request->validate([
+            "type"=>"required|integer",
+            'student_homework_id'=>'required|integer'
+        ]);
+        $studentHomeWork = HandleHomeWork::find($request->student_homework_id);
+        $new_status = 0;
+        switch($request->type){
+            case 1:
+                $new_status = 2;
+                break;
+            case 2:
+                $new_status = 5;
+                break;
+        }
+        $studentHomeWork->status = $new_status;
+        if($studentHomeWork->update())
+            return $this->ReS(["message"=>"Student HomeWork Updated !!"]);
+        else
+            return $this->ReE(["message"=>"Error Occurred"]);
+
+    }
+    public function getHomeWorkSubmission(Request $request,$homework_id){
+        $school_id = $this->getSchoolId($request);
+        $submission = HandleHomeWork::with(['student','files'])->where(['school_id'=>$school_id,'homework_id'=>$homework_id,"status"=>4])->get();
+        return $this->ReS(["homework_submission"=>$submission]);
+    }   
+    public function submitHomeWork(Request $request){
+        $request->validate([
+            'description'=>"required|string",
+            'homework_id'=>'required|integer',
+            'student_id'=>'required|integer',
+        ]);
+        $school_id = $this->getSchoolId($request);
+        $homework_id = $request->homework_id;
+        $student_id = $request->student_id;
+        $getHomeWork  = StudentHomeWork::find($homework_id);
+        if($getHomeWork->submition_date > \Carbon\Carbon::now()){
+            return $this->ReE(["message"=>"Homework is Closed"],400);
+        }
+
+        $getStudentHomeWork = HandleHomeWork::where(["school_id"=>$school_id,"homework_id"=>$homework_id,"student_id"=>$student_id])->first();
+        $getStudentHomeWork->description = $request->description;
+        $getStudentHomeWork->status = 4;
+        $getStudentHomeWork->save();
+        if($this->bulkFileUpdate($request->files,$getStudentHomeWork)){
+            return $this->ReS(["message"=>"HomeWork Submitted."]);
+        }
+
+    }
     public function getChildHomeWork(Request $request){
         $request->validate([
             'student_ids'=>"required|array"

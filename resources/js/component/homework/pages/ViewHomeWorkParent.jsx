@@ -1,8 +1,10 @@
-import React,{Component} from "react"
+import React,{Component,Suspense} from "react"
 import ParentHeader from "../header/ParentHeader"
 import { connect } from "react-redux";
-import ViewPanelHomeWorkParent from "../panel/ViewPanelHomeWorkParent"
-import ViewParticularHomeWork from "../form/ViewParticularHomeWorkParent"
+const ViewPanelHomeWorkParent = React.lazy(() => import('../panel/ViewPanelHomeWorkParent'));
+const ViewParticularHomeWork = React.lazy(() => import('../form/ViewParticularHomeWorkParent'));
+const SubmitHomeWork = React.lazy(() => import('../form/SubmitHomeWork'));
+
 
 class ViewHomeWorkParent extends Component{
     constructor(props){
@@ -23,18 +25,30 @@ class ViewHomeWorkParent extends Component{
         switch(type){
             case "view":
                 this.changeState("view_id",id);
+                this.changeState("submit_id","");
+                break
+            case "submit":
+                this.changeState("view_id","");
+                this.changeState("submit_id",id);
+                break
+            case "hide":
+                this.changeState("view_id","");
+                this.changeState("submit_id","");
                 break
         }
     }
     render(){
         const {student_id} = this.props.match.params
-        const {view_id} = this.state
+        const {view_id,submit_id} = this.state
         return(
             <div>
                 <ParentHeader mainHeader="Home" header="Homewrok" sub_header="View Current/Past"/>
                 <div className="container-fluid mt--6">
-                    <ViewPanelHomeWorkParent sendEventType={this.sendEventType} student_id={student_id} />
-                    {view_id && <ViewParticularHomeWork view_id={view_id} student_id={student_id} /> }
+                    <Suspense fallback={<div>Loading…</div>}>
+                        <ViewPanelHomeWorkParent sendEventType={this.sendEventType} student_id={student_id} />
+                    </Suspense>
+                    {view_id && <Suspense fallback={<div>Loading…</div>}><ViewParticularHomeWork view_id={view_id} student_id={student_id} /></Suspense> }
+                    {submit_id && <Suspense fallback={<div>Loading…</div>}><SubmitHomeWork sendEventType={this.sendEventType} homework_id={submit_id} student_id={student_id}/></Suspense>}
                 </div>
             </div>
         )

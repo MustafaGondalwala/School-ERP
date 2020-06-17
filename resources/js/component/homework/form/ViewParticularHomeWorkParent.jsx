@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import CardComponent from "../../utils/CardComponent";
+import React, { Component,Suspense } from "react";
+const CardComponent = React.lazy(() => import('../../utils/CardComponent'));
 import { connect } from "react-redux";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Col, PreviewFiles, FormGroup, PreviewServerFiles } from "../../utils/Components";
 
 
 
@@ -25,8 +26,6 @@ class ViewParticularHomeWorkParent extends Component {
         const particular_homework = this.findArrayElementByTitle(parent_homework[student_id],view_id)
         this.setState({
             data:particular_homework
-        },() => {
-            console.log(this.state)
         })
     }
     componentDidMount(){
@@ -43,6 +42,7 @@ class ViewParticularHomeWorkParent extends Component {
         const { data,errors } = this.state;
         const { subject } = this.props;
         return(
+      <Suspense fallback={<div>Loading…</div>}>
             <CardComponent title="View Particular HomeWork">
                 {data ?
                 <div>
@@ -97,6 +97,9 @@ class ViewParticularHomeWorkParent extends Component {
           />
           {errors.description && <InlineError text={errors.description} />}
         </div>
+        <FormGroup>
+          <PreviewServerFiles files={data.homework.files}/>
+        </FormGroup>
         <div className="form-group">
                 <label>Submition Date:</label>
                 <input type="date" disabled className="form-control" name="submition_date" onChange={e => this.onChange(e)} value={data.homework.submition_date}/>
@@ -108,6 +111,7 @@ class ViewParticularHomeWorkParent extends Component {
         </div>
                 : <div>Loading ...</div>}
             </CardComponent>
+        </Suspense>
         )
     }
 }

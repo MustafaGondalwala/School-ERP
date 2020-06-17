@@ -35,6 +35,16 @@ export const UploadInput = () => (
 export const UploadFile = () => (
     <input type="file" className="form-control" />
 )
+export const PreviewServerFiles = ({files}) => {
+    return(
+        <Row>
+            {files && files.map(item => {
+                return <Col md="3" sm="3">
+                <img src={item.file_url} className="img img-fluid img-thumbnail"/></Col>
+            })}
+        </Row>
+    )
+}
 
 export class UploadImage extends Component{
     constructor(props){
@@ -90,7 +100,6 @@ export const UploadMutitpleMutiples = ({type="file",name,onChange,disabled,error
 }
 
 export const PreviewFiles = ({download=false,files}) => {
-    console.log(files)
     return(
         <Row>
             {files && files.map(item => {
@@ -112,7 +121,7 @@ export const Input = ({type="text",name,placeholder,value,onChange,disabled,erro
     )
 }
 export const Select = ({children,onChange,name,value}) => (
-    <select className="form-control" name={name} value={value} onChange={e => onChange}>
+    <select className="form-control" name={name} value={value} onChange={e => onChange(e)}>
         {children}
     </select>
 )

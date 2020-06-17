@@ -39,6 +39,20 @@ class ViewPanelHomeWorkParent extends Component{
           return element.id == student_id;
         })
     }
+    fetchStatus(status){
+      switch(status){
+        case 1:
+          return "Pending";
+        case 2:
+          return "Completed";
+        case 3:
+          return "Issue Raised";
+        case 4:
+          return "Submitted";
+        case 5:
+          return "Rejected";
+      }
+    }
     render(){
       const columns = [
         {
@@ -66,18 +80,28 @@ class ViewPanelHomeWorkParent extends Component{
           {
             name:"Status",
             sortable:true,
-            cell: row => <div>{row.status == 1 ? <div>Ongoing</div>:<div>Closed</div> }</div>
+            cell: row => <div>
+            {this.fetchStatus(row.status)}</div>
           },
           {
             name: 'View',
             sortable: true,
             cell: row => <div><button onClick={e => this.props.sendEventType("view",row.id)} className="btn btn-sm btn-primary">View</button></div>,
           },
+          {
+            name: 'Action',
+            sortable: true,
+            cell: row => <div>
+                {(row.status == 1 || row.status == 5 || row.status == 3) && <button onClick={e => this.props.sendEventType("submit",row.homework.id)} className="btn btn-sm btn-success">Submit</button>}
+              </div>,
+          },
       ];
+      const {student_id} = this.props;
+      const back_link = "/parent/homework/student/"+student_id
         return(
-            <CardComponent title="View HomeWork" >
+            <CardComponent title="View HomeWork" back_link={back_link}>
               <DataTable
-                title={"Class HomeWorks"}
+                title={"Student HomeWorks"}
                     columns={columns}
                     data={this.state.rows}
                 />

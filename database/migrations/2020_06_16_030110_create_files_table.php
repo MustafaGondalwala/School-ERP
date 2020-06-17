@@ -18,7 +18,6 @@ class CreateFilesTable extends Migration
             $table->string('public_id');
             $table->string('file_url');
             $table->string('file_type',20);
-            $table->morphs('user');
             $table->morphs('type');
             $table->timestamps();
         });

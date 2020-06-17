@@ -19,6 +19,14 @@ class ViewPanelHomeWork extends Component{
     addClickFunction(){
         this.props.sendEventType("add",null)
     }
+    fetchStatus(status){
+      switch(status){
+        case 1:
+          return "OnGoing";
+        case 2:
+          return "Closed";
+      }
+    }
     render(){
         const columns = [
             {
@@ -45,7 +53,8 @@ class ViewPanelHomeWork extends Component{
               {
                 name:"Status",
                 sortable:true,
-                cell: row => <div>{row.status == 1 ? <div>Ongoing</div>:<div>Closed</div> }</div>
+                cell: row => <div>
+                {this.fetchStatus(row.status)}</div>
               },
               {
                 name: 'View',
@@ -53,11 +62,21 @@ class ViewPanelHomeWork extends Component{
                 cell: row => <div><button onClick={e => this.props.sendEventType("view",row.id)} className="btn btn-sm btn-primary">View</button></div>,
               },
               {
+                name: 'Submittion',
+                sortable: true,
+                cell: row => <div><button onClick={e => this.props.sendEventType("homework_check",row.id)} className="btn btn-sm btn-primary">Check</button></div>,
+              },
+              {
+                name: 'Student Status',
+                sortable: true,
+                cell: row => <div><button onClick={e => this.props.sendEventType("student_status",row.id)} className="btn btn-sm btn-primary">View</button></div>,
+              },
+              {
                 name: 'Actions',
                 sortable: true,
                 cell: row => <div>
                                 <td  className="table-actions">
-                                            <a href="#!"   className="table-action" data-toggle="tooltip" data-original-title="Edit product">
+                                            <a href="#!" onClick={e => this.props.sendEventType("edit_homework",row)}  className="table-action" data-toggle="tooltip" data-original-title="Edit product">
                                                 <i className="fas fa-user-edit" />
                                             </a>
                                             <a href="#!"  className="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete product">
@@ -67,15 +86,16 @@ class ViewPanelHomeWork extends Component{
                 </div>
               }
           ];
+          const back_link = "/teacher/homework/class/"+this.props.class_id
         return(
-            <CardComponent title="View HomeWork" add_object={{'text':"Add",'clickFunction':this.addClickFunction}}>
+            <CardComponent title="View HomeWork" back_link={back_link} add_object={{'text':"Add",'clickFunction':this.addClickFunction}}>
                 <DataTable
                 title={"Class HomeWorks"}
                     columns={columns}
                     data={this.props.class_homeworks}
                 />
             </CardComponent>
-        )
+        ) 
     }
 }
 

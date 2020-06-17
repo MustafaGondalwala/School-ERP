@@ -107,6 +107,9 @@ export default {
         homework:{
             add: (data) => api.post("/api/v1/teacher/homework",data,formDataConfig).then(response => response.data.success),
             get: (class_id) => api("/api/v1/teacher/homework/"+class_id).then(response => response.data.success),
+            get_submission: homework_id => api("/api/v1/teacher/homework/submission/"+homework_id).then(response => response.data.success),
+            homework_check: (type,student_homework_id) => api.put("/api/v1/teacher/homework/submission",{type,student_homework_id}).then(response => response.data.success),
+            get_student_status: homework_id => api("/api/v1/teacher/homework/student_status/all/"+homework_id).then(response => response.data.success),
         }
     },
     parent:{
@@ -117,5 +120,10 @@ export default {
     class: () => api("/api/v1/admin/class").then(response => response.data.success),
     subjects: () => api("/api/v1/subject").then(response => response.data.success),
     classwise_timetable: (class_id) => api("/api/v1/classwise_timetable/"+class_id).then(response => response.data.success),
-    teachers: () => api("/api/v1/teacher").then(response => response.data.success)
+    teachers: () => api("/api/v1/teacher").then(response => response.data.success),
+    parentstudent: {
+        homework:{
+            submit: data => api.post("/api/v1/parentstudent/homework/submit",data,formDataConfig).then(response => response.data.success),
+        }
+    }
 }

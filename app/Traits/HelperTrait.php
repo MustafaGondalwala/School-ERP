@@ -6,12 +6,30 @@ use App\SystemYear;
 use App\FeeInstallments;
 use App\ClassPeriod;
 use \Cloudder;
+use App\File;
 trait HelperTrait{
     public function ReS($data){
         return response()->json(["success"=>$data]);
     }
     public function ReE($data,$status=400){
         return response()->json(["error"=>$data],$status);
+    }
+
+    public function bulkFileUpdate($files,$instance)
+    {
+        foreach($files as $file){
+            foreach($file as $e){
+                        $upload_data = $this->uploadFile($e);
+                        $new_file = new File;
+                        $new_file->public_id = $upload_data['public_id'];
+                        $new_file->file_url = $upload_data['url'];
+                        $new_file->file_type = $e->getClientOriginalExtension();
+                        $new_file->type_type = get_class($instance);
+                        $new_file->type_id = $instance->id;
+                        $new_file->save();
+            }
+        }
+        return true;
     }
     public function getSchoolId($request){
         return $request->header('Auth-School-Id');

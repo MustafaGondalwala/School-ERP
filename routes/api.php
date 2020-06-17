@@ -25,7 +25,9 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::get("/teacher","TeacherController@viewAllTeacher");
     Route::get("/student/searchable/{searchText}","StudentController@studentsSearchable");
     Route::get("/student/searchable","StudentController@studentsSearchableLimit");
-
+    Route::group(["prefix"=>"parentstudent"],function(){
+        Route::post("/homework/submit","HomeWorkController@submitHomeWork");
+    });
     
     Route::group(["prefix"=>"parent","middleware"=>"parentCheck"],function(){
         Route::group(["prefix"=>"homework"],function(){
@@ -36,6 +38,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::group(["prefix"=>"homework"],function(){
             Route::post("","HomeWorkController@addHomeWork");
             Route::get("{class_id}","HomeWorkController@getClassHomeWork");
+            Route::get("submission/{homework_id}","HomeWorkController@getHomeWorkSubmission");
+            Route::put("submission","HomeWorkController@checkHomeWorkSubmission");
+            Route::get("student_status/all/{homework_id}","HomeWorkController@getStudentStatus");
+            
         });
     });
     Route::group(["prefix"=>"admin","middleware"=>"adminCheck"],function(){

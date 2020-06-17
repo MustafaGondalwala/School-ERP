@@ -1,8 +1,13 @@
-import React, { Component } from "react";
-import CardComponent from "../../utils/CardComponent";
+import React, { Component,Suspense } from "react";
+const CardComponent = React.lazy(() => import('../../utils/CardComponent'));
+import { Col, PreviewFiles, FormGroup, PreviewServerFiles } from "../../utils/Components";
+
 import { connect } from "react-redux";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+const Row = React.lazy(() => import('../../utils/Row'));
+
+import {setSubjectDispatch} from "../../actions/subjects"
 
 class ViewParticularHomeWork extends Component {
   constructor(props) {
@@ -14,33 +19,41 @@ class ViewParticularHomeWork extends Component {
     this.updateData = this.updateData.bind(this)
   }
   updateData(view_id,class_homeworks){
-    class_homeworks.map((item) => {
-        if (item.id == view_id) {
-          this.setState(
-            {
-              data: item,
-            });
-        }
-      });
+      const data = this.findArrayElementByTitle(class_homeworks,view_id)
+      this.setState({
+        data
+      })
+  }
+  findArrayElementByTitle(array, id) {
+    return array.find((element) => {
+      return element.id == id;
+    })
   }
   componentDidMount() {
-    var view_id = this.props.view_id;
+    const {subject,setSubjectDispatch,view_id} = this.props
     var class_homeworks = this.props.class_homeworks;
     this.updateData(view_id,class_homeworks);
+    if(Object.keys(subject).length == 0){
+      setSubjectDispatch()
+    }
   }
   componentWillReceiveProps(){
-    var view_id = this.props.view_id;
+    const {subject,setSubjectDispatch,view_id} = this.props
     var class_homeworks = this.props.class_homeworks;
-    this.updateData(view_id,class_homeworks);
+    const data = this.findArrayElementByTitle(class_homeworks,view_id)
+      this.setState({
+        data
+      })
   }
 
   render() {
     const { data,errors } = this.state;
     const { subject } = this.props;
-
     return (
+      <Suspense fallback={<div>Loading…</div>}>
+      {data && 
       <CardComponent title="View Particular HomeWork">
-        {data && <div>
+        <div>
             <div className="form-group">
           <label>Title: </label>
           <input
@@ -97,6 +110,9 @@ class ViewParticularHomeWork extends Component {
           />
           {errors.description && <InlineError text={errors.description} />}
         </div>
+        <FormGroup>
+          <PreviewServerFiles files={data.files}/>
+        </FormGroup>
         <div className="form-group">
                 <label>Submition Date:</label>
                 <input type="date" disabled className="form-control" name="submition_date" onChange={e => this.onChange(e)} value={data.submition_date}/>
@@ -105,9 +121,11 @@ class ViewParticularHomeWork extends Component {
                 )}
               </div>
             
-        </div>} 
+        </div>
       </CardComponent>
-    );
+    } 
+      </Suspense>
+      );
   }
 }
 
@@ -118,4 +136,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ViewParticularHomeWork);
+export default connect(mapStateToProps,{setSubjectDispatch})(ViewParticularHomeWork);

@@ -109,8 +109,6 @@ class AddFormHomeWork extends Component {
       Object.keys(files).map(item => {
         files_array.push(files[item])
       })
-      // let formData = new FormData();    //formdata object
-      
       this.setState({
         files:files_array
       })
