@@ -99,11 +99,11 @@ class DatabaseSeeder extends Seeder
         );
         SystemYear::insert(
             array(
-                array("school_info_id"=>$school_id,"year"=>"2019-20","selected"=>1),
-                array("school_info_id"=>$school_id,"year"=>"2018-19","selected"=>0),
-                array("school_info_id"=>$school_id,"year"=>"2017-18","selected"=>0),
-                array("school_info_id"=>$school_id,"year"=>"2016-17","selected"=>0),
-                array("school_info_id"=>$school_id,"year"=>"2015-16","selected"=>0),
+                array("year"=>"2019-20"),
+                array("year"=>"2018-19"),
+                array("year"=>"2017-18"),
+                array("year"=>"2016-17"),
+                array("year"=>"2015-16"),
             )
         );
         FeeInstallments::insert(
