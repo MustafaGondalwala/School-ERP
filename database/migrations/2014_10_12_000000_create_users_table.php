@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('login_text')->unique();
             $table->morphs('profile');
             $table->integer('school_id');
+            $table->integer('year_id');
             $table->string('profile_pic')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -17,7 +17,7 @@ const CardComponent = ({title,back_link,children,add_object,custom_object,print,
                         </Link>
                     }
                     {print && <Button right sm primary>Print</Button>}
-                    {download && <Button right sm neutral>Download</Button>}
+                    {download && <span>{download}</span>}
 
                     {custom_object && {custom_object}}
                     {add_object && <button className="btn btn-neutral float-right" onClick={add_object.clickFunction}>{add_object.text}</button>}

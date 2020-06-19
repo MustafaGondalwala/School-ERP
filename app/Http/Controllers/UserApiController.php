@@ -24,6 +24,8 @@ class UserApiController extends Controller
             $sendData['user'] = $user;
             $sendData["user_type"] = $user["user_type"];
             $sendData['school_id'] = $user['school_id'];
+            $sendData['school'] = $user->school();
+            $sendData['year_id'] = $user->year_id; 
             if($user['user_type'] == 1){
                 $user['info'] = AdminInfo::with('school')->where('id',$user->id)->first();
             }else if($user['user_type'] == 3){

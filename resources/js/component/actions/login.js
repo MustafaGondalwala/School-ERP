@@ -30,9 +30,10 @@ export const userLoggedIn = user => ({
 
 export const login = credentials => dispatch => {
     return api.user.login(credentials).then(data => {
-      const { token,user,user_type,school_id } = data
+      const { token,user,user_type,school_id,year_id } = data
       localStorage.token = token
       localStorage.user_type = user_type
+      localStorage.year_id = year_id
       localStorage.school_id = school_id
       if(user_type == 4){
         localStorage.assigned_class = JSON.stringify(data.user.info.class)
@@ -42,7 +43,7 @@ export const login = credentials => dispatch => {
         dispatch(setParentChild(data.user.info));
       }
       localStorage.userAccount = JSON.stringify(user)
-      setAuthorizationHeader(token,user_type,school_id);
+      setAuthorizationHeader(token,user_type,school_id,year_id);
       dispatch(userLoggedIn(user));
       return user_type
     })
@@ -51,10 +52,7 @@ export const login = credentials => dispatch => {
 
 export const logout = () => dispatch => {
   return api.user.logout().then(data => {
-    localStorage.removeItem("userAccount");
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_type");
-    localStorage.removeItem("school_id");
+    localStorage.clear();
     setAuthorizationHeader();
     dispatch(userLoggedOut());
   })

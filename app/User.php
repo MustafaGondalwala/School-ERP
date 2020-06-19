@@ -39,10 +39,13 @@ class User extends Authenticatable
     ];
     
     public function school(){
-        return $this->belongsTo('App\SchoolInfo');
+        return $this->belongsTo('App\SchoolInfo','school_id');
     }
     public function childs(){
         return StudentInfo::where('parent_id',$this->profile_id)->get();
+    }
+    public function year(){
+        return $this->belongsTo(SystemYear::class,'year_id');
     }
     public function profile(){
         return $this->morphTo();

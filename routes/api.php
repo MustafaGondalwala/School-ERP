@@ -28,7 +28,15 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::group(["prefix"=>"parentstudent"],function(){
         Route::post("/homework/submit","HomeWorkController@submitHomeWork");
     });
-    
+    Route::group(["prefix"=>"adminclerk","middleware"=>"adminCheck"],function(){
+        Route::group(["prefix"=>"student"],function(){
+            Route::post("/register","RegisterStudentController@newRegisterStudent");
+            Route::post("/register/list","RegisterStudentController@registerStudentList");
+            Route::post("/register/list","RegisterStudentController@registerStudentList");
+            Route::post("/register/bulk_add","RegisterStudentController@registerBulkAdd");
+            
+        });
+    });
     Route::group(["prefix"=>"parent","middleware"=>"parentCheck"],function(){
         Route::group(["prefix"=>"homework"],function(){
             Route::post("","HomeWorkController@getChildHomeWork");

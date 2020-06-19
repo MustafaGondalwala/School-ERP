@@ -130,7 +130,7 @@ if (localStorage.token) {
   }else if(localStorage.user_type == 3){
     store.dispatch(setParentChild(JSON.parse(localStorage.parent_childs)))
   }
-  setAuthorizationHeader(localStorage.token,payload.user_type,payload.school_id);
+  setAuthorizationHeader(localStorage.token,payload.user_type,payload.school_id,localStorage.year_id);
   store.dispatch(userLoggedIn(payload));
 }
 

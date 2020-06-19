@@ -15,6 +15,7 @@ use App\StudentInfo;
 use App\ParentInfo;
 use App\Staff;
 use App\Teacher;
+use App\RegisterStudent;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -28,9 +29,29 @@ class DatabaseSeeder extends Seeder
         $password = "admin";
         $gender_array = array('male','female','other');
         $class_array = array('1','2','3','4','5','6','7');
+        $class_array_name = array('5th','6th','7th','8th','9th','10th','12th');
         $religion = array('hindu','muslim','sikh','jain');
         $caste = array('general','sc','st','obc','other');
-        DB::beginTransaction();
+        // foreach(range(1,500) as $index){
+        //     $new_register = new RegisterStudent;
+        //     $new_register->register_no = $faker->numberBetween($min = 3000, $max = 90000);
+        //     $new_register->class = $class_array_name[$faker->numberBetween($min = 0, $max = 6)];
+        //     $new_register->student_name =   $faker->name;
+        //     $new_register->father_name =  $faker->name;
+        //     $new_register->mother_name =  $faker->name;
+        //     $new_register->father_contact_no1 =  $faker->phoneNumber;
+        //     $new_register->father_contact_no2 =  $faker->phoneNumber;
+        //     $new_register->dob = $faker->date($format = 'Y-m-d', $max = 'now');
+        //     $new_register->student_address = $faker->city;
+        //     $new_register->gender = "male";
+        //     $new_register->doA = $faker->date($format = 'Y-m-d', $max = 'now');
+        //     $new_register->block = $faker->city;
+        //     $new_register->state = $faker->city;
+        //     $new_register->district =  $faker->city;
+        //     $new_register->year_id = 1;
+        //     $new_register->save();
+        // }
+        // return;
         $new_school_info = new SchoolInfo;
         $new_school_info->name = "Burhani English School";
         $new_school_info->email = "burhanienglishschool@gmail.com";

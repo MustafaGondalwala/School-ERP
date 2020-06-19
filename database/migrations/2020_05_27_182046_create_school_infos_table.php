@@ -22,6 +22,7 @@ class CreateSchoolInfosTable extends Migration
             $table->string('message_code');
             $table->integer('package_type')->comment('1=> Basic 2=> Pro 3=> Advanced');
             $table->string('front_pic');
+            $table->integer('year_id')->nullable();
             $table->timestamps();
         });
     }

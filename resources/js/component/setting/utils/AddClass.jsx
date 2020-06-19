@@ -2,9 +2,9 @@ import React,{Component} from "react"
 import CardComponent from "../../utils/CardComponent"
 import InlineError from "../../utils/InlineError"
 import Swal from 'sweetalert2'
-import { connect } from "react-redux";
 import api from "../../api"
 import {getClassSection,setClassSection} from "../../actions/classes"
+import { connect } from "react-redux";
 
 class AddClass extends Component{
     constructor(props){

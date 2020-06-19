@@ -37,7 +37,7 @@
     </head>
     <body>
         <div id="app"></div>
-        <script src="{{ secure_asset('js/app.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
         <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
         <script src="/assets/vendor/js-cookie/js.cookie.js"></script>
         <script src="/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>

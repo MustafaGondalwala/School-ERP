@@ -24,6 +24,15 @@ api.interceptors.response.use((response) => response, (error) => {
   });
 
 export default {
+    adminclerk:{
+        student:{
+            register:{
+                add: data => api.post("/api/v1/adminclerk/student/register",data,formDataConfig).then(response => response.data.success),
+                list: class_string => api.post("/api/v1/adminclerk/student/register/list",{class_string}).then(response => response.data.success),
+                bulk_add: data => api.post("/api/v1/adminclerk/student/register/bulk_add",{data}).then(response => response.data.success),
+            },
+        },
+    },
     student:{
         get_student_searchable: () => api("/api/v1/student/searchable").then(response => response.data.success),
         get_student_searchable: searchText => api("/api/v1/student/searchable/"+searchText).then(response => response.data.success),

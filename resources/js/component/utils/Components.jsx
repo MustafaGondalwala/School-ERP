@@ -32,8 +32,8 @@ export const UploadInput = () => (
     <input type="file" className="form-control" />
 )
 
-export const UploadFile = () => (
-    <input type="file" className="form-control" />
+export const UploadFile = ({name,onChange}) => (
+    <input type="file" name={name} onChange={onChange} className="form-control" />
 )
 export const PreviewServerFiles = ({files}) => {
     return(
@@ -120,10 +120,13 @@ export const Input = ({type="text",name,placeholder,value,onChange,disabled,erro
         </span>
     )
 }
-export const Select = ({children,onChange,name,value}) => (
-    <select className="form-control" name={name} value={value} onChange={e => onChange(e)}>
+export const Select = ({errors={},children,onChange,name,value}) => (
+    <span>
+        <select className="form-control" name={name} value={value} onChange={e => onChange(e)}>
         {children}
     </select>
+    {errors[name] && <InlineError text={errors[name]} />}
+    </span>
 )
 
 export const SelectOption = ({children,selected,value}) => (

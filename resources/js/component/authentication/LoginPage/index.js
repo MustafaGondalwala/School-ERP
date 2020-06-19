@@ -40,12 +40,13 @@ class LoginPage extends Component{
                 redirect_url = "/clerk/dashboard"
           }
           this.props.history.push(redirect_url)
-        }).catch(error => {
-          self.setState({
-            login_button_text:"Login",
-            errors:error.response.data.error.message
-          })
         })
+        // .catch(error => {
+        //   self.setState({
+        //     login_button_text:"Login",
+        //     errors:error.response.data.error.message
+        //   })
+        // })
       }
     render(){
         return(

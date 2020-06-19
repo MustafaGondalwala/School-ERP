@@ -34,6 +34,9 @@ trait HelperTrait{
     public function getSchoolId($request){
         return $request->header('Auth-School-Id');
     }
+    public function getSchoolYearId($request){
+        return $request->header('Auth-School-Year');
+    }
     public function getTeacherId(){
       return Auth()->user()->profile()->first()->id; 
     }
