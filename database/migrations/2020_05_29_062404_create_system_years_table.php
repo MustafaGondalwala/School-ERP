@@ -16,7 +16,6 @@ class CreateSystemYearsTable extends Migration
         Schema::create('system_years', function (Blueprint $table) {
             $table->id();
             $table->string('year');
-            $table->unique(['school_info_id', 'year']);
             $table->timestamps();
         });
     }
