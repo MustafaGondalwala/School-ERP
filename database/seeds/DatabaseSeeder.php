@@ -32,6 +32,130 @@ class DatabaseSeeder extends Seeder
         $class_array_name = array('5th','6th','7th','8th','9th','10th','12th');
         $religion = array('hindu','muslim','sikh','jain');
         $caste = array('general','sc','st','obc','other');
+
+
+        foreach(range(1,500) as $index){
+            try{
+                
+        $school_id = 1;
+        $new_addmission = new StudentInfo;
+        $new_addmission->school_info_id = $school_id;
+        $new_addmission->roll_no =  $faker->numberBetween($min = 3000, $max = 90000);
+        $new_addmission->class_id = $class_array[$faker->numberBetween($min = 0, $max = 6)];
+        $new_addmission->religion = $religion[$faker->numberBetween($min = 0, $max = 3)];
+        $new_addmission->caste = $caste[$faker->numberBetween($min = 0, $max = 3)];
+        $new_addmission->student_name = $faker->name;
+        $new_addmission->father_name = $faker->name;
+        $new_addmission->mother_name = $faker->name;
+        $new_addmission->father_contact_no1 = $faker->phoneNumber;
+        $new_addmission->sms_number = $new_addmission->father_contact_no1;
+        $new_addmission->father_contact_no2 = $faker->phoneNumber;
+
+        $new_addmission->father_email = $faker->unique()->email;
+        $new_addmission->student_email = $faker->unique()->email;
+        $new_addmission->dob = $faker->date($format = 'Y-m-d', $max = 'now');
+        $new_addmission->age = $faker->numberBetween($min = 5, $max = 25);
+        $new_addmission->gender = $gender_array[$faker->numberBetween($min = 0, $max = 1)];
+        $new_addmission->father_occupation = $faker->name;
+        $new_addmission->mother_occupation =$faker->name;
+        $new_addmission->guardian_name = $faker->name;
+        $new_addmission->guardian_occupation = $faker->name;
+        $new_addmission->dob = $faker->date($format = 'Y-m-d', $max = 'now');
+        $new_addmission->year_id = 1;
+        $new_addmission->save();
+
+        $new_addmission->address()->updateOrCreate([
+            'student_address'=> $faker->name,
+            'place'=>$faker->city,
+            'block'=>$faker->city,
+            'district'=>$faker->city,
+            'state'=>$faker->city,
+            'landmark'=>$faker->city,
+            'pincode'=>$faker->city,
+            'student_info_id'=>$new_addmission->id
+        ]);
+        $new_addmission->documents()->updateOrCreate([
+            'student_aadhar_card'=>$faker->phoneNumber,
+            'father_aadhar_card'=>$faker->phoneNumber,
+            'father_bank_name'=>$faker->phoneNumber,
+            'father_bank_number'=>$faker->phoneNumber,
+            'student_bank_name'=>$faker->phoneNumber,
+            'student_bank_number'=>$faker->phoneNumber,
+            'student_info_id'=>$new_addmission->id
+        ]);
+        
+        $student_photo = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634125/jenokskz4khsrohifaud.jpg";
+        $father_photo = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $mother_photo = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $last_marksheet = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $income_certificate = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $transfer_certificate = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $caste_certificate = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $transfer_certificate = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $dob_certificate = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $student_aadhar_card_photo = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+        $father_aadhar_card_photo = "http://res.cloudinary.com/dfpzk3jgf/image/upload/v1592634128/hjoa0qdavjvea8zfy6ju.jpg";
+
+        // if($request->hasFile('student_photo'))
+        //     $student_photo = $this->uploadFile($request->student_photo)['url'];
+        // if($request->hasFile('father_photo'))
+        //     $father_photo = $this->uploadFile($request->father_photo)['url'];
+        // if($request->hasFile('mother_photo'))
+        //     $mother_photo = $this->uploadFile($request->mother_photo)['url'];
+        // if($request->hasFile('income_certificate'))
+        //     $income_certificate = $this->uploadFile($request->income_certificate)['url'];
+        // if($request->hasFile('transfer_certificate'))
+        //     $transfer_certificate = $this->uploadFile($request->transfer_certificate)['url'];
+        // if($request->hasFile('caste_certificate'))
+        //     $caste_certificate = $this->uploadFile($request->caste_certificate)['url'];
+        // if($request->hasFile('dob_certificate'))
+        //     $dob_certificate = $this->uploadFile($request->dob_certificate)['url'];
+        // if($request->hasFile('student_aadhar_card_photo'))
+        //     $student_aadhar_card_photo = $this->uploadFile($request->student_aadhar_card_photo)['url'];
+        // if($request->hasFile('father_aadhar_card_photo'))
+        //     $father_aadhar_card_photo = $this->uploadFile($request->father_aadhar_card_photo)['url'];
+
+        $new_addmission->photos()->updateOrCreate([
+            'student_photo'=>$student_photo,
+            'father_photo'=>$father_photo,
+            'mother_photo'=>$mother_photo,
+            'last_marksheet'=>$last_marksheet,
+            'income_certificate'=>$income_certificate,
+            'transfer_certificate'=>$transfer_certificate,
+            'caste_certificate'=>$caste_certificate,
+            'transfer_certificate'=>$transfer_certificate,
+            'dob_certificate'=>$dob_certificate,
+            'student_aadhar_card_photo'=>$student_aadhar_card_photo,
+            'father_aadhar_card_photo'=>$father_aadhar_card_photo,
+            'student_info_id'=>$new_addmission->id
+        ]);
+
+
+        $new_student = new User;
+        $new_student->name = $new_addmission->student_name;
+        $new_student->login_text = $new_addmission->father_contact_no1;
+        $new_student->school_id = $school_id;
+        $new_student->year_id = 1;
+        $new_student->profile_pic = $father_photo;
+        $new_student->password = bcrypt($new_addmission->father_contact_no1);
+        $new_student->user_type = 3;
+        $new_student->save();
+
+        $new_parent = new User;
+        $new_parent->name = $new_addmission->student_name;
+        $new_parent->login_text = $new_addmission->roll_no;
+        $new_parent->school_id = $school_id;
+        $new_parent->year_id = 1;
+        $new_parent->profile_pic = $student_photo;
+        $new_parent->password = bcrypt($new_addmission->roll_no);
+        $new_parent->user_type = 2;
+        $new_parent->save();
+        
+            }catch(\Exception $e){
+                echo $e->getMessage();
+            }
+        }
+        return 
         // foreach(range(1,500) as $index){
         //     $new_register = new RegisterStudent;
         //     $new_register->register_no = $faker->numberBetween($min = 3000, $max = 90000);

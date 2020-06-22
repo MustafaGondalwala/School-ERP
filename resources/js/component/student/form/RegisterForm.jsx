@@ -190,8 +190,9 @@ class RegisterPage extends Component{
                                 <div className="form-group">
                                     <FormLabel>Date of Admission</FormLabel>
                                     <Input type="date" onChange={this.onChange} value={data.doA} name="doA"/>
-                            </div>
+                                 </div>
                             </Col>
+                            
                         </Row>
                         <Row>
                             <Col md="4" sm="4">

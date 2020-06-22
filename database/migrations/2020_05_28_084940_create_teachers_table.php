@@ -18,9 +18,7 @@ class CreateTeachersTable extends Migration
             $table->string('empid',20)->unique();
             $table->integer('assign_class_id')->nullable();
             $table->string('teacher_name',100);
-            $table->string('teacher_subject');
-            $table->string('teacher_class');
-            $table->integer('school_info_id');
+            $table->integer('school_id');
             $table->timestamps();
         });
     }

@@ -22,19 +22,38 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::get('year',"YearController@getSystemYears");
     Route::get("/subject","SubjectController@getAllSubjects");
     Route::get("/classwise_timetable/{class_id}","TimeTableController@getClassWiseTimeTable");
-    Route::get("/teacher","TeacherController@viewAllTeacher");
     Route::get("/student/searchable/{searchText}","StudentController@studentsSearchable");
     Route::get("/student/searchable","StudentController@studentsSearchableLimit");
+    Route::get("/teacher/names","TeacherController@getTeacherNames");
+    
     Route::group(["prefix"=>"parentstudent"],function(){
         Route::post("/homework/submit","HomeWorkController@submitHomeWork");
     });
+    Route::group(["prefix"=>"adminteacher","middleware"=>"adminCheck"],function(){
+        Route::group(["prefix"=>"attendance"],function(){
+            Route::post("student","AttendanceController@getStudent");
+            Route::put("student","AttendanceController@updateAttendanceStudent");
+            Route::post("staff","AttendanceController@getAttendanceStaff");
+            Route::put("staff","AttendanceController@updateAttendanceStaff");
+            Route::post("student/getclasswise","AttendanceController@getClasswiseReport");
+            Route::post("student/getindividual","AttendanceController@getStudentIndividualReport");
+            Route::post("staff/getindividual","AttendanceController@getStaffIndividualReport");
+
+        });
+    });
     Route::group(["prefix"=>"adminclerk","middleware"=>"adminCheck"],function(){
         Route::group(["prefix"=>"student"],function(){
+            Route::post("/update","StudentController@updateStudentAdmission");
             Route::post("/register","RegisterStudentController@newRegisterStudent");
             Route::post("/register/list","RegisterStudentController@registerStudentList");
             Route::post("/register/list","RegisterStudentController@registerStudentList");
             Route::post("/register/bulk_add","RegisterStudentController@registerBulkAdd");
-            
+            Route::get("/listAll","StudentController@listAllCurrentStudent");
+            Route::get("/list/{class_id}","StudentController@listStudentByClass");
+            Route::get("/list-individual/{student_id}","StudentController@getStudentById");
+            Route::post("/admission/bulk_add","StudentController@admissionBulkAdd");
+            Route::post("/admission/update-particular-cell","StudentController@updateParticularCell");
+       
         });
     });
     Route::group(["prefix"=>"parent","middleware"=>"parentCheck"],function(){
@@ -59,12 +78,18 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::post("","StudentController@addNewStudent");
             Route::get("/searchable/{searchText}","StudentController@studentsSearchable");
             Route::get("/searchable","StudentController@studentsSearchableLimit");
-
+        });
+        Route::group(["prefix"=>"staff"],function(){
+            Route::get("/searchable/{searchText}","StaffController@staffSearchable");
+            Route::get("/searchable","StaffController@staffSearchableLimit");
         });
         Route::group(["prefix"=>"teacher"],function(){
-            Route::get("{teacher_id}","TeacherController@viewParticularTeacher");
+            Route::get("/view/{teacher_id}","TeacherController@viewParticularTeacher");
             Route::post("","TeacherController@addNewTeacher");
-            
+            Route::post("/update","TeacherController@addNewTeacher");
+            Route::get("","TeacherController@viewAllTeacher");
+            Route::post("/assigned_teacher","TeacherController@assignedTeacher");
+
         });
        Route::group(["prefix"=>"class"],function(){
             Route::get("","ClassController@getAllClassSection");
@@ -117,27 +142,16 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::put("marksheet/individual","ExamController@fetchMarksheetIndividual");
     });
 
-       Route::group(["prefix"=>"timetable"],function(){
+    Route::group(["prefix"=>"timetable"],function(){
             Route::post("","TimeTableController@addTimeTable");
             Route::put("","TimeTableController@updateTimeTable");
             Route::get("","TimeTableController@getTimeTableName");
             Route::post("/get","TimeTableController@getTimeTableMain");
-        });
+    });
 
 
-            Route::group(["prefix"=>"attendance"],function(){
-                Route::post("student","AttendanceController@getStudent");
-                Route::put("student","AttendanceController@updateAttendanceStudent");
-                Route::post("staff","AttendanceController@getAttendanceStaff");
-                Route::put("staff","AttendanceController@updateAttendanceStaff");
-                Route::post("student/getclasswise","AttendanceController@getClasswiseReport");
-                Route::post("student/getindividual","AttendanceController@getStudentIndividualReport");
-            });
-        });
-
-
-
-
+            
+});
 
 
     });

@@ -7,7 +7,7 @@ import CardComponent from "../../utils/CardComponent";
 import Col from "../../utils/Col";
 import Row from "../../utils/Row";
 import SelectStudent from "../../utils/SelectStudent";
-import { CSVLink } from 'react-csv'
+import { CSVLink } from "react-csv";
 
 import {
   FormGroup,
@@ -25,7 +25,6 @@ import { AgGridReact } from "ag-grid-react";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-// import "ag-grid-enterprise"
 import { Link } from "react-router-dom";
 class RegisterListPage extends Component {
   constructor(props) {
@@ -56,7 +55,7 @@ class RegisterListPage extends Component {
     const { class_string } = this.state;
     this.setState({
       button_text: "Fetching ...",
-      register_students:""
+      register_students: "",
     });
     api.adminclerk.student.register.list(class_string).then((data) => {
       const { register_students } = data;
@@ -118,25 +117,32 @@ class RegisterListPage extends Component {
 class ViewRegisterTable extends Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this)
+    this.state = {
+      row:""
+    }
   }
-  
+
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
   }
-  handleClick(e){
-    console.log(e.target)
+  checkboxSelect(e) {
+    const row = this.gridApi.getSelectedRows()[0];
+    this.setState({row})
+  }
+  buttonClick(e){
+    // const type = e.target.getAttribute('type')
+    // const row_id = e.target
   }
   render() {
-    
     const { register_students } = this.props;
-    const columnDefs =  [
+    const columnDefs = [
       {
         headerName: "Register No",
         field: "register_no",
         sortable: true,
         filter: true,
+        checkboxSelection: true,
       },
       { headerName: "Class", field: "class", sortable: true, filter: true },
       {
@@ -190,41 +196,54 @@ class ViewRegisterTable extends Component {
         filter: true,
       },
       { headerName: "Block", field: "block", sortable: true, filter: true },
-      { headerName: "State", field: "state", sortable: true, filter: true },
+      {
+        headerName: "State",
+        field: "state",
+        sortable: true,
+        filter: true,
+        editable: true,
+      },
       {
         headerName: "Created At",
         field: "created_at",
         sortable: true,
         filter: true,
       },
-      {
-        headerName: "View",
-        field: "id",
-        colId: "view",
-        cellRendererFramework: function(params) {
-          return <Button primary sm onClick={(e,row) => {
-            console.log(e,row)
-          }}>Make Admission</Button>
-        }
-      }
-    ]
+    ];
+    const {row} = this.state;
     return (
-      <CardComponent title="List" print download={<CSVLink
-        data={register_students}
-        filename='RegisterStudent.csv'
-        target='_self'
-        className="btn btn-sm float-right"
+      <CardComponent
+        title="List"
+        download={
+          <CSVLink
+            data={register_students}
+            filename="RegisterStudent.csv"
+            target="_self"
+            className="btn btn-neutral btn-sm float-right"
+          >
+            Download
+          </CSVLink>
+        }
       >
-        Download
-      </CSVLink>}>
+      <Row>
+        <Col md="12">
+          <Button disabled={!row} className="btn btn-primary btn-sm">Make Admission</Button>
+          <Button row_id={row.id} type="print" onClick={this.buttonClick}  disabled={!row} primary sm>Print</Button>
+          <Button row_id={row.id} type="edit" onClick={this.buttonClick} disabled={!row} primary sm>Edit</Button>
+          <Button row_id={row.id} type="drop" onClick={this.buttonClick} disabled={!row} danger sm>Drop</Button>
+        </Col>
+      </Row>
         <div
           className="ag-theme-balham"
           style={{ height: "800px", width: "100%" }}
         >
           <AgGridReact
-            onGridReady={this.onGridReady}
+            onGridReady={this.onGridReady.bind(this)}
             columnDefs={columnDefs}
+            rowSelection={true}
+            enableFilter={true}
             pagination={true}
+            onRowSelected={this.checkboxSelect.bind(this)}
             paginationAutoPageSize={true}
             rowData={register_students}
           ></AgGridReact>

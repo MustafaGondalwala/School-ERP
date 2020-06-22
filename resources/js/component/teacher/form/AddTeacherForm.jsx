@@ -1,659 +1,638 @@
-import validator from "validator"
-import React,{Component} from "react"
-import {Link} from "react-router-dom"
-import Select from 'react-select'
-import api from "../../api"
-import InlineError from "../../utils/InlineError"
-import Swal from 'sweetalert2'
+import validator from "validator";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import api from "../../api";
+import BodyComponent from "../../utils/BodyComponent";
+import CardComponent from "../../utils/CardComponent";
+import InlineError from "../../utils/InlineError";
+import Swal from "sweetalert2";
+import Row from "../../utils/Row";
+import {
+  RedLabel,
+  Col,
+  FormGroup,
+  FormLabel,
+  Input,
+  Select,
+  SelectOption,
+  PreviewSingleImage,
+  UploadImage,
+  Button,
+  Table
+} from "../../utils/Components";
 
- export default class AddTeacherForm extends Component {
-    constructor(props) {
-      super(props);
-          var date = new Date();
-          var today_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
-          this.state = {
-            data: {
-              empid: "EE120",
-              teacher_name: "Mukesh",
-              gender: "male",
-              relative_name: "mukesh",
-              email: "mukesh@gmail.com",
-              contact_no: "9586756273",
-              qualification: "b.com",
-              address: "hasanpura",
-              dob: "2020-03-20",
-              blood_group: "",
-              teach_subject: "1,3",
-              teach_class: "2,3,4",
-              date_of_join: today_date,
-              pan_card_no: "",
-              aadhar_no: "",
-              bank_name: "",
-              bank_account_no: "",
-              bank_ifc_no: "",
-              pf_no: "",
-              pf_amount: "",
-              da_amount: "",
-              hra_amount: "",
-              remark: "",
-              casual_leave: "",
-              sick_leave: "",
-              pay_earn_leave: "",
-              other_leave: "",
-              teacher_photo: "",
-              id_proof: "",
-              experience_letter: "",
-              other_document1: "",
-              other_document2: "",
-              salary: "20000", 
-              send_sms:true
-            },
-            subjects:[],
-            classes:[],
-            errors: {},
-            register_user_message:"",
-            today_date:today_date
-          };
-          this.toggleSmsChange = this.toggleSmsChange.bind(this)
-          this.ResetForm = this.ResetForm.bind(this)
+export default class AddTeacherForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data : {
+      empid: "",
+      teacher_name: "",
+      gender: "male",
+      relative_name: "",
+      email: "",
+      contact_no: "",
+      qualification: "",
+      address: "",
+      dob: "",
+      blood_group: "",
+      aadhar_card: "",
+      bank_name: "",
+      bank_number: "",
+      pf_no: "",
+      pf_amount: "",
+      da_amount: "",
+      hra_amount: "",
+      salary_remark: "",
+      casual_leave: "",
+      sick_leave: "",
+      pay_earn_leave: "",
+      other_leave: "",
+      emp_photo: "",
+      id_proof: "",
+      experience_letter: "",
+      other_documents1: "",
+      other_documents2: "",
+      salary: "",
+      send_sms: true,
+      },
+      errors: {},
+      button_text:"Add"
     };
-    onFileChange(e){
-      this.setState({
-        data: {...this.state.data,[e.target.name]:e.target.files[0]}
-      });
-    }
-    validate(data){
-      const errors = {};
-      if (!data.empid) errors.empid = "Can't be blank";
-      if (!data.teacher_name) errors.teacher_name = "Can't be blank";
-      if (!data.gender) errors.gender = "Can't be blank";
-      if (!data.relative_name) errors.relative_name = "Can't be blank";
-      if (!data.email) errors.email = "Can't be blank";
-      if (!data.contact_no) errors.contact_no = "Can't be blank";
-      if (!data.qualification) errors.qualification = "Can't be blank";
-      if (!data.address) errors.address = "Can't be blank";
-      if (!data.salary) errors.salary = "Can't be blank";
-      if (!data.dob) errors.dob = "Can't be blank";
-      if (!data.teach_class) errors.teach_class = "Can't be blank";
-      if (!data.teach_subject) errors.teach_subject = "Can't be blank";
-      if (!data.date_of_join) errors.date_of_join = "Can't be blank";
-  
-      if (data.teacher_name.length < 3) errors.teacher_name = "Min. Length 3 char."
-      if (data.relative_name.length < 3) errors.relative_name = "Min. Length 3 char."
-      if (data.address.length < 3) errors.address = "Min. Length 5 char."
-      if (data.contact_no.length != 10) errors.contact_no = "Invalid Contact No."
-      if (!validator.isMobilePhone(data.contact_no) ) errors.contact_no = "Invalid Contact No."
-  
-  
-  
-      return errors;
-    };
-    onSubmit(e){
-      e.preventDefault();
-      const errors = this.validate(this.state.data);
-      this.setState({ errors });
-      const formData = new FormData();
-      Object.keys(this.state.data).map((item)=>{
-        formData.append(item,this.state.data[item])
-      })
-      if (Object.keys(errors)
-        .length === 0) {
-        this.props.submit(this.state.data).then(data => {
-          this.ResetForm();
-        }).catch(error => {
-            if(error.response.status == 400)
-              Swal.fire("Error Occured","Validation Error","error");
-            else if(error.response.status){
-              Swal.fire("Error Occured","Validation Error","warning");
-              this.setState({
-                errors:error.response.data.errors
-              })
-            }
-          })
-      }
-    }
-    ResetForm(){
-      var date = new Date();
-      var today_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
-      const data = {
-              empid: "",
-              teacher_name: "",
-              gender: "male",
-              relative_name: "",
-              email: "",
-              contact_no: "",
-              qualification: "",
-              address: "",
-              dob: "",
-              blood_group: "",
-              teach_subject: "",
-              teach_class: "",
-              date_of_join: today_date,
-              pan_card_no: "",
-              aadhar_no: "",
-              bank_name: "",
-              bank_account_no: "",
-              bank_ifc_no: "",
-              pf_no: "",
-              pf_amount: "",
-              da_amount: "",
-              hra_amount: "",
-              remark: "",
-              casual_leave: "",
-              sick_leave: "",
-              pay_earn_leave: "",
-              other_leave: "",
-              teacher_photo: "",
-              id_proof: "",
-              experience_letter: "",
-              other_document1: "",
-              other_document2: "",
-              salary: "20000", 
-              create_login:"1",
-              send_sms:true
-            };
-      this.setState({data:data})
-    }
-  
-    toggleSmsChange(){
-      this.setState({
-        data: {...this.state.data,["send_sms"]:!this.state.data.send_sms}
-      });
-    }
-    componentDidMount(){
-      var self = this
-      if(this.props.teacher_details){
+    this.toggleSmsChange = this.toggleSmsChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onFileChange = this.onFileChange.bind(this);
+    this.makeInputNull = this.makeInputNull.bind(this)
+  }
+  onFileChange(e) {
+    const { name, files } = e.target;
+    var value = files[0];
+    this.setState({
+      data: { ...this.state.data, [name]: value },
+    });
+  }
+  validate(data) {
+    const errors = {};
+    if (!data.empid) errors.empid = "Can't be blank";
+    if (!data.teacher_name) errors.teacher_name = "Can't be blank";
+    if (!data.gender) errors.gender = "Can't be blank";
+    if (!data.relative_name) errors.relative_name = "Can't be blank";
+    if (!data.email) errors.email = "Can't be blank";
+    if (!data.contact_no) errors.contact_no = "Can't be blank";
+    if (!data.qualification) errors.qualification = "Can't be blank";
+    if (!data.address) errors.address = "Can't be blank";
+    if (!data.salary) errors.salary = "Can't be blank";
+    if (!data.dob) errors.dob = "Can't be blank";
+    if (!data.date_of_joining) errors.date_of_joining = "Can't be blank";
+
+
+    if (data.teacher_name.length < 3)
+      errors.teacher_name = "Min. Length 3 char.";
+    if (data.relative_name.length < 3)
+      errors.relative_name = "Min. Length 3 char.";
+    if (data.address.length < 3) errors.address = "Min. Length 5 char.";
+    if (data.contact_no.length != 10) errors.contact_no = "Invalid Contact No.";
+    if (!validator.isMobilePhone(data.contact_no))
+      errors.contact_no = "Invalid Contact No.";
+
+    return errors;
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    const {data,edit} = this.state
+    const errors = this.validate(this.state.data);
+    this.setState({ errors });
+    const formData = new FormData();
+    Object.keys(this.state.data).map((item) => {
+      formData.append(item, this.state.data[item]);
+    });
+    if (Object.keys(errors).length === 0) {
+      if(!edit){
         this.setState({
-          data: this.props.teacher_details
+          button_text:"Adding .."
         })
-      }
-  
-      api.admin.get_subjects().then(data => {
-        var preferend = [];
-        data.subjects.map(item => {
-          preferend.push({value:item.id,label:item.subject_name})
-        })
-        self.setState({subjects : preferend})
-      })
-  
-      api.admin.get_distinct_class().then(data => {
-        var preferend = [];
-        data.classes.map(item => {
-          if(item.section == null)
-           preferend.push({value:item.id,label:item.class_title})
-        })
-        self.setState({classes : preferend})
-      })
-    }
-  
-    componentWillReceiveProps(){
-      if(this.props.server_error){
+      }else{
         this.setState({
-          errors:this.props.server_error
+          button_text:"Updating .."
         })
       }
-      if(this.props.register_user_message){
-        this.ResetForm();
+      var text = 'Add Teacher in System'
+      if(edit){
+        text = 'Update Teacher in System'
       }
-      if(this.props.teacher_details){
-        this.setState({
-          data:this.props.teacher_details,
-          errors:{}
-        },()=>{
-          console.log(this.state.data)
-        })
-      }
-    }
-  
-  
-    handleInputChange(data,name){
-      var new_value = ""
-      data.map(i => {
-        if(new_value == "")
-          new_value = i.value
-        else
-          new_value = new_value + "," + i.value
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Add Teacher in System",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        showLoaderOnConfirm: true,
+        confirmButtonText: 'Yes, process it!',
+        preConfirm: () => {
+            return this.props
+            .submit(formData)
+            .then((data) => {
+             return data
+            })
+            .catch((error) => {
+              if (error.response.status == 400)
+                Swal.fire("Error Occured", "Validation Error", "error");
+              else if (error.response.status) {
+                Swal.fire("Error Occured", "Validation Error", "warning");
+                this.setState({
+                  errors: error.response.data.errors,
+                });
+              }
+            });
+          }
+      }).then((result) => {
+        
+        if(result.hasOwnProperty('value')){
+          if(result.value.hasOwnProperty('error')){
+            Swal.fire("Error","Error Occured in Process. Please check the Data","error")
+          }
+          if(result.value.hasOwnProperty('message')){
+            if(!edit)
+              this.makeInputNull();
+            Swal.fire("Success",result.value.message,"success")
+          }
+          if(!edit){
+            this.setState({
+              button_text:"Add"
+            })
+          }else{
+            this.setState({
+              button_text:"Update"
+            })
+          }
+          
+        }
       })
-      this.setState({
-        data: {...this.state.data,[name]:new_value}
-      })
-    }
-    onChange(e){
-      this.setState({
-        data: {...this.state.data,[e.target.name]:e.target.value}
-      });
-    }
-    render () {
-      const { data, errors } = this.state;
-      const {title,back_link} = this.props
-      return (
-        <div className="container-fluid mt--6">
-         <div className="row">
-           <div className="col-lg-12 col-md-12">
-             <div className="card-wrapper">
-               <div className="card">
-                 <div className="card-header">
-                   <h3 className="mb-0">{title} <Link  to={back_link} class="btn btn-neutral float-right" type="submit">Back</Link></h3>
-                 </div>
-                 <div className="card-body">
-                  {this.props.register_user_message &&
-                    <div className="row">
-                        <div className="alert alert-success alert-dismissible fade show" role="alert">
-                          <span className="alert-icon"><i className="ni ni-like-2"/></span>
-                          <span className="alert-text">
-                          Teacher Added in System
-                          </span>
-                          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                          </button>
-                        </div>
-                    </div>
-                  }
-                  <h3 style={{color:"#ae5856"}}>Personal Detail:</h3>
-                  <br />
-                  <div className="row">
-                     <div className="col-md-2">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example3cols1Input">Emp Id*</label>
-                         {data.id ? <input type="integer" className="form-control" name="empid" disabled   value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." /> :
-                        <input type="integer" className="form-control" name="empid"    value={data.empid} onChange={(e) =>this.onChange(e)} placeholder="Emp id." />}
-                         {errors.empid && <InlineError text={errors.empid} />}
-                       </div>
-                     </div>
-  
-                     <div className="col-md-3">
-                        <div className="form-group">
-                     <label className="form-control-label" htmlFor="example3cols1Input">Teacher Name*</label>
-                        <div className="input-group input-group-merge">
-  
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="fas fa-user" />
-                            </span>
-                          </div>
-                          <input className="form-control" placeholder="Teacher Name"  name="teacher_name" value={data.teacher_name} onChange={(e) =>this.onChange(e)}   type="text" />
-  
-                        </div>
-                          {errors.teacher_name && <InlineError text={errors.teacher_name} />}
-  
-                        </div>
-                     </div>
-  
-                     <div className="col-sm-3 col-md-2">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols1Input">Gender*</label>
-                            <select class="form-control" name="gender" value={data.gender} onChange={(e) =>this.onChange(e)} >
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                            {errors.gender && <InlineError text={errors.gender} />}
-                       </div>
-                     </div>
-  
-                     <div className="col-md-3">
-                        <div className="form-group">
-                        <label className="form-control-label" htmlFor="example3cols1Input">Husband/Father Name*</label>
-                        <div className="input-group input-group-merge">
-  
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="fas fa-user" />
-                            </span>
-                          </div>
-                          <input className="form-control" placeholder="Husband/Father Name"  name="relative_name" value={data.relative_name} onChange={(e) =>this.onChange(e)}   type="text" />
-  
-                        </div>
-                          {errors.relative_name && <InlineError text={errors.relative_name} />}
-  
-                        </div>
-                     </div>
-                   </div>
-                   <div className="row">
-                     <div className="col-sm-6 col-md-4">
-                        <div className="form-group">
-                        <label className="form-control-label" htmlFor="example3cols1Input">Email*</label>
-                        <div className="input-group input-group-merge">
-  
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="fas fa-envelope" />
-                            </span>
-                          </div>
-                          <input className="form-control" placeholder="Email"  name="email" value={data.email} onChange={(e) =>this.onChange(e)}   type="text" />
-                        </div>
-                          {errors.email && <InlineError text={errors.email} />}
-  
-                     </div>
-                     </div>
-  
-                     <div className="col-sm-6 col-md-4">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols1Input">Contact No.*</label>
-                         <input type="decimal" className="form-control" name="contact_no" placeholder="Contact No."  value={data.contact_no} onChange={(e) =>this.onChange(e)} />
-                         {errors.contact_no && <InlineError text={errors.contact_no} />}
-  
-                       </div>
-                     </div>
-  
-                   </div>
-                   <div className="row">
-                   <div className="col-sm-6 col-md-4">
-                     <div className="form-group">
-                       <label className="form-control-label" htmlFor="example2cols2Input">Address*</label>
-                       <input type="text" className="form-control" name="address"  placeholder="Address"  value={data.address} onChange={(e) =>this.onChange(e)} />
-                       {errors.address && <InlineError text={errors.address} />}
-  
-                     </div>
-                   </div>
-  
-                     <div className="col-sm-6 col-md-4">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols1Input">Qualification*</label>
-                         <input type="decimal" className="form-control" name="qualification"  placeholder="Qualification"  value={data.qualification} onChange={(e) =>this.onChange(e)} />
-                         {errors.qualification && <InlineError text={errors.qualification} />}
-                       </div>
-                     </div>
-  
-                     <div className="col-sm-6 col-md-4">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">Dob*</label>
-                         <input
-    className="form-control datepicker"
-    placeholder="Select date"
-    type="date" name="dob"  value={data.dob} onChange={(e) =>this.onChange(e)}
-  />
-                         {errors.dob && <InlineError text={errors.dob} />}
-                       </div>
-                     </div>
-                     <div className="col-sm-6 col-md-4">
-                       <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">Blood Group</label>
-                         <input type="text" className="form-control" name="blood_group" placeholder="Blood Group" value={data.blood_group} onChange={(e) =>this.onChange(e)} />
-                         {errors.blood_group && <InlineError text={errors.blood_group} />}
-                       </div>
-                     </div>
-                   </div>
-                   <h3 style={{color:"#ae5856"}}>Documents:</h3>
-  
-                   <div className="row">
-  
-  
-  
-                        <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                          <label className="form-control-label" htmlFor="example2cols2Input">
-                           Teacher Photo
-                           </label>
-                           <input type="file" className="form-control"  name="teacher_photo" onChange={(e) =>this.onFileChange(e)} />
-                           </div>
-                        </div>
-                        <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">
-                          Experience letter
-                           </label>
-                           <input type="file" className="form-control"  name="experience_letter" onChange={(e) =>this.onFileChange(e)} />
-                           </div>
-                        </div>
-  
-                        <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">
-                          ID Proof
-                           </label>
-                           <input type="file" className="form-control"  name="id_proof" onChange={(e) =>this.onFileChange(e)} />
-                           </div>
-                        </div>
-  
-                        <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">
-                          Other Document 1
-                           </label>
-                           <input type="file" className="form-control"  name="other_document1" onChange={(e) =>this.onFileChange(e)} />
-                           </div>
-                        </div>
-  
-                        <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                         <label className="form-control-label" htmlFor="example2cols2Input">
-                          Other Document 2
-                           </label>
-                           <input type="file" className="form-control"  name="other_document2" onChange={(e) =>this.onFileChange(e)} />
-                           </div>
-                        </div>
-                     </div>
-                     <h3 style={{color:"#ae5856"}}>Documents Details:</h3>
-  
-                     <div className="row">
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Date of Joining</label>
-                           <input type="date" className="form-control" name="date_of_join" value={data.date_of_join} defaultValue={this.today_date} placeholder="Date of Joining" onChange={(e) =>this.onChange(e)} />
-                           {errors.date_of_join && <InlineError text={errors.date_of_join} />}
-                         </div>
-                       </div>
-                       {!data.id &&
-                        <div>
-                       <div className="col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols2Input">Teaching Class*</label>
-                            <Select
-                            isMulti
-                            name="teach_class"
-                            onChange={(e) =>this.handleInputChange(e,"teach_class")}
-                            options={this.state.classes}
-                            className="basic-multi-select"
-                            classNamePrefix="select"
-                           />
-  
-                           {errors.teach_class && <InlineError text={errors.teach_class} />}
-  
-                         </div>
-                       </div>
-  
-                       <div className="col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols2Input">Teaching Subject*</label>
-                           
-                           <Select
-                            isMulti
-                            name="teach_subject"
-                            onChange={(e) =>this.handleInputChange(e,"teach_subject")}
-                            options={this.state.subjects}
-                            className="basic-multi-select"
-                            classNamePrefix="select"
-                          />
-                           {errors.teach_subject && <InlineError text={errors.teach_subject} />}
-  
-                         </div>
-                       </div>
-                       </div>
-                     }
-  
-                     </div>
-  
-                     <h3 style={{color:"#ae5856"}}>Salary Details:</h3>
-  
-                       <div className="row">
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols2Input">Pan Card No.</label>
-                           <input type="text" className="form-control" name="pan_card_no" value={data.pan_card_no} placeholder="Pan Card No." onChange={(e) =>this.onChange(e)} />
-                           {errors.pan_card_no && <InlineError text={errors.pan_card_no} />}
-                         </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols2Input">Salary*</label>
-                           <input type="text" className="form-control" name="salary" value={data.salary} placeholder="Salary" onChange={(e) =>this.onChange(e)} />
-                           {errors.salary && <InlineError text={errors.salary} />}
-                         </div>
-                       </div>
-  
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Aadhar No</label>
-                           <input type="text" className="form-control"  name="aadhar_no" placeholder="Aadhar No" onChange={(e) =>this.onChange(e)}/>
-                           {errors.aadhar_no && <InlineError text={errors.aadhar_no} />}
-  
-                         </div>
-                       </div>
-  
-  
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Bank Name</label>
-                           <input type="text" className="form-control" placeholder="Bank Name"  name="bank_name" onChange={(e) =>this.onChange(e)}/>
-                           {errors.bank_name && <InlineError text={errors.bank_name} />}
-  
-                         </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Bank Account No.</label>
-                           <input type="text" className="form-control"  name="bank_account_no" placeholder="Bank Account No." onChange={(e) =>this.onChange(e)}/>
-                           {errors.bank_account_no && <InlineError text={errors.bank_account_no} />}
-                         </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Bank IFC No.</label>
-                           <input type="text" className="form-control"  name="bank_ifc_no" placeholder="Bank IFC No." onChange={(e) =>this.onChange(e)}/>
-                           {errors.bank_ifc_no && <InlineError text={errors.bank_ifc_no} />}
-                         </div>
-                       </div>
-  
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">PF No.</label>
-                           <input type="text" className="form-control"  name="pf_no" placeholder="PF No." onChange={(e) =>this.onChange(e)}/>
-                           {errors.pf_no && <InlineError text={errors.pf_no} />}
-                         </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">PF Amount</label>
-                           <input type="number" className="form-control"  name="pf_amount" placeholder="PF Amount" onChange={(e) =>this.onChange(e)}/>
-                           {errors.pf_amount && <InlineError text={errors.pf_amount} />}
-                         </div>
-                       </div>
-  
-  
-                       <div className="col-sm-6 col-md-4">
-                         <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">TDS Amount</label>
-                           <input type="number" className="form-control"  name="tds_amount" placeholder="TDS Amount" onChange={(e) =>this.onChange(e)}/>
-                           {errors.tds_amount && <InlineError text={errors.tds_amount} />}
-                           </div>
-                         </div>
-  
-                       <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Professional TAX Amount Monthly</label>
-                           <input type="number" className="form-control"  name="protax_amount" placeholder="TProfessional TAX Amount Monthly" onChange={(e) =>this.onChange(e)}/>
-                           {errors.protax_amount && <InlineError text={errors.protax_amount} />}
-                           </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">DA Amount Monthly</label>
-                           <input type="number" className="form-control"  name="da_amount" placeholder="DA Amount Monthly" onChange={(e) =>this.onChange(e)}/>
-                           {errors.datax_amount && <InlineError text={errors.datax_amount} />}
-                           </div>
-                       </div>
-                       <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">HRA Amount Monthly</label>
-                           <input type="number" className="form-control"  name="hra_amount" placeholder="HRA Amount Monthly" onChange={(e) =>this.onChange(e)}/>
-                           {errors.hra_amount && <InlineError text={errors.hra_amount} />}
-                           </div>
-                       </div>
-  
-                       <div className="col-sm-6 col-md-4">
-                          <div className="form-group">
-                           <label className="form-control-label" htmlFor="example2cols1Input">Remark</label>
-                           <input type="text" className="form-control"  name="remark" placeholder="Remark" onChange={(e) =>this.onChange(e)}/>
-                           {errors.remark && <InlineError text={errors.remark} />}
-                           </div>
-                       </div>
-  
-                       </div>
-                       <h3 style={{color:"#ae5856"}}>Leave Details:</h3>
-                       <div className="row">
-                           <div className="col-sm-6 col-md-4">
-                             <div className="form-group">
-                            <label className="form-control-label" htmlFor="example2cols2Input">Casual Leave</label>
-                              <input type="number" className="form-control" placeholder="Casual Leave"  name="casual_leave" onChange={(e) =>this.onChange(e)} />
-                              {errors.casual_leave && <InlineError text={errors.casual_leave} />}
-                              </div>
-                           </div>
-  
-                           <div className="col-sm-6 col-md-4">
-                             <div className="form-group">
-                              <label className="form-control-label" htmlFor="example2cols2Input">Pay/Earn Leave</label>
-                              <input type="number" className="form-control" placeholder="Pay/Earn Leave"  name="pay_earn_leave" onChange={(e) =>this.onChange(e)} />
-                              {errors.pay_earn_leave && <InlineError text={errors.pay_earn_leave} />}
-                              </div>
-                           </div>
-  
-                           <div className="col-sm-6 col-md-4">
-                             <div className="form-group">
-                              <label className="form-control-label" htmlFor="example2cols2Input">Sick Leave</label>
-                              <input type="number" className="form-control" placeholder="Sick Leave"  name="sick_leave" onChange={(e) =>this.onChange(e)} />
-                              {errors.sick_leave && <InlineError text={errors.sick_leave} />}
-                              </div>
-                           </div>
-  
-                           <div className="col-sm-6 col-md-4">
-                             <div className="form-group">
-                              <label className="form-control-label" htmlFor="example2cols2Input">Other Leave</label>
-                              <input type="number" className="form-control" placeholder="Other Leave"  name="other_leave" onChange={(e) =>this.onChange(e)} />
-                              {errors.other_leave && <InlineError text={errors.other_leave} />}
-                              </div>
-                           </div>
-                       </div>
-  
-  
-  
-                       <div className="row">
-                         <div className="col-sm-6 col-md-2">
-                           <div className="form-group">
-                            
-                           </div>
-                         </div>
-                         </div>
-                         {!data.id &&
-                                 <div className="row">
-                                   <div className="col-sm-6 col-md-2">
-                                   <table className="table table-padding">
-                                    <tr>
-                                      <td>
-                                       <label className="form-control-label" htmlFor="example2cols1Input">Check for Sms Message</label>
-                                      </td>
-                                      <td>
-                                        <input type="checkbox" checked={data.send_sms}
-                    onChange={(e) => this.toggleSmsChange()} />  
-                                     </td>
-  
-                                    </tr>
-                                  </table>
-                                   </div>
-                                </div>
-  
-                      }
-                       <div className="row">
-                        <button class="btn btn-primary" onClick={e => this.onSubmit(e)} type="button">{this.props.button_text}</button>
-                        <button class="btn btn-warning" onClick={e => this.ResetForm(e)} type="button">Reset</button>
-                        {data.id && <button className="btn btn-danger" onClick={e => this.props.removeTeacher()}>Remove Teacher</button>}
-                       </div>
-                   </div>
-               </div>
-               </div>
-             </div>
-           </div>
-         </div>
-      )
     }
   }
+  makeInputNull(){
+    const data = {
+      empid: "",
+      teacher_name: "",
+      gender: "male",
+      relative_name: "",
+      email: "",
+      contact_no: "",
+      qualification: "",
+      address: "",
+      dob: "",
+      blood_group: "",
+      aadhar_card: "",
+      bank_name: "",
+      bank_number: "",
+      pf_no: "",
+      pf_amount: "",
+      da_amount: "",
+      hra_amount: "",
+      salary_remark: "",
+      casual_leave: "",
+      sick_leave: "",
+      pay_earn_leave: "",
+      other_leave: "",
+      emp_photo: "",
+      id_proof: "",
+      experience_letter: "",
+      other_documents1: "",
+      other_documents2: "",
+      salary: "",
+      date_of_join:"",
+      send_sms: true,
+    }
+    this.setState({
+      data
+    })
+  }
+  toggleSmsChange() {
+    this.setState({
+      data: { ...this.state.data, ["send_sms"]: !this.state.data.send_sms },
+    });
+  }
+  componentDidMount(){
+    const {data} = this.props
+    if(data != undefined)
+      this.setState({
+        data,
+        button_text:"Update",
+        edit:true
+      })
+  }
+  onChange(e) {
+    this.setState({
+      data: { ...this.state.data, [e.target.name]: e.target.value },
+    });
+  }
+  render() {
+    const { data, errors,button_text } = this.state;
+    const { title, back_link } = this.props;
+    return (
+        <CardComponent title={title} back_link={back_link}>
+          <RedLabel>Personal Information:</RedLabel>
+          <Row>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Empid: </FormLabel>
+                <Input
+                  errors={errors}
+                  name="empid"
+                  onChange={this.onChange}
+                  value={data.empid || ''} 
+                />
+              </FormGroup>
+            </Col>
+            {/* teacher_name */}
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Teacher Name*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="teacher_name"
+                  value={data.teacher_name || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Husband/Father Name*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="relative_name"
+                  value={data.relative_name || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Email*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="email"
+                  value={data.email || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Gender*</FormLabel>
+                <Select
+                  errors={errors}
+                  name="gender"
+                  value={data.gender}
+                  onChange={this.onChange}
+                >
+                  <SelectOption>-- Select --</SelectOption>
+                  <SelectOption value="male">Male</SelectOption>
+                  <SelectOption value="female">Female</SelectOption>
+                  <SelectOption value="other">Other</SelectOption>
+                </Select>
+              </FormGroup>
+            </Col>
+            {/* contact_no */}
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Contact No*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="contact_no"
+                  value={data.contact_no || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Address*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="address"
+                  value={data.address || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Qualification</FormLabel>
+                <Input
+                  errors={errors}
+                  name="qualification"
+                  value={data.qualification || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Dob*</FormLabel>
+                <Input
+                  type="date"
+                  errors={errors}
+                  name="dob"
+                  value={data.dob  || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            {/* blood_group */}
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Blood Group*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="blood_group"
+                  value={data.blood_group  || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Date of Joining*</FormLabel>
+                <Input
+                  errors={errors}
+                  type="date"
+                  name="date_of_joining"
+                  value={data.date_of_joining ||''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <RedLabel>Documents</RedLabel>
+          <Row>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Aadhar Card</FormLabel>
+                <Input
+                  errors={errors}
+                  name="aadhar_card"
+                  value={data.aadhar_card || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Bank Name</FormLabel>
+                <Input
+                  errors={errors}
+                  name="bank_name"
+                  value={data.bank_name || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Bank Number</FormLabel>
+                <Input
+                  errors={errors}
+                  name="bank_number"
+                  value={data.bank_number || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Pan Card Number</FormLabel>
+                <Input
+                  errors={errors}
+                  name="pan_card_number"
+                  value={data.pan_card_number || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Teacher Photo</FormLabel>
+                <UploadImage
+                  name="emp_photo"
+                  value={data.emp_photo}
+                  onChange={this.onFileChange}
+                />
+                <PreviewSingleImage url={data.emp_photo} />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Experience Letter</FormLabel>
+                <UploadImage
+                  name="experience_letter"
+                  value={data.experience_letter}
+                  onChange={this.onFileChange}
+                />
+                <PreviewSingleImage url={data.experience_letter} />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>ID Proof</FormLabel>
+                <UploadImage
+                  name="id_proof"
+                  value={data.id_proof}
+                  onChange={this.onFileChange}
+                />
+                <PreviewSingleImage url={data.id_proof} />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Other Documents 1</FormLabel>
+                <UploadImage
+                  name="other_documents1"
+                  value={data.other_documents1}
+                  onChange={this.onFileChange}
+                />
+                <PreviewSingleImage url={data.other_documents1} />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Other Documents 2</FormLabel>
+                <UploadImage
+                  name="other_documents2"
+                  value={data.other_documents2}
+                  onChange={this.onFileChange}
+                />
+                <PreviewSingleImage url={data.other_documents2} />
+              </FormGroup>
+            </Col>
+          </Row>
+          <RedLabel>Salary Details:</RedLabel>
+          <Row>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Salary*</FormLabel>
+                <Input
+                  errors={errors}
+                  name="salary"
+                  value={data.salary || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>PF No.</FormLabel>
+                <Input
+                  errors={errors}
+                  name="pf_no"
+                  value={data.pf_no || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>PF Amount</FormLabel>
+                <Input
+                  errors={errors}
+                  name="pf_amount"
+                  value={data.pf_amount || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>TDS Amount</FormLabel>
+                <Input
+                  errors={errors}
+                  name="tds_amount"
+                  value={data.tds_amount || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Professional TAX Amount</FormLabel>
+                <Input
+                  errors={errors}
+                  name="professional_tax"
+                  value={data.professional_tax || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>DA Amount</FormLabel>
+                <Input
+                  errors={errors}
+                  name="da_amount"
+                  value={data.da_amount || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>HRA Amount </FormLabel>
+                <Input
+                  errors={errors}
+                  name="hra_amount"
+                  value={data.hra_amount || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Salary Remark </FormLabel>
+                <Input
+                  errors={errors}
+                  name="salary_remark"
+                  value={data.salary_remark || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <RedLabel>Leave Details</RedLabel>
+          <Row>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Casual Leave </FormLabel>
+                <Input
+                  errors={errors}
+                  name="casual_leave"
+                  value={data.casual_leave || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Pay/Earn Leave </FormLabel>
+                <Input
+                  errors={errors}
+                  name="pay_earn_leave"
+                  value={data.pay_earn_leave || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Sick Leave </FormLabel>
+                <Input
+                  errors={errors}
+                  name="sick_leave"
+                  value={data.sick_leave || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4" sm="6">
+              <FormGroup>
+                <FormLabel>Other Leave </FormLabel>
+                <Input
+                  errors={errors}
+                  name="other_leave"
+                  value={data.other_leave || ''}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            {!data.id && (
+              <Row>
+                <Table>
+                <tbody>
+                <tr>
+                <td>
+                  <FormLabel>Check for Sms Message</FormLabel>
+                </td>
+                <td>
+                        <input
+                          type="checkbox"
+                          checked={data.send_sms}
+                          onChange={(e) => this.toggleSmsChange()}
+                        />
+                </td>
+                </tr>
+                </tbody>
+                </Table>
+              </Row>
+            )}
+          </Row>
+          <Row>
+            <Button primary onClick={this.onSubmit}>{button_text}</Button>
+          </Row>
+        </CardComponent>
+    );
+  }
+}

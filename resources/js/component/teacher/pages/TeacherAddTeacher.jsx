@@ -1,37 +1,36 @@
-import React,{Component} from "react"
-import AdminHeader from "../header/AdminHeader"
-import AddTeacherForm from "../form/AddTeacherForm"
+import React,{Component,Suspense} from "react"
+const AdminHeader = React.lazy(() => import("../../header/admin/AdminTeacherHeader"))
+const AddTeacherForm =   React.lazy(() => import("../form/AddTeacherForm"))
 import {Link} from "react-router-dom"
 import Swal from 'sweetalert2'
 
 import api from "../../api"
+import BodyComponent from "../../utils/BodyComponent"
+import TopBreadCrumb from "../../utils/TopBreadcrumb"
 
 export default class TeacherAddTeacher extends Component{
     
     constructor(props){
         super(props)
-        this.state = {
-            "button_text":"Add"
-        }
         this.submit = this.submit.bind(this)
     }
 
     submit(data){
-        this.setState({
-            button_text:"Adding .."
-        })
-        return api.admin.add_teacher(data).then(data => {
-            Swal.fire("Success",data.success.message,"success");
-            this.setState({
-                button_text:"Add"
-            })
-        })   
+        return api.admin.teacher.add(data)  
     }
     render(){
         return(
             <div>
-                <AdminHeader mainHeader="Teacher" header="Add Teacher" />
-                        <AddTeacherForm submit={this.submit} button_text={this.state.button_text} title="Add Teacher" back_link="/admin/teacher"/>
+            <TopBreadCrumb mainHeader="Teacher" header="Add Teacher" >
+                <Suspense fallback={<h1>Loading ...</h1>}>
+                    <AdminHeader/>
+                </Suspense>
+            </TopBreadCrumb>
+                <BodyComponent>
+                    <Suspense fallback={<h1>Loading ...</h1>}>
+                        <AddTeacherForm submit={this.submit} title="Add Teacher" back_link="/admin/teacher"/>
+                    </Suspense>
+                </BodyComponent>
             </div>
         )
     }

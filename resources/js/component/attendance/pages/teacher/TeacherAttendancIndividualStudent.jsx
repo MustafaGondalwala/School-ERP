@@ -8,7 +8,7 @@ import { Col, Button, Table, Thead } from "../../../utils/Components"
 import SelectStudent from "../../../utils/SelectStudent"
 
 const TeacherAttendanceIndividualStudent = () => (
-    <div>
+    <div>   
         <TopBreadCrumb>
             <AttendanceHeader />
         </TopBreadCrumb>
@@ -31,7 +31,6 @@ const TeacherAttendanceIndividualStudent = () => (
                 <Thead>
                     <th>Sr no.</th>
                     <th>Staus</th>
-
                 </Thead>
             </Table>
             </CardComponent>

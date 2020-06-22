@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import CardComponent from "../../utils/CardComponent";
 import Swal from "sweetalert2"
+import Row from "../../utils/Row";
+const Chart  = React.lazy(() => import("../../utils/Chart")) 
 
 export default class FillViewFormStaff extends Component {
   constructor(props) {
@@ -10,10 +12,16 @@ export default class FillViewFormStaff extends Component {
       staff_attendance: "",
       view_type:"",
       update_attendance:[],
-      update_button:"Update Attendance"
+      update_button:"Update Attendance",
+      total_present:0,
+			total_absent:0,
+      total_leave:0,
+      total_half_leave:0,
+			total_none:0
     };
     this.stateChange = this.stateChange.bind(this);
     this.changeSelectStatus = this.changeSelectStatus.bind(this)
+    this.updateTotalInputs = this.updateTotalInputs.bind(this)
   }
   stateChange(name, value,callback) {
     this.setState(
@@ -27,10 +35,41 @@ export default class FillViewFormStaff extends Component {
     var title = "";
     if (this.props.view_type == "fill") title = "Fill Attendance";
     else title = "View Attendance";
+    const {view_type,staff_attendance} = this.props
     this.stateChange("title", title);
-    this.stateChange("staff_attendance", this.props.staff_attendance);
-    this.stateChange("view_type",this.props.view_type)
+    this.stateChange("staff_attendance", staff_attendance);
+    this.stateChange("view_type",view_type)
+    this.updateTotalInputs(staff_attendance)
   }
+  updateTotalInputs(data){
+    var total_present = 0;
+    var total_absent = 0;
+    var total_leave = 0;
+    var total_half_leave = 0;
+    var total_none = 0;
+    data.map(item => {
+      switch(item.status){
+        case 1:
+          total_present += 1;
+          break;
+        case 2:
+          total_absent += 1;
+          break;
+        case 3:
+          total_leave += 1
+          break
+        case 4:
+          total_half_leave +=1
+          break
+        case 5:
+          total_none += 1;
+          break;
+      }
+    })
+    this.setState({
+      total_leave,total_present,total_absent,total_none
+    })
+}
 
   changeSelectStatus(e,index){
       const temp = this.state.staff_attendance;
@@ -63,6 +102,14 @@ export default class FillViewFormStaff extends Component {
   }
   render() {
     const { title,staff_attendance,view_type,update_button } = this.state;
+    const {total_present,total_absent,total_leave,total_none,total_half_leave} = this.state;
+    const {select_date} = this.props
+    const dataPoints = [{"y":total_present,label:"Total Present"},
+							          {"y":total_absent,label:"Total Absent"},
+                        {"y":total_leave,label:"Total Leave"},
+                        {"y":total_half_leave,label:"Total Half Leave"},
+							  				{"y":total_none,label:"Total None Entry"}
+							  			];
     return (
       <CardComponent title={title}>
         <div className="row">
@@ -89,6 +136,11 @@ export default class FillViewFormStaff extends Component {
               }
           </div>
         </div>
+        <br />
+        <br />
+        <Row>
+        {view_type == "view" && <Chart title={`Staff Attendance for ${select_date}`} filename={`staff_attendance`} type="pie" dataPoints={dataPoints}/>}
+        </Row>
       </CardComponent>
     );
   }

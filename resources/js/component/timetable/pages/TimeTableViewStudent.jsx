@@ -1,8 +1,13 @@
-import React,{Component} from "react"
+import React,{Component,Suspense} from "react"
 import AdminHeader from "../header/AdminHeader"
-import ViewPanelStudent from "../utils/ViewPanelStudent"
-import AddTimeTableStudent from "../form/AddTimeTableStudent"
-import EditTimeTableStudent from "../form/EditTimeTableStudent"
+
+
+
+const ViewPanelStudent = React.lazy(() => import("../utils/ViewPanelStudent")) 
+const AddTimeTableStudent = React.lazy(() => import("../form/AddTimeTableStudent")) 
+const EditTimeTableStudent = React.lazy(() => import("../form/EditTimeTableStudent")) 
+
+
 import api from "../../api"
 
 export default class TimeTableViewStudent extends Component{
@@ -43,9 +48,15 @@ export default class TimeTableViewStudent extends Component{
             <div>
                 <AdminHeader mainHeader="TimeTable" header="View"/>
                 <div className="container-fluid mt--6">
-                    <ViewPanelStudent sendEventType={this.sendEventType}/>
-                    {add_panel  && <div><AddTimeTableStudent /></div>} 
-                    {edit_panel && <EditTimeTableStudent time_table_name={time_table_name}/>}
+                    <Suspense fallback={<h1>Loading ...</h1>}>
+                        <ViewPanelStudent sendEventType={this.sendEventType}/>
+                    </Suspense>
+                    {add_panel  && <Suspense fallback={<h1>Loading ...</h1>}><AddTimeTableStudent /></Suspense>} 
+                    {edit_panel && 
+                        <Suspense fallback={<h1>Loading ...</h1>}>
+                        <EditTimeTableStudent time_table_name={time_table_name}/>
+                        </Suspense>
+                    }
                 </div>
             </div>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import CardComponent from "../../utils/CardComponent";
 import Swal from "sweetalert2"
-import Chart from "../../utils/Chart"
+const Chart  = React.lazy(() => import("../../utils/Chart")) 
 
 export default class FillViewFormStudent extends Component {
   constructor(props) {
@@ -87,7 +87,6 @@ export default class FillViewFormStudent extends Component {
       this.props.updateStudentAttendance(this.state.update_attendance).then(data => {
         this.stateChange("update_button","Update Attendance")
         this.stateChange("update_attendance",[])
-        console.log(data)
         Swal.fire("Done","Student Attendance Updated !!","success")
       }).catch(error =>{
           if(error.response){

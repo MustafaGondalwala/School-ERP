@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import api from "../../api";
 import CardComponent from "../../utils/CardComponent";
-import Chart from "../../utils/Chart"
+const Chart  = React.lazy(() => import("../../utils/Chart")) 
+
 
 class ClassSectionWise extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class ClassSectionWise extends Component {
     };
   }
   fetchData(class_id, select_month) {
-    api.admin.student_attendance
+    api.adminteacher.student_attendance
       .get_classwise(class_id, select_month)
       .then((data) => {
         const { attendance_details } = data;

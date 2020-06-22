@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import AdminHeader from "../header/AdminHeader";
 import BodyComponent from "../../utils/BodyComponent";
 import CardComponent from "../../utils/CardComponent";
 import SelectStudent from "../../utils/SelectStudent";
 import InlineError from "../../utils/InlineError";
-import StudentIndividualReport from "../utils/StudentIndividualReport"
+const StudentIndividualReport = React.lazy(() => import("../utils/StudentIndividualReport"))
 
 export default class AdminAttendanceIndividualStudent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        select_month: "2020-06",
-        student_id: 1
+        select_month: "",
+        student_id: ''
       },
       button_text: "Fetch",
       errors: {},
@@ -101,11 +101,15 @@ export default class AdminAttendanceIndividualStudent extends Component {
             </div>
             <div className="row">
               <div className="col-md-6">
-                <button className="btn btn-primary" onClick={e => this.fetchStudent(e)}>{button_text}</button>
+                <button className="btn btn-primary" onClick={this.fetchStudent}>{button_text}</button>
               </div>
             </div>
           </CardComponent>
-          {open_panel && <StudentIndividualReport data={data}/>} 
+          {open_panel && 
+          <Suspense fallback={<h1>Loading ...</h1>}>
+            <StudentIndividualReport data={data}/>
+          </Suspense>
+        } 
         </BodyComponent>
       </div>
     );

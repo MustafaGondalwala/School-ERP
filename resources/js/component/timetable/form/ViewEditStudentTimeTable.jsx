@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CardComponent from "../../utils/CardComponent";
 
 import {setSubjectDispatch, setSubjects} from "../../actions/subjects"
-import {setTeacherDispatch} from "../../actions/teacher"
+import {setTeachersNameDispatch} from "../../actions/teacher"
 import { connect } from "react-redux";
 
 class ViewEditStudentTimeTable extends Component{
@@ -15,10 +15,10 @@ class ViewEditStudentTimeTable extends Component{
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount(){
-        const {subjects,setSubjectDispatch,timetable,setTeacherDispatch,teachers,type} = this.props
-        
-        if(Object.keys(teachers).length == 0){
-            setTeacherDispatch()
+        const {subjects,setSubjectDispatch,timetable,setTeachersNameDispatch,teacher_names,type} = this.props
+        if(Object.keys(teacher_names).length == 0){
+            console.log("not ")
+            setTeachersNameDispatch()
         }
 
         if(Object.keys(subjects).length == 0){
@@ -52,7 +52,7 @@ class ViewEditStudentTimeTable extends Component{
         })
     }
     render(){
-        const { type,subjects,teachers} = this.props
+        const { type,subjects,teacher_names} = this.props
         const {timetable,title} = this.state
         return(
             <CardComponent title={title}>
@@ -103,7 +103,7 @@ class ViewEditStudentTimeTable extends Component{
                   </thead>
                   <tbody>
                       { Object.keys(timetable).map((item,key) => {
-                          return <EachView type={type} teachers={teachers} changeFunc={this.onChange} row={timetable[item]} subjects={subjects} key={key} label={item} />
+                          return <EachView type={type} teachers={teacher_names} changeFunc={this.onChange} row={timetable[item]} subjects={subjects} key={key} label={item} />
                         })}
                   </tbody>
                   <tfoot>
@@ -127,13 +127,11 @@ class ViewEditStudentTimeTable extends Component{
 function mapStateToProps(state) {
     return {
         subjects:state.subjects,
-        teachers:state.teachers
+        teacher_names:state.teachers_name
     };
 }
 
-export default connect(mapStateToProps,{setSubjectDispatch,setTeacherDispatch})(ViewEditStudentTimeTable);
-
-
+export default connect(mapStateToProps,{setSubjectDispatch,setTeachersNameDispatch})(ViewEditStudentTimeTable);
 
 
 const EachView = ({type,row,label,key,subjects,changeFunc,teachers}) => {

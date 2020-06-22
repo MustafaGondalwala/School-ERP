@@ -54,7 +54,7 @@ class StudentIndividualReport extends Component {
     });
   }
    async fetchData(student_id, select_month) {
-      await api.admin.student_attendance
+      await api.adminteacher.student_attendance
       .get_individual(student_id, select_month)
       .then((data) => {
         const { attendance_details, student_details,details_fetch } = data;
@@ -77,7 +77,7 @@ class StudentIndividualReport extends Component {
   async componentWillMount() {
      this.updateStudentInfo();
   }
-  componentWillReceiveProps() {
+  async componentWillReceiveProps() {
     this.updateStudentInfo();
   }
   render() {

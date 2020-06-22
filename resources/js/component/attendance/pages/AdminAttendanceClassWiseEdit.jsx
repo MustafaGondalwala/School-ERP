@@ -1,10 +1,12 @@
-import React,{Component} from "react"
+import React,{Component, Suspense} from "react"
 import AdminHeader from "../header/AdminHeader"
 import GetClassId from "../../utils/GetClassId"
 import CardComponent from "../../utils/CardComponent"
 import BodyComponent from "../../utils/BodyComponent"
-import ClassSectionWise from "../utils/ClassSectionWise"
+const ClassSectionWise  = React.lazy(() => import( "../utils/ClassSectionWise"))
 import InlineError from "../../authentication/form/InlineError"
+import Row from "../../utils/Row"
+import { FormGroup, FormLabel, Input, Button, Col } from "../../utils/Components"
 
 
 export default class AdminAttendanceClassWiseEdit extends Component{
@@ -21,6 +23,8 @@ export default class AdminAttendanceClassWiseEdit extends Component{
             open_panel:false
         }
         this.sendClassId = this.sendClassId.bind(this)
+        this.getClassAttendance = this.getClassAttendance.bind(this)
+        this.onChange = this.onChange.bind(this)
     }
 
     sendClassId(class_id){
@@ -46,7 +50,6 @@ export default class AdminAttendanceClassWiseEdit extends Component{
         this.setState({
             errors
         })
-
         if(Object.keys(errors).length == 0){
             this.setState({
                 open_panel:true
@@ -60,21 +63,22 @@ export default class AdminAttendanceClassWiseEdit extends Component{
                 <AdminHeader mainHeader="Attendance" header="Class/Sectio Wise" sub_header="View" />
                 <BodyComponent>
                     <CardComponent title="Select Class/Section" back_link="/admin/attendance">
-                        <GetClassId errors={errors} sendClassId={this.sendClassId} />
-                        <div className="row">
-                            <div className="form-group">
-                                <label className="form-control-label" htmlFor="example3cols1Input">Select Month</label>
-                                <input value={data.select_month} onChange={(e) => this.onChange(e)} className="form-control" type="month" name="select_month" />
-                                {errors.select_month && <InlineError text={errors.select_month} />} 
-                            </div>	  
-                        </div>
-                        <div className="row">
-                            <button onClick={e => this.getClassAttendance()} className="btn btn-primary">{fetch_button}</button>
-                        </div>
+                        <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />
+                        <Row>
+                            <Col md="6" sm="6">
+                            <FormGroup>
+                                <FormLabel>Select Month</FormLabel>
+                                <Input errors={errors} value={data.select_month} onChange={this.onChange} type="month" name="select_month" />
+                            </FormGroup>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Button primary onClick={this.getClassAttendance}>{fetch_button}</Button>
+                        </Row>
                     </CardComponent>
                     {
-                        open_panel && 
-                            <ClassSectionWise title="Class/Section Wise" data={data}/>
+                        open_panel && <Suspense fallback={<h1>Loading ...</h1>}>
+                            <ClassSectionWise title="Class/Section Wise" data={data}/></Suspense>
                     }
                     
                 </BodyComponent>

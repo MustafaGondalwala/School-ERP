@@ -83,7 +83,7 @@ class TimeTablePublishStudentTimeTable extends Component{
                                                 <td>{item.class_title}</td>
                                                 <td>{item.section}</td>
                                                 <td>
-                                                    <select onChange={e => this.onChange(e,item.id)} defaultValue={item.time_table_id} className="form-control">
+                                                    <select onChange={e => this.onChange(e,item.id)} value={item.time_table_id} className="form-control">
                                                         <option>-- Select --</option>
                                                         {Object.keys(timetables).length > 0 && Object.keys(timetables).map((item,id) => {
                                                             return <option key={id} value={timetables[item].id}>{timetables[item].time_table_name}</option>

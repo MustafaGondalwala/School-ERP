@@ -194,7 +194,7 @@ class ClassController extends Controller
     }
     public function getAllClassSection(Request $request){
         $school_id = $this->getSchoolId($request);
-        $classes = Classes::select('id','class_title','section','time_table_id')->where('school_info_id',$school_id)->get();
+        $classes = Classes::with('teacher')->where('school_info_id',$school_id)->get();
         return $this->ReS(["classes"=>$classes]);
     }
     public function getDistinctClass(Request $request){

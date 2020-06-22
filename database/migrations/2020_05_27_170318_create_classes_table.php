@@ -19,6 +19,7 @@ class CreateClassesTable extends Migration
             $table->string('class_title',60);
             $table->string('section',10)->nullable();
             $table->string('time_table_id')->nullable();
+            $table->integer('assigned_teacher_id')->nullable();
             $table->timestamps();
         });
     }

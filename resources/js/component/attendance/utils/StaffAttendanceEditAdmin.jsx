@@ -1,8 +1,8 @@
-import React,{Component} from "react"
+import React,{Component, Suspense} from "react"
 import CardComponent from "../../utils/CardComponent"
 import InlineError from "../../authentication/form/InlineError"
 import api from "../../api"
-import FillViewFormStaff from "../form/FillViewFormStaff"
+const FillViewFormStaff = React.lazy(() => import("../form/FillViewFormStaff")) 
 
 export default class StaffAttendanceEditAdmin extends Component{
     constructor(props){
@@ -51,7 +51,7 @@ export default class StaffAttendanceEditAdmin extends Component{
             }else{
                 this.changeState("view_button","Loading ...");
             }
-            api.admin.staff_attendance.get(this.state.data).then(data => {
+            api.adminteacher.staff_attendance.get(this.state.data).then(data => {
                 this.setState({
                     staff_attendance:data.staff_attendance,
                     view_type:type,
@@ -62,7 +62,7 @@ export default class StaffAttendanceEditAdmin extends Component{
         }
     }
     updateStudentAttendance(staff_attendance){
-        return api.admin.staff_attendance.update(staff_attendance).then(data => {
+        return api.adminteacher.staff_attendance.update(staff_attendance).then(data => {
             console.log(data.message);
         })
     }
@@ -87,7 +87,11 @@ export default class StaffAttendanceEditAdmin extends Component{
                             </div>
                         </div>
                 </CardComponent>
-                {(view_type && staff_attendance ) && <FillViewFormStaff updateStudentAttendance={this.updateStudentAttendance} view_type={view_type} staff_attendance={staff_attendance}/>}  
+                {(view_type && staff_attendance ) && 
+                <Suspense fallback={<h1>Loading ...</h1>}>
+                    <FillViewFormStaff updateStudentAttendance={this.updateStudentAttendance} select_date={data.select_date} view_type={view_type} staff_attendance={staff_attendance}/>  
+                </Suspense>
+                }
             </div>
         )
     }

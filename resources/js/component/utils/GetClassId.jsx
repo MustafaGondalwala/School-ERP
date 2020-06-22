@@ -13,6 +13,7 @@ class GetClassId extends Component {
         distinct_classes: [],
         classes: [],
         class_: "",
+        default_value:"",
         section_: "",
       };
       this.onChange = this.onChange.bind(this);
@@ -20,7 +21,8 @@ class GetClassId extends Component {
     }
     componentDidMount() {
       var self = this;
-      if(Object.keys(this.props.classes).length == 0){
+      const {classes,class_id} = this.props
+      if(Object.keys(classes).length == 0){
         api.class().then(data => {
           const uniqueClasses = [];
           data.classes.map((item) => {
@@ -50,7 +52,6 @@ class GetClassId extends Component {
         }
       });
     }
-  
     onChangeClasses(e) {
       var value = e.target.value;
       var value_by = [];
@@ -93,7 +94,20 @@ class GetClassId extends Component {
       );
     }
     render() {
-      const { errors,class_id } = this.props;
+      const { errors,class_id,classes,disabled } = this.props;
+      var default_value = "";
+      
+      if(classes.length > 0){
+        classes.map(item => {
+         if(item.id == class_id){
+          //  this.setState({
+          //    default_value:item.class_title
+          //  })
+          default_value = item.class_title
+         }
+        })
+      }
+      
       return (
         <Row>
           <Col md="6" sm="6">
@@ -103,12 +117,17 @@ class GetClassId extends Component {
             <select
                 className="form-control"
                 name="class"
+                disabled={disabled}
                 onChange={(e) => this.onChangeClasses(e)}
-                value={class_id}
+                value={default_value}
               >
                 <option value="">Select Class</option>
                 {this.state.distinct_classes.map(function (item,key) {
-                  return <option key={key} value={item}>{item}</option>;
+                  if(item == class_id){
+                    return <option selected={true} key={key} value={item}>{item}</option>;
+                  }else{
+                    return <option key={key} value={item}>{item}</option>;
+                  }
                 })}
               </select>
               {errors.class_id && <InlineError text={errors.class_id} />}
@@ -118,6 +137,7 @@ class GetClassId extends Component {
               <select
                 className="form-control"
                 value={this.section_}
+                disabled={disabled}
                 name="section_"
                 onChange={(e) => this.onChange(e)}
               >

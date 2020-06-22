@@ -8,9 +8,9 @@ export const AdminLeftSide = () => (
       <div className="scrollbar-inner">
         <div className="sidenav-header  d-flex  align-items-center">
           <a className="navbar-brand" href="dashboard.html">
-            <img src="../../assets/img/brand/blue.png" className="navbar-brand-img" alt="..." />
+            <img src="/assets/img/brand/blue.png" className="navbar-brand-img" alt="..." />
           </a>
-          <div className=" ml-auto ">
+          <div className="ml-auto ">
             <div className="sidenav-toggler d-none d-xl-block" data-action="sidenav-unpin" data-target="#sidenav-main">
               <div className="sidenav-toggler-inner">
                 <i className="sidenav-toggler-line"></i>
@@ -234,7 +234,7 @@ export class AdminTopNavbar extends Component{
                             <div className="col-auto">
                               <img
                                 alt="Image placeholder"
-                                src="../../assets/img/theme/team-1.jpg"
+                                src="/assets/img/theme/team-1.jpg"
                                 className="avatar rounded-circle"
                               />
                             </div>
@@ -420,7 +420,7 @@ export class AdminTopNavbar extends Component{
                         <span className="avatar avatar-sm rounded-circle">
                           <img
                             alt="Image placeholder"
-                            src="../../assets/img/theme/team-4.jpg"
+                            src="/assets/img/theme/team-4.jpg"
                           />
                         </span>
                         <div className="media-body  ml-2  d-none d-lg-block">

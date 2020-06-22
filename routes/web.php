@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/demo', ['as' => 'demo', 'uses' => 'StudentController@demo']);
 Route::view('/{path?}', 'app')
      ->where('path', '.*')
      ->name('react');

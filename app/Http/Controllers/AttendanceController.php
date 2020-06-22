@@ -14,6 +14,31 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
+    public function getStaffIndividualReport(Request $request){
+        // dd($request->all());
+        $request->validate([
+            'staff_id'=>"required|integer",
+            'select_month'=>'required|date'
+        ]);
+
+        $carbon_date = Carbon::parse($request->select_month);
+        $month = $carbon_date->month;
+        $school_id = $this->getSchoolId($request);
+        $year = $carbon_date->year;
+        $staff_id = $request->staff_id;
+        $every_count = StaffAttendance::select('status', DB::raw('count(*) as total'))
+                 ->groupBy('status')
+                 ->whereYear('attendance_date', '=', $year)
+              	 ->whereMonth('attendance_date', '=', $month)->where(["staff_id"=>$staff_id,"school_id"=>$school_id])
+                 ->get();
+
+        $details_fetch = StaffAttendance::select('attendance_date','status')->whereYear('attendance_date', '=', $year)
+              ->whereMonth('attendance_date', '=', $month)->where(["staff_id"=>$staff_id,"school_id"=>$school_id])->orderBy('attendance_date')->
+              get();
+        $school_details = Staff::find($staff_id);     
+
+        return $this->ReS(["attendance_details"=>$every_count,"details_fetch"=>$details_fetch,"staff_details"=>$school_details]);
+    }
     public function getStudentIndividualReport(Request $request){
         $request->validate([
             'student_id'=>"required|integer",
@@ -28,7 +53,7 @@ class AttendanceController extends Controller
         $every_count = StudentAttendance::select('status', DB::raw('count(*) as total'))
                  ->groupBy('status')
                  ->whereYear('attendance_date', '=', $year)
-              	 ->whereMonth('attendance_date', '=', $month)->where(["class_id"=>$student_id,"school_id"=>$school_id])
+              	 ->whereMonth('attendance_date', '=', $month)->where(["student_id"=>$student_id,"school_id"=>$school_id])
                  ->get();
 
         $details_fetch = StudentAttendance::select('attendance_date','status')->whereYear('attendance_date', '=', $year)
@@ -82,7 +107,7 @@ class AttendanceController extends Controller
         $select_date = $request->select_date;
         $checkIfExist = StaffAttendance::select('staff_id','status')->where(['school_id'=>$school_id,"attendance_date"=>$select_date])->count();
         if(!$checkIfExist){
-            $student_ids = Staff::select('id')->where(['school_info_id'=>$school_id])->pluck('id');
+            $student_ids = Staff::select('id')->where(['school_id'=>$school_id])->pluck('id');
             $staffAttendances = [];
             try{
                 DB::beginTransaction();

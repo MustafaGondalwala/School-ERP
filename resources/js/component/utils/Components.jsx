@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import InlineError from "./InlineError"
 import Row from "./Row"
 
-export const Button = ({primary,success,warning,danger,neutral,sm,lg,children,onClick,right,left}) => {
+export const Button = ({primary,disabled,success,warning,danger,neutral,sm,lg,children,onClick,right,left,...rest}) => {
     var className=""
     if(primary)
         className="btn btn-primary"
@@ -25,7 +25,7 @@ export const Button = ({primary,success,warning,danger,neutral,sm,lg,children,on
         className+=" float-left"
     
     return(
-        <button onClick={e => onClick(e)} className={className}>{children}</button>
+        <button disabled={disabled} onClick={e => onClick(e)} className={className} {...rest}>{children}</button>
     )
 }
 export const UploadInput = () => (
@@ -61,6 +61,7 @@ export class UploadImage extends Component{
             url:value
         })
     }
+  
     changeData(e){
         const file = e.target.files[0]
         var url = URL.createObjectURL(e.target.files[0])
@@ -99,6 +100,11 @@ export const UploadMutitpleMutiples = ({type="file",name,onChange,disabled,error
     )
 }
 
+export const PreviewSingleImage = ({url}) => (
+    <span>
+        {(typeof url == "string" && url != "") && <img src={url} className="img img-thumbnail img-fluid"/>}
+    </span>
+)
 export const PreviewFiles = ({download=false,files}) => {
     return(
         <Row>
@@ -120,9 +126,9 @@ export const Input = ({type="text",name,placeholder,value,onChange,disabled,erro
         </span>
     )
 }
-export const Select = ({errors={},children,onChange,name,value}) => (
+export const Select = ({errors={},children,onChange,name,value,...rest}) => (
     <span>
-        <select className="form-control" name={name} value={value} onChange={e => onChange(e)}>
+        <select className="form-control" name={name} value={value} onChange={e => onChange(e)} {...rest}>
         {children}
     </select>
     {errors[name] && <InlineError text={errors[name]} />}
@@ -130,7 +136,7 @@ export const Select = ({errors={},children,onChange,name,value}) => (
 )
 
 export const SelectOption = ({children,selected,value}) => (
-    <option selected={selected} value={value}>
+    <option selected={selected} key={Math.random()} value={value}>
         {children}
     </option>
 )

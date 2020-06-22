@@ -33,7 +33,8 @@ import StudentAdminHomePage from "./student/pages/StudentAdminHomePage"
 import TeacherAdminHomePage from "./teacher/pages/TeacherAdminHomePage"
 import TeacherAddTeacher from "./teacher/pages/TeacherAddTeacher"
 import TeacherViewTeacher from "./teacher/pages/TeacherViewTeacher"
-
+import TeacherAssignedClass from "./teacher/pages/TeacherAssignedClass"
+import TeacherProfileUpdate from "./teacher/pages/TeacherProfileUpdate"
 
 import TeacherClassWiseTimeTable from "./timetable/pages/TeacherClassWiseTimeTable"
 
@@ -53,6 +54,7 @@ import AdminAttendanceStudentEdit from "./attendance/pages/AdminAttendanceStuden
 import AdminAttendanceStaffEdit from "./attendance/pages/AdminAttendanceStaffEdit"
 import AdminAttendanceClassWiseEdit from "./attendance/pages/AdminAttendanceClassWiseEdit"
 import AdminAttendanceIndividualStudent from "./attendance/pages/AdminAttendanceIndividualStudent"
+import AdminAttendanceIndividualStaff from "./attendance/pages/AdminAttendanceIndividualStaff"
 
 
 import AdminSettingHomePage from "./setting/pages/AdminHomePage"
@@ -69,12 +71,9 @@ import TeacherAttendancIndividualStudent from "./attendance/pages/teacher/Teache
 import TeacherLeaveHomePage from "./leave/pages/teacher/TeacherLeaveHomePage"
 import TeacherExamHomePage from "./exam/pages/teacher/TeacherExamHomePage"
 
-
 import AdminExamHome from "./exam/pages/AdminHomePage"
 import AdminClassHallTicket from "./exam/pages/AdminClassHallTicket"
 import AdminExamFillMarksheet from "./exam/pages/AdminExamFillMarksheet"
-
-
 
 
 
@@ -181,7 +180,12 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/student/register-student-list" component={RegisterListPage} />
             <AdminDashboardRoutes exact path="/admin/student/register-student-bulk" component={BulkStudentRegister} />
             <AdminDashboardRoutes exact path="/admin/student/admission-student" component={AdmissionStudent} />
-            <AdminDashboardRoutes exact path="/admin/student/student-admission-list" component={AdmissionStudentList} />
+            <AdminDashboardRoutes exact path="/admin/student/admission-student/:register_id" component={AdmissionStudent} />
+            <AdminDashboardRoutes exact path="/admin/student/edit-student/:edit_student_id" component={AdmissionStudent} />
+  
+  
+  
+           <AdminDashboardRoutes exact path="/admin/student/student-admission-list" component={AdmissionStudentList} />
             <AdminDashboardRoutes exact path="/admin/student/student-admission-bulk" component={BulkStudentAdmission} />
             <AdminDashboardRoutes exact path="/admin/student/student-profile-update" component={StudentProfileUpdate} />
             <AdminDashboardRoutes exact path="/admin/student/student-profile-update-bulk" component={BulkStudentProfile} />
@@ -201,6 +205,8 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/teacher" component={TeacherAdminHomePage} />
             <AdminDashboardRoutes exact path="/admin/teacher/add-new-teacher" component={TeacherAddTeacher} />
             <AdminDashboardRoutes exact path="/admin/teacher/view-teacher" component={TeacherViewTeacher} />
+            <AdminDashboardRoutes exact path="/admin/teacher/assign-teacher" component={TeacherAssignedClass} />
+            <AdminDashboardRoutes exact path="/admin/teacher/update" component={TeacherProfileUpdate} />
 
             <AdminDashboardRoutes exact path="/admin/fees/" component={FeesAdminHomePage} />
             <AdminDashboardRoutes exact path="/admin/fees/set-installments" component={FeeInstallments} />
@@ -218,6 +224,7 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/attendance/edit-staff" component={AdminAttendanceStaffEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/view-class-wise-student-attendance" component={AdminAttendanceClassWiseEdit} />
             <AdminDashboardRoutes exact path="/admin/attendance/view-particular-student-attendance" component={AdminAttendanceIndividualStudent} />
+            <AdminDashboardRoutes exact path="/admin/attendance/view-particular-staff-attendance" component={AdminAttendanceIndividualStaff} />
             
             <AdminDashboardRoutes exact path="/admin/exam" component={AdminExamHome} />
             <AdminDashboardRoutes exact path="/admin/hallticket/class" component={AdminClassHallTicket} />

@@ -1,9 +1,12 @@
-import React,{Component} from "react"
+import React,{Component,Suspense} from "react"
 import CardComponent from "../../utils/CardComponent"
 import GetClassId from "../../utils/GetClassId"
-import InlineError from "../../authentication/form/InlineError"
+import InlineError from "../../utils/InlineError"
+import Col from "../../utils/Col"
+import Row from "../../utils/Row"
 import api from "../../api"
-import FillViewFormStudent from "../form/FillViewFormStudent"
+const FillViewFormStudent = React.lazy(() => import("../form/FillViewFormStudent")) 
+import { FormGroup, FormLabel, Input,Button } from "../../utils/Components"
 
 export default class StudentAttendanceEditAdmin extends Component{
     constructor(props){
@@ -21,6 +24,7 @@ export default class StudentAttendanceEditAdmin extends Component{
         }
         this.sendClassId = this.sendClassId.bind(this)
         this.submit = this.submit.bind(this)
+        this.onChange = this.onChange.bind(this)
         this.changeState = this.changeState.bind(this)
     }
     onChange(e){
@@ -57,7 +61,7 @@ export default class StudentAttendanceEditAdmin extends Component{
             }else{
                 this.changeState("view_button","Loading ...");
             }
-            api.admin.student_attendance.get(this.state.data).then(data => {
+            api.adminteacher.student_attendance.get(this.state.data).then(data => {
                 this.setState({
                     student_attendance:data.student_attendance,
                     view_type:type,
@@ -68,7 +72,7 @@ export default class StudentAttendanceEditAdmin extends Component{
         }
     }
     updateStudentAttendance(student_attendance){
-        return api.admin.student_attendance.update(student_attendance).then(data => {
+        return api.adminteacher.student_attendance.update(student_attendance).then(data => {
             return data
         })
     }
@@ -77,24 +81,23 @@ export default class StudentAttendanceEditAdmin extends Component{
         return(
             <div>
                 <CardComponent title="Select Class" back_link="/admin/attendance">
-                        <GetClassId errors={errors} sendClassId={this.sendClassId} />
-                        <div className="row">
-                            <div className="form-group col-md-6">
-                                <label className="form-control-label">
-                                    Select Date
-                                </label>
-                                <input type="date" onChange={e => this.onChange(e)} name="select_date" value={data.date} className="form-control"/>
-                                {errors.select_date && <InlineError text={errors.select_date} />}
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="form-group">
-                               <button className="btn btn-primary" onClick={e => this.submit("view")}>{view_button}</button> 
-                               <button className="btn btn-primary" onClick={e => this.submit("fill")}>{fill_button}</button> 
-                            </div>
-                        </div>
+                        <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />
+                        <Row>
+                            <Col md="4" sm="6">
+                                <FormGroup>
+                                    <FormLabel>Select Date</FormLabel>
+                                    <Input errors={errors} type="date" onChange={this.onChange} name="select_date" value={data.date}/>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                       <Row>
+                            <Col md="12" sm="12">
+                                <Button primary onClick={e => this.submit("view")}>{view_button}</Button>
+                                <Button primary onClick={e => this.submit("fill")}>{fill_button}</Button>
+                            </Col>
+                       </Row>
                 </CardComponent>
-                {(view_type && student_attendance ) && <FillViewFormStudent select_date={data.select_date} updateStudentAttendance={this.updateStudentAttendance} view_type={view_type} student_attendance={student_attendance}/>}  
+                {(view_type && student_attendance ) && <Suspense fallback={<h1>Loading ...</h1>}><FillViewFormStudent select_date={data.select_date} updateStudentAttendance={this.updateStudentAttendance} view_type={view_type} student_attendance={student_attendance}/></Suspense>}  
             </div>
         )
     }

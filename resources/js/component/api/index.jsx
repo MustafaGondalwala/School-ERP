@@ -31,18 +31,35 @@ export default {
                 list: class_string => api.post("/api/v1/adminclerk/student/register/list",{class_string}).then(response => response.data.success),
                 bulk_add: data => api.post("/api/v1/adminclerk/student/register/bulk_add",{data}).then(response => response.data.success),
             },
+            listAll : () => api("/api/v1/adminclerk/student/listAll").then(response => response.data.success),
+            listByClassId: class_id => api("/api/v1/adminclerk/student/list/"+class_id).then(response => response.data.success),
+            getstudent: (student_id) => api("/api/v1/adminclerk/student/list-individual/"+student_id).then(response => response.data.success),
+            update_student: data => api.post('/api/v1/adminclerk/student/update',data,formDataConfig).then(response => response.data.success),
+            admission: {
+                bulk_add: data => api.post('/api/v1/adminclerk/student/admission/bulk_add',{data}).then(response => response.data.success),
+                update_student_cell: data => api.post('/api/v1/adminclerk/student/admission/update-particular-cell',data).then(response => response.data.success),
+            },
         },
     },
     student:{
         get_student_searchable: () => api("/api/v1/student/searchable").then(response => response.data.success),
         get_student_searchable: searchText => api("/api/v1/student/searchable/"+searchText).then(response => response.data.success),
     },
+    staff:{
+        get_staff_searchable: () => api("/api/v1/admin/staff/searchable").then(response => response.data.success),
+        get_staff_searchable: searchText => api("/api/v1/admin/staff/searchable/"+searchText).then(response => response.data.success),
+    },
     admin: {
         get_subjects: () => api("/api/v1/admin/subject").then(response => response.data.success),
         get_distinct_class: () => api("/api/v1/admin/class/distinct").then(response=> response.data.success),
-        add_teacher: data => api.post("/api/v1/admin/teacher",data,{headers:{'Content-Type': 'multipart/form-data'}}).then(response => response.data.success),
-        view_all_teacher: () => api("/api/v1/admin/teacher").then(response => response.data.success),
-        view_particular_teacher: teacher_id => api("/api/v1/admin/teacher/"+teacher_id).then(response => response.data.success),
+        teacher:{
+            add: data => api.post("/api/v1/admin/teacher",data,{headers:{'Content-Type': 'multipart/form-data'}}).then(response => response.data.success),
+            view_all: () => api("/api/v1/admin/teacher").then(response => response.data.success),
+            assigned_teacher: data => api.post("/api/v1/admin/teacher/assigned_teacher",data).then(response => response.data.success),
+            view_particular_teacher: teacher_id => api("/api/v1/admin/teacher/view/"+teacher_id).then(response => response.data.success),
+            update: data => api.post("/api/v1/admin/teacher/update",data,formDataConfig).then(response => response.data.success),
+        
+        },
     	student:{
             admission: (data) => api.post('/api/v1/admin/student/admission',data,formDataConfig).then(response => response.data.success),
     		view_all_student: () => api("/api/v1/admin/student").then(response => response.data.success),
@@ -100,17 +117,7 @@ export default {
             getTimetable: (timetable_name) => api.post("/api/v1/admin/timetable/get",{timetable_name}).then(response => response.data.success),
             publish_timetable: (publish_timetable) => api.put("/api/v1/admin/class/publish_timetable",{publish_timetable}).then(response => response.data.success),
         },
-        student_attendance:{
-            get: data => api.post("/api/v1/admin/attendance/student",data).then(response => response.data.success),
-            update: student_attendance => api.put("/api/v1/admin/attendance/student",{student_attendance}).then(response => response.data.success),
-            get_classwise: (class_id,select_month) => api.post("/api/v1/admin/attendance/student/getclasswise",{class_id,select_month}).then(response => response.data.success),
-            get_individual: (student_id,select_month) => api.post("/api/v1/admin/attendance/student/getindividual",{student_id,select_month}).then(response => response.data.success),
-            
-        },
-        staff_attendance:{
-            get: data => api.post("/api/v1/admin/attendance/staff",data).then(response => response.data.success),
-            update: staff_attendance => api.put("/api/v1/admin/attendance/staff",{staff_attendance}).then(response => response.data.success),
-        },
+        
     },
     teacher:{
         homework:{
@@ -121,6 +128,19 @@ export default {
             get_student_status: homework_id => api("/api/v1/teacher/homework/student_status/all/"+homework_id).then(response => response.data.success),
         }
     },
+    adminteacher:{
+        student_attendance:{
+            get: data => api.post("/api/v1/adminteacher/attendance/student",data).then(response => response.data.success),
+            update: student_attendance => api.put("/api/v1/adminteacher/attendance/student",{student_attendance}).then(response => response.data.success),
+            get_classwise: (class_id,select_month) => api.post("/api/v1/adminteacher/attendance/student/getclasswise",{class_id,select_month}).then(response => response.data.success),
+            get_individual: (student_id,select_month) => api.post("/api/v1/adminteacher/attendance/student/getindividual",{student_id,select_month}).then(response => response.data.success),
+        },
+        staff_attendance:{
+            get: data => api.post("/api/v1/adminteacher/attendance/staff",data).then(response => response.data.success),
+            update: staff_attendance => api.put("/api/v1/adminteacher/attendance/staff",{staff_attendance}).then(response => response.data.success),
+            get_individual: (staff_id,select_month) => api.post("/api/v1/adminteacher/attendance/staff/getindividual",{staff_id,select_month}).then(response => response.data.success),
+        },
+    },
     parent:{
         homework:{
             get: student_ids =>  api.post("/api/v1/parent/homework",{student_ids}).then(response => response.data.success),
@@ -130,6 +150,7 @@ export default {
     subjects: () => api("/api/v1/subject").then(response => response.data.success),
     classwise_timetable: (class_id) => api("/api/v1/classwise_timetable/"+class_id).then(response => response.data.success),
     teachers: () => api("/api/v1/teacher").then(response => response.data.success),
+    teacher_names: () => api("/api/v1/teacher/names").then(response => response.data.success),
     parentstudent: {
         homework:{
             submit: data => api.post("/api/v1/parentstudent/homework/submit",data,formDataConfig).then(response => response.data.success),
