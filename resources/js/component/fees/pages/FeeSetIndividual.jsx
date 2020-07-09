@@ -1,11 +1,13 @@
-import React,{Component} from "react"
+import React,{Component, Suspense} from "react"
 import AdminHeader from "../header/AdminHeader"
 import CardComponent from "../../utils/CardComponent"
 import SelectStudent from "../../utils/SelectStudent"
 import YearComponent from "../../utils/YearSelectComponent"
 import api from "../../api"
-import FeeSetIndividualForm from "../form/FeeSetIndividualForm"
 import Swal from "sweetalert2";
+import Row from "../../utils/Row"
+import { Col, FormGroup, FormLabel, Button } from "../../utils/Components"
+const FeeSetIndividualForm = React.lazy(() => import("../form/FeeSetIndividualForm"))
 
 export default class FeeSetIndividual extends Component{
     constructor(props){
@@ -20,21 +22,9 @@ export default class FeeSetIndividual extends Component{
         this.getStudentId = this.getStudentId.bind(this)
         this.updateFees = this.updateFees.bind(this)
     }
-    componentDidMount(){
-        this.setState({
-            student_id:13
-        },() => {
-            this.onFetch();
-        })
-    }
     getStudentId(student_id){
         this.setState({
             student_id
-        })
-    }
-    getYear(e){
-        this.setState({
-            year_id:e.target.value
         })
     }
     onFetch(){
@@ -43,7 +33,7 @@ export default class FeeSetIndividual extends Component{
             fee_individual:""
         })
         const {student_id,year_id} = this.state
-        api.admin.fee.get_individual_fees({student_id,year_id}).then(data => {
+        api.adminclerk.fee.get_individual_fees({student_id,year_id}).then(data => {
             this.setState({
                 fetch_button:"Fetch",
                 fee_individual:data.fee_individual
@@ -58,7 +48,7 @@ export default class FeeSetIndividual extends Component{
             fetch_button:"Updating Fees",
             fee_individual:"",
         })
-        api.admin.fee.update_individual_fees(fee_individual,send_message).then(data => {
+        api.adminclerk.fee.update_individual_fees(fee_individual,send_message).then(data => {
             this.setState({
                 fetch_button:"Fetch",
                 fee_individual:data.fee_individual
@@ -75,20 +65,21 @@ export default class FeeSetIndividual extends Component{
                 <AdminHeader mainHeader="Fee" header="Set Individual Fees" />
                 <div className="container-fluid mt--6">
                     <CardComponent title="Select Student" back_link="/admin/fees">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="form-control-label">Select Student</label>
+                       <Row>
+                           <Col md="6" sm="6">
+                                <FormGroup>
+                                    <FormLabel>Select Student</FormLabel>
                                     <SelectStudent  sendStudentId={this.getStudentId}/>
-                                </div>
-                                <YearComponent onChange={this.getYear}  label="Select Year" name="year" errors=""/>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <button className="btn btn-primary" onClick={e => this.onFetch()}>{fetch_button}</button>
-                        </div>
+                                </FormGroup>
+                           </Col>
+                       </Row> 
+                       <Row>
+                           <Button primary onClick={e => this.onFetch()}>{fetch_button}</Button>
+                       </Row>
                     </CardComponent>                
-                    {fee_individual && <FeeSetIndividualForm  update_button={this.state.update_button} updateFees={this.updateFees} fee_individual={fee_individual}/>}
+                    {fee_individual && <Suspense fallback={<h1>Loading ...</h1>}>
+                        <FeeSetIndividualForm  update_button={this.state.update_button} updateFees={this.updateFees} fee_individual={fee_individual}/>
+                    </Suspense>}
                 </div>
             </div>
         )

@@ -1,46 +1,66 @@
-import React from "react"
-import TopBreadCrumb from "../../../utils/TopBreadcrumb"
-import BodyComponent from "../../../utils/BodyComponent"
-import Row from "../../../utils/Row"
-import ColComponent from "../../../utils/ColComponent"
+import React from "react";
+import TopBreadCrumb from "../../../utils/TopBreadcrumb";
+import BodyComponent from "../../../utils/BodyComponent";
+import Row from "../../../utils/Row";
+import ColComponent from "../../../utils/ColComponent";
+import ExamHeader from "../../../header/teacher/ExamHeader";
+import CardComponent from "../../../utils/CardComponent";
+import EmptyHeader from "../../../utils/EmptyHeader";
+import { Col } from "../../../utils/Components";
 
-import ExamHeader from "../../../header/teacher/ExamHeader"
-
-const TeacherExamHomePage = () => (
+const TeacherExamHomePage = (props) => {
+  const {class_id} = props.match.params
+  return (
     <div>
-        <TopBreadCrumb mainHeader="Exam" header="Home">
-            <ExamHeader />
-        </TopBreadCrumb>
-        <BodyComponent>
-            <Row>
+    <EmptyHeader mainHeader="Exam" header="Home"/>
+      <BodyComponent>
+        <Row>
+          <div className="card-deck flex-column flex-xl-row">
+            <CardComponent title="Monthly Test">
+              <div className="row card-wrapper">
                 <ColComponent
-                    title="Fill Exam Marksheet"
-                    description="Fill Exam Marksheet in System"
-                    link="/teacher/exam/fillexammarksheet"
-                    button_text="Fill"
+                  title="Add Monthly Test"
+                  description="Add Monthly Test in System"
+                  link={"/teacher/monthlytest/add/"+class_id}
+                  button_text="Add"
                 />
                 <ColComponent
-                    title="View Class Exam Report"
-                    description="View Class Exam Report in System"
-                    link="/teacher/exam/exammarksheet/report"
-                    button_text="View"
-                />
-                
-                <ColComponent
-                    title="Fill Monthly Marks"
-                    description="Fill Monthly Marksheet in System"
-                    link="/teacher/exam/fillmonthlymarks"
-                    button_text="Fill"
+                  title="Fill Monthly Test Marksheet"
+                  description="Fill Exam Marksheet in System"
+                  link={"/teacher/monthlytest/fill/"+class_id}
+                  button_text="Fill"
                 />
                 <ColComponent
-                    title="View Class Monthly Test Report"
-                    description="View Class Monthly Test Report in System"
-                    link="/teacher/exam/monthlymarks/report"
-                    button_text="View"
+                  title="View Class Test Report"
+                  description="View Class Test Report in System"
+                  link={"/teacher/exam/monthlytest/report/"+class_id}
+                  button_text="View"
                 />
-            </Row>
-        </BodyComponent>
-    </div>
-)
+              </div>
+            </CardComponent>
+          </div>
 
-export default TeacherExamHomePage
+          <div className="card-deck flex-column flex-xl-row">
+            <CardComponent title="Exam">
+              <div className="row card-wrapper">
+                <ColComponent
+                  title="Fill Exam Marksheet"
+                  description="Fill Exam Marksheet in System"
+                  link={"/teacher/exam/fill/"+class_id}
+                  button_text="Fill"
+                />
+                <ColComponent
+                  title="View Class Exam Marksheet Report"
+                  description="View Class Test Report in System"
+                  link={"/teacher/exam/report/"+class_id}
+                  button_text="View"
+                />
+              </div>
+            </CardComponent>
+          </div>
+        </Row>
+      </BodyComponent>
+    </div>
+  );
+};
+export default TeacherExamHomePage;

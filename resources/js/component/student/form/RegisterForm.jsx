@@ -78,7 +78,6 @@ class RegisterPage extends Component{
         const {data} = this.state
         const errors = this.validate(data)
         this.setState({ errors })
-        console.log(errors)
         if(Object.keys(errors).length == 0){
             this.setState({
               button_text:"Registering Student ..."
@@ -247,12 +246,6 @@ class RegisterPage extends Component{
                                     <UploadImage name="father_photo" onChange={this.fileChange}/>
                                 </FormGroup>
                             </Col>
-                            <Col md="4" sm="4">
-                                    <FormGroup>
-                                        <FormLabel>Select Year</FormLabel>
-                                        <YearSelectComponent errors={errors} value={data.select_year} onChange={this.onChange} name="select_year"/>
-                                    </FormGroup>
-                            </Col>
                         </Row>
                         <Row>
                             <Button primary onClick={this.submit}>{button_text}</Button>
@@ -262,7 +255,6 @@ class RegisterPage extends Component{
         )
     }
 }
-
 
 function mapStateToProps(state) {
     return {

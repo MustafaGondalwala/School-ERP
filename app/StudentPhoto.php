@@ -18,4 +18,6 @@ class StudentPhoto extends Model
        'student_aadhar_card_photo',
        'father_aadhar_card_photo',
     ];
+
+    
 }

@@ -1,4 +1,4 @@
-import React,{Component} from "react"
+import React,{Component,} from "react"
 import CardComponent from "../../utils/CardComponent"
 import AdminHeader from "../header/AdminHeader"
 import {getClassDispatch,setClassSection} from "../../actions/classes"

@@ -16,7 +16,7 @@ mix.browserSync('admin.schoolerp.test');
 
 mix.webpackConfig({
     output:{
-        chunkFilename:'js/react/[name].js',
+        chunkFilename:'js/react/[name].chunck.js',
     }
 });
 

@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component,Suspense } from "react";
 import AdminHeader from "../header/AdminHeader";
 import BodyComponent from "../../utils/BodyComponent";
+import EmptyHeader from "../../utils/EmptyHeader";
 import CardComponent from "../../utils/CardComponent";
 import GetClassId from "../../utils/GetClassId";
 import { connect } from "react-redux";
@@ -9,32 +10,27 @@ import MutipleSelectSubject from "../../utils/MultipleSelectSubject";
 import YearSelectComponent from "../../utils/YearSelectComponent";
 import InlineError from "../../utils/InlineError";
 import FillExamMarksheet from "../form/FillExamMarksheet"
-
+const ViewStudentDetailsExamMarksheet = React.lazy(() => import("../form/ViewStudentDetailsExamMarksheet"))
 
 import api from "../../api";
 import Swal from "sweetalert2";
+import Row from "../../utils/Row"
+import { Col, FormGroup, FormLabel, Select, SelectOption, Button, Input } from "../../utils/Components";
 
 class AdminExamFillMarksheet extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        class_id: "",
-        exam_type: "",
-        subjects: "",
-        year: "",
+        class_id: "1",
+        exam_type: "1",
       },
       button_text: "Fetch Students",
       students: "",
-      fill_marksheet_view:false,
-      exam_marksheet:"",
-      class_info:"",
-      student_info:"",
       errors: {},
     };
     this.setStateData = this.setStateData.bind(this);
     this.sendClassId = this.sendClassId.bind(this);
-    this.sendSubjects = this.sendSubjects.bind(this);
     this.submit = this.submit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fetchMarksheet = this.fetchMarksheet.bind(this)
@@ -49,21 +45,25 @@ class AdminExamFillMarksheet extends Component {
       data: { ...this.state.data, [name]: value },
     });
   }
-  async sendClassId(class_id) {
+  sendClassId(class_id) {
     this.setStateData("class_id", class_id);
   }
-  async sendSubjects(subjects) {
-    this.setStateData("subjects", subjects);
-  }
-  async onChange(e) {
+  onChange(e) {
     this.setStateData(e.target.name, e.target.value);
   }
   validate(data) {
     const errors = {};
     if (!data.class_id) errors.class_id = "Can't be blank";
     if (!data.exam_type) errors.exam_type = "Can't be blank";
-    if (!data.subjects) errors.subjects = "Can't be blank";
     return errors;
+  }
+  componentWillMount(){
+    // this.setState({
+    //   class_id:"1",
+    //   exam_type:"1"
+    // },() => {
+      this.submit()
+    // })
   }
   submit() {
     const errors = this.validate(this.state.data);
@@ -71,19 +71,16 @@ class AdminExamFillMarksheet extends Component {
     this.setState({ errors });
     if (Object.keys(errors).length == 0) {
       this.setState({
-        class_hallticket: "",
-        button_text: "Fetchinging Students ...",
-        exam_marksheet:"",
-        fill_marksheet_view:false,
+        button_text: "Fetching Students ...",
         students:"",
       });
 
-      api.admin.exam.marksheet
-        .classwise(data)
+      api.adminteacher.exam.marksheet
+        .get_students(data)
         .then((data) => {
-          const { students } = data;
+          const { studentDetails } = data;
           this.setState({
-            students,
+            students:studentDetails,
             button_text: "Fetch Students",
           });
         })
@@ -143,98 +140,46 @@ class AdminExamFillMarksheet extends Component {
 
     return (
       <div>
-        <AdminHeader
+      <EmptyHeader 
           mainHeader="Exam"
-          header="Hall Ticket"
-          sub_header="Class/Section Wise"
+          header="Marksheet"
+          sub_header="Exam Marksheet"
         />
         <BodyComponent>
           <CardComponent title="Select Class" back_link="/admin/exam">
-            <GetClassId sendClassId={this.sendClassId} errors={errors} />
-            <div className="row">
-              <div className="col-md-4">
-                <label className="form-control-label">Exam Type</label>
-                <select
-                  onChange={(e) => this.onChange(e)}
-                  name="exam_type"
-                  className="form-control"
-                >
-                  <option value="">-- Select --</option>
-                  {Object.keys(examType).length > 0 &&
-                    examType.map((item, id) => {
-                      return <option value={item.id}>{item.exam_type}</option>;
-                    })}
-                </select>
-                {errors.exam_type && <InlineError text={errors.exam_type} />}
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label className="form-control-label">Subject</label>
-                  <MutipleSelectSubject sendSubjects={this.sendSubjects} />
-                  {errors.subjects && <InlineError text={errors.subjects} />}
-                </div>
-              </div>
-              <div className="col-md-4">
-                <YearSelectComponent
-                  value={data.year}
-                  label="Select Year"
-                  name="year"
-                  onChange={this.onChange}
-                  errors=""
-                />
-              </div>
-            </div>
-            <div className="row">
-              <button
-                onClick={(e) => this.submit()}
-                className="btn btn-primary"
-              >
-                {button_text}
-              </button>
-            </div>
+            <GetClassId class_id={data.class_id} sendClassId={this.sendClassId} errors={errors} />
+            <Row>
+              <Col md={4}>
+                 <FormGroup>
+                   <FormLabel>Exam Type</FormLabel>
+                   <Select errors={errors} value={data.exam_type} onChange={this.onChange} name="exam_type">
+                     <SelectOption value=""> -- Select -- </SelectOption>
+                     {Object.keys(examType).length > 0 &&
+                        examType.map((item, id) => {
+                          return <SelectOption value={item.id}>{item.exam_type}</SelectOption>
+                        })
+                      }
+                   </Select>
+                 </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={4}>
+                <Button primary sm onClick={this.submit}>{button_text}</Button>
+              </Col>
+            </Row>
           </CardComponent>
-
-          {(students && !fill_marksheet_view) && <ViewStudentTable sendStudentId={this.fetchMarksheet} students={students} />}
-          {fill_marksheet_view && <FillExamMarksheet updateStudentMarksheet={this.updateStudentMarksheet} type="fill" student_info={student_info} class_info={class_info} exam_marksheet={exam_marksheet}/>}
+          {students && 
+          <Suspense fallback={<h1>Loading ...</h1>}>
+            <ViewStudentDetailsExamMarksheet exam_type={data.exam_type} sendStudentId={this.fetchMarksheet} studentDetails={students} />
+          </Suspense>
+          }
         </BodyComponent>
       </div>
     );
   }
 }
 
-const ViewStudentTable = ({ students,sendStudentId }) => (
-  <CardComponent title="Select Marksheet Students">
-    <div className="table-responsive">
-      <table className="table">
-        <thead>
-          <tr>
-            <td>Sr.no</td>
-            <td>Student Name</td>
-            <td>Parent Name</td>
-            <td>Fill Marksheet</td>
-            <td>Status</td>
-            <td>Created By</td>
-            <td>Publish At</td>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((item, id) => {
-            return (
-              <tr key={id}>
-                <td>{id + 1}</td>
-                <td>{item.student_name}</td>
-                <td>{item.father_name}</td>
-                <td>
-                  <button onClick={e => sendStudentId(item.id)} className="btn btn-primary">Fill</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  </CardComponent>
-);
 
 function mapStateToProps(state) {
   return {

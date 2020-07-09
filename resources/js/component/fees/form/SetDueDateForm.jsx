@@ -4,56 +4,54 @@ import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import GetInstallmentYear from "./GetInstallmentYear"
 import CardComponent from "../../utils/CardComponent"
+import { Input } from "../../utils/Components";
 
 export default class SetDueDateForm extends Component{
     constructor(props){
         super(props)
         this.state = {
-            last_due_date:"",
+            due_date:"",
             update_button:"Update"
         }
         this.getDueDate = this.getDueDate.bind(this)
+        this.onChange = this.onChange.bind(this)
+        this.updateDueDate = this.updateDueDate.bind(this)
     }
     getDueDate(data){
         api.admin.fee.get_due_date(data).then(data => {
+            const {due_date} = data
             this.setState({
-                last_due_date:data.due_date.last_due_date,
-                id:data.due_date.id
+                due_date
             })
         })
     }
     onChange(e){
+        const {name,value} = e.target
         this.setState({
-          [e.target.name]:e.target.value
-        });
+            due_date: {...this.state.due_date,[name]: value}
+        })
     }
     updateDueDate(){
-        var last_due_date = this.state.last_due_date
-        var id = this.state.id
+        const {due_date} = this.state
         this.setState({
             update_button:"Updating ..."
         })
-        api.admin.fee.update_due_date({"last_due_date":last_due_date,"id":id}).then(data => {
-            this.setState({
-                last_due_date:data.due_date.last_due_date,
-                id:data.due_date.id,
-                update_button:"Update"
-            })
+        api.admin.fee.update_due_date(due_date).then(data => {
+            console.log(data)
             Swal.fire("Success","Due Date is Updated!","success");
         })
     }
 
     render(){
-        const {last_due_date,update_button} = this.state
+        const {due_date,update_button} = this.state
         return(
            <div>
-                <GetInstallmentYear submit={this.getDueDate} />
-                { (last_due_date == null || last_due_date) &&  
+            <GetInstallmentYear submit={this.getDueDate} />
+                { due_date &&  
                     <CardComponent title="Update Due Date">
                     <div className="form-group row">
                         <div className="col">
-                            {last_due_date == null ? <input type="date" value={last_due_date}  name="last_due_date" onChange={e => this.onChange(e)}  className="form-control"/>
-                            : <input type="date" name="last_due_date" value={last_due_date} onChange={e => this.onChange(e)} className="form-control" value={last_due_date}/>}
+                            <Input type="date" name="last_due_date" value={due_date.last_due_date || ''} onChange={this.onChange} />
                         </div>
                         <div className="col">
                             <button className="btn btn-primary" onClick={e =>  this.updateDueDate()}>{update_button}</button>

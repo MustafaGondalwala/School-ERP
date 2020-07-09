@@ -85,8 +85,7 @@ class AddExamType extends Component{
         const {exam_type,error,button_text} = this.state
         const {examType} = this.props
         return(
-            <div className="col-md-6">
-                <CardComponent title="Add Exam Type">
+            <CardComponent title="Exam Type">
                     <div className="col-md-6">
                         <div className="row">
                             <div className="form-group">
@@ -120,7 +119,6 @@ class AddExamType extends Component{
                     </div>
                     
                 </CardComponent>
-            </div>
         )
     }
 }

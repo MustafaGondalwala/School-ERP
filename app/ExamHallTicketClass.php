@@ -12,6 +12,9 @@ class ExamHallTicketClass extends Model
     public function subject(){
         return $this->belongsTo(Subjects::class,'subject_id');
     }
+    public function class(){
+        return $this->belongsTo(Classes::class,'class_id');
+    }
     public function year(){
         return $this->belongsTo(SystemYear::class,'year_id');
     }

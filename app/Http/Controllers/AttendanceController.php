@@ -168,7 +168,7 @@ class AttendanceController extends Controller
         $select_date = $request->select_date;
         $checkIfExist = StudentAttendance::select('student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->count();
         if(!$checkIfExist){
-            $student_ids = StudentInfo::select('id')->where(['school_info_id'=>$school_id,"class_id"=>$request->class_id])->pluck('id');
+            $student_ids = StudentInfo::select('id')->where(['school_id'=>$school_id,"class_id"=>$request->class_id])->pluck('id');
             $studentAttendances = [];
             try{
                 DB::beginTransaction();

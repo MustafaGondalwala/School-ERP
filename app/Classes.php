@@ -15,8 +15,11 @@ class Classes extends Model
     public function teacher(){
         return $this->belongsTo(Teacher::class,'assigned_teacher_id');
     }
+    public function roll_no(){
+        return $this->hasOne(StudentRollNo::class,'class_id');
+    }
     public function timetable(){
-        return $this->belongsTo(StudentTimeTable::class,'timetable_name','timetable_id');
+        return $this->belongsTo(StudentTimeTable::class,'time_table_id');
     }
     public function studentinfo()
     {

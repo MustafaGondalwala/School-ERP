@@ -151,14 +151,14 @@ class AddClass extends Component{
                                     return <tr key={id}>
                                         <td>{id+1}</td>
                                         <td>{item}</td>
-                                        <td  className="table-actions">
-                                            <a href="#!" onClick={e => this.updateClass(item)} className="table-action" data-toggle="tooltip" data-original-title="Edit product">
-                                                <i className="fas fa-user-edit" />
-                                            </a>
-                                            <a href="#!" onClick={e => this.removeClass(item)} className="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete product">
-                                                <i className="fas fa-trash" />
-                                            </a>
-                                        </td>
+                                            <td  className="table-actions">
+                                                <a href="#!" onClick={e => this.updateClass(item)} className="table-action" data-toggle="tooltip" data-original-title="Edit product">
+                                                    <i className="fas fa-user-edit" />
+                                                </a>
+                                                <a href="#!" onClick={e => this.removeClass(item)} className="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete product">
+                                                    <i className="fas fa-trash" />
+                                                </a>
+                                            </td>
                                         </tr>
                                     })}
                                     </tbody>

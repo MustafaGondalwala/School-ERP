@@ -14,6 +14,8 @@ class SchoolInfo extends Model
     }
     public function year(){
         return $this->hasMany('App\SystemYear');
-
+    }
+    public function photos(){
+        return $this->hasMany('App\SchoolPhoto','school_info_id');
     }
 }

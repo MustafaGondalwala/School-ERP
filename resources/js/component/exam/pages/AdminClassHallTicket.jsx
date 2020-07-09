@@ -1,4 +1,4 @@
-import React,{Component} from "react"
+import React,{Component, Suspense} from "react"
 import AdminHeader from "../header/AdminHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import CardComponent from "../../utils/CardComponent"
@@ -9,10 +9,12 @@ import MutipleSelectSubject from "../../utils/MultipleSelectSubject"
 import YearSelectComponent from "../../utils/YearSelectComponent"
 import InlineError from "../../utils/InlineError"
 
-import ClassHallTicketEdit from "../form/ClassHallTicketEdit"
+const ClassHallTicketEdit =  React.lazy(() => import("../form/ClassHallTicketEdit"))
 import Swal from "sweetalert2";
 
 import api from "../../api"
+import Row from "../../utils/Row"
+import { Col, FormLabel, SelectOption, Select, FormGroup } from "../../utils/Components"
 
 class AdminClassHallTicket extends Component{
     constructor(props){
@@ -21,8 +23,6 @@ class AdminClassHallTicket extends Component{
             data: {
                 class_id:"",
                 exam_type:"",
-                subjects:"",
-                year:""
             },
             button_text:"Fetch",
             class_hallticket:"",
@@ -30,7 +30,6 @@ class AdminClassHallTicket extends Component{
         }
         this.setStateData = this.setStateData.bind(this)
         this.sendClassId = this.sendClassId.bind(this)
-        this.sendSubjects = this.sendSubjects.bind(this)
         this.submit = this.submit.bind(this)
         this.onChange = this.onChange.bind(this)
     }
@@ -45,20 +44,18 @@ class AdminClassHallTicket extends Component{
             data: {...this.state.data,[name]: value}
         })
     }
+
     async sendClassId(class_id){
         this.setStateData("class_id",class_id)
     }
-    async sendSubjects(subjects){
-        this.setStateData("subjects",subjects)
-    }
     async onChange(e){
-        this.setStateData(e.target.name,e.target.value)
+        const {name,value} = e.target
+        this.setStateData(name,value)
     }
     validate(data){
         const errors = {};
         if (!data.class_id) errors.class_id = "Can't be blank";
         if (!data.exam_type) errors.exam_type = "Can't be blank";
-        if (!data.subjects) errors.subjects = "Can't be blank";
         return errors;
     }
     submit(){
@@ -70,7 +67,7 @@ class AdminClassHallTicket extends Component{
                 class_hallticket:"",
                 button_text:"Fetching Hall Ticket ..."
             })
-            api.admin.exam.hall_ticket.get(data).then(data => {
+            api.adminclerk.exam.hall_ticket.get(data).then(data => {
                const {class_hallticket} = data
                 this.setState({
                     class_hallticket,
@@ -81,7 +78,7 @@ class AdminClassHallTicket extends Component{
     }
 
     updateClassHallTicket(class_hallticket){
-        return api.admin.exam.hall_ticket.update(class_hallticket).then(data => {
+        return api.adminclerk.exam.hall_ticket.update(class_hallticket).then(data => {
             return data
         })
     }
@@ -94,34 +91,29 @@ class AdminClassHallTicket extends Component{
                 <AdminHeader mainHeader="Exam" header="Hall Ticket" sub_header="Class/Section Wise"/>
                 <BodyComponent>
                     <CardComponent title="Select Class" back_link="/admin/exam">
-                        <GetClassId sendClassId={this.sendClassId} errors={errors} />
-                        <div className="row">
-                            <div className="col-md-4">
-                                <label className="form-control-label">Exam Type</label>
-                                <select onChange={e => this.onChange(e)} name="exam_type" className="form-control">
-                                    <option value="">-- Select --</option>
-                                    {Object.keys(examType).length > 0 && examType.map((item,id) => {
-                                    return <option value={item.id}>{item.exam_type}</option>
-                                    })}
-                                </select>
-                                {errors.exam_type && <InlineError text={errors.exam_type} /> }
-                            </div>
-                            <div className="col-md-4">
-                                    <div className="form-group">
-                                    <label className="form-control-label">Subject</label>
-                                    <MutipleSelectSubject sendSubjects={this.sendSubjects}/>
-                                    {errors.subjects && <InlineError text={errors.subjects} /> }
-                                    </div>
-                            </div>
-                            <div className="col-md-4">
-                                    <YearSelectComponent value={data.year} label="Select Year" name="year" onChange={this.onChange} errors=""/>
-                            </div>
-                        </div>
+                        <GetClassId class_id={data.class_id} sendClassId={this.sendClassId} errors={errors} />
+                        <Row>
+                            <Col md="4">
+                                <FormGroup>
+                                    <FormLabel>Exam Type</FormLabel>
+                                    <Select  errors={errors} onChange={this.onChange} name="exam_type" value={data.exam_type}>
+                                        <SelectOption value={""}> -- Select -- </SelectOption>
+                                        {Object.keys(examType).length > 0 && examType.map((item,id) => {
+                                        return <SelectOption key={id} value={item.id}>{item.exam_type}</SelectOption>
+                                        })}
+                                    </Select>
+                                </FormGroup>
+                            </Col>
+                        </Row>
                         <div className="row">
                             <button onClick={e => this.submit()} className="btn btn-primary">{button_text}</button>
                         </div>
                     </CardComponent>
-                    {class_hallticket && <ClassHallTicketEdit submit={this.updateClassHallTicket} class_hallticket={class_hallticket} title={"Edit Class Hall Ticket"} class_id={data.class_id}/>}
+                    {class_hallticket && 
+                        <Suspense fallback={<h2>Loading Component ...</h2>}>
+                            <ClassHallTicketEdit submit={this.updateClassHallTicket} class_hallticket={class_hallticket} title={"Edit Class Hall Ticket"} class_id={data.class_id}/>
+                        </Suspense>
+                    }
                 </BodyComponent>
             </div>
         )

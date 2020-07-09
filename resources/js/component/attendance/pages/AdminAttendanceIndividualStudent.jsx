@@ -1,5 +1,7 @@
 import React, { Component, Suspense } from "react";
-import AdminHeader from "../header/AdminHeader";
+const TeacherHeader = React.lazy(() => import("../../header/teacher/AttendanceHeader")) 
+import TopBreadCrumb from "../../utils/TopBreadcrumb"
+
 import BodyComponent from "../../utils/BodyComponent";
 import CardComponent from "../../utils/CardComponent";
 import SelectStudent from "../../utils/SelectStudent";
@@ -56,11 +58,11 @@ export default class AdminAttendanceIndividualStudent extends Component {
 
     return (
       <div>
-        <AdminHeader
-          mainHeader="Attendance"
-          header="Student"
-          sub_header="Individual Student"
-        />
+        <Suspense fallback={<h1>Loading ...</h1>}>
+                <TopBreadCrumb mainHeader="Attendance" header="Student" sub_header="Edit Attendance">
+                    <TeacherHeader mainHeader="Attendance" header="Edit/View"/>
+                </TopBreadCrumb>
+            </Suspense>
         <BodyComponent>
           <CardComponent title="Select Student" back_link="/admin/attendance">
             <div className="row">

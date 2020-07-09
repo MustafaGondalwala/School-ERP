@@ -2,9 +2,12 @@ import React,{Component} from "react"
 import CardComponent from "../../utils/CardComponent"
 import api from "../../api"
 import Swal from "sweetalert2";
+import { Table, Thead } from "../../utils/Components";
+import { connect } from "react-redux";
+import {setFeeInstallmentsDispatch} from "../../actions/fee"
 
 
-export default class SetInstallmentsForm extends Component{
+class SetInstallmentsForm extends Component{
     constructor(props){
         super(props)
         this.state = {
@@ -24,14 +27,21 @@ export default class SetInstallmentsForm extends Component{
               ],
               total_installment: [],
               errors: {},
+              button_text:"Update"
         }
     }
-    componentDidMount(){
-        api.admin.fee.get_installments().then(data => {
+    async componentDidMount(){
+        const {setFeeInstallmentsDispatch,total_installment} = this.props
+        if(Object.keys(total_installment).length == 0){
+            const total_installment = await setFeeInstallmentsDispatch()
             this.setState({
-                total_installment:data.installments
-            })
-        })
+                total_installment
+            }) 
+        }else{
+            this.setState({
+                total_installment
+            }) 
+        }
     }
     onChange(e) {
         var getCurrent = this.state.total_installment;
@@ -48,45 +58,48 @@ export default class SetInstallmentsForm extends Component{
           total_installment: getCurrent,
           errors: {},
         });
-      }
+    }
 
-      onSubmit(){
+    onSubmit(){
           const {total_installment} = this.state;
           if(total_installment.length == 0){
             Swal.fire("Validation Error","Please select atleast One Installment","warning")
           }else{
-              this.props.submit(total_installment).catch(error => {
+                
+                api.adminclerk.fee.update_installments(total_installment).then(data => {
+                    Swal.fire("Success","Fee Installments Updated!!","success");
+                }).catch(error => {
                   Swal.fire("Error Occurred","Please try again later..","error");
-              })
+                 })
           }
       }
     render(){
-        const {total,total_installment} = this.state
-        const {button_text} = this.props
+        const {total,button_text,total_installment} = this.state
         return(
              <CardComponent title="Set Installments" back_link="/admin/fees">
                 <div className="row col-md-4">
-                <table className="table">
-                    <tr>
+                <Table>
+                    <Thead>
                         <th>Installment</th>
                         <th>Enabled/Disabled</th>
-                    </tr>
+                    </Thead>
                     {total_installment && total.map(item => {
                             if(total_installment.indexOf(item) > -1)
                             {
                                 return <tr>
                                 <td>{item}</td>
-                                <td><input name={item} value={item} checked={true} onChange={(e) => this.onChange(e)} type="checkbox" /></td>
+                                <td><input name={item} value={item || ''} checked={true} onChange={(e) => this.onChange(e)} type="checkbox" /></td>
                                 </tr>  
                             }else{
                                 return <tr>
                                 <td>{item}</td>
-                                <td><input name={item} value={item}  onChange={(e) => this.onChange(e)} type="checkbox" /></td>
+                                <td><input name={item} value={item || ''}  onChange={(e) => this.onChange(e)} type="checkbox" /></td>
                                 </tr>  
                             }
                         })
                     }
-                </table>
+                </Table>
+                    
                 <div className="col-md-4">
                     <button className="btn btn-primary" onClick={e => this.onSubmit()}>{button_text}</button>
                 </div>
@@ -95,3 +108,11 @@ export default class SetInstallmentsForm extends Component{
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        total_installment:state.installments
+    };
+}
+
+export default connect(mapStateToProps,{setFeeInstallmentsDispatch})(SetInstallmentsForm);

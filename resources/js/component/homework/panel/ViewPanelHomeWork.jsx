@@ -90,7 +90,7 @@ class ViewPanelHomeWork extends Component{
         return(
             <CardComponent title="View HomeWork" back_link={back_link} add_object={{'text':"Add",'clickFunction':this.addClickFunction}}>
                 <DataTable
-                title={"Class HomeWorks"}
+                  title={"Class HomeWorks"}
                     columns={columns}
                     data={this.props.class_homeworks}
                 />

@@ -4,6 +4,8 @@ import Row from "../../utils/Row"
 import Col from "../../utils/Col"
 import api from "../../api"
 import Swal from "sweetalert2";
+import { connect } from "react-redux";
+
 
 
 class ClassHallTicketEdit extends Component{
@@ -11,7 +13,8 @@ class ClassHallTicketEdit extends Component{
         super(props)
         this.state = {
             class_hallticket:"",
-            button_text:"Update Hall Ticket"
+            button_text:"Update Hall Ticket",
+            display_data:""
         }
         this.onChange = this.onChange.bind(this)
     }
@@ -20,21 +23,24 @@ class ClassHallTicketEdit extends Component{
             [name]:value
         })
     }
-    componentDidMount(){
-        const {class_hallticket} = this.props
+    async componentDidMount(){
+        const {class_hallticket,classes,class_id} = this.props
         this.setStateData("class_hallticket",class_hallticket);
+        const class_to_display = classes.filter(function(item) {
+            return item.id == class_id;
+        })[0];
+        var display_data = class_to_display.class_title
+        if(class_to_display.section)
+            display_data += " "+class_to_display.section
+        this.setStateData("display_data",display_data)
     }
-    componentWillReceiveProps(){
-        const {class_hallticket} = this.props
-        this.setStateData("class_hallticket",class_hallticket);
-    }
-    onChange(e,index){
+    async onChange(e,index){
         const {name,value} = e.target
         const {class_hallticket} = this.state
         class_hallticket[index][name] = value
         this.setStateData("class_hallticket",class_hallticket)
     }
-    updateHallTicket(){
+    async updateHallTicket(){
         const {class_hallticket} = this.state
         const {submit} = this.props
         this.setStateData("button_text","Updating Hall Ticket ...")
@@ -55,14 +61,14 @@ class ClassHallTicketEdit extends Component{
         })
     }
     render(){
-        const {title,class_id} = this.props
-        const {class_hallticket,button_text} = this.state
+        const {title,class_id,type} = this.props
+        const {class_hallticket,button_text,display_data} = this.state
         return(
             <CardComponent title={title}>
-                {class_id && <Row>
+                {display_data && <Row>
                     <Col md="4">
                         <label className="form-control-label">Class</label>
-                        <input type="text" className="form-control" disabled={true} value={class_id}/>
+                        <input type="text" className="form-control" disabled={true} value={display_data}/>
                     </Col>
                 </Row>
                 }
@@ -81,7 +87,7 @@ class ClassHallTicketEdit extends Component{
                             </thead>
                             <tbody>
                                 {class_hallticket.map((item,id) => {
-                                    return <EveryRow key={id} index={id} onChange={this.onChange} row={item} />
+                                    return <EveryRow type={type} key={id} index={id} onChange={this.onChange} row={item} />
                                 })}
                             </tbody>
                         </table>
@@ -94,8 +100,12 @@ class ClassHallTicketEdit extends Component{
     }
 }
 
-const EveryRow = ({key,index,row,onChange}) => (
-        <tr key={key}>
+const EveryRow = ({index,row,onChange,type, ...props}) => {
+    var disabled = ""
+    if(type == "view")
+        disabled = true
+    return(
+        <tr {... props}>
             <td>
                 {index+1}
             </td>
@@ -103,15 +113,24 @@ const EveryRow = ({key,index,row,onChange}) => (
                 {row.subject.subject_name}
             </td>
             <td>
-                <input type="date" name="exam_date" onChange={e => onChange(e,index)} className="form-control" value={row.exam_date}/>
+                <input disabled={disabled} type="date" name="exam_date" onChange={e => onChange(e,index)} className="form-control" value={row.exam_date || ''}/>
             </td>
             <td>
-                <input type="time" name="start_time" onChange={e => onChange(e,index)} className="form-control" value={row.start_time}/>
+                <input disabled={disabled}  type="time" name="start_time" onChange={e => onChange(e,index)} className="form-control" value={row.start_time || ''}/>
             </td>
             <td>
-                <input type="time" name="end_time" onChange={e => onChange(e,index)} className="form-control" value={row.end_time}/>
+                <input disabled={disabled}  type="time" name="end_time" onChange={e => onChange(e,index)} className="form-control" value={row.end_time || ''}/>
             </td>
         </tr>
-)
+    )
+}
 
-export default ClassHallTicketEdit
+function mapStateToProps(state) {
+    return {
+      classes:state.classes,
+    };
+  }
+  
+  export default connect(mapStateToProps)(ClassHallTicketEdit);
+
+  

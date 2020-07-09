@@ -54,7 +54,7 @@ export default class TimeTableViewStudent extends Component{
                     {add_panel  && <Suspense fallback={<h1>Loading ...</h1>}><AddTimeTableStudent /></Suspense>} 
                     {edit_panel && 
                         <Suspense fallback={<h1>Loading ...</h1>}>
-                        <EditTimeTableStudent time_table_name={time_table_name}/>
+                            <EditTimeTableStudent time_table_name={time_table_name}/>
                         </Suspense>
                     }
                 </div>

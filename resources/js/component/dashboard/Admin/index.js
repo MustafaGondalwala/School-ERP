@@ -71,12 +71,19 @@ export const AdminLeftSide = () => (
               </Link>
             
             </li>
-            <li className="nav-item">
+          <li className="nav-item">
               <Link className="nav-link" to="/admin/leave">
                 <i className="ni ni-archive-2 text-green"></i>
                 <span className="sidenav-mini-icon"> L </span>
 
                 <span className="nav-link-text">Leave</span>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/noticeboard">
+                <i className="ni ni-archive-2 text-green"></i>
+                <span className="sidenav-mini-icon"> N </span>
+                <span className="nav-link-text">Notice Board</span>
               </Link>
             </li>
             

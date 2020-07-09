@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class FeeClassWise extends Model
 {
     public function feeType(){
-        return $this->hasOne('App\FeeType','fee_type','id');
+        return $this->belongsTo('App\FeeType','fee_type_id');
+    }
+    public function feeInstallment(){
+        return $this->belongsTo('App\FeeInstallments','fee_installment_id');
     }
 }

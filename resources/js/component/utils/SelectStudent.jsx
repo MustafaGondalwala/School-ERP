@@ -13,24 +13,39 @@ export default class SelectStudent extends Component{
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount(){
-        api.student.get_student_searchable().then(data => {
-            this.setState({
-                student_list:data.student,
-                isLoading:false
+        const {class_id} = this.props
+        if(class_id != undefined){
+            api.student.get_student_searchable_by_class(class_id).then(data => {
+                this.setState({
+                    student_list:data.student,
+                    isLoading:false
+                })
             })
-        })
+        }else{
+            api.student.get_student_searchable().then(data => {
+                this.setState({
+                    student_list:data.student,
+                    isLoading:false
+                })
+            })   
+        }
     }
     onInputChange(searchText){
         if(searchText != ""){
             this.setState({
                 isLoading:true
             })
-            api.admin.student.get_student_searchable(searchText).then(data => {
-                this.setState({
-                    student_list:data.student,
-                    isLoading:false
+            const {class_id} = this.props
+            if(class_id != undefined){
+                return
+            }else{
+                api.student.get_student_searchable(searchText).then(data => {
+                    this.setState({
+                        student_list:data.student,
+                        isLoading:false
+                    })
                 })
-            })
+            }
         }
     }
     onChange(data){

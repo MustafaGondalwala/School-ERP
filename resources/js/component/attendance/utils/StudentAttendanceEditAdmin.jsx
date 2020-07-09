@@ -20,7 +20,9 @@ export default class StudentAttendanceEditAdmin extends Component{
             student_attendance:"",
             errors:{},
             view_button:"View Attendance",
-            fill_button:"Fill Attendance"
+            fill_button:"Fill Attendance",
+            show_class_panel:true,
+            user_type:""
         }
         this.sendClassId = this.sendClassId.bind(this)
         this.submit = this.submit.bind(this)
@@ -36,6 +38,17 @@ export default class StudentAttendanceEditAdmin extends Component{
         this.setState({
             [type]:value
         })
+    }
+
+    componentDidMount(){
+        const {class_id,user_type} = this.props
+        console.log(class_id,user_type)
+        if(user_type != undefined && class_id != undefined){
+            this.setState({
+                data: {...this.state.data,["class_id"]:class_id},
+            });
+            this.changeState("user_type",user_type)
+        }
     }
     sendClassId(class_id){
         this.setState({
@@ -77,11 +90,15 @@ export default class StudentAttendanceEditAdmin extends Component{
         })
     }
     render(){
-        const {errors,data,student_attendance,view_type,view_button,fill_button} = this.state
+        const {errors,data,student_attendance,view_type,view_button,fill_button,user_type} = this.state
+        var back_link = "/admin/attendance"
+        if(user_type != "")
+            back_link = "/teacher/attendance/class/"+data.class_id
+
         return(
             <div>
-                <CardComponent title="Select Class" back_link="/admin/attendance">
-                        <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />
+                <CardComponent title="Select Class" back_link={back_link}>
+                        {!user_type && <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />}
                         <Row>
                             <Col md="4" sm="6">
                                 <FormGroup>

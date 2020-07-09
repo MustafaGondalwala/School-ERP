@@ -17,15 +17,24 @@ class ViewClassWiseTimeTable extends Component{
         if(classwise_timetable.hasOwnProperty(class_id)){
             this.setState({
                 timetable:classwise_timetable[class_id]
-            },() => {
-                console.log(this.state)
             })
         }else{
             const timetable = await this.props.getClassWiseTimeTable(class_id)
             this.setState({
                 timetable:timetable[class_id]
-            },() => {
-                console.log(this.state)
+            })
+        }
+    }
+    async componentWillReceiveProps(){
+        const {class_id,classwise_timetable} = this.props
+        if(classwise_timetable.hasOwnProperty(class_id)){
+            this.setState({
+                timetable:classwise_timetable[class_id]
+            })
+        }else{
+            const timetable = await this.props.getClassWiseTimeTable(class_id)
+            this.setState({
+                timetable:timetable[class_id]
             })
         }
     }
@@ -34,7 +43,7 @@ class ViewClassWiseTimeTable extends Component{
         const {timetable} = this.state
         return(
             <div>
-            {timetable ? <ViewEditStudentTimeTable type="view" timetable={timetable} title={title}/> : <CardComponent>Loading ...</CardComponent>}
+                {timetable ? <ViewEditStudentTimeTable type="view" timetable={timetable} title={title}/> : <CardComponent>Loading ...</CardComponent>}
             </div>
         )
     }

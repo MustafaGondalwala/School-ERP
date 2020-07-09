@@ -11,7 +11,6 @@ class GetInstallmentYear extends Component{
         this.state = {
             data:{
                 "installment":"",
-                "select_year":""
             },
             errors:{},
             fetch_button:"Fetch"
@@ -27,7 +26,6 @@ class GetInstallmentYear extends Component{
     validate(data){
         const errors = {};
         if (!data.installment) errors.installment = "Can't be blank";
-        if (!data.select_year) errors.select_year = "Can't be blank";
         return errors;
       };
     onSubmit(){
@@ -44,7 +42,6 @@ class GetInstallmentYear extends Component{
         return(
             <CardComponent title="Set Fee Due Date" back_link="/admin/fees">
                     <InstallmentSelectComponent errors={errors} colType="col-md-4" name="installment" onChange={this.onChange} label="Select Installments"/>
-                    <YearSelectComponent errors={errors} colType="col-md-4" name="select_year" onChange={this.onChange} label="Select Year"/>
                     <button onClick={e => this.onSubmit()} className="btn btn-primary">{fetch_button}</button>
             </CardComponent>
         )

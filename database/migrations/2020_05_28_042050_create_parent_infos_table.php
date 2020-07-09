@@ -17,8 +17,10 @@ class CreateParentInfosTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('mobile_no');
-            $table->string('student_info_id');
+            $table->integer('school_id');
+            $table->integer('year_id');
             $table->timestamps();
+
         });
     }
 

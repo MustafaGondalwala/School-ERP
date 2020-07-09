@@ -72,21 +72,9 @@ const StudentHomePage = () => {
                 button_text="Enter"
               />
               <ColComponent
-                title="Bulk Profile Update"
-                description="Bulk Student Profile Update in System"
-                link="/admin/student/student-profile-update-bulk"
-                button_text="View"
-              />
-              <ColComponent
                 title="Profile Images"
                 description="Image Update of Student in System"
                 link="/admin/student/student-profile-image"
-                button_text="View"
-              />
-              <ColComponent
-                title="Bulk Images Upload"
-                description="Bulk Image Update of Student in System"
-                link="/admin/student/student-profile-update-images-bulk"
                 button_text="View"
               />
             </div>
@@ -96,12 +84,6 @@ const StudentHomePage = () => {
         <div className="card-deck flex-column flex-xl-row">
           <CardComponent title="View">
             <div className="row card-wrapper">
-              <ColComponent
-                title="Student List"
-                description="View All Student in System"
-                link="/admin/student/student-list"
-                button_text="View"
-              />
               <ColComponent
                 title="Student Advanced Search"
                 description="Filter Student in System"
@@ -129,19 +111,13 @@ const StudentHomePage = () => {
               <ColComponent
                 title="Class/Section Wise"
                 description="View Class/Section Wise Report"
-                link="/admin/student/register-student-bulk"
+                link="/admin/student/report/class-section"
                 button_text="View"
               />
               <ColComponent
-                title="Caste Wise"
-                description="View Caste Wise Report"
-                link="/admin/student/register-student-bulk"
-                button_text="View"
-              />
-              <ColComponent
-                title="Religion Wise"
-                description="View Religion Wise Report"
-                link="/admin/student/register-student-bulk"
+                title="Religion-Caste Wise"
+                description="View Religion-Caste Wise Report"
+                link="/admin/student/report/religion-caste"
                 button_text="View"
               />
               <ColComponent
@@ -178,18 +154,12 @@ const StudentHomePage = () => {
               <ColComponent
                 title="Add/Edit/View Clerk"
                 description="Add/Edit/View Clerk"
-                link="/admin/student/register-student-bulk"
-                button_text="View"
+                link="/admin/student/clerk"
+                button_text="Manage"
               />
               <ColComponent
                 title="Change Password"
                 description="Profile Update of Clerk"
-                link="/admin/student/register-student-bulk"
-                button_text="View"
-              />
-              <ColComponent
-                title="View Clerk List"
-                description="View Clerk List"
                 link="/admin/student/register-student-bulk"
                 button_text="View"
               />
@@ -224,6 +194,18 @@ const StudentHomePage = () => {
                 description="Generate ID in System"
                 link="/admin/student/student-generate-id-card"
                 button_text="View"
+              />  
+              <ColComponent
+                title="Set Roll No"
+                description="Set Roll No"
+                link="/admin/student/set-roll_no"
+                button_text="Set"
+              />
+              <ColComponent
+                title="Set Register ID"
+                description="Set Register ID"
+                link="/admin/student/set-register"
+                button_text="Set"
               />
             </div>
           </CardComponent>

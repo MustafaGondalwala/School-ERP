@@ -15,8 +15,9 @@ class CreateFeeInstallmentsTable extends Migration
     {
         Schema::create('fee_installments', function (Blueprint $table) {
             $table->id();
-            $table->integer('school_info_id');
+            $table->integer('school_id');
             $table->string('installment');
+            $table->integer('year_id')->default(1);
             $table->timestamps();
         });
     }

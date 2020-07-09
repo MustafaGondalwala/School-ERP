@@ -7,10 +7,13 @@ import feeType from "./reducers/feeType"
 import {setClass as classes ,setDistinctClass as distinct_classes,classPeriod as class_periods,setClassWiseTimeTable as classwise_timetable} from "./reducers/classes"
 import {setSubjects as subjects} from "./reducers/subjects"
 import {setTeachers as teachers,setTeachersName as teachers_name} from "./reducers/teachers"
-import {setTimetable as timetables} from "./reducers/timetable"
+import {setTimetable as timetables,setTimetableTeacher as teacher_timetables} from "./reducers/timetable"
 import {class_homeworks} from "./reducers/homework"
 import {parent_childs,parent_homework} from "./reducers/parent"
-import {examType} from "./reducers/exam"
+import {examType,monthlyTest} from "./reducers/exam"
+import {adminStudentHeader} from "./reducers/header"
+import {schoolClerks} from "./reducers/clerk"
+import {studyMaterialGroup} from "./reducers/study_material"
 
 export default combineReducers({
     user,
@@ -29,5 +32,10 @@ export default combineReducers({
     parent_homework,
     classwise_timetable,
     examType,
-    teachers_name
+    teachers_name,
+    teacher_timetables,
+    adminStudentHeader,
+    schoolClerks,
+    monthlyTest,
+    studyMaterialGroup
   });

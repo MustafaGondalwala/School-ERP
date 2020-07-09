@@ -13,7 +13,7 @@ import { error } from "jquery"
 const RegisterForm = React.lazy(() => import("../form/RegisterForm"))
 import GetClassId from "../../utils/GetClassId"
 import api from "../../api"
-
+import Swal from "sweetalert2"
 class RegisterPage extends Component{
     newRegisterStudent(data){
         let formData = new FormData();    //formdata object
@@ -21,7 +21,7 @@ class RegisterPage extends Component{
           formData.append(item,data[item])
         })
         return api.adminclerk.student.register.add(formData).then(data => {
-            console.log(data)
+            Swal.fire("Success","Student Registered","success")
         })
     }
     render(){

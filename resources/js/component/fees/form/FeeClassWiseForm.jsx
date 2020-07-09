@@ -3,7 +3,7 @@ import React,{Component} from "react"
 import CardComponent from "../../utils/CardComponent"
 import api from "../../api"
 import Swal from "sweetalert2";
-
+import shortid from "shortid";
 
 export default class FeeClassWiseForm extends Component{
     constructor(props){
@@ -24,18 +24,20 @@ export default class FeeClassWiseForm extends Component{
             year_id
         })
     }
-    feeTypeAmount(e,label){
+    // componentWillReceiveProps(){
+    //     const {fee_class_wise,class_id,year_id} = this.props
+    //     this.setState({
+    //         fee_class_wise,
+    //         class_id,
+    //         year_id
+    //     })
+    // }
+    feeTypeAmount(e,label,index){
         const value = e.target.value;
-        const fee_type_id = e.target.getAttribute('data-fee_type_id')
-        const updateClassWise = this.state.updateClassWise
-        const temp_state = this.state.fee_class_wise
-        temp_state[label].map(item => {
-            if(item.fee_type_id == fee_type_id)
-                item.amount = value
-        })
+        const {fee_class_wise} = this.state
+        fee_class_wise[label][index].amount = value
         this.setState({
-            fee_class_wise:temp_state,
-            updateClassWise:updateClassWise
+            fee_class_wise
         })
     }
 
@@ -43,14 +45,8 @@ export default class FeeClassWiseForm extends Component{
         data['fee_class_wise'] = this.state.fee_class_wise
         data['class_id'] = this.state.class_id
         data['year_id'] = this.state.year_id
-        this.setState({
-            update_button:"Updating Fees ...",
-            fee_class_wise:""
-        },() => {
-            Swal.fire("Please wait ...","Updaing Fees ..","info");
-        })
         
-        api.admin.fee.update_class_wise_fees(data).then(data => {
+        api.adminclerk.fee.update_class_wise_fees(data).then(data => {
             this.setState({
                 fee_class_wise:data.fee_class_wise,
                 update_button:"Update Fees"
@@ -68,7 +64,7 @@ export default class FeeClassWiseForm extends Component{
         return(
                <div>
                     {fee_class_wise && 
-                        Object.keys(fee_class_wise).map(item => {
+                        Object.keys(fee_class_wise).map((item,key) => {
                             return <ViewInstallmentForm installment_label={item} feeTypeAmount={this.feeTypeAmount} installment_wise={fee_class_wise[item]}/>
                         })
                     }
@@ -125,7 +121,7 @@ class SubmitForm extends Component{
 
 const ViewInstallmentForm = ({installment_label,installment_wise,feeTypeAmount}) => {
     return(
-        <CardComponent title={`${installment_label} Fees:`}>
+        <CardComponent key={shortid.generate()} title={`${installment_label} Fees:`}>
             <div className="table-responsive">
                 <table className="table">
                     <thead>
@@ -137,10 +133,10 @@ const ViewInstallmentForm = ({installment_label,installment_wise,feeTypeAmount})
                     </thead>
                     <tbody>
                         {installment_wise.map((item,id) => {
-                            return <tr>
+                            return <tr key={shortid.generate()}>
                                 <td>{id+1}</td>
-                                <td>{item.fee_type_id}</td>
-                                <td><input type="number" min="0" data-fee_type_id={item.fee_type_id} className="form-control" onChange={e => feeTypeAmount(e,installment_label)} value={item.amount}/>
+                                <td>{item.fee_type.fee_type}</td>
+                                <td><input type="number" min="0" data-fee_type_id={item.fee_type_id} className="form-control" onChange={e => feeTypeAmount(e,installment_label,id)} value={item.amount}/>
                                 </td>
                             </tr>
                         })}

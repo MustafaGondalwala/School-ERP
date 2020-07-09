@@ -41,7 +41,6 @@ class AdmissionStudent extends Component {
       father_contact_no1: "",
       father_contact_no2: "",
       gender: "male",
-      sms_number: "",
       father_email: "",
       mother_email: "",
       father_occupation: "",
@@ -73,6 +72,7 @@ class AdmissionStudent extends Component {
     };
     this.state = {
       data: data,
+      roll_no_placeholder:"Please Select Class",
       button_text: "Add Admission",
       title: "Admission Student",
       errors: {},
@@ -81,6 +81,7 @@ class AdmissionStudent extends Component {
     this.onChange = this.onChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.sendClassId = this.sendClassId.bind(this);
+    this.getRollNoSequence = this.getRollNoSequence.bind(this);
   }
 
   calculate_age(dob) {
@@ -118,7 +119,6 @@ class AdmissionStudent extends Component {
     if (!data.mother_name) errors.mother_name = "Can't be blank";
     if (!data.student_name) errors.student_name = "Can't be blank";
     if (!data.father_contact_no1) errors.father_contact_no1 = "Can't be blank";
-    if (!data.sms_number) errors.sms_number = "Can't be blank";
     if (!data.class_id) errors.class_id = "Can't be blank";
     if (!data.religion) errors.religion = "Can't be blank";
     if (!data.caste) errors.caste = "Can't be blank";
@@ -128,10 +128,34 @@ class AdmissionStudent extends Component {
     if (!data.place) errors.place = "Can't be blank";
     return errors;
   }
+  async getRollNoSequence(class_id){
+    this.setState({
+      roll_no_placeholder:"Loading ..."
+    })
+    await api.adminclerk.student.get_roll_no(class_id).then(data => {
+      const {roll_no} = data
+      if(roll_no == null){
+        Swal.fire("Roll No not Set","Roll No Sequence not Set. Please Set","warning");
+        this.setState({
+          roll_no_placeholder:"Please Select Class"
+        })
+      }else{
+        const userAccount = JSON.parse(localStorage.getItem('userAccount'))
+        const {unique_id_code} = userAccount.info.school
+        const {roll_id,rollno_string} = roll_no
+        const new_roll_no = unique_id_code+"-"+rollno_string+roll_id
+        this.setState({
+          data: { ...this.state.data, ["roll_no"]: new_roll_no },
+        });
+      }
+        
+    })
+  }
   sendClassId(class_id) {
     this.setState({
       data: { ...this.state.data, ["class_id"]: class_id },
     });
+    this.getRollNoSequence(class_id)
   }
   async componentWillMount() {
     const params = this.props.match.params;
@@ -181,13 +205,18 @@ class AdmissionStudent extends Component {
         this.setState({
           button_text: "Updating ...",
         });
-        api.adminclerk.student.update_student(formData)
+        api.adminclerk.student.update_student(formData).then(data => {
+          Swal.fire("Success",data.message,"success");
+          this.setState({
+            button_text:"Update"
+          })
+        })
       } else {
         this.setState({
           button_text: "Adding ...",
         });
-        api.admin.student
-          .admission(formData)
+        api.adminclerk.student.admission
+          .add(formData)
           .then((data) => {
             this.setState({ data, button_text: " Add Admission" });
             Swal.fire(
@@ -204,7 +233,7 @@ class AdmissionStudent extends Component {
     }
   }
   render() {
-    const { data, errors, button_text, title, update_student } = this.state;
+    const { data, errors, button_text, title, update_student,roll_no_placeholder } = this.state;
     return (
       <div>
         <TopBreadCrumb mainHeader="Student" header="Admission" sub_header="Add">
@@ -222,6 +251,8 @@ class AdmissionStudent extends Component {
                   <Input
                     errors={errors}
                     name="roll_no"
+                    disabled
+                    placeholder={roll_no_placeholder}
                     onChange={this.onChange}
                     value={data.roll_no}
                   />
@@ -360,7 +391,7 @@ class AdmissionStudent extends Component {
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Student Address:</FormLabel>
+                  <FormLabel>Student Address*:</FormLabel>
                   <Input
                     name="student_address"
                     errors={errors}
@@ -372,9 +403,10 @@ class AdmissionStudent extends Component {
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Place:</FormLabel>
+                  <FormLabel>Place*:</FormLabel>
                   <Input
                     name="place"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="Place"
                     value={data.place}
@@ -432,9 +464,10 @@ class AdmissionStudent extends Component {
               {/* pincode */}
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Pincode:</FormLabel>
+                  <FormLabel>Pincode*:</FormLabel>
                   <Input
                     name="pincode"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="Pincode"
                     value={data.pincode}
@@ -443,10 +476,11 @@ class AdmissionStudent extends Component {
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Religion:</FormLabel>
+                  <FormLabel>Religion*:</FormLabel>
                   <Select
                     errors={errors}
                     name="religion"
+                    value={data.religion}
                     onChange={this.onChange}
                   >
                     <SelectOption>-- Select --</SelectOption>
@@ -460,8 +494,8 @@ class AdmissionStudent extends Component {
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Caste:</FormLabel>
-                  <Select errors={errors} name="caste" onChange={this.onChange}>
+                  <FormLabel>Caste*:</FormLabel>
+                  <Select errors={errors} value={data.caste} name="caste" onChange={this.onChange}>
                     <SelectOption>-- Select --</SelectOption>
                     <SelectOption value="general">General</SelectOption>
                     <SelectOption value="obc">OBC</SelectOption>
@@ -580,19 +614,7 @@ class AdmissionStudent extends Component {
                 </FormGroup>
               </Col>
 
-              <Col md="4" sm="6">
-                <FormGroup>
-                  <FormLabel>SMS Number*:</FormLabel>
-                  <Input
-                    errors={errors}
-                    type="number"
-                    placeholder="SMS Number 2"
-                    name="sms_number"
-                    onChange={this.onChange}
-                    value={data.sms_number}
-                  />
-                </FormGroup>
-              </Col>
+              
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Father Email:</FormLabel>

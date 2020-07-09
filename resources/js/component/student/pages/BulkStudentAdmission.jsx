@@ -79,7 +79,8 @@ class BulkStudentAdmission extends Component{
                         <Col md="4">
                             <ButtonGroup>
                                 <Button onClick={this.uploadData} primary sm>Upload</Button>
-                                <Button success sm>Download</Button>
+                                <a href="/storage/uploads/images/admission_student_template.xlsx"className="btn btn-success btn-sm" success sm>Download</a>
+                                {/* admission_student_template.xlsx */}
                             </ButtonGroup>
                         </Col>
                     </Row>

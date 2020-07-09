@@ -28,6 +28,49 @@ export const Button = ({primary,disabled,success,warning,danger,neutral,sm,lg,ch
         <button disabled={disabled} onClick={e => onClick(e)} className={className} {...rest}>{children}</button>
     )
 }
+
+
+
+const getFileType = (name) => {
+    var fileSplit = name.split('.');
+    var fileExt = '';
+    if (fileSplit.length > 1) {
+    fileExt = fileSplit[fileSplit.length - 1];
+    } 
+    return fileExt;
+}
+export const PreviewAttachment = ({attachments}) => {
+    return(
+        <div>
+            {
+                 attachments && attachments.map((item,id) => {
+                    var extension = getFileType(item.name)
+                    var url =  URL.createObjectURL(item)
+                    switch(extension){
+                        case "jpg":
+                        case "png":
+                        case "jpeg":
+                            return <img src={url} className="img img-thumbnail img-fluid"/>
+                        case "csv":
+                            return <p><i class="fas fa-file-csv"></i></p>
+                        case "xlsx":
+                        case "xls":
+                            return <p><i class="far fa-file-excel"></i></p>
+                        case "pdf":
+                            return <p><i class="far fa-file-pdf"></i></p>
+                        case "zip":
+                        case "rar":
+                            return <p><i class="far fa-file-archive"></i></p>
+                        case "doc":
+                        case "txt":
+                            return <p><i class="far fa-file-word"></i></p>
+                    }
+                })
+            }
+
+        </div>
+    )
+}
 export const UploadInput = () => (
     <input type="file" className="form-control" />
 )
@@ -68,12 +111,14 @@ export class UploadImage extends Component{
         this.setState({url})
         this.props.onChange(e)
     }
+    
+
     render(){
         const {onChange,name} = this.props
         const {url} = this.state
         return(
             <span>
-                <input type="file" name={name} onChange={e => this.changeData(e)} accept='image/*' className="form-control" />
+                <input type="file" {... this.props} name={name} onChange={e => this.changeData(e)} accept='image/*' className="form-control" />
                 {url  && 
                     <img src={url} className="img img-fluid img-thumbnail"/>
                 }
@@ -102,7 +147,7 @@ export const UploadMutitpleMutiples = ({type="file",name,onChange,disabled,error
 
 export const PreviewSingleImage = ({url}) => (
     <span>
-        {(typeof url == "string" && url != "") && <img src={url} className="img img-thumbnail img-fluid"/>}
+        {(typeof url == "string" && url != "" && url != "null") && <img src={url} className="img img-thumbnail img-fluid"/>}
     </span>
 )
 export const PreviewFiles = ({download=false,files}) => {
@@ -118,7 +163,7 @@ export const PreviewFiles = ({download=false,files}) => {
     )
 }
 
-export const Input = ({type="text",name,placeholder,value,onChange,disabled,errors={}}) => {
+export const Input = ({type="text",name,placeholder,value,onChange,disabled,errors={},...props}) => {
     return(
         <span>
         <input type={type} disabled={disabled} value={value} name={name} placeholder={placeholder} onChange={e => onChange(e)} className="form-control"/>
@@ -135,8 +180,8 @@ export const Select = ({errors={},children,onChange,name,value,...rest}) => (
     </span>
 )
 
-export const SelectOption = ({children,selected,value}) => (
-    <option selected={selected} key={Math.random()} value={value}>
+export const SelectOption = ({children,selected,value, ...rest}) => (
+    <option selected={selected} value={value} {...rest}>
         {children}
     </option>
 )

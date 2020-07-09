@@ -70,6 +70,7 @@ class RegisterStudentController extends Controller
         $new_register->block = $request->block;
         $new_register->district = $request->district;
         $new_register->year_id = $this->getSchoolYearId($request);
+        $new_register->school_id = $this->getSchoolId($request);
         if($request->hasFile('student_name')){
             $new_register->student_photo = $this->uploadFile($request->student_photo)['url'];
         }if($request->hasFile('mother_photo')){
@@ -78,6 +79,7 @@ class RegisterStudentController extends Controller
             $new_register->father_photo = $this->uploadFile($request->father_photo)['url'];
         }
         $new_register->save();
+        \DB::commit();
         return $this->ReS(["message"=>'Student Registered']);
     }   
 }

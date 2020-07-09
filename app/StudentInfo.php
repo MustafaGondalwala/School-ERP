@@ -35,4 +35,7 @@ class StudentInfo extends Model
     public function photos(){
         return $this->hasOne(StudentPhoto::class,'student_info_id');
     }
+    public function fees(){
+        return $this->hasMany(StudentFee::class,'student_id');
+    }
 }

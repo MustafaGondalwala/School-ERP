@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','login_text','school_id','user_type'
+        'name', 'email', 'password','login_text','school_id','user_type','password'
     ];
 
     /**
@@ -41,6 +41,12 @@ class User extends Authenticatable
     public function school(){
         return $this->belongsTo('App\SchoolInfo','school_id');
     }
+
+    public function teacher(){
+        return $this->belongsTo('App\Teacher','login_text','empid');
+    }
+
+
     public function childs(){
         return StudentInfo::where('parent_id',$this->profile_id)->get();
     }

@@ -21,7 +21,9 @@ class CreateHandleReceiptsTable extends Migration
             $table->string('fee_type');
             $table->integer('waiver_amount');
             $table->integer('total_amount');
+            $table->integer('total_pending');
             $table->integer('total_paid');
+            $table->integer('current_paid');
             $table->timestamps();
         });
     }

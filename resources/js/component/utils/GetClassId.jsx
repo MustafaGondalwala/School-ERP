@@ -109,45 +109,51 @@ class GetClassId extends Component {
       }
       
       return (
-        <Row>
-          <Col md="6" sm="6">
-            <FormLabel>
-              Class
-            </FormLabel>
-            <select
-                className="form-control"
-                name="class"
-                disabled={disabled}
-                onChange={(e) => this.onChangeClasses(e)}
-                value={default_value}
-              >
-                <option value="">Select Class</option>
-                {this.state.distinct_classes.map(function (item,key) {
-                  if(item == class_id){
-                    return <option selected={true} key={key} value={item}>{item}</option>;
-                  }else{
-                    return <option key={key} value={item}>{item}</option>;
+        <div>
+          {this.state.distinct_classes.length > 0 ?
+            <Row>
+              <Col md="6" sm="6">
+                <FormLabel>
+                  Class
+                </FormLabel>
+                <select
+                    className="form-control"
+                    name="class"
+                    disabled={disabled}
+                    onChange={(e) => this.onChangeClasses(e)}
+                    value={default_value}
+                  >
+                    <option value="">Select Class</option>
+                    {this.state.distinct_classes.map(function (item,key) {
+                      if(item == class_id){
+                        return <option selected={true} key={key} value={item}>{item}</option>;
+                      }else{
+                        return <option key={key} value={item}>{item}</option>;
+                      }
+                    })}
+                  </select>
+                  {errors != undefined && 
+                    <span>{errors.class_id && <InlineError text={errors.class_id} />}</span>
                   }
-                })}
-              </select>
-              {errors.class_id && <InlineError text={errors.class_id} />}
-          </Col>
-          <Col md="6" sm="6">
-              <FormLabel>Section</FormLabel>
-              <select
-                className="form-control"
-                value={this.section_}
-                disabled={disabled}
-                name="section_"
-                onChange={(e) => this.onChange(e)}
-              >
-                {this.state.section &&
-                  this.state.section.map((item,key) => {
-                    if (item != null) return <option key={key} value={item}>{item}</option>;
-                  })}
-              </select>
-          </Col>
-        </Row>
+              </Col>
+              <Col md="6" sm="6">
+                  <FormLabel>Section</FormLabel>
+                  <select
+                    className="form-control"
+                    value={this.section_}
+                    disabled={disabled}
+                    name="section_"
+                    onChange={(e) => this.onChange(e)}
+                  >
+                    {this.state.section &&
+                      this.state.section.map((item,key) => {
+                        if (item != null) return <option key={key} value={item}>{item}</option>;
+                      })}
+                  </select>
+              </Col>
+            </Row>
+          : <h5>Loading Classes ...</h5>}
+          </div>
       );
     }
 }

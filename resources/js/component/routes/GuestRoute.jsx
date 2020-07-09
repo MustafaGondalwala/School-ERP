@@ -16,10 +16,10 @@ const getUserTypeString = (user_type) => {
       case 4:
         return "teacher"
         break
-      case 4:
+      case 5:
         return "clerk"
         break
-      case 5:
+      case 6:
         return "management"
         break
     }

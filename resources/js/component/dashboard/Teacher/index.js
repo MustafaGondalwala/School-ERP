@@ -3,7 +3,7 @@ import {Link,Redirect} from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/login"
 
-export const TeacherLeftSide = (assigned_class) => {
+export const TeacherLeftSide = ({assigned_class}) => {
   return(
     <nav className="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
       <div className="scrollbar-inner">
@@ -24,8 +24,7 @@ export const TeacherLeftSide = (assigned_class) => {
         <div className="navbar-inner">
           <div className="collapse navbar-collapse" id="sidenav-collapse-main">
           <ul className="navbar-nav">
-            {assigned_class && Object.keys(assigned_class).map((item,key) => {
-              var classes = assigned_class['assigned_class'];
+             { assigned_class && assigned_class.map((classes,key) => {
               return <li key={key} className="nav-item">
                 <a className="nav-link collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls={key}>
                   <i className="ni ni-ungroup text-orange" />
@@ -73,6 +72,12 @@ export const TeacherLeftSide = (assigned_class) => {
                       <Link to={`/teacher/virtual-classes/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> C </span>
                         <span className="sidenav-normal"> Virtual Class </span>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={`/teacher/study-material/class/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> S </span>
+                        <span className="sidenav-normal"> Study Material </span>
                       </Link>
                     </li>
                     

@@ -17,9 +17,8 @@ class CreateFeeDueDatesTable extends Migration
             $table->id();
             $table->integer('fee_installment_id');
             $table->date('last_due_date')->nullable();
-            $table->integer('school_info_id');
-            $table->integer('system_year_id');
-            $table->unique(['school_info_id', 'fee_installment_id']);
+            $table->integer('school_id');
+            $table->integer('year_id');
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ class InstallmentSelectComponent extends Component{
                     <label className="form-control-label">{label}</label>
                     <select name={name} onChange={onChange} className="form-control">
                         <option value="">-- Select --</option>
-                        {Object.keys(installments).length > 1 && installments.map(item => {
-                            return <option value={item}>{item}</option>
+                        {Object.keys(installments).length > 1 && installments.map((item,key) => {
+                            return <option key={key} value={item.id}>{item.installment}</option>
                         })}
                     </select>
                     {errors[name] && <InlineError text={errors[name]}/>}

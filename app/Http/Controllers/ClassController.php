@@ -11,9 +11,66 @@ use App\FeeClassWise;
 use App\StudentFee;
 use App\ClassPeriod;
 use App\StudentTimeTable;
-
+use App\SubjectClasswise;
 class ClassController extends Controller
 {
+    public function deleteSubjectClassWise(Request $request,$class_id,$subject_id){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $checkIfExist = SubjectClasswise::where([
+            'class_id'=>$class_id,
+            'school_id'=>$school_id,
+            'year_id'=>$year_id,
+            'subject_id'=>$subject_id
+        ])->count();
+        if($checkIfExist == 0){
+            return $this->ReE(["message"=>"Error Occured"],422);
+        }
+        SubjectClasswise::where([
+            'class_id'=>$class_id,
+            'school_id'=>$school_id,
+            'year_id'=>$year_id,
+            'subject_id'=>$subject_id
+        ])->delete();
+
+        $data = $this->getClassWiseSubject($school_id,$year_id,$class_id);
+        $message = "Subject Dis-Allocated form Class.";
+        return $this->ReS(["subjectclasswise"=>$data,"message"=>$message]);
+    }
+    public function updateSubjectClassWise(Request $request,$class_id){
+        $request->validate([
+            'subject_id'=>'required|integer'
+        ]);
+        
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $subject_id = $request->subject_id;
+
+        $checkIfExist = SubjectClasswise::where([
+            'class_id'=>$class_id,
+            'school_id'=>$school_id,
+            'year_id'=>$year_id,
+            'subject_id'=>$subject_id
+        ])->count();
+        if($checkIfExist > 0){
+            return $this->ReE(["message" => "Subject Already Exists for Class. Try Another Class"],422);
+        }
+        $new_subject = new SubjectClasswise;
+        $new_subject->year_id = $year_id;
+        $new_subject->school_id = $school_id;
+        $new_subject->subject_id = $subject_id;
+        $new_subject->class_id = $class_id;
+        $new_subject->save();
+        $data = $this->getClassWiseSubject($school_id,$year_id,$class_id);
+        $message = "Subject Allocated for Class.";
+        return $this->ReS(["subjectclasswise"=>$data,"message"=>$message]);
+    }
+    public function getSubjectClassWise(Request $request,$class_id){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $data = $this->getClassWiseSubject($school_id,$year_id,$class_id);
+        return $this->ReS(["subjectclasswise"=>$data]);
+    }
     public function publishTimeTable(Request $request){
         $request->validate([
             'publish_timetable'=>'required|array'
@@ -194,7 +251,7 @@ class ClassController extends Controller
     }
     public function getAllClassSection(Request $request){
         $school_id = $this->getSchoolId($request);
-        $classes = Classes::with('teacher')->where('school_info_id',$school_id)->get();
+        $classes = Classes::with('teacher','roll_no')->where('school_id',$school_id)->get();
         return $this->ReS(["classes"=>$classes]);
     }
     public function getDistinctClass(Request $request){

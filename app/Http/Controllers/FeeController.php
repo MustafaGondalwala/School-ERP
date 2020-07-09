@@ -14,7 +14,91 @@ use App\HandleReceipt;
 use App\FeeReceipt;
 
 class FeeController extends Controller
-{   
+{
+    public function getPendingFeesClassWise(Request $request){
+        $request->validate([
+            'class_id'=>'required|integer',
+            'installment'=>'required|integer'
+        ]);
+        $class_id = $request->class_id;
+        $installment_id = $request->installment;
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+
+        $studentInfo = StudentInfo::with('fees')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+            'class_id'=>$class_id,
+        ])->get();
+        
+        return $this->ReS(["installment"=>$studentInfo]);
+    }
+    public function deleteClassWiseFeeType(Request $request,$class_id,$row_id){
+        
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        FeeType::find($row_id)->delete();
+        $data = FeeType::select('id','fee_type')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+        ])->get();
+        return $this->ReS(["fee_type"=>$data,"message"=>"Fee Type Delete!!"]);
+    }
+    public function updateClassWiseFeeType(Request $request,$class_id){
+        $request->validate([
+            'fee_type'=>'required|string|max:100',
+            'id'=>'required|integer'
+        ]);
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        FeeType::find($request->id)->update([
+            'fee_type'=>$request->fee_type
+        ]);
+        $data = FeeType::select('id','fee_type')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+            'class_id'=>$class_id
+        ])->get();
+        return $this->ReS(["fee_type"=>$data,"message"=>"Fee Type Updated!!"]);
+    }
+    public function addClassWiseFeeType(Request $request,$class_id){
+        $request->validate([
+            'fee_type'=>'required|string|max:100'
+        ]);
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $checkIfExist = FeeType::where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+            'class_id'=>$class_id,
+            'fee_type'=>$request->fee_type
+        ])->count();
+        if($checkIfExist != 0){
+            return $this->ReE(["message"=>"Fee Type Already Exist"],422);
+        }
+        $new_fee_type = new FeeType;
+        $new_fee_type->year_id = $year_id;
+        $new_fee_type->school_id = $school_id;
+        $new_fee_type->class_id = $class_id;
+        $new_fee_type->fee_type = $request->fee_type;
+        $new_fee_type->save();
+        $data = FeeType::select('id','fee_type')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+            'class_id'=>$class_id
+        ])->get();
+        return $this->ReS(["fee_type"=>$data]);
+    }
+    public function getClassWiseFeeType(Request $request,$class_id){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $data = FeeType::select('id','fee_type')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id,
+            'class_id'=>$class_id
+        ])->get();
+        return $this->ReS(["fee_type"=>$data]);
+    }
     public function getReceiptDetails(Request $request,$receipt_id){
         $receiptDetails = HandleReceipt::where('receipt_id',$receipt_id)->get();
         return $this->ReS(["receiptDetails"=>$receiptDetails]);
@@ -23,33 +107,28 @@ class FeeController extends Controller
         $request->validate([
             'student_id'=>'required|integer'
         ]);
-        if($request->year_id == ""){
-            $year_id = $this->getCurrentYear($request);
-        }else{
-            $year_id = $request->year_id;
-        }
+        $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
         $student_id = $request->student_id;
         $fee_receipts = FeeReceipt::where([
             'student_id'=>$student_id,
-            'system_year_id'=>$year_id,
+            'year_id'=>$year_id,
             'school_id'=>$school_id
         ])->get();
+        if(count($fee_receipts) == 0){
+            return $this->ReE(["message"=>"No Fee Receipt Found"],400);
+        }
         return $this->ReS(["fee_receipts"=>$fee_receipts]);
     }
     public function payIndividualFees(Request $request){
         $request->validate([
-            'send_message'=>'required|boolean',
             'payment_type'=>'required',
             'fee_individual'=>'required|array'
         ]);
         $school_id = $this->getSchoolId($request);
         $student_id = $request->student_id;
-        if($request->year_id == ""){
-            $year_id = $this->getCurrentYear($request);
-        }else{
-            $year_id = $request->year_id;
-        }
+        $class_id = StudentInfo::find($student_id)->class_id;
+        $year_id = $this->getSchoolYearId($request);
         try{
             DB::beginTransaction();
             $new_fee_receipt = new FeeReceipt;
@@ -57,26 +136,21 @@ class FeeController extends Controller
             $new_fee_receipt->payment_type = $request->payment_type;
             $new_fee_receipt->school_id = $this->getSchoolId($request);
             $new_fee_receipt->student_id = $request->student_id;
-            $new_fee_receipt->system_year_id = $year_id;
+            $new_fee_receipt->year_id = $year_id;
             $new_fee_receipt->save();
 
             $fee_individual = $request->fee_individual;
             foreach($fee_individual as $installment){
                 foreach($installment as $type){
-                    if($type['current_paid'] > 0){
-                        
+                    if($type['temp_paid'] > 0){
                         $total_pending = $type['total_pending'];
-                        $new_total_pending = $type['total_amount'] - $type['current_paid'];
-                        $update_student_fees = StudentFee::where([
-                            'id'=>$type['id'],
-                            'fee_installment_id'=>$type['fee_installment_id'],
-                            'fee_type_id'=>$type['fee_type_id'],
-                            'amount'=>$type['amount'],
-                            'waiver_amount'=>$type['waiver_amount'],
-                            'total_amount'=>$type['total_amount']
-                        ])->update([
+                        $new_total_pending = $total_pending - $type['temp_paid'];
+                        $new_current_paid = $type['current_paid'] + $type['temp_paid'];
+                        
+                        $update_student_fees = StudentFee::find($type['id'])->update([
                             'total_pending'=>$new_total_pending,
-                            'current_paid'=>0
+                            'current_paid'=>$new_current_paid,
+                            'temp_paid'=>0
                         ]);
                         if($update_student_fees){
                             $handleReceipt = new HandleReceipt;
@@ -86,9 +160,12 @@ class FeeController extends Controller
                             $handleReceipt->amount = $type['amount'];
                             $handleReceipt->waiver_amount = $type['waiver_amount'];
                             $handleReceipt->total_amount = $type['total_amount'];
+                            $handleReceipt->total_pending = $type['total_pending'];
                             $handleReceipt->total_paid = $type['current_paid'];
+                            $handleReceipt->current_paid = $type['temp_paid'];
                             $handleReceipt->save();
                         }
+
                     }
                 }
             }
@@ -98,11 +175,23 @@ class FeeController extends Controller
             return $this->ReE(["message"=>$e->getMessage()],400);
         }
         DB::commit();
-        $fee_receipts = FeeReceipt::where([
-                'school_id'=>$school_id,
-                'student_id'=>$student_id,
+        $fee_installments = FeeInstallments::select('id','installment')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
         ])->get();
-        return $this->ReS(["fee_individual"=>$request->fee_individual,'fee_receipt'=>$fee_receipts]);
+        $send_array = [];
+        foreach($fee_installments as $installment){
+            $getInstallmentFeeType = StudentFee::with('feeType','feeInstallment')->where([
+                'fee_installment_id'=>$installment['id'],
+                'classes_id'=>$class_id,
+                'student_id'=>$student_id,
+                'school_id'=>$school_id,
+                'year_id'=>$year_id,
+                'student_id'=>$student_id
+            ])->get();
+            $send_array[$installment['installment']] = $getInstallmentFeeType;
+        }
+        return $this->ReS(["fee_individual"=>$send_array]);
     }
     public function updateIndividualFees(Request $request){
         $request->validate([
@@ -114,7 +203,7 @@ class FeeController extends Controller
             DB::beginTransaction();
             foreach($fee_individual as $installment){
                 foreach($installment as $type){
-                    $update = StudentFee::where([
+                    $check = $update = StudentFee::where([
                         'id'=>$type['id'],
                         'fee_installment_id'=>$type['fee_installment_id'],
                         'fee_type_id'=>$type['fee_type_id']
@@ -122,6 +211,7 @@ class FeeController extends Controller
                         'amount'=>$type['amount'],
                         'waiver_amount'=>$type['waiver_amount'],
                         'total_amount'=>$type['total_amount'],
+                        'total_pending'=>$type['total_pending'],
                         'indivitual_set'=>1
                     ]);
                 }
@@ -133,72 +223,116 @@ class FeeController extends Controller
         DB::commit();
         return $this->ReS(["fee_individual"=>$request->fee_individual]);
     }
-    public function getIndividualFees(Request $request,$only_read){
+    public function getIndividualFees(Request $request){
         $request->validate([
             'student_id'=>'required|integer'
         ]);
-        if($request->year_id == ""){
-            $year_id = $this->getCurrentYear($request);
-        }else{
-            $year_id = $request->year_id;
-        }
         $student_id = $request->student_id;
+        $class_id = StudentInfo::find($student_id)->class_id;
+        $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
         $send_array = array();
-        foreach($this->getInstallment($school_id) as $installment){
-            $fees_per_installments = StudentFee::select('id','fee_installment_id','fee_type_id','amount','waiver_amount','total_amount','total_pending','current_paid')->where([
-                'student_info_id'=>$student_id,
-                'system_year_id'=>$year_id,
-                'fee_installment_id'=>$installment['id']
-                ])->get();
-            if($only_read == 0 && count($fees_per_installments) == 0){
-                return $this->ReE(["message"=>"Fees of Student is Not Set."],422);
+        $fee_installments = FeeInstallments::select('id','installment')->where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
+        ])->get();
+        $fee_types = $this->getAllFeeType($class_id,$school_id,$year_id)->pluck('id');
+        try{
+            DB::beginTransaction();
+            foreach($fee_installments as $installment){
+                foreach($fee_types as $type){
+                    $checkIfExist = StudentFee::where([
+                        'fee_installment_id'=>$installment['id'],
+                        'fee_type_id'=>$type,
+                        'classes_id'=>$class_id,
+                        'student_id'=>$student_id,
+                        'school_id'=>$school_id,
+                        'year_id'=>$year_id,
+                        'student_id'=>$student_id
+                    ])->count();
+                    if($checkIfExist == 0){
+                        $new_student_fee = new StudentFee;
+                        $new_fees = new StudentFee;
+                        $new_fees->school_id = $school_id;
+                        $new_fees->student_id = $student_id;
+                        $new_fees->classes_id = $class_id;
+                        $new_fees->fee_installment_id = $installment['id'];
+                        $new_fees->fee_type_id = $type;
+                        $new_fees->year_id = $year_id;
+                        $new_fees->save();
+                    }
+                }
             }
-            $send_array[$installment['installment']] = $fees_per_installments;
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+            return $this->ReE(["message"=>$e->getMessage()],400);
         }
-        return $this->ReS(["fee_individual"=>$send_array]);
+        $send_array = [];
+        foreach($fee_installments as $installment){
+            $getInstallmentFeeType = StudentFee::with('feeType','feeInstallment')->where([
+                'fee_installment_id'=>$installment['id'],
+                'classes_id'=>$class_id,
+                'student_id'=>$student_id,
+                'school_id'=>$school_id,
+                'year_id'=>$year_id,
+                'student_id'=>$student_id
+            ])->get();
+            $send_array[$installment['installment']] = $getInstallmentFeeType;
+        }
+        return $this->ReS(["fee_individual"=>$send_array]); 
     }
     private function handleFees($student_id,$class_id,$school_id,$fee_type_id,$fee_installment_id,$system_year_id,$amount,$exist_update=true){     
         $count = StudentFee::where([
-            'school_info_id'=>$school_id,
-            'student_info_id'=>$student_id,
+            'school_id'=>$school_id,
+            'student_id'=>$student_id,
             'classes_id'=>$class_id,
             'fee_installment_id'=>$fee_installment_id,
             'fee_type_id'=>$fee_type_id,
-            'system_year_id'=>$system_year_id
+            'year_id'=>$system_year_id
         ])->count();
         
         if($count == 0){
             $new_fees = new StudentFee;
-            $new_fees->school_info_id = $school_id;
-            $new_fees->student_info_id = $student_id;
+            $new_fees->school_id = $school_id;
+            $new_fees->student_id = $student_id;
             $new_fees->classes_id = $class_id;
             $new_fees->fee_installment_id = $fee_installment_id;
             $new_fees->fee_type_id = $fee_type_id;
-            $new_fees->system_year_id = $system_year_id;
+            $new_fees->year_id = $system_year_id;
             $new_fees->amount = $amount;
+            $new_fees->total_pending = $amount;
+            $new_fees->total_amount = $amount;
             $new_fees->save();
         }else{
             if($exist_update){
                 StudentFee::where([
-                    'school_info_id'=>$school_id,
-                    'student_info_id'=>$student_id,
+                    'school_id'=>$school_id,
+                    'student_id'=>$student_id,
                     'classes_id'=>$class_id,
                     'fee_installment_id'=>$fee_installment_id,
                     'fee_type_id'=>$fee_type_id,
-                    'system_year_id'=>$system_year_id,
-                    'indivitual_set'=>1
-                ])->update(['amount'=>$amount]);
+                    'year_id'=>$system_year_id,
+                ])->update([
+                    'amount'=>$amount,
+                    'indivitual_set'=>1,
+                    'total_pending'=>$amount,
+                    'total_amount'=>$amount
+                ]);
             }else{
                 StudentFee::where([
-                    'school_info_id'=>$school_id,
-                    'student_info_id'=>$student_id,
+                    'school_id'=>$school_id,
+                    'student_id'=>$student_id,
                     'classes_id'=>$class_id,
                     'fee_installment_id'=>$fee_installment_id,
                     'fee_type_id'=>$fee_type_id,
-                    'system_year_id'=>$system_year_id,
-                    'indivitual_set'=>0
-                ])->update(['amount'=>$amount]);
+                    'year_id'=>$system_year_id,
+                ])->update([
+                    'amount'=>$amount,
+                    'indivitual_set'=>0,
+                    'total_pending'=>$amount,
+                    'total_amount'=>$amount
+                ]);
             }
         }
     }
@@ -211,65 +345,114 @@ class FeeController extends Controller
         $school_id = $this->getSchoolId($request);
         $class_id = $request->class_id;
         $fee_class_wise = $request->fee_class_wise;
+        $year_id = $this->getSchoolYearId($request);
 
-        if($request->year_id == ""){
-            $year_id = $this->getCurrentYear($request);
-        }else{
-            $year_id = $request->year_id;
-        }
-
+        $all_students = StudentInfo::select('id')->where('school_id',$school_id)->where('class_id',$class_id)->pluck('id');
         try{
             DB::beginTransaction();
-            $students = StudentInfo::select('id')->where('school_info_id',$school_id)->where('class_id',$class_id)->get();
-            foreach($fee_class_wise as $key => $fee_types){
-                foreach($fee_types as $type){
-                    $update = FeeClassWise::select('amount')->where([
-                        'school_info_id'=>$school_id,
-                        'classes_id'=>$class_id,
-                        'system_year_id'=>$year_id,
-                        'fee_type_id'=>$type['fee_type_id'],
-                        'fee_installment_id'=>$type['fee_installment_id']
-                    ])->update(['amount'=>$type['amount']]);
-                }
-            }
-            foreach($students as $student){
-                foreach($fee_class_wise as $key => $fee_types){
-                    foreach($fee_types as $type){
-                        $this->handleFees($student['id'],$class_id,$school_id,$type['fee_type_id'],$type['fee_installment_id'],$year_id,$type['amount'],$request->overwrite);
+                    foreach($fee_class_wise as $installment_type => $fee_types){
+                        foreach($fee_types as $type){
+                            $update = FeeClassWise::select('amount')->where([
+                                        'school_id'=>$school_id,
+                                        'classes_id'=>$class_id,
+                                        'year_id'=>$year_id,
+                                        'fee_type_id'=>$type['fee_type_id'],
+                                        'fee_installment_id'=>$type['fee_installment_id']
+                                    ])->update(['amount'=>$type['amount']]);
+                        }
                     }
-                }
-            }
+                    foreach($all_students as $student){
+                        foreach($fee_class_wise as $installment_type => $fee_types){
+                            foreach($fee_types as $type){
+                                $fee_installment_id = $type['fee_installment_id'];
+                                $fee_type_id = $type['fee_type_id'];
+                                $amount = $type['amount'];
+                                    $count = StudentFee::where([
+                                        'school_id'=>$school_id,
+                                        'student_id'=>$student,
+                                        'classes_id'=>$class_id,
+                                        'fee_installment_id'=>$fee_installment_id,
+                                        'fee_type_id'=>$fee_type_id,
+                                        'year_id'=>$year_id
+                                    ])->count();
+                                    if($count == 0){
+                                        $new_fees = new StudentFee;
+                                        $new_fees->school_id = $school_id;
+                                        $new_fees->student_id = $student;
+                                        $new_fees->classes_id = $class_id;
+                                        $new_fees->fee_installment_id = $fee_installment_id;
+                                        $new_fees->fee_type_id = $fee_type_id;
+                                        $new_fees->year_id = $year_id;
+                                        $new_fees->amount = $amount;
+                                        $new_fees->total_pending = $amount;
+                                        $new_fees->total_amount = $amount;
+                                        $new_fees->save();
+                                    }else{
+                                        if($request->overwrite == true){
+                                            StudentFee::where([
+                                                'school_id'=>$school_id,
+                                                'student_id'=>$student,
+                                                'classes_id'=>$class_id,
+                                                'fee_installment_id'=>$fee_installment_id,
+                                                'fee_type_id'=>$fee_type_id,
+                                                'year_id'=>$year_id,
+                                            ])->update([
+                                                'amount'=>$amount,
+                                                'indivitual_set'=>1,
+                                                'total_pending'=>$amount,
+                                                'total_amount'=>$amount
+                                            ]);
+                                        }else{
+                                            StudentFee::where([
+                                                'school_id'=>$school_id,
+                                                'student_id'=>$student,
+                                                'classes_id'=>$class_id,
+                                                'fee_installment_id'=>$fee_installment_id,
+                                                'fee_type_id'=>$fee_type_id,
+                                                'year_id'=>$year_id,
+                                            ])->update([
+                                                'amount'=>$amount,
+                                                'indivitual_set'=>0,
+                                                'total_pending'=>$amount,
+                                                'total_amount'=>$amount
+                                            ]);
+                                        }
+                                    }
+                            }
+                        }
+                    }
         }catch(\Exception $e){
             DB::rollback();
             return $this->ReE(["message"=>$e->getMessage()],400);
         }
+
         DB::commit();
         return $this->ReS(["message"=>"Fee Class Wise Updated!!","fee_class_wise"=>$fee_class_wise]);
     }
     public function getClassWiseFees(Request $request){
-        $year_id = $request->year_id;
         $class_id = $request->class_id;
-        if($year_id == ""){
-            $year_id = $this->getCurrentYear($request);
-        }
+        $year_id = $this->getSchoolId($request);
         $school_id = $this->getSchoolId($request);
-        $fee_installments = Auth()->user()->school()->with('installments')->first()['installments'];
+        $fee_installments = FeeInstallments::where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
+        ])->get();
         
         $checkifExist = FeeClassWise::where([
-            'school_info_id'=>$school_id,
+            'school_id'=>$school_id,
             'classes_id'=>$class_id,
         ])->count();
         if($checkifExist == 0){
             DB::beginTransaction();
             try{
                 foreach($fee_installments as $installment){
-                    foreach($this->getAllFeeType() as $fee_type){
+                    foreach($this->getAllFeeType($class_id,$school_id,$year_id) as $fee_type){
                         $new_feeclasswise = new FeeClassWise;
-                        $new_feeclasswise->school_info_id = $school_id;
+                        $new_feeclasswise->school_id = $school_id;
                         $new_feeclasswise->classes_id = $class_id;
                         $new_feeclasswise->fee_installment_id = $installment['id'];
                         $new_feeclasswise->fee_type_id = $fee_type['id'];
-                        $new_feeclasswise->system_year_id = $year_id;
+                        $new_feeclasswise->year_id = $year_id;
                         $new_feeclasswise->save();
                     }
                 }
@@ -283,8 +466,8 @@ class FeeController extends Controller
         $send_array = [];
         foreach($fee_installments as $installment){
             $installment_name = $installment['installment'];
-            $getInstallmentFeeType = FeeClassWise::with('feeType')->select('fee_installment_id','fee_type_id','amount')->where([
-                'school_info_id'=>$school_id,
+            $getInstallmentFeeType = FeeClassWise::with('feeType','feeInstallment')->where([
+                'school_id'=>$school_id,
                 'classes_id'=>$class_id,
                 'fee_installment_id'=>$installment['id']
             ])->get();
@@ -304,9 +487,9 @@ class FeeController extends Controller
     public function getFeeType(Request $request){
         return $this->ReS(["fee_types"=>$this->getAllFeeType()]);
     }
-    private function getAllFeeType(){
-        $school = Auth()->user()->school()->with('fee_type')->first();
-        return $school['fee_type'];
+    private function getAllFeeType($class_id,$school_id,$year_id){
+        $fee_type = FeeType::where(['class_id'=>$class_id,'school_id'=>$school_id,'year_id'=>$year_id])->get();
+        return $fee_type;
     }
     public function addFeeType(Request $request){
         $request->validate([
@@ -316,7 +499,7 @@ class FeeController extends Controller
         $checkIfExist = FeeType::where("fee_type",$request->fee_type)->count();
         if($checkIfExist == 0){
             $new_fee_type = new FeeType;
-            $new_fee_type->school_info_id = $this->getSchoolId($request);
+            $new_fee_type->school_id = $this->getSchoolId($request);
             $new_fee_type->fee_type = $request->fee_type;
             $new_fee_type->save();
             return $this->ReS(["fee_types"=>$this->getAllFeeType()]);
@@ -335,20 +518,20 @@ class FeeController extends Controller
     }
     public function getDueDate(Request $request){
         $request->validate([
-            "installment"=>"required|string",
-            "select_year"=>"required|integer"
+            "installment"=>"required|integer",
         ]);
         $school_id = $this->getSchoolId($request);
-        $installment_id  = FeeInstallments::select('id')->where('installment',$request->installment)->first()->id;
+        $year_id = $this->getSchoolYearId($request);
+        $installment_id  = FeeInstallments::find($request->installment)->id;
         $selectFeeDueDate = FeeDueDate::select('last_due_date','id')->where(
-                    ['school_info_id'=>$school_id,
-                    'system_year_id'=>$request->select_year,
+                    ['school_id'=>$school_id,
+                    'year_id'=>$year_id,
                     'fee_installment_id'=>$installment_id
                     ])->first();
         if(!$selectFeeDueDate){
             $new_due_date = new FeeDueDate;
-            $new_due_date->school_info_id = $school_id;
-            $new_due_date->system_year_id = $request->select_year;
+            $new_due_date->school_id = $school_id;
+            $new_due_date->year_id = $year_id;
             $new_due_date->fee_installment_id = $installment_id;
             $new_due_date->last_due_date = null;
             $new_due_date->save();
@@ -361,10 +544,10 @@ class FeeController extends Controller
         $school_id = $this->getSchoolId($request);
         DB::beginTransaction();
         try{
-            $delete = FeeInstallments::where("school_info_id",$school_id)->delete();
+            $delete = FeeInstallments::where("school_id",$school_id)->delete();
             foreach($request->total_installments as $installment){
                 $new_installments = new FeeInstallments;
-                $new_installments->school_info_id = $school_id;
+                $new_installments->school_id = $school_id;
                 $new_installments->installment = $installment;
                 $new_installments->save();
             }
@@ -385,6 +568,8 @@ class FeeController extends Controller
     }
 
     private function feeInstallments($school_id){
-        return Auth()->user()->school()->with('installments')->first()['installments']->pluck('installment');
+        return FeeInstallments::where([
+            'school_id'=>$school_id
+        ])->get();
     }
 }

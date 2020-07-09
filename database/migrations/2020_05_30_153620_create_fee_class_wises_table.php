@@ -15,11 +15,11 @@ class CreateFeeClassWisesTable extends Migration
     {
         Schema::create('fee_class_wises', function (Blueprint $table) {
             $table->id();
-            $table->integer('school_info_id');
+            $table->integer('school_id');
             $table->integer('classes_id');
             $table->integer('fee_installment_id');
             $table->integer('fee_type_id');
-            $table->integer('system_year_id');
+            $table->integer('year_id');
             $table->integer('amount')->default(0);
             $table->timestamps();
         });

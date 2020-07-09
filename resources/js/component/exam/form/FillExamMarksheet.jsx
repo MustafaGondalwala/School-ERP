@@ -2,6 +2,7 @@ import React,{Component} from "react"
 import CardComponent from "../../utils/CardComponent"
 import Swal from 'sweetalert2'
 import Row from "../../utils/Row"
+import { Col, Input, FormGroup, FormLabel } from "../../utils/Components"
 
 export default class FillExamMarksheet extends Component{
     constructor(props){
@@ -48,11 +49,41 @@ export default class FillExamMarksheet extends Component{
             }
           })
     }
+    publish(){
+        console.log("ok")
+    }
     render(){
         const {student_info,class_info,type} = this.props
         const {exam_marksheet} = this.state
         return(
             <CardComponent title="Fill Marksheet">
+            <Row>
+                <Col md={3}>
+                    <FormGroup>
+                        <FormLabel>Student Name</FormLabel>
+                        <Input value={student_info.student_name} disabled/>
+                    </FormGroup>
+                  
+                </Col>
+                <Col md={3}>
+                    <FormGroup>
+                        <FormLabel>Mother Name</FormLabel>
+                        <Input value={student_info.mother_name} disabled/>
+                    </FormGroup>
+                </Col>
+                <Col md={3}>
+                    <FormGroup>
+                        <FormLabel>Father Name</FormLabel>
+                        <Input value={student_info.father_name} disabled/>
+                    </FormGroup>
+                </Col>
+                <Col md={3}>
+                    <FormGroup>
+                        <FormLabel>Father Contact No</FormLabel>
+                        <Input value={student_info.father_contact_no1} disabled/>
+                    </FormGroup>
+                </Col>
+            </Row>
             <div className="table_responsive">
                 <table className="table">
                     <thead>
@@ -82,7 +113,7 @@ export default class FillExamMarksheet extends Component{
                 </table>
                 <Row>
                     <button className="btn btn-primary" onClick={e => this.submit()}>Update</button>
-                    <button className="btn btn-warning">Publish</button>
+                    <button className="btn btn-warning" onClick={e => this.publish()}>Publish</button>
 
                 </Row>
             </div>

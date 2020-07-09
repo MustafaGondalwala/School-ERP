@@ -18,7 +18,7 @@ class CreateFeeReceiptsTable extends Migration
             $table->string('amount_name');
             $table->integer('student_id');
             $table->integer('school_id');
-            $table->integer('system_year_id');
+            $table->integer('year_id');
             $table->integer('payment_type')->comment('1=> Cash 2=> Cheque 3=> Bank Transfer 4=> Net Banking');
             $table->timestamps();
         });

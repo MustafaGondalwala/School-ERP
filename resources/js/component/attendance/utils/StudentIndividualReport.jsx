@@ -202,7 +202,6 @@ class StudentIndividualReport extends Component {
 
 
 const StudentAttendancePanel = ({details_fetch}) => {
-    console.log(details_fetch)
     function intToAttendanceStatus(status){
         switch(status){
             case 1:

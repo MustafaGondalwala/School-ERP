@@ -1,4 +1,4 @@
-import { SET_EXAM_TYPE } from "../types";
+import { SET_EXAM_TYPE,SET_MONTHLY_TEST } from "../types";
 
 export function examType(state = {}, action = {}) {
   switch (action.type) {
@@ -8,3 +8,14 @@ export function examType(state = {}, action = {}) {
       return state;
   }
 }
+
+export function monthlyTest(state = {}, action = {}) {
+  switch (action.type) {
+    case SET_MONTHLY_TEST:
+      return action.monthly_test;
+    default:
+      return state;
+  }
+}
+
+

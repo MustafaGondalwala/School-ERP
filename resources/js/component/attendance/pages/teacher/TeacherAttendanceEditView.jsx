@@ -1,45 +1,23 @@
-import React from "react"
-import TopBreadcrumb from "../../../utils/TopBreadcrumb"
-import AttendanceHeader from "../../../header/teacher/AttendanceHeader"
-import CardComponent from "../../../utils/CardComponent"
-import BodyComponent from "../../../utils/BodyComponent"
-import Row from "../../../utils/Row"
-import { Col, FormGroup, FormLabel, Input, ButtonGroup, Button, Table, Thead } from "../../../utils/Components"
-const TeacherAttendanceEditView = () => (
-    <div>
-        <TopBreadcrumb mainHeader="Attendance" header="Edit/View">
-            <AttendanceHeader />
-        </TopBreadcrumb>
-        <BodyComponent>
-            <CardComponent title="Select Title">
-                <Row>
-                    <Col md="6">
-                        <FormGroup>
-                            <FormLabel>Select Date:</FormLabel>
-                            <Input type="date"/>
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="1">
-                        <Button primary>View</Button>
-                    </Col>
-                    <Col md="1">
-                        <Button primary>Fill</Button>
-                    </Col>
-                </Row>
-            </CardComponent>
-            <CardComponent title="Fil Attendance" download print>
-                <Table>
-                    <Thead>
-                        <td>Sr no.</td>
-                        <td>Student Name</td>
-                        <td>Status</td>
-                    </Thead>
-                </Table>
-            </CardComponent>
-        </BodyComponent>
-    </div>
-)
+import React,{Component,Suspense} from "react"
+const TeacherHeader = React.lazy(() => import("../../../header/teacher/AttendanceHeader")) 
+const StudentAttendanceEditAdmin = React.lazy(() => import("../../utils/StudentAttendanceEditAdmin"))
+import TopBreadCrumb from "../../../utils/TopBreadcrumb"
+ const AdminAttendanceTeacherEdit = (props) =>  {
+    const {class_id} = props.match.params   
+    return(
+        <div>
+            <Suspense fallback={<h1>Loading ...</h1>}>
+                <TopBreadCrumb mainHeader="Attendance" header="Student" sub_header="Edit Attendance">
+                    <TeacherHeader mainHeader="Attendance" header="Edit/View"/>
+                </TopBreadCrumb>
+            </Suspense>
+            <div className="container-fluid mt--6">
+                <Suspense fallback={<h1>Loading ...</h1>}>
+                    <StudentAttendanceEditAdmin class_id={class_id} user_type="teacher" />
+                </Suspense>
+            </div>
+        </div>
+    )
+ }
 
-export default TeacherAttendanceEditView
+ export default AdminAttendanceTeacherEdit

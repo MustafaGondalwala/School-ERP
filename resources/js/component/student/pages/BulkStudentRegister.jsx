@@ -86,7 +86,7 @@ class BulkStudentRegister extends Component{
                         <Col md="4">
                             <ButtonGroup>
                                 <Button onClick={this.uploadData} primary sm>Upload</Button>
-                                <Button success sm>Download</Button>
+                                <a href="/storage/uploads/images/register_student_template.xlsx"className="btn btn-success btn-sm" success sm>Download</a>
                             </ButtonGroup>
                         </Col>
                     </Row>
@@ -110,24 +110,13 @@ class ViewRegisterTable extends Component {
       const { data } = this.props;
       const columnDefs = [
         {
-          headerName: "Roll No",
-          field: "roll_no",
+          headerName: "Register No",
+          field: "register_no",
           sortable: true,
           filter: true,
           checkboxSelection: true,
         },
-        {
-          headerName: "Class",
-          field: "class_title",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Section",
-          field: "section",
-          sortable: true,
-          filter: true,
-        },
+        { headerName: "Class", field: "class", sortable: true, filter: true },
         {
           headerName: "Student Name",
           field: "student_name",
@@ -158,96 +147,17 @@ class ViewRegisterTable extends Component {
           sortable: true,
           filter: true,
         },
-        {
-          headerName: "Father Email",
-          field: "father_email",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Father Occupation",
-          field: "father_occupation",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Mother Occupation",
-          field: "mother_occupation",
-          sortable: true,
-          filter: true,
-        },
-  
-        {
-          headerName: "Guardian Name",
-          field: "guardian_name",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Guardian Occupation",
-          field: "guardian_occupation",
-          sortable: true,
-          filter: true,
-        },
-  
         { headerName: "Gender", field: "gender", sortable: true, filter: true },
         { headerName: "DOB", field: "dob", sortable: true, filter: true },
-        { headerName: "Age", field: "age", sortable: true, filter: true },
-        { headerName: "Gender", field: "gender", sortable: true, filter: true },
-        { headerName: "Handicapped", field: "handicapped", sortable: true, filter: true },
-  
         {
-          headerName: "Father AadharCard",
-          field: "father_aadhar_card",
+          headerName: "Date of Admission",
+          field: "doA",
           sortable: true,
           filter: true,
         },
-        {
-          headerName: "Father Bank Name",
-          field: "father_bank_name",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Father Bank Number",
-          field: "father_bank_number",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Student AadharCard",
-          field: "student_aadhar_card",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Student Bank Name",
-          field: "student_bank_name",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Student Bank Number",
-          field: "student_bank_number",
-          sortable: true,
-          filter: true,
-        },
-        { headerName: "Gender", field: "gender", sortable: true, filter: true },
         {
           headerName: "Student Address",
           field: "student_address",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Place",
-          field: "place",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Landmark",
-          field: "landmark",
           sortable: true,
           filter: true,
         },
@@ -257,24 +167,14 @@ class ViewRegisterTable extends Component {
           sortable: true,
           filter: true,
         },
-        {
-          headerName: "Pincode",
-          field: "pincode",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Block",
-          field: "block",
-          sortable: true,
-          filter: true,
-        },
+        { headerName: "Block", field: "block", sortable: true, filter: true },
         {
           headerName: "State",
           field: "state",
           sortable: true,
           filter: true,
-        },
+          editable: true,
+        }
       ];
       return (
         <CardComponent title="List" >

@@ -83,7 +83,7 @@ class ViewRegisterTable extends React.Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             showLoaderOnConfirm: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, Update it!',
             preConfirm: (login) => {
                 const data = {
                     'id':params.data.id,

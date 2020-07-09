@@ -30,6 +30,7 @@ export default class FeeSetIndividualForm extends Component{
             case "amount":
                 individual_installment[index].amount = value;
                 individual_installment[index].total_amount = parseInt(individual_installment[index].amount) - parseInt(individual_installment[index].waiver_amount);
+                individual_installment[index].total_pending =  parseInt(individual_installment[index].total_amount) - individual_installment[index].current_paid
                 break
             case "waiver_amount":
                 if(value > individual_installment[index].amount){
@@ -89,6 +90,9 @@ const EditInstallment = ({individual_label,individual,onChange}) => {
                             <th>Amount</th>
                             <th>Waiver Amount</th>
                             <th>Total Amount</th>
+                            <th>Current Paid</th>
+                            <th>Total Pending</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +105,7 @@ const EditInstallment = ({individual_label,individual,onChange}) => {
                                     {id + 1}
                                 </td>
                                 <td>
-                                    {item.fee_type_id}
+                                    {item.fee_type.fee_type}
                                 </td>
                                 <td>
                                     <input type="number" min="0" data-index={id} name="amount" onChange={e =>onChange(e,individual_label)} className="form-control" value={item.amount}/>
@@ -112,6 +116,13 @@ const EditInstallment = ({individual_label,individual,onChange}) => {
                                 <td>
                                     <input type="number"min="0"  disabled data-index={id} name="total_amount" className="form-control" onChange={e =>onChange(e,individual_label)} value={item.total_amount}/>
                                 </td>
+                                <td>
+                                    <input type="number"min="0" className="form-control"  disabled  value={item.current_paid}/>
+                                </td>
+                                <td>
+                                    <input type="number"min="0" className="form-control"  disabled data-index={id} name="total_pending" className="form-control" onChange={e =>onChange(e,individual_label)}  value={item.total_pending}/>
+                                </td>
+
                             </tr>
                         })
                     }

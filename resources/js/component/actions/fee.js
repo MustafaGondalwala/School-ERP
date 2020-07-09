@@ -20,7 +20,13 @@ export const setFeeTypeDispatch = feeType => ({
 
 
 export const setFeeInstallmentsDispatch = () => dispatch => 
-    api.admin.fee.get_installments().then(data => {
+    api.adminclerk.fee.get_installments().then(data => {
+        dispatch(setFeeInstallments(data.installments));
+        return data.installments
+    })
+
+export const updateFeeIntallmentsDispatch = () => dispatch => 
+    api.adminclerk.fee.update_installments().then(data => {
         dispatch(setFeeInstallments(data.installments));
         return data.installments
     })
@@ -31,6 +37,6 @@ export const setYearDispatch = () =>  dispatch =>
     })
 
 export const setFeeType = () => dispatch =>
-    api.admin.fee.get_fee_type().then(data => {
+    api.adminclerk.fee.get_fee_type().then(data => {
         dispatch(setFeeTypeDispatch(data.fee_types))
     })

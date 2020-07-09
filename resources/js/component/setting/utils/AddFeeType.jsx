@@ -36,7 +36,7 @@ class AddFeeType extends Component{
             this.setState({
                 add_button:"Adding ..."
             })
-            api.admin.fee.add_fee_type(fee_type).then(data => {
+            api.adminclerk.fee.add_fee_type(fee_type).then(data => {
                 this.props.setFeeTypeDispatch(data.fee_types)
                 this.setState({
                     add_button:"Add"
@@ -56,7 +56,7 @@ class AddFeeType extends Component{
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.value) {
-              api.admin.fee.remove_fee_type(fee_type).then(data => {
+              api.adminclerk.fee.remove_fee_type(fee_type).then(data => {
                 Swal.fire(
                     'Deleted!',
                     'Fee Type has been deleted.',

@@ -10,6 +10,15 @@ use App\Classes;
 
 class TeacherController extends Controller
 {
+    public function publishTimeTable(Request $request){
+        dd($request->all());
+        foreach($request->publish_timetable as $key => $value){
+            if($value != null){
+                Classes::find($value)->update(['assigned_teacher_id'=>$key]);
+            }
+        }
+        return $this->ReS(["message"=>"Data Updated!!"]);
+    }
     public function assignedTeacher(Request $request){
         $request->validate([
             'class_id'=>'required|integer',
@@ -22,7 +31,7 @@ class TeacherController extends Controller
         $data = Classes::find($class_id)->update(['assigned_teacher_id'=>$teacher_id]);
         $teacher_data = Teacher::find($teacher_id)->update(['assign_class_id'=>$class_id]);
         if($data == true && $teacher_data == true){
-            $classes = Classes::with('teacher')->where('school_info_id',$school_id)->get();
+            $classes = Classes::with('teacher')->where('school_id',$school_id)->get();
             return $this->ReS(["message"=>"Teacher Assigned to Class","classes"=>$classes]);
         }
     }
@@ -97,29 +106,33 @@ class TeacherController extends Controller
                 $other_documents1 = NULL;
                 $other_documents2 = NULL;    
                 $emp_photo = NULL;
-                    if($request->emp_photo != NULL && !$request->hasFile('emp_photo'))
-                    $emp_photo = $request->emp_photo;
-                    if($request->id_proof != NULL && !$request->hasFile('id_proof'))
-                    $id_proof = $request->id_proof;
-                    if($request->experience_letter != NULL && !$request->hasFile('experience_letter'))
-                    $experience_letter = $request->experience_letter;
-                    if($request->other_documents1 != NULL && !$request->hasFile('other_documents1'))
-                    $other_documents1 = $request->other_documents1;
-                    if($request->other_documents2 != NULL && !$request->hasFile('other_documents2'))
-                    $other_documents2 = $request->other_documents2;
+
+
+            
+
+                //     if($request->emp_photo != NULL && !$request->hasFile('emp_photo'))
+                //     $emp_photo = $request->emp_photo;
+                //     if($request->id_proof != NULL && !$request->hasFile('id_proof'))
+                //     $id_proof = $request->id_proof;
+                //     if($request->experience_letter != NULL && !$request->hasFile('experience_letter'))
+                //     $experience_letter = $request->experience_letter;
+                //     if($request->other_documents1 != NULL && !$request->hasFile('other_documents1'))
+                //     $other_documents1 = $request->other_documents1;
+                //     if($request->other_documents2 != NULL && !$request->hasFile('other_documents2'))
+                //     $other_documents2 = $request->other_documents2;
 
             
             
-            if($request->hasFile('emp_photo')){}
-                $emp_photo = $this->uploadFile($request->emp_photo)['url'];
-            if($request->hasFile('id_proof'))
-                $id_proof = $this->uploadFile($request->id_proof)['url'];
-            if($request->hasFile('experience_letter'))
-                $experience_letter = $this->uploadFile($request->experience_letter)['url'];
-            if($request->hasFile('other_documents1'))
-                $other_documents1 = $this->uploadFile($request->other_documents1)['url'];
-            if($request->hasFile('other_documents2'))
-                $other_documents2 = $this->uploadFile($request->other_documents2)['url'];
+            // if($request->hasFile('emp_photo')){}
+            //     $emp_photo = $this->uploadFile($request->emp_photo)['url'];
+            // if($request->hasFile('id_proof'))
+            //     $id_proof = $this->uploadFile($request->id_proof)['url'];
+            // if($request->hasFile('experience_letter'))
+            //     $experience_letter = $this->uploadFile($request->experience_letter)['url'];
+            // if($request->hasFile('other_documents1'))
+            //     $other_documents1 = $this->uploadFile($request->other_documents1)['url'];
+            // if($request->hasFile('other_documents2'))
+            //     $other_documents2 = $this->uploadFile($request->other_documents2)['url'];
             
             if($request->id){
                 $teacher->user()->update([
@@ -197,14 +210,18 @@ class TeacherController extends Controller
                 ]);
             }
            
-            // $teacher_login = new User;
-            // $teacher_login->name = $teacher->teacher_name;
-            // $teacher_login->login_text = $teacher->empid;
-            // $teacher_login->password = bcrypt($teacher->empid);
-            // $teacher_login->user_type = 4;
-            // $teacher_login->school_id = $schoolId;
-            // $teacher_login->year_id = $year_id;
-            // $teacher_login->save();
+            if($request->id){
+                $teacher_login = User::where('empid',$teacher->empid)->where('school_id',$schoolId)->first();
+            }else{
+            $teacher_login = new User;
+            }
+            $teacher_login->name = $teacher->teacher_name;
+            $teacher_login->login_text = $teacher->empid;
+            $teacher_login->password = bcrypt($teacher->empid);
+            $teacher_login->user_type = 4;
+            $teacher_login->school_id = $schoolId;
+            $teacher_login->year_id = $year_id;
+            $teacher_login->save();
             DB::commit();
             $message = "Teacher Added!";
             if($request->id){

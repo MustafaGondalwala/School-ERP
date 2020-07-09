@@ -36,12 +36,17 @@ export const login = credentials => dispatch => {
       localStorage.year_id = year_id
       localStorage.school_id = school_id
       if(user_type == 4){
-        localStorage.assigned_class = JSON.stringify(data.user.info.class)
-        dispatch(setAssignedClass(data.user.info.class))
-      }else if(user_type == 3){
-        localStorage.parent_childs = JSON.stringify(data.user.info);
-        dispatch(setParentChild(data.user.info));
+        const {teacher,classes} = data
+        localStorage.classes = JSON.stringify(classes)
+        localStorage.teacher = JSON.stringify(teacher)
+        dispatch(setAssignedClass(classes))
       }
+      //   localStorage.assigned_class = JSON.stringify(data.user.info.class)
+      //   dispatch(setAssignedClass(data.user.info.class))
+      // }else if(user_type == 3){
+      //   localStorage.parent_childs = JSON.stringify(data.user.info);
+      //   dispatch(setParentChild(data.user.info));
+      // }
       localStorage.userAccount = JSON.stringify(user)
       setAuthorizationHeader(token,user_type,school_id,year_id);
       dispatch(userLoggedIn(user));
