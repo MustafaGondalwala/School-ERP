@@ -10,6 +10,6 @@ class StudyMaterialGroups extends Model
         'group_name'
     ];
     public function materials(){
-        return $this->hasMany('App\StudyMaterial','group_id')->with('files','user');
+        return $this->hasMany('App\StudyMaterial','group_id')->with('attachments','user');
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudyMaterial extends Model
 {
-    public function files() 
+    public function attachments() 
     { 
         return $this->morphMany(File::class, 'type');
     }

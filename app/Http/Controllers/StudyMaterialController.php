@@ -11,7 +11,7 @@ class StudyMaterialController extends Controller
         $school_id = $this->getSchoolId($request);
         $year_id = $this->getSchoolYearId($request);
         
-        return $this->ReS(StudyMaterial::with('files','user')->where([
+        return $this->ReS(StudyMaterial::with('user')->where([
             'school_id'=>$school_id,
             'year_id'=>$year_id,
             'group_id'=>$group_id,

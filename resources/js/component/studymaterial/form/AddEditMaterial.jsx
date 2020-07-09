@@ -96,6 +96,9 @@ class AddEditMaterial extends Component {
     render() {
       const { groups,class_id,title,type } = this.props;
       const { data, errors } = this.state;
+      var disabled = false
+      if(type == 2)
+        disabled = true
       return (
         <CardComponent title={title}>
           <Row>
@@ -104,6 +107,7 @@ class AddEditMaterial extends Component {
                 <FormLabel>Title*</FormLabel>
                 <Input
                   errors={errors}
+                  disabled={disabled}
                   value={data.title || ''}
                   onChange={this.onChange}
                   name="title"
@@ -113,9 +117,10 @@ class AddEditMaterial extends Component {
             </Col>
             <Col md={4} sm={6}>
               <FormGroup>
-                <FormLabel>Sub-Title*</FormLabel>
+                <FormLabel>Sub-Title</FormLabel>
                 <Input
                   errors={errors}
+                  disabled={disabled}
                   value={data.subtitle || ''}
                   onChange={this.onChange}
                   name="subtitle"
@@ -130,6 +135,7 @@ class AddEditMaterial extends Component {
                 <FormLabel>Descriptions</FormLabel>
                 <CkEditor
                 value={data.description || ''}
+                  disabled={disabled}
                   onChange={(data) => {
                     this.setState({
                       data: { ...this.state.data, ["description"]: data },
@@ -167,21 +173,23 @@ class AddEditMaterial extends Component {
         }
 
             <Row>
-
-
             <Col md={4} sm={4}>
               <FormGroup>
                 <FormLabel>Attachment:</FormLabel>
-                <input
-                  type="file"
-                  onChange={(e) => this.onFileChange(e)}
-                  className="form-control"
-                  multiple
-                />
+               {type != 2 && 
+                  <input
+                    type="file"
+                    onChange={(e) => this.onFileChange(e)}
+                    className="form-control"
+                    multiple
+                  />
+                }
               </FormGroup>
             </Col>
             <Col md={12} sm={12}>
+            {type != 2 && 
               <PreviewAttachment attachments={data.attachments} />
+            }
             </Col>
           </Row>
           <Row>

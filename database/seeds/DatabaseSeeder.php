@@ -123,7 +123,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        foreach(range(1,1200) as $index){
+        foreach(range(1,200) as $index){
             $new_register = new RegisterStudent;
             $new_register->register_no = $faker->numberBetween($min = 3000, $max = 90000).$index;
             $new_register->class = $class_array[$faker->numberBetween($min = 0, $max = 6)];
@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
             $new_register->save();
         }
 
-       foreach(range(1,1000) as $index){
+       foreach(range(1,300) as $index){
         try{
 
             $new_addmission = new StudentInfo;
