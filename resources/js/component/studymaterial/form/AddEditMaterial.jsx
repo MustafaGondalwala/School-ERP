@@ -12,6 +12,7 @@ import {
   Thead,
   Select,
   PreviewAttachment,
+  PreviewAttachmentFile
 } from "../../utils/Components";
 import InlineError from "../../utils/InlineError";
 import api from "../../api";
@@ -96,6 +97,7 @@ class AddEditMaterial extends Component {
     render() {
       const { groups,class_id,title,type } = this.props;
       const { data, errors } = this.state;
+      console.log(data.attachments)
       var disabled = false
       if(type == 2)
         disabled = true
@@ -189,6 +191,9 @@ class AddEditMaterial extends Component {
             <Col md={12} sm={12}>
             {type != 2 && 
               <PreviewAttachment attachments={data.attachments} />
+            }
+            {type == 2 && 
+              <PreviewAttachmentFile attachments={data.attachments} />
             }
             </Col>
           </Row>

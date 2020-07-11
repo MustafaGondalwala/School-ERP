@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 import InlineError from "./InlineError"
 import Row from "./Row"
+import { render } from "react-dom"
+import { Player } from 'video-react';
+
 
 export const Button = ({primary,disabled,success,warning,danger,neutral,sm,lg,children,onClick,right,left,...rest}) => {
     var className=""
@@ -39,6 +42,75 @@ const getFileType = (name) => {
     } 
     return fileExt;
 }
+
+export const PreviewWithDeleteDownload = ({url,type,deleteFunction}) => {
+    return(
+        <Col md={3} sm={3} lg={3}>
+            {type == 1 &&
+                <span>
+                    <img src={url} width="220" height="200" className="img-thumbnail img"/>
+                </span>
+            }
+            {type == 2 &&
+                <span>
+                    <i class="fas fa-file-csv fa-7x"></i>
+                </span>
+            }
+            {
+                type == 3 && <i class="far fa-file-excel fa-7x"></i>
+            }
+            {
+                type == 4 && <i class="far fa-file-pdf fa-7x"></i>
+            }
+            {
+                type == 5 && <i class="fas fa-file-archive fa-7x"></i>
+            }
+            {
+                type == 6 && <i class="fas fa-file-word fa-7x"></i>
+            }
+            {
+                type == 7 && <i class="fab fa-html5 fa-7x"></i>
+            }
+            <br />
+            <Button danger sm><i class="fas fa-trash-alt"></i></Button>
+            <Button primary sm><i class="fas fa-cloud-download-alt"></i></Button>
+            <br />
+        </Col>
+    )
+}
+
+export const PreviewAttachmentFile = ({attachments}) => {
+    return(
+        <Row>
+            {
+                 attachments && attachments.map((item,id) => {
+                    var url = item.file_url
+                    switch(item.extension){
+                        case "jpg":
+                        case "png":
+                        case "jpeg":
+                            return <PreviewWithDeleteDownload url={url} type={1}/>
+                        case "csv":
+                            return <PreviewWithDeleteDownload url={url} type={2}/>
+                        case "xlsx":
+                        case "xls":
+                            return <PreviewWithDeleteDownload url={url} type={3} />
+                        case "pdf":
+                            return <PreviewWithDeleteDownload url={url} type={4}/>
+                        case "zip":
+                        case "rar":
+                            return <PreviewWithDeleteDownload url={url} type={5}/>
+                        case "doc":
+                        case "txt":
+                            return <PreviewWithDeleteDownload url={url} type={6}/>
+                        case "htm":
+                            return <PreviewWithDeleteDownload url={url} type={7}/>
+                    }
+                })
+            }
+        </Row>
+    )
+}
 export const PreviewAttachment = ({attachments}) => {
     return(
         <div>
@@ -50,20 +122,35 @@ export const PreviewAttachment = ({attachments}) => {
                         case "jpg":
                         case "png":
                         case "jpeg":
-                            return <img src={url} className="img img-thumbnail img-fluid"/>
+                            return <img src={url} className="img img-thumbnail"/>
                         case "csv":
                             return <p><i class="fas fa-file-csv"></i></p>
                         case "xlsx":
                         case "xls":
-                            return <p><i class="far fa-file-excel"></i></p>
+                            return <p><i class="far fa-file-excel fa-5x"></i></p>
                         case "pdf":
-                            return <p><i class="far fa-file-pdf"></i></p>
+                            return <p><i class="far fa-file-pdf fa-5x"></i></p>
                         case "zip":
                         case "rar":
-                            return <p><i class="far fa-file-archive"></i></p>
+                            return <p><i class="far fa-file-archive fa-5x"></i></p>
                         case "doc":
                         case "txt":
-                            return <p><i class="far fa-file-word"></i></p>
+                            return <p><i class="far fa-file-word fa-5x"></i></p>
+                        case "mp4":
+                        case "avi":
+                        case "mov":
+                        case "wmv":
+                        case "flv":
+                        case "webm":
+                        case "mkv":
+                        case "ogv":
+                        case "3gp":
+                            return <div>
+                            <video width="620" height="440" controls>
+                                <source src={url} type={"video/"+extension} />
+                                Your browser does not support the video tag.
+                                </video>
+                            </div>
                     }
                 })
             }

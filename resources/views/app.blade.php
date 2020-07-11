@@ -17,7 +17,9 @@
         <link rel="stylesheet" href="/assets/vendor/animate.css/animate.min.css" />
         <link rel="stylesheet" href="/assets/vendor/fullcalendar/dist/fullcalendar.min.css" />
         <link rel="stylesheet" href="{{ secure_asset('css/argon.css')}}" type="text/css">
+        <link rel="stylesheet" href="{{ secure_asset('css/video-react.css')}}" type="text/css"/>
         <title>School Erp</title>
+
     </head>
     <body>
         <div id="app"></div>
