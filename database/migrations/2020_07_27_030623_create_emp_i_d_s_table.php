@@ -16,7 +16,7 @@ class CreateEmpIDSTable extends Migration
         Schema::create('emp_i_d_s', function (Blueprint $table) {
             $table->id();
             $table->integer('school_id');
-            $table->integer('empid')->unique();
+            $table->integer('empid');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ use App\StudentInfo;
 use App\ParentInfo;
 use App\Staff;
 use App\Teacher;
+use App\EmpID;
 use App\RegisterStudent;
 class DatabaseSeeder extends Seeder
 {
@@ -50,7 +51,11 @@ class DatabaseSeeder extends Seeder
         $newyear->school_id = $school_id;
         $newyear->save();
         $year_id = $newyear->id;
+        $empid = new EmpID;
 
+        $empid->school_id = $school_id;
+        $empid->empid = 0;
+        $empid->save();
         SystemYear::insert(
             array(
                 array("year"=>"2019-20","school_id"=>$school_id),
@@ -121,7 +126,7 @@ class DatabaseSeeder extends Seeder
             $teacher_login->year_id = $year_id;
             $teacher_login->save();
         }
-        foreach(range(1,1200) as $index){
+        foreach(range(1,200) as $index){
             $new_register = new RegisterStudent;
             $new_register->register_no = $faker->numberBetween($min = 3000, $max = 90000).$index;
             $new_register->class = $class_array[$faker->numberBetween($min = 0, $max = 6)];
@@ -220,7 +225,7 @@ class DatabaseSeeder extends Seeder
 
 
 
-       foreach(range(1,1200) as $index){
+       foreach(range(1,200) as $index){
         try{
 
             $new_addmission = new StudentInfo;

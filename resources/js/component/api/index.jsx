@@ -12,10 +12,7 @@ api.interceptors.response.use((response) => response, (error) => {
     const {status,data} = error.response
     if(status == 401){
         Swal.fire("Error",data.message+". Please Login Page.",'error')
-        localStorage.removeItem("userAccount");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user_type");
-        localStorage.removeItem("school_id");
+        localStorage.clear();
         setAuthorizationHeader();
     }else if(status == 500){
         Swal.fire("Error","Server Error has Occured Please again later.",'error')
