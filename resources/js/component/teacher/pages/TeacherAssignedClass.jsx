@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import TopBreadCrumb from "../../utils/TopBreadcrumb"
-import AdminTeacherHeader from "../../header/admin/AdminTeacherHeader"
+import AdminTeacherHeader from "../header/AdminHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import CardComponent from "../../utils/CardComponent"
 import { connect } from "react-redux";
@@ -65,9 +65,7 @@ class TeacherAssignedClass extends Component{
         const {classes,getClassDispatch,teachers_name} = this.props
         return(
             <div>
-                <TopBreadCrumb mainHeader="Teacher" header="Assigned Class">
-                    <AdminTeacherHeader />
-                </TopBreadCrumb>
+                <AdminTeacherHeader mainHeader="Teacher" header="Assigned Class"/>
                 <BodyComponent>
                     <CardComponent title="Assigned Class" back_link="/admin/teacher">
                         <Table>

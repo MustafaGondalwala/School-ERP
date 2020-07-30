@@ -3,8 +3,68 @@ import InlineError from "./InlineError"
 import Row from "./Row"
 import { render } from "react-dom"
 import { Player } from 'video-react';
+import shortid from "shortid";
+
+export const getOnlineTestStatusText = (status) => {
+    switch(status){
+        case 1:
+            return "Attended";
+            break;
+    }
+}
+
+export const getKey = () => {
+    return shortid.generate()
+}
+
+export const TR = ({children}) => (
+    <tr key={shortid.generate()}>
+        {children}
+    </tr>
+)
+
+export const convert24hrto12hr = (timeString) => {
+    return new Date('1970-01-01T' + timeString + 'Z')
+    .toLocaleTimeString({},
+      {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
+    );
+}
 
 
+export const getQuestionType = (question_type) => {
+    switch(question_type){
+        case 1:
+            return "Mutitple Choice Question"
+            break;
+        case 2:
+            return "True or False"
+            break;
+        case 3:
+            return "Fill in Blanks"
+            break;
+        case 4:
+            return "Short Question"
+            break;
+        case 5:
+            return "Long Question"
+            break
+    }
+}
+export const checkExamDateTime = (examDate,startTime,endTime) => {
+    var isToday = new Date().toDateString() == new Date(examDate).toDateString();
+    if(isToday == true){
+        var startTime = startTime.toString().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/)
+        var endTime = endTime.toString().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/)
+        if(startTime[1] == new Date().getHours()){
+            if(parseInt(startTime[3]) <= new Date().getMinutes()){
+                return true
+            }
+            // console.log(new Date().getMinutes(),parseInt(startTime[3]));
+            // console.log(new Date().getMinutes(),startTime[3])
+        }
+    }
+    return false
+}
 export const Button = ({primary,disabled,success,warning,danger,neutral,sm,lg,children,onClick,right,left,...rest}) => {
     var className=""
     if(primary)
@@ -43,9 +103,9 @@ const getFileType = (name) => {
     return fileExt;
 }
 
-export const PreviewWithDeleteDownload = ({url,type,deleteFunction}) => {
+export const PreviewWithDeleteDownload = ({url,showDelete,type,deleteFunction}) => {
     return(
-        <Col md={3} sm={3} lg={3}>
+        <Col md={3} sm={6} lg={6}>
             {type == 1 &&
                 <span>
                     <img src={url} width="220" height="200" className="img-thumbnail img"/>
@@ -53,65 +113,98 @@ export const PreviewWithDeleteDownload = ({url,type,deleteFunction}) => {
             }
             {type == 2 &&
                 <span>
-                    <i class="fas fa-file-csv fa-7x"></i>
+                    <i className="fas fa-file-csv fa-7x"></i>
                 </span>
             }
             {
-                type == 3 && <i class="far fa-file-excel fa-7x"></i>
+                type == 3 && <i className="far fa-file-excel fa-7x"></i>
             }
             {
-                type == 4 && <i class="far fa-file-pdf fa-7x"></i>
+                type == 4 && <i className="far fa-file-pdf fa-7x"></i>
             }
             {
-                type == 5 && <i class="fas fa-file-archive fa-7x"></i>
+                type == 5 && <i className="fas fa-file-archive fa-7x"></i>
             }
             {
-                type == 6 && <i class="fas fa-file-word fa-7x"></i>
+                type == 6 && <i className="fas fa-file-word fa-7x"></i>
             }
             {
-                type == 7 && <i class="fab fa-html5 fa-7x"></i>
+                type == 7 && <i className="fab fa-html5 fa-7x"></i>
             }
-            <br />
-            <Button danger sm><i class="fas fa-trash-alt"></i></Button>
-            <Button primary sm><i class="fas fa-cloud-download-alt"></i></Button>
-            <br />
+            {   type == 8 && <video width="500" height="350" controls>
+                            <source src={url} type={"video/mp4"} />
+                            Your browser does not support the video tag.
+                            </video>
+            }
+                <span>
+                <br />
+                {showDelete && 
+                    <Button danger sm onClick={deleteFunction}><i className="fas fa-trash-alt"></i></Button>
+                }
+                
+                <a className="btn btn-primary btn-sm" download target="_blank" href={url}><i className="fas fa-cloud-download-alt"></i></a>
+                <br />
+                </span>
         </Col>
     )
 }
 
-export const PreviewAttachmentFile = ({attachments}) => {
+export const PreviewAttachmentFile = ({attachments,deleteFunc,showDelete}) => {
     return(
         <Row>
             {
                  attachments && attachments.map((item,id) => {
                     var url = item.file_url
-                    switch(item.extension){
+                    var extension = item.extension
+                    var delete_text = item.id
+                    var delete_type = 2
+                     if(item.lastModified){
+                        extension = getFileType(item.name)
+                        url =  URL.createObjectURL(item)
+                        delete_text = item.name
+                        delete_type = 1
+                     }
+                    switch(extension){
                         case "jpg":
                         case "png":
                         case "jpeg":
-                            return <PreviewWithDeleteDownload url={url} type={1}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={1}/>
                         case "csv":
-                            return <PreviewWithDeleteDownload url={url} type={2}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} deleteFunction={() => deleteFunc(delete_text,delete_type)} url={url} type={2}/>
                         case "xlsx":
                         case "xls":
-                            return <PreviewWithDeleteDownload url={url} type={3} />
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={3} />
                         case "pdf":
-                            return <PreviewWithDeleteDownload url={url} type={4}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={4}/>
                         case "zip":
                         case "rar":
-                            return <PreviewWithDeleteDownload url={url} type={5}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={5}/>
                         case "doc":
                         case "txt":
-                            return <PreviewWithDeleteDownload url={url} type={6}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={6}/>
                         case "htm":
-                            return <PreviewWithDeleteDownload url={url} type={7}/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={7}/>
+                            break
+                        case "mp3":
+                        case "mp4":
+                        case "avi":
+                        case "mov":
+                        case "mpg":
+                        case "wmv":
+                        case "3g2":
+                        case "3gp":
+                        case "ogv":
+                        case "mkv":
+                        case "webm":
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(delete_text,delete_type)} type={8}/>
+                            break
                     }
                 })
             }
         </Row>
     )
 }
-export const PreviewAttachment = ({attachments}) => {
+export const PreviewAttachment = ({attachments,showDelete,deleteFunc}) => {
     return(
         <div>
             {
@@ -122,35 +215,22 @@ export const PreviewAttachment = ({attachments}) => {
                         case "jpg":
                         case "png":
                         case "jpeg":
-                            return <img src={url} className="img img-thumbnail"/>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} deleteFunction={() => deleteFunc(item.name,1)} url={url} type={1}/>
                         case "csv":
-                            return <p><i class="fas fa-file-csv"></i></p>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)} type={2}/>
                         case "xlsx":
                         case "xls":
-                            return <p><i class="far fa-file-excel fa-5x"></i></p>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)} type={3} />
                         case "pdf":
-                            return <p><i class="far fa-file-pdf fa-5x"></i></p>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)} type={4}/>
                         case "zip":
                         case "rar":
-                            return <p><i class="far fa-file-archive fa-5x"></i></p>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)}  type={5}/>
                         case "doc":
                         case "txt":
-                            return <p><i class="far fa-file-word fa-5x"></i></p>
-                        case "mp4":
-                        case "avi":
-                        case "mov":
-                        case "wmv":
-                        case "flv":
-                        case "webm":
-                        case "mkv":
-                        case "ogv":
-                        case "3gp":
-                            return <div>
-                            <video width="620" height="440" controls>
-                                <source src={url} type={"video/"+extension} />
-                                Your browser does not support the video tag.
-                                </video>
-                            </div>
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)} type={6}/>
+                        case "htm":
+                            return <PreviewWithDeleteDownload showDelete={showDelete} url={url} deleteFunction={() => deleteFunc(item.name,1)} type={7}/>
                     }
                 })
             }
@@ -253,7 +333,7 @@ export const PreviewFiles = ({download=false,files}) => {
 export const Input = ({type="text",name,placeholder,value,onChange,disabled,errors={},...props}) => {
     return(
         <span>
-        <input type={type} disabled={disabled} value={value} name={name} placeholder={placeholder} onChange={e => onChange(e)} className="form-control"/>
+        <input type={type} disabled={disabled} value={value} name={name} placeholder={placeholder} onChange={e => onChange(e)} className="form-control" {...props}/>
         {errors[name] && <InlineError text={errors[name]}/>}
         </span>
     )

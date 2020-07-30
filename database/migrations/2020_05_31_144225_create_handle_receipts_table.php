@@ -24,6 +24,7 @@ class CreateHandleReceiptsTable extends Migration
             $table->integer('total_pending');
             $table->integer('total_paid');
             $table->integer('current_paid');
+            $table->date('created_at_date')->default(\Carbon\Carbon::now());
             $table->timestamps();
         });
     }

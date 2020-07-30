@@ -39,7 +39,9 @@ export default class FeeSetIndividual extends Component{
                 fee_individual:data.fee_individual
             })
         }).catch(error => {
-            Swal.fire("Error Ocurred","Error Occured in Process, Please try Later","error");
+            const {data,status} = error.response
+            if(status == 400)
+                Swal.fire("Invalid Fee Type",data.error.message,"warning");
         })
     }
 
@@ -66,7 +68,7 @@ export default class FeeSetIndividual extends Component{
                 <div className="container-fluid mt--6">
                     <CardComponent title="Select Student" back_link="/admin/fees">
                        <Row>
-                           <Col md="6" sm="6">
+                           <Col md="6" sm="12">
                                 <FormGroup>
                                     <FormLabel>Select Student</FormLabel>
                                     <SelectStudent  sendStudentId={this.getStudentId}/>

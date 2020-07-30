@@ -37,7 +37,9 @@ export default class SetDueDateForm extends Component{
             update_button:"Updating ..."
         })
         api.admin.fee.update_due_date(due_date).then(data => {
-            console.log(data)
+            this.setState({
+                update_button:"Update"
+            })
             Swal.fire("Success","Due Date is Updated!","success");
         })
     }

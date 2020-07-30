@@ -33,7 +33,7 @@ export default class StudentReceipt extends Component{
         return(
             <span>
                 {fee_receipts.length > 0 &&
-                    <CardComponent title="Fee Receipts">
+                    <CardComponent title="Fee Receipts" back_link={this.props.back_link}>
                         <div className="table-responsive">
                         <table className="table">
                             <thead>
@@ -74,7 +74,7 @@ const ViewReceipt = ({receipt,rowInfo}) => {
     var old_pending = 0;
     var total_amount = 0;
     return(
-        <CardComponent title={title}>
+        <CardComponent title={title} >
             <Row>
                 <Col md="6" sm="6">
                     <h4>Payment Type: {payment_type}</h4>

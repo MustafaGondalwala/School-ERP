@@ -1,22 +1,23 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[17],{
 
-/***/ "./resources/js/component/exam/form/ViewStudentDetailsMonthlyTest.jsx":
-/*!****************************************************************************!*\
-  !*** ./resources/js/component/exam/form/ViewStudentDetailsMonthlyTest.jsx ***!
-  \****************************************************************************/
+/***/ "./resources/js/component/fees/form/FeeClassWiseForm.jsx":
+/*!***************************************************************!*\
+  !*** ./resources/js/component/fees/form/FeeClassWiseForm.jsx ***!
+  \***************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FeeClassWiseForm; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var shortid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! shortid */ "./node_modules/shortid/index.js");
+/* harmony import */ var shortid__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(shortid__WEBPACK_IMPORTED_MODULE_4__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -47,459 +48,200 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var FeeClassWiseForm = /*#__PURE__*/function (_Component) {
+  _inherits(FeeClassWiseForm, _Component);
 
-var ViewStudentDetailsMonthlyTest = /*#__PURE__*/function (_Component) {
-  _inherits(ViewStudentDetailsMonthlyTest, _Component);
+  var _super = _createSuper(FeeClassWiseForm);
 
-  var _super = _createSuper(ViewStudentDetailsMonthlyTest);
-
-  function ViewStudentDetailsMonthlyTest(props) {
+  function FeeClassWiseForm(props) {
     var _this;
 
-    _classCallCheck(this, ViewStudentDetailsMonthlyTest);
+    _classCallCheck(this, FeeClassWiseForm);
 
     _this = _super.call(this, props);
     _this.state = {
-      marksheet: "",
-      row: "",
-      marksheet_id: "",
-      studentDetails: ""
+      fee_class_wise: "",
+      updateClassWise: [],
+      update_button: "Update Fees"
     };
-    _this.updateMarksheet = _this.updateMarksheet.bind(_assertThisInitialized(_this));
-    _this.updateStudentMarksheet = _this.updateStudentMarksheet.bind(_assertThisInitialized(_this));
+    _this.feeTypeAmount = _this.feeTypeAmount.bind(_assertThisInitialized(_this));
+    _this.updateClassWiseFee = _this.updateClassWiseFee.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ViewStudentDetailsMonthlyTest, [{
+  _createClass(FeeClassWiseForm, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var studentDetails = this.props.studentDetails;
+      var _this$props = this.props,
+          fee_class_wise = _this$props.fee_class_wise,
+          class_id = _this$props.class_id,
+          year_id = _this$props.year_id;
       this.setState({
-        studentDetails: studentDetails
+        fee_class_wise: fee_class_wise,
+        class_id: class_id,
+        year_id: year_id
       });
     }
   }, {
-    key: "updateMarksheet",
-    value: function updateMarksheet(studentDetails) {
+    key: "feeTypeAmount",
+    value: function feeTypeAmount(e, label, index) {
+      var value = e.target.value;
+      var temp_state = this.state.fee_class_wise;
+      temp_state[label][index].amount = value;
       this.setState({
-        studentDetails: studentDetails
+        fee_class_wise: temp_state
       });
     }
   }, {
-    key: "submit",
-    value: function submit(row, marksheet_id) {
+    key: "updateClassWiseFee",
+    value: function updateClassWiseFee(data) {
       var _this2 = this;
 
-      this.setState({
-        row: "",
-        marksheet_id: ""
-      }, function () {
+      data['fee_class_wise'] = this.state.fee_class_wise;
+      data['class_id'] = this.state.class_id;
+      data['year_id'] = this.state.year_id;
+      _api__WEBPACK_IMPORTED_MODULE_2__["default"].adminclerk.fee.update_class_wise_fees(data).then(function (data) {
         _this2.setState({
-          row: row,
-          marksheet_id: marksheet_id
-        });
-      });
-    }
-  }, {
-    key: "updateStudentMarksheet",
-    value: function updateStudentMarksheet(remark, grade, marksheet, marksheet_id, monthly_test, student_id) {
-      var _this3 = this;
-
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.update_marksheet(remark, grade, marksheet, marksheet_id, monthly_test, student_id).then(function (data) {
-        var message = data.message,
-            marksheet = data.marksheet;
-        sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Success", message, "success");
-
-        _this3.setState({
-          studentDetails: ""
+          fee_class_wise: data.fee_class_wise,
+          update_button: "Updating Fees ..."
         });
 
-        _this3.updateMarksheet(marksheet);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("Done", "Fee Class Wise Updated !!", "success");
       })["catch"](function (error) {
-        if (error.response) {
-          var status = error.response.status;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("Error Occured", "Error Occured while processing the data.", "error");
 
-          if (status == 422 || status == 400) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Invalid Data", "Data is Valid. Please Enter Correct Data", "warning");
-          }
-        }
-      });
-    }
-  }, {
-    key: "statusString",
-    value: function statusString(status) {
-      switch (status) {
-        case 1:
-          return "Not Edit";
-
-        case 2:
-          return "Edited";
-
-        case 3:
-          return 'Publish';
-      }
-    }
-  }, {
-    key: "unpublishMarksheet",
-    value: function unpublishMarksheet(marksheet_id) {
-      var _this4 = this;
-
-      sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, UnPublish this Marksheet !'
-      }).then(function (result) {
-        if (result.value) {
-          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.unpublishMarksheet(marksheet_id).then(function (data) {
-            var message = data.message,
-                studentDetails = data.studentDetails;
-
-            _this4.setState({
-              studentDetails: ""
-            });
-
-            _this4.updateMarksheet(studentDetails);
-
-            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Success", message, "success");
-          })["catch"](function (error) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Error Occured", "Error Occured.", "error");
-          });
-        }
-      });
-    }
-  }, {
-    key: "publishMarksheet",
-    value: function publishMarksheet(marksheet_id) {
-      var _this5 = this;
-
-      sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Publish this Marksheet !'
-      }).then(function (result) {
-        if (result.value) {
-          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.publishMarksheet(marksheet_id).then(function (data) {
-            var message = data.message,
-                studentDetails = data.studentDetails;
-
-            _this5.setState({
-              studentDetails: ""
-            });
-
-            _this5.updateMarksheet(studentDetails);
-
-            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Success", message, "success");
-          })["catch"](function (error) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Error Occured", "Error Occured.", "error");
-          });
-        }
+        _this2.setState({
+          update_button: "Update Fees"
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this3 = this;
 
-      var _this$props = this.props,
-          submit = _this$props.submit,
-          exam_type = _this$props.exam_type;
-      var _this$state = this.state,
-          row = _this$state.row,
-          marksheet_id = _this$state.marksheet_id,
-          studentDetails = _this$state.studentDetails;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Students Details"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Student Roll No"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Student Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Action"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Publish / Unpublish"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Publish At")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, studentDetails.length > 0 && studentDetails.map(function (item, id) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: id
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.student.roll_no), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.student.student_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          primary: true,
-          sm: true,
-          onClick: function onClick() {
-            return _this6.submit(item, item.id);
-          }
-        }, "Fill")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, _this6.statusString(item.status)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.status == 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          primary: true,
-          sm: true,
-          onClick: function onClick() {
-            return _this6.publishMarksheet(item.id);
-          }
-        }, "Publish"), item.status == 3 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          danger: true,
-          sm: true,
-          onClick: function onClick() {
-            return _this6.unpublishMarksheet(item.id);
-          }
-        }, "UnPublish")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.publish_at && item.status == 3 && new Date(item.publish_at).toLocaleString()));
-      })))), row && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(MonthlyTestMarksheet, {
-        exam_type: exam_type,
-        submit: this.updateStudentMarksheet,
-        marksheet_id: marksheet_id,
-        row: row
+      var fee_class_wise = this.state.fee_class_wise;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, fee_class_wise && Object.keys(fee_class_wise).map(function (item, key) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ViewInstallmentForm, {
+          installment_label: item,
+          feeTypeAmount: _this3.feeTypeAmount,
+          installment_wise: fee_class_wise[item]
+        });
+      }), fee_class_wise && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SubmitForm, {
+        update_button: this.state.update_button,
+        updateClassWiseFee: this.updateClassWiseFee
       }));
     }
   }]);
 
-  return ViewStudentDetailsMonthlyTest;
+  return FeeClassWiseForm;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-var MonthlyTestMarksheet = /*#__PURE__*/function (_Component2) {
-  _inherits(MonthlyTestMarksheet, _Component2);
 
-  var _super2 = _createSuper(MonthlyTestMarksheet);
 
-  function MonthlyTestMarksheet(props) {
-    var _this7;
+var ViewInstallmentForm = function ViewInstallmentForm(_ref) {
+  var installment_label = _ref.installment_label,
+      installment_wise = _ref.installment_wise,
+      feeTypeAmount = _ref.feeTypeAmount;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    key: shortid__WEBPACK_IMPORTED_MODULE_4___default.a.generate(),
+    title: "".concat(installment_label, " Fees:")
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "table-responsive"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+    className: "table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr No."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Amount"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, installment_wise.map(function (item, id) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      key: shortid__WEBPACK_IMPORTED_MODULE_4___default.a.generate()
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.fee_type.fee_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "number",
+      min: "0",
+      "data-fee_type_id": item.fee_type_id,
+      className: "form-control",
+      onChange: function onChange(e) {
+        return feeTypeAmount(e, installment_label, id);
+      },
+      value: item.amount
+    })));
+  })))));
+};
 
-    _classCallCheck(this, MonthlyTestMarksheet);
+var SubmitForm = /*#__PURE__*/function (_Component2) {
+  _inherits(SubmitForm, _Component2);
 
-    _this7 = _super2.call(this, props);
-    _this7.state = {
-      marksheet: "",
-      remark: "",
-      grade: ""
+  var _super2 = _createSuper(SubmitForm);
+
+  function SubmitForm(props) {
+    var _this4;
+
+    _classCallCheck(this, SubmitForm);
+
+    _this4 = _super2.call(this, props);
+    _this4.state = {
+      overwrite: false,
+      send_message: true
     };
-    _this7.onChange = _this7.onChange.bind(_assertThisInitialized(_this7));
-    _this7.onChangeRow = _this7.onChangeRow.bind(_assertThisInitialized(_this7));
-    _this7.submit = _this7.submit.bind(_assertThisInitialized(_this7));
-    return _this7;
+    return _this4;
   }
 
-  _createClass(MonthlyTestMarksheet, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this8 = this;
-
-      var _this$props2 = this.props,
-          marksheet_id = _this$props2.marksheet_id,
-          row = _this$props2.row;
-      var remark = row.remark,
-          grade = row.grade;
-      this.setState({
-        remark: remark,
-        grade: grade
-      });
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.get_individual(marksheet_id).then(function (data) {
-        var marksheet = data.marksheet;
-
-        _this8.setState({
-          marksheet: marksheet
-        });
-      });
-    }
-  }, {
-    key: "onChange",
-    value: function onChange(e, index) {
-      var _e$target = e.target,
-          name = _e$target.name,
-          value = _e$target.value;
-      var marksheet = this.state.marksheet;
-      marksheet[index][name] = value;
-      this.setState({
-        marksheet: marksheet
-      });
-    }
-  }, {
-    key: "submit",
-    value: function submit() {
-      var _this$state2 = this.state,
-          remark = _this$state2.remark,
-          grade = _this$state2.grade,
-          marksheet = _this$state2.marksheet;
-      var _this$props3 = this.props,
-          marksheet_id = _this$props3.marksheet_id,
-          exam_type = _this$props3.exam_type;
-      var student_id = this.props.row.student_id;
-      this.props.submit(remark, grade, marksheet, marksheet_id, exam_type, student_id);
-    }
-  }, {
-    key: "onChangeRow",
-    value: function onChangeRow(e) {
-      var _e$target2 = e.target,
-          name = _e$target2.name,
-          value = _e$target2.value;
-      this.setState(_defineProperty({}, name, value));
+  _createClass(SubmitForm, [{
+    key: "handleChange",
+    value: function handleChange(e) {
+      this.setState(_defineProperty({}, e.target.name, e.target.checked));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this9 = this;
+      var _this5 = this;
 
-      var row = this.props.row;
-      var _this$state3 = this.state,
-          marksheet = _this$state3.marksheet,
-          remark = _this$state3.remark,
-          grade = _this$state3.grade;
-      var total_marks = 0;
-      var max_marks = 0;
-      var min_marks = 0;
-      var title = "Month Test Marksheet: " + row.student.roll_no;
+      var _this$state = this.state,
+          overwrite = _this$state.overwrite,
+          send_message = _this$state.send_message;
+      var update_button = this.props.update_button;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: title
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-        md: 6,
-        sm: 4
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Student Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: row.student.student_name,
-        disabled: true
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-        md: 6,
-        sm: 4
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Student Roll No"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: row.student.roll_no,
-        disabled: true
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-        md: 6,
-        sm: 4
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Father Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: row.student.father_name,
-        disabled: true
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-        md: 6,
-        sm: 4
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Father Contact No"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: row.student.father_contact_no1,
-        disabled: true
-      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), marksheet ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "table_responsive"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Min Marks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Max Marks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Marks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Grade"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, marksheet.map(function (item, id) {
-        total_marks += parseInt(item.total_marks);
-        min_marks += parseInt(item.min_marks);
-        max_marks += parseInt(item.max_marks);
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EveryRow, {
-          key: id,
-          onChange: _this9.onChange,
-          index: id,
-          row: item
-        });
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: min_marks,
-        disabled: true
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: max_marks,
-        disabled: true
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        value: total_marks,
-        disabled: true
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Select"], {
-        name: "grade",
-        onChange: this.onChangeRow,
-        value: grade
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: ""
-      }, " -- Select -- "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 1
-      }, "A"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 2
-      }, "A-"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 3
-      }, "A+"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 4
-      }, "B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 5
-      }, "B-"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 6
-      }, "B+"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 7
-      }, "C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 8
-      }, "D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 9
-      }, "E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-        value: 10
-      }, "F"))))))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Loading Marksheet ..."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-        md: 6,
-        sm: 4
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Remark"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-        type: "text",
-        name: "remark",
-        onChange: this.onChangeRow,
-        value: remark
-      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        title: "Update Class Wise Fees"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: "checkbox-inline"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "checkbox",
+        checked: overwrite,
+        onChange: function onChange(e) {
+          return _this5.handleChange(e);
+        },
+        name: "overwrite"
+      }), "\xA0\xA0Overwrite Existing Indivitual Student Fee"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: "checkbox-inline"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "checkbox",
+        checked: send_message,
+        onChange: function onChange(e) {
+          return _this5.handleChange(e);
+        },
+        name: "send_message"
+      }), "\xA0\xA0Send Message to Parents"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-primary",
-        onClick: this.submit
-      }, "Update")));
+        onClick: function onClick(e) {
+          return _this5.props.updateClassWiseFee({
+            overwrite: overwrite,
+            send_message: send_message
+          });
+        }
+      }, update_button)));
     }
   }]);
 
-  return MonthlyTestMarksheet;
+  return SubmitForm;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-var EveryRow = function EveryRow(_ref) {
-  var index = _ref.index,
-      row = _ref.row,
-      _onChange = _ref.onChange;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    key: index
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, index + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.subject.subject_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "number",
-    min: "0",
-    name: "min_marks",
-    onChange: function onChange(e) {
-      return _onChange(e, index);
-    },
-    value: row.min_marks || 0,
-    className: "form-control"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "number",
-    min: "0",
-    name: "max_marks",
-    onChange: function onChange(e) {
-      return _onChange(e, index);
-    },
-    value: row.max_marks || 0,
-    className: "form-control"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "number",
-    min: "0",
-    name: "total_marks",
-    onChange: function onChange(e) {
-      return _onChange(e, index);
-    },
-    value: row.total_marks || 0,
-    className: "form-control"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Select"], {
-    name: "grade",
-    onChange: function onChange(e) {
-      return _onChange(e, index);
-    },
-    value: row.grade || 0
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: ""
-  }, " -- Select -- "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 1
-  }, "A"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 2
-  }, "A-"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 3
-  }, "A+"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 4
-  }, "B"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 5
-  }, "B-"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 6
-  }, "B+"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 7
-  }, "C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 8
-  }, "D"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 9
-  }, "E"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
-    value: 10
-  }, "F"))));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (ViewStudentDetailsMonthlyTest);
 
 /***/ })
 

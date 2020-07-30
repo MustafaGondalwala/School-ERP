@@ -80,7 +80,12 @@ export const TeacherLeftSide = ({assigned_class}) => {
                         <span className="sidenav-normal"> Study Material </span>
                       </Link>
                     </li>
-                    
+                    <li className="nav-item">
+                      <Link to={`/teacher/online-exam/class/${classes.id}`} className="nav-link">
+                        <span className="sidenav-mini-icon"> O </span>
+                        <span className="sidenav-normal"> Online Exam </span>
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -107,6 +112,18 @@ export const TeacherLeftSide = ({assigned_class}) => {
                   <Link to="/teacher/homework" className="nav-link" >
                     <i className="ni ni-ungroup text-orange" />
                     <span className="nav-link-text">Home Work</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/teacher/online-exam" className="nav-link" >
+                    <i className="ni ni-ungroup text-orange" />
+                    <span className="nav-link-text">Online Exam</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={"/teacher/study-material/teacher"} className="nav-link" >
+                    <i className="ni ni-ungroup text-orange" />
+                    <span className="nav-link-text">Study Material</span>
                   </Link>
                 </li>
                 <li className="nav-item">

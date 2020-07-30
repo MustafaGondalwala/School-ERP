@@ -139,13 +139,20 @@ class AttendanceController extends Controller
             'student_attendance'=>'required|array'
         ]);
         $student_attendance = $request->student_attendance;
+        $class_id = "";
+        $school_id = $this->getSchoolId($request);
+        $attendance_date = "";
         try{
             DB::beginTransaction();
             foreach($student_attendance as $type){
                 if($type != null){
                     $id = $type[0];
                     $new_status = $type[1];
-                    StudentAttendance::find($id)->update([
+                    $data = StudentAttendance::find($id);
+                    $class_id = $data->class_id;
+                    $attendance_date = $data->attendance_date;
+
+                    $data->update([
                         'status'=>$new_status
                     ]);
                 }
@@ -156,7 +163,8 @@ class AttendanceController extends Controller
         }finally{
             DB::commit();
         }
-        return $this->ReS(['message'=>"Student Attendance Updated"]);
+        $studentAttendances = $this->getAttendance($school_id,$class_id,$attendance_date);
+        return $this->ReS(['message'=>"Student Attendance Updated","studentAttendances"=>$studentAttendances]);
     }
     public function getStudent(Request $request){
         $request->validate([
@@ -187,6 +195,7 @@ class AttendanceController extends Controller
         }
         DB::commit();
         $studentAttendances = $this->getAttendance($school_id,$class_id,$select_date);
+        //  StudentAttendance::with('studentInfo','class')->select('id','student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->get();
         return $this->ReS(["student_attendance"=>$studentAttendances]);
     }
 }

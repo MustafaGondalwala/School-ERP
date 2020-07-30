@@ -15,6 +15,8 @@ use App\MonthlyTestType;
 use App\MonthlyTestMarksheet;
 use App\MonthlyTestStudent;
 use App\ExamMarksheet;
+use App\Teacher;
+use App\StudentInfo;
 
 trait HelperTrait{
     public function ReS($data){
@@ -24,6 +26,11 @@ trait HelperTrait{
         return response()->json(["error"=>$data],$status);
     }
 
+    public function EmpIDIncrement($school_id){
+        $data = EmpID::where(['school_id'=>$school_id])->first();
+        $data->increment('empid');
+        return true;
+    }
     public function getSchoolUniqueCode($school_id){
         return SchoolInfo::find($school_id)->unique_id_code;
     }
@@ -35,25 +42,55 @@ trait HelperTrait{
         ])->first();
         return $data;
     }
-
-    public function bulkFileUpdate($files,$instance)
+    public function bulkFileUpdateBag($fileBag,$instance,$school_id){
+        foreach($fileBag as $files){
+            foreach($files as $file){
+                if(gettype($file) != "string"){
+                    $upload_data = $this->uploadFile($file);
+                    $new_file = new File;
+                    $new_file->file_url = $upload_data['url'];
+                    $new_file->extension = $file->getClientOriginalExtension();
+                    $new_file->type_type = get_class($instance);
+                    $new_file->school_id = $school_id;
+                    $new_file->type_id = $instance->id;
+                    $new_file->save();
+                }
+            }
+        }
+    }
+    public function bulkFileUpdate($files,$instance,$school_id)
     {
         foreach($files as $file){
+            if(gettype($file) != "string"){
                 $upload_data = $this->uploadFile($file);
                 $new_file = new File;
                 $new_file->file_url = $upload_data['url'];
                 $new_file->extension = $file->getClientOriginalExtension();
                 $new_file->type_type = get_class($instance);
+                $new_file->school_id = $school_id;
                 $new_file->type_id = $instance->id;
                 $new_file->save();
+            }
         }
         return true;
-    }  
+    }
+     
     public function deletePhoto($old_photo){
         if($old_photo == NULL || $old_photo == "")
             return false;
         else{
             return true;
+        }
+    }
+
+    public function removeFile($file_id){
+        try{
+            $file = File::find($file_id);
+            unlink(public_path().$file->file_url);
+            $file->delete();
+            return true;
+        }catch(\Exception $e){
+            return false;
         }
     }
     public function fetchCorrectPhoto($fileOrString){
@@ -119,6 +156,9 @@ trait HelperTrait{
         return $request->header('Auth-School-Year');
     }
 
+    public function checkForExamDateTime($examDate,$startTime,$endTime){
+        return true;
+    }
     public function getMonthlyTest($school_id,$year_id){
         $data = MonthlyTestType::where([
             'school_id'=>$school_id,
@@ -128,10 +168,13 @@ trait HelperTrait{
     }
 
     public function getTeacherId(){
-      return Auth()->user()->profile()->first()->id; 
+        return Teacher::where('empid',Auth()->user()->login_text)->first()->id;
     }
-    public function getClassPeriods($school_id){
-        return ClassPeriod::select('id','period_id','start_time','end_time')->where("school_id",$school_id)->orderBy('period_id')->get();
+    public function getStudentInfoId(){
+        return StudentInfo::where('roll_no',Auth()->user()->login_text)->first()->id;
+    }
+    public function getClassPeriods($school_id,$year_id){
+        return ClassPeriod::select('id','period_id','start_time','end_time')->where(["school_id"=>$school_id,"year_id"=>$year_id])->orderBy('period_id')->get();
     }
     public function getCurrentYear($request){
         $school_id = $request->header('Auth-School-Id');
@@ -142,7 +185,7 @@ trait HelperTrait{
     }
 
     public function getInstallment($school_id){
-        $installments = FeeInstallments::select('installment','id')->where('school_info_id',$school_id)->get();
+        $installments = FeeInstallments::select('installment','id')->where('school_id',$school_id)->get();
         return $installments;
     }
     public function getSchool(){

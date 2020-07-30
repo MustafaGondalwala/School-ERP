@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[43],{
 
-/***/ "./resources/js/component/homework/form/ViewParticularHomeWorkParent.jsx":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/component/homework/form/ViewParticularHomeWorkParent.jsx ***!
-  \*******************************************************************************/
+/***/ "./resources/js/component/homework/form/EditHomeWork.jsx":
+/*!***************************************************************!*\
+  !*** ./resources/js/component/homework/form/EditHomeWork.jsx ***!
+  \***************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,12 +11,16 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ckeditor/ckeditor5-react */ "./node_modules/@ckeditor/ckeditor5-react/dist/ckeditor.js");
-/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
-/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_subjects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../actions/subjects */ "./resources/js/component/actions/subjects.js");
+/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
+/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ckeditor/ckeditor5-react */ "./node_modules/@ckeditor/ckeditor5-react/dist/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_8__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -46,66 +50,129 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
-var CardComponent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
-  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx"));
-});
 
 
 
 
 
-var ViewParticularHomeWorkParent = /*#__PURE__*/function (_Component) {
-  _inherits(ViewParticularHomeWorkParent, _Component);
 
-  var _super = _createSuper(ViewParticularHomeWorkParent);
 
-  function ViewParticularHomeWorkParent(props) {
+
+
+var EditHomeWork = /*#__PURE__*/function (_Component) {
+  _inherits(EditHomeWork, _Component);
+
+  var _super = _createSuper(EditHomeWork);
+
+  function EditHomeWork(props) {
     var _this;
 
-    _classCallCheck(this, ViewParticularHomeWorkParent);
+    _classCallCheck(this, EditHomeWork);
 
     _this = _super.call(this, props);
     _this.state = {
-      data: "",
-      errors: {}
+      data: {},
+      errors: {},
+      update_button: "Update"
     };
-    _this.fetchHomeWork = _this.fetchHomeWork.bind(_assertThisInitialized(_this));
+    _this.onFileChange = _this.onFileChange.bind(_assertThisInitialized(_this));
+    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ViewParticularHomeWorkParent, [{
-    key: "findArrayElementByTitle",
-    value: function findArrayElementByTitle(array, id) {
-      return array.find(function (element) {
-        return element.id == id;
-      });
-    }
-  }, {
-    key: "fetchHomeWork",
-    value: function fetchHomeWork() {
-      var _this$props = this.props,
-          parent_homework = _this$props.parent_homework,
-          student_id = _this$props.student_id,
-          view_id = _this$props.view_id;
-      var particular_homework = this.findArrayElementByTitle(parent_homework[student_id], view_id);
+  _createClass(EditHomeWork, [{
+    key: "fetchData",
+    value: function fetchData(data) {
+      var _this2 = this;
+
       this.setState({
-        data: particular_homework
+        data: {},
+        files: ""
+      }, function () {
+        var image_url = [];
+        data.files.map(function (each) {
+          image_url.push(each.file_url);
+        });
+        data.image_url = image_url;
+
+        _this2.setState({
+          data: data
+        });
       });
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.fetchHomeWork();
+      var data = this.props.data;
+      var _this$props = this.props,
+          subject = _this$props.subject,
+          setSubjectDispatch = _this$props.setSubjectDispatch;
+
+      if (Object.keys(subject).length == 0) {
+        setSubjectDispatch();
+      }
+
+      this.fetchData(data);
     }
   }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps() {
-      var _this2 = this;
+      var data = this.props.data;
+      console.log(data);
+      this.fetchData(data);
+    }
+  }, {
+    key: "onFileChange",
+    value: function onFileChange(e) {
+      var _e$target = e.target,
+          name = _e$target.name,
+          files = _e$target.files;
+      var files_array = [];
+      Object.keys(files).map(function (item) {
+        files_array.push(files[item]);
+      });
+      this.setState({
+        files: files_array
+      });
+      var image_url = [];
+
+      if (Object.keys(files).length > 0) {
+        Object.keys(files).map(function (item) {
+          image_url.push(URL.createObjectURL(files[item]));
+        });
+      }
 
       this.setState({
-        data: ""
-      }, function () {
-        _this2.fetchHomeWork();
+        data: _objectSpread(_objectSpread({}, this.state.data), {}, _defineProperty({}, "image_url", image_url))
+      });
+    }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this$state = this.state,
+          data = _this$state.data,
+          files = _this$state.files;
+      console.log(data, files);
+      this.setState({
+        update_button: "Updating HomeWork ..."
+      });
+      var formData = new FormData(); //formdata object
+
+      Object.keys(data).map(function (item) {
+        formData.append(item, data[item]);
+      });
+
+      for (var i = 0; i < files.length; i++) {
+        formData.append("files[".concat(i, "]"), files[i]);
+      }
+
+      console.log(formData);
+    }
+  }, {
+    key: "onChange",
+    value: function onChange(e) {
+      this.setState({
+        data: _objectSpread(_objectSpread({}, this.state.data), {}, _defineProperty({}, e.target.name, e.target.value))
       });
     }
   }, {
@@ -113,53 +180,43 @@ var ViewParticularHomeWorkParent = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var _this$state = this.state,
-          data = _this$state.data,
-          errors = _this$state.errors;
       var subject = this.props.subject;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Suspense"], {
-        fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Loading\u2026")
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CardComponent, {
-        title: "View Particular HomeWork"
-      }, data ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Title: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        disabled: true,
-        type: "text",
+      var _this$state2 = this.state,
+          data = _this$state2.data,
+          errors = _this$state2.errors,
+          update_button = _this$state2.update_button;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Edit HomeWork"
+      }, Object.keys(data).length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Col"], {
+        md: "12",
+        sm: "12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Input"], {
         name: "title",
-        value: data.homework.title,
         onChange: function onChange(e) {
           return _this3.onChange(e);
         },
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Sub Title: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        disabled: true,
-        type: "text",
+        value: data.title
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Subtitle"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+        onChange: function onChange(e) {
+          return _this3.onChange(e);
+        },
         name: "subtitle",
-        value: data.homework.subtitle,
+        value: data.subtitle
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        className: "form-control",
+        value: data.subject,
         onChange: function onChange(e) {
           return _this3.onChange(e);
         },
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Subject:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        disabled: true,
-        type: "text",
-        name: "title",
-        value: data.homework.subject.subject_name,
-        onChange: function onChange(e) {
-          return _this3.onChange(e);
-        },
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Description: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        disabled: true,
-        editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_3___default.a,
-        data: data.homework.description,
+        name: "subject"
+      }, Object.keys(subject).length > 0 && subject.map(function (item, key) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: key,
+          value: item.id
+        }, item.subject_name);
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Description"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_7___default.a, {
+        editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_8___default.a,
+        data: data.description,
         onChange: function onChange(event, editor) {
           var data = editor.getData();
 
@@ -170,38 +227,51 @@ var ViewParticularHomeWorkParent = /*#__PURE__*/function (_Component) {
         onInit: function onInit(editor) {
           editor.setData(data.description);
         }
-      }), errors.description && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(InlineError, {
+      }), errors.description && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_6__["default"], {
         text: errors.description
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["PreviewServerFiles"], {
-        files: data.homework.files
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "form-group"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Submition Date:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Upload Files"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["UploadMutitpleMutiples"], {
+        onChange: this.onFileChange,
+        name: "files"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["PreviewFiles"], {
+        files: data.image_url
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Submission Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Input"], {
         type: "date",
-        disabled: true,
-        className: "form-control",
         name: "submition_date",
+        value: data.submition_date,
         onChange: function onChange(e) {
           return _this3.onChange(e);
-        },
-        value: data.homework.submition_date
-      }), errors.submition_date && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(InlineError, {
-        text: errors.submition_date
-      }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Loading ...")));
+        }
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        name: "status",
+        value: data.status,
+        onChange: function onChange(e) {
+          return _this3.onChange(e);
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "1"
+      }, "Open"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "2"
+      }, "Closed"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        warning: true,
+        onClick: function onClick(e) {
+          return _this3.submit();
+        }
+      }, update_button)))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Loading ..."));
     }
   }]);
 
-  return ViewParticularHomeWorkParent;
+  return EditHomeWork;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 function mapStateToProps(state) {
   return {
-    parent_homework: state.parent_homework,
     subject: state.subjects
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(ViewParticularHomeWorkParent));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, {
+  setSubjectDispatch: _actions_subjects__WEBPACK_IMPORTED_MODULE_5__["setSubjectDispatch"]
+})(EditHomeWork));
 
 /***/ })
 

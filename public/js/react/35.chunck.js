@@ -1,21 +1,19 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[35],{
 
-/***/ "./resources/js/component/timetable/form/EditTimeTableStudent.jsx":
-/*!************************************************************************!*\
-  !*** ./resources/js/component/timetable/form/EditTimeTableStudent.jsx ***!
-  \************************************************************************/
+/***/ "./resources/js/component/teacher/form/SelectTeacher.jsx":
+/*!***************************************************************!*\
+  !*** ./resources/js/component/teacher/form/SelectTeacher.jsx ***!
+  \***************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EditTimeTableStudent; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _form_ViewEditStudentTimeTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../form/ViewEditStudentTimeTable */ "./resources/js/component/timetable/form/ViewEditStudentTimeTable.jsx");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _actions_teacher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/teacher */ "./resources/js/component/actions/teacher.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43,90 +41,60 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var EditTimeTableStudent = /*#__PURE__*/function (_Component) {
-  _inherits(EditTimeTableStudent, _Component);
+var SelectTeacher = /*#__PURE__*/function (_Component) {
+  _inherits(SelectTeacher, _Component);
 
-  var _super = _createSuper(EditTimeTableStudent);
+  var _super = _createSuper(SelectTeacher);
 
-  function EditTimeTableStudent(props) {
-    var _this;
+  function SelectTeacher() {
+    _classCallCheck(this, SelectTeacher);
 
-    _classCallCheck(this, EditTimeTableStudent);
-
-    _this = _super.call(this, props);
-    _this.state = {
-      timetable: ""
-    };
-    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
-    return _this;
+    return _super.apply(this, arguments);
   }
 
-  _createClass(EditTimeTableStudent, [{
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps() {
-      var _this2 = this;
-
-      var time_table_name = this.props.time_table_name;
-      this.setState({
-        timetable: ""
-      });
-      _api__WEBPACK_IMPORTED_MODULE_1__["default"].admin.timetable.getTimetable(time_table_name).then(function (data) {
-        _this2.setState({
-          timetable: data.timetables
-        });
-      })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("Error Occured", "Error Occured in Process. Try again Later", "error");
-      });
-    }
-  }, {
+  _createClass(SelectTeacher, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this3 = this;
+      var _this$props = this.props,
+          teachers_name = _this$props.teachers_name,
+          setTeachersNameDispatch = _this$props.setTeachersNameDispatch;
 
-      var time_table_name = this.props.time_table_name;
-      this.setState({
-        timetable: ""
-      });
-      _api__WEBPACK_IMPORTED_MODULE_1__["default"].admin.timetable.getTimetable(time_table_name).then(function (data) {
-        _this3.setState({
-          timetable: data.timetables
-        });
-      })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("Error Occured", "Error Occured in Process. Try again Later", "error");
-      });
-    }
-  }, {
-    key: "submit",
-    value: function submit(timetable) {
-      var _this4 = this;
-
-      _api__WEBPACK_IMPORTED_MODULE_1__["default"].admin.timetable.update(timetable).then(function (data) {
-        _this4.setState({
-          timetable_name: "",
-          timetable: ""
-        });
-
-        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("success", data.message, "success");
-      })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire("Error Occured", "Error Occured in Process. Try again Later", "error");
-      });
+      if (Object.keys(teachers_name).length == 0) {
+        setTeachersNameDispatch();
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      var timetable = this.state.timetable;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, timetable ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_form_ViewEditStudentTimeTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        submit: this.submit,
-        type: "edit",
-        timetable: timetable
-      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Loading ..."));
+      var _this$props2 = this.props,
+          teachers_name = _this$props2.teachers_name,
+          value = _this$props2.value,
+          onChange = _this$props2.onChange;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        name: "assigned_teacher",
+        onChange: onChange,
+        value: value || ""
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], null, " -- Select -- "), Object.keys(teachers_name).length > 0 && teachers_name.map(function (teacher, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], {
+          key: index,
+          value: teacher.id
+        }, teacher.teacher_name);
+      }));
     }
   }]);
 
-  return EditTimeTableStudent;
+  return SelectTeacher;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
+function mapStateToProps(state) {
+  return {
+    teachers_name: state.teachers_name
+  };
+}
 
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
+  setTeachersNameDispatch: _actions_teacher__WEBPACK_IMPORTED_MODULE_1__["setTeachersNameDispatch"]
+})(SelectTeacher));
 
 /***/ })
 

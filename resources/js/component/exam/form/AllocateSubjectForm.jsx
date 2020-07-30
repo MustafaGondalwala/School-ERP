@@ -152,7 +152,7 @@ class AllocateSubjectForm extends Component{
                 </Table>
                 : <h2> No Subject Found for Class </h2>}
 
-            </CardComponent>
+                </CardComponent>
             {add && <AddSubjectClass submit={this.updateSubjectPerClass} type={"add"} title={"Add Subject Class"} subjects={subjects} subjectclasswise={subjectclasswise}/>}
             </span>
         )

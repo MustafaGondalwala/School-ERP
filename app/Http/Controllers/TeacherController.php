@@ -93,9 +93,10 @@ class TeacherController extends Controller
                 $teacher = Teacher::find($request->id);
             else
                 $teacher = new Teacher;
-            $teacher->empid = $schoolCode.'-'.$request->empid;
+            $teacher->empid = $request->empid;
             $teacher->teacher_name = $request->teacher_name;
             $teacher->school_id = $schoolId;
+            $teacher->year_id = $year_id;
             if($request->id)
                 $teacher->update();
             else
@@ -106,8 +107,6 @@ class TeacherController extends Controller
                 $other_documents1 = NULL;
                 $other_documents2 = NULL;    
                 $emp_photo = NULL;
-
-
             
 
                 //     if($request->emp_photo != NULL && !$request->hasFile('emp_photo'))
@@ -183,6 +182,7 @@ class TeacherController extends Controller
                     "gender"=>$request->gender,
                     "address"=>$request->address,
                     "dob"=>$request->dob,
+                    'year_id'=>$year_id,
                     "contact_no"=>$request->contact_no,
                     "school_id"=>$schoolId,
                     "blood_group"=>$request->blood_group,
@@ -222,6 +222,7 @@ class TeacherController extends Controller
             $teacher_login->school_id = $schoolId;
             $teacher_login->year_id = $year_id;
             $teacher_login->save();
+            $this->EmpIDIncrement($school_id);
             DB::commit();
             $message = "Teacher Added!";
             if($request->id){

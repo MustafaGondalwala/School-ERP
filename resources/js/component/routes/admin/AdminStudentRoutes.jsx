@@ -24,6 +24,7 @@ import PromoteStudent from "../../student/pages/PromoteStudent"
 import StudentAdminHomePage from "../../student/pages/StudentAdminHomePage"
 import SetRollNo from "../../student/pages/SetRollNo"
 import ViewEditClerk from "../../student/pages/ViewEditClerk"
+import SetRegisterIDStudent from "../../student/pages/SetRegisterIDStudent"
 
 const AdminStudentRoutes = () => (
     <span>
@@ -49,6 +50,7 @@ const AdminStudentRoutes = () => (
         <AdminDashboardRoutes exact path="/admin/student/student-physical-fitness" component={StudentPhysicalFitness} />
         <AdminDashboardRoutes exact path="/admin/student/student-generate-id-card" component={StudentGenerateIdCard} />
         <AdminDashboardRoutes exact path="/admin/student/promote-student" component={PromoteStudent} />
+        <AdminDashboardRoutes exact path="/admin/student/set-register" component={SetRegisterIDStudent} />
     </span>
 )
 

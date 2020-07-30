@@ -18,29 +18,17 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
-    // public function addMonthlyTest(Request $request){
-    //     $request->validate([
-    //         'monthly_test'=>'required|string'
-    //     ]);
-    //     $year_id = $this->getSchoolYearId($request);
-    //     $school_id = $this->getSchoolId($request);
-    //     $checkIfExist = MonthlyTestType::where([
-    //         'year_id'=>$year_id,
-    //         'school_id'=>$school_id,
-    //         'monthly_test'=>$request->monthly_test
-    //     ])->count();
-    //     if($checkIfExist > 0){
-    //         return $this->ReE(["message"=>"Monthly Test Already Exists"],422);
-    //     }
-
-    //     $new_monthly = new MonthlyTestType;
-    //     $new_monthly->school_id = $school_id;
-    //     $new_monthly->year_id = $year_id;
-    //     $new_monthly->monthly_test = $request->monthly_test;
-    //     $new_monthly->save();
-
-    //     return $this->ReS(["monthly_test"=>$this->getMonthlyTest($school_id,$year_id)]);
-    // }
+    public function getMonthlyTestResults(Request $request,$student_id){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $data = MonthlyTestStudent::with('monthlyTest')->where([
+            'student_id'=>$student_id,
+            'year_id'=>$year_id,
+            'status'=>3,
+            'school_id'=>$school_id
+        ])->get();
+        return $this->ReS(["monthly_test"=>$data]);
+    }
     public function removeMonthlyTest(Request $request,$class_id,$month_test_id){
         $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
@@ -57,7 +45,7 @@ class ExamController extends Controller
             'class_id'=>$class_id,
             'year_id'=>$year_id
         ])->delete();
-        $data = MonthlyTestType::where([
+        $data = MonthlyTestType::with('subjects')->where([
             'class_id'=>$class_id,
             'year_id'=>$year_id,
             'school_id'=>$school_id
@@ -68,7 +56,8 @@ class ExamController extends Controller
     }
     public function addMonthlyTestType(Request $request,$class_id){
                 $request->validate([
-                    'monthly_test'=>'required|string'
+                    'monthly_test'=>'required|string',
+                    'subject_ids'=>'required',
                 ]);
                 $year_id = $this->getSchoolYearId($request);
                 $school_id = $this->getSchoolId($request);
@@ -88,7 +77,12 @@ class ExamController extends Controller
                 $new_monthly->monthly_test = $request->monthly_test;
                 $new_monthly->class_id = $class_id;
                 $new_monthly->save();
-                $data = MonthlyTestType::where([
+                foreach($request->subject_ids as $subject_ids){
+                    $new_monthly->subjects()->create([
+                        'subject_id'=>$subject_ids
+                    ]);
+                }
+                $data = MonthlyTestType::with('subjects')->where([
                     'class_id'=>$class_id,
                     'year_id'=>$year_id,
                     'school_id'=>$school_id
@@ -99,7 +93,7 @@ class ExamController extends Controller
     public function getAllMonthlyTestType(Request $request,$class_id){
         $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
-        $data = MonthlyTestType::where([
+        $data = MonthlyTestType::with('subjects')->where([
             'class_id'=>$class_id,
             'year_id'=>$year_id,
             'school_id'=>$school_id
@@ -108,10 +102,10 @@ class ExamController extends Controller
         return $this->ReS(['monthlyTest'=>$data]);
     }
     public function unpublishExamMarksheet(Request $request,$marksheet_id){
-        $update = ExamMarkSheetStudents::find($marksheet_id)->update([
-            'status'=>2,
-            'publish_at'=>Carbon::now()
-        ]);
+        $update = ExamMarkSheetStudents::find($marksheet_id);
+        $update->status = 2;
+        $update->update();
+      
         $studentMarksheet = ExamMarkSheetStudents::find($marksheet_id);
         $class_id = $studentMarksheet['class_id'];
         $year_id = $studentMarksheet['year_id'];
@@ -238,6 +232,7 @@ class ExamController extends Controller
             'publish_at'=>null
         ]);
         $studentMarksheet = MonthlyTestStudent::find($marksheet_id);
+        dd($studentMarksheet);
         $class_id = $studentMarksheet['class_id'];
         $year_id = $studentMarksheet['year_id'];
         $student_id  = $studentMarksheet['student_id'];
@@ -317,6 +312,7 @@ class ExamController extends Controller
         $request->validate([
             'marksheet'=>'required|array',
             'marksheet_id'=>'required|integer',
+            'monthtest_id'=>'required|integer'
         ]);
         $student_marksheet_id = $request->marksheet_id;
         $studentMarksheet = MonthlyTestStudent::find($student_marksheet_id);
@@ -325,7 +321,8 @@ class ExamController extends Controller
         $student_id  = $studentMarksheet['student_id'];
         $school_id = $studentMarksheet['school_id'];
         $monthy_test_type = $studentMarksheet['monthly_test_type'];
-        $subjects = $this->getClassWiseOnlySubjectId($school_id,$year_id,$class_id);
+        $subjects = MonthlyTestType::with('subjects')->find($monthy_test_type)->subjects()->pluck('subject_id');
+        // $subjects = $this->getClassWiseOnlySubjectId($school_id,$year_id,$class_id);
         try{
             DB::beginTransaction();
             $studentMarksheet = MonthlyTestStudent::find($student_marksheet_id)->update([
@@ -406,10 +403,8 @@ class ExamController extends Controller
         $student_id  = $studentMarksheet['student_id'];
         $school_id = $studentMarksheet['school_id'];
         $monthy_test_type = $studentMarksheet['monthly_test_type'];
-
-                $subjects = $this->getClassWiseOnlySubjectId($school_id,$year_id,$class_id);
-
-                try{
+        $subjects = MonthlyTestType::with('subjects')->find($monthy_test_type)->subjects()->pluck('subject_id');
+        try{
                     DB::beginTransaction();
                     foreach($subjects as $subject_id){
                         $checkIfExist = MonthlyTestMarksheet::where('subject_id',$subject_id)->where([

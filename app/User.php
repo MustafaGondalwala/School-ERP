@@ -46,6 +46,21 @@ class User extends Authenticatable
         return $this->belongsTo('App\Teacher','login_text','empid');
     }
 
+    public function studyMaterialGroups(){
+        return $this->morphMany(StudyMaterialGroups::class, 'teacher')->with('class','subject','material');
+    }
+    public function questionpapers()
+    {
+        return $this->morphMany(QuestionPaper::class, 'created_by')->with('class','subject','question');
+    }
+    public function onlineexam()
+    {
+        return $this->morphMany(OnlineExam::class, 'created_by')->with('class','questionpaper','monthyTestType','examType','teacher')->orderBy('exam_date');
+    }
+    public function onlineexamWithStudentAnswers()
+    {
+        return $this->morphMany(OnlineExam::class, 'created_by')->with('class','questionpaper','monthyTestType','examType','withStudentAnswers')->orderBy('exam_date');
+    }
 
     public function childs(){
         return StudentInfo::where('parent_id',$this->profile_id)->get();

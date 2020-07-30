@@ -4,7 +4,7 @@ import api from "../../api"
 import { connect } from "react-redux";
 import ViewEditStudentTimeTable from "../form/ViewEditStudentTimeTable"
 
-import {getClassWiseTimeTable} from "../../actions/classes"
+import {setTimeTableStudentParentDispatch} from "../../actions/timetable"
 class ViewClassWiseTimeTable extends Component{
     constructor(props){
         super(props)
@@ -19,9 +19,9 @@ class ViewClassWiseTimeTable extends Component{
                 timetable:classwise_timetable[class_id]
             })
         }else{
-            const timetable = await this.props.getClassWiseTimeTable(class_id)
+            const timetable = await this.props.setTimeTableStudentParentDispatch(class_id)
             this.setState({
-                timetable:timetable[class_id]
+                timetable
             })
         }
     }
@@ -32,9 +32,9 @@ class ViewClassWiseTimeTable extends Component{
                 timetable:classwise_timetable[class_id]
             })
         }else{
-            const timetable = await this.props.getClassWiseTimeTable(class_id)
+            const timetable = await this.props.setTimeTableStudentParentDispatch(class_id)
             this.setState({
-                timetable:timetable[class_id]
+                timetable
             })
         }
     }
@@ -55,4 +55,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps,{getClassWiseTimeTable})(ViewClassWiseTimeTable);
+export default connect(mapStateToProps,{setTimeTableStudentParentDispatch})(ViewClassWiseTimeTable);

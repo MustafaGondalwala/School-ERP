@@ -94,7 +94,7 @@ class GetClassId extends Component {
       );
     }
     render() {
-      const { errors,class_id,classes,disabled } = this.props;
+      const { errors,class_id,classes,disabled,md,sm } = this.props;
       var default_value = "";
       
       if(classes.length > 0){
@@ -112,7 +112,7 @@ class GetClassId extends Component {
         <div>
           {this.state.distinct_classes.length > 0 ?
             <Row>
-              <Col md="6" sm="6">
+              <Col md={md || 6} sm={sm || 6}>
                 <FormLabel>
                   Class
                 </FormLabel>
@@ -136,7 +136,7 @@ class GetClassId extends Component {
                     <span>{errors.class_id && <InlineError text={errors.class_id} />}</span>
                   }
               </Col>
-              <Col md="6" sm="6">
+              <Col md={md || 6} sm={sm || 6}>
                   <FormLabel>Section</FormLabel>
                   <select
                     className="form-control"

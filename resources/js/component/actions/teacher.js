@@ -1,5 +1,5 @@
 
-import {SET_TEACHERS,SET_TEACHERS_NAME} from "../types"
+import {SET_TEACHERS,SET_TEACHERS_NAME,SET_TEACHER_ONLINEXAM} from "../types"
 import api from "../api";
 
 
@@ -12,6 +12,10 @@ export const setTeachersName = (teacher_names) => ({
     teacher_names
   });
 
+
+ 
+
+    
   export const setTeacherDispatch = () => dispatch => {
     api.teachers().then(data => {
       dispatch(setTeachers(data.teachers))

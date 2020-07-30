@@ -9,7 +9,7 @@ export default class StaffAttendanceEditAdmin extends Component{
         super(props)
         this.state = {
             data:{
-                select_date:"2020-06-06",
+                select_date:"",
             },
             view_type:"",
             staff_attendance:"",
@@ -24,9 +24,6 @@ export default class StaffAttendanceEditAdmin extends Component{
         this.setState({
             data: {...this.state.data,[e.target.name]:e.target.value}
         });
-    }
-    componentDidMount(){
-        this.submit("view")
     }
     changeState(type,value){
         this.setState({
@@ -63,7 +60,6 @@ export default class StaffAttendanceEditAdmin extends Component{
     }
     updateStudentAttendance(staff_attendance){
         return api.adminteacher.staff_attendance.update(staff_attendance).then(data => {
-            console.log(data.message);
         })
     }
     render(){

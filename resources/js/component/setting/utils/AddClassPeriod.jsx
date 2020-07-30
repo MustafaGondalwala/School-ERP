@@ -140,10 +140,10 @@ class AddClassPeriod extends Component {
     ];
     
     const {errors,data,add_update_button} = this.state
-    const {class_periods} = this.props
+    const {class_periods,back_link} = this.props
     return (
-      <div className="col-md-6">
-        <CardComponent title="Add Class Period">
+      <div className="col-md-12">
+        <CardComponent title="Add Class Period" back_link={back_link}>
           <div className="row">
             <div className="col">
               <div className="form-group">

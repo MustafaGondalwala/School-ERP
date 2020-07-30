@@ -678,15 +678,17 @@ class StudentController extends Controller
     public function studentsSearchable(Request $request,$searchText){
         $school_id = $this->getSchoolId($request);
         $year_id = $this->getSchoolYearId($request);
-        $all_student = StudentInfo::where(['school_id'=>$school_id,"year_id"=>$year_id])->select('class_id','student_name','roll_no','id')->limit(600)->get();
+        $all_student = StudentInfo::with('class')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get();
         $label_student = array();
         foreach ($all_student as $key => $value)
         {
-            $label = $value->student_name . " [" . $value->roll_no . "] [" . $value->class_id . "-" . $value->class_id . "] [" . $value->father_name . "]";
-            array_push($label_student, array(
-                "value" => $value->id,
-                "label" => $label
-            ));
+            if($value->class){
+                $label = $value->student_name . " [" . $value->class->class_title . "] [" . $value->class->class_title . "-" . $value->class->section . "] [" . $value->father_name . "]";
+                array_push($label_student, array(
+                    "value" => $value->id,
+                    "label" => $label
+                ));
+            }
         }
         return $this->ReS(["student" => $label_student]);
     }

@@ -49,36 +49,44 @@ export default class FeeSetIndividualForm extends Component{
 
     render(){
         const {fee_individual,send_message} = this.state
+        const {type} = this.props
         return(
             <div>
             {fee_individual && 
                 Object.keys(fee_individual).map((item,key) => {
-                    return <EditInstallment onChange={this.changeAmountData} key={key} individual={fee_individual[item]} individual_label={item} />
+                    return <EditInstallment type={type} onChange={this.changeAmountData} key={key} individual={fee_individual[item]} individual_label={item} />
                 })
             }
-            {fee_individual &&  
-            <CardComponent title="Update Fees Individual">
-                <div className="row">
-                    <div className="form-group">
-                        <label className="checkbox-inline">
-                        <input type="checkbox" checked={send_message} onChange={(e) => { this.setState({ [e.target.name]:e.target.checked })}} name="send_message"/> 
-                            &nbsp;&nbsp;Send Message to Parents
-                        </label>
-                    </div>
-                </div>
-                <div className="row">
-                    <button onClick={e => this.props.updateFees(fee_individual,send_message)} className="btn btn-primary">{this.props.update_button}</button>
-                </div>
-            </CardComponent>
+            {   type != "2" && 
+                <span>
+                    {fee_individual &&  
+                    <CardComponent title="Update Fees Individual">
+                        <div className="row">
+                            <div className="form-group">
+                                <label className="checkbox-inline">
+                                <input type="checkbox" checked={send_message} onChange={(e) => { this.setState({ [e.target.name]:e.target.checked })}} name="send_message"/> 
+                                    &nbsp;&nbsp;Send Message to Parents
+                                </label>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <button onClick={e => this.props.updateFees(fee_individual,send_message)} className="btn btn-primary">{this.props.update_button}</button>
+                        </div>
+                    </CardComponent>
+                    }
+                </span>
             }
             </div>
         )
     }
 }
 
-const EditInstallment = ({individual_label,individual,onChange}) => {
+const EditInstallment = ({individual_label,type,individual,onChange}) => {
     var total_amount = 0;
     var amount = 0;
+    var disabled = false
+    if(type == "2")
+        disabled = true
     return(
         <CardComponent title={`${individual_label} Fees`}>
             <div className="table-responsive">
@@ -92,7 +100,6 @@ const EditInstallment = ({individual_label,individual,onChange}) => {
                             <th>Total Amount</th>
                             <th>Current Paid</th>
                             <th>Total Pending</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -108,10 +115,10 @@ const EditInstallment = ({individual_label,individual,onChange}) => {
                                     {item.fee_type.fee_type}
                                 </td>
                                 <td>
-                                    <input type="number" min="0" data-index={id} name="amount" onChange={e =>onChange(e,individual_label)} className="form-control" value={item.amount}/>
+                                    <input type="number" min="0" disabled={disabled} data-index={id} name="amount" onChange={e =>onChange(e,individual_label)} className="form-control" value={item.amount}/>
                                 </td>
                                 <td>
-                                    <input type="number" min="0" data-index={id} name="waiver_amount" className="form-control" onChange={e =>onChange(e,individual_label)}  value={item.waiver_amount}/>
+                                    <input type="number" min="0" disabled={disabled} data-index={id} name="waiver_amount" className="form-control" onChange={e =>onChange(e,individual_label)}  value={item.waiver_amount}/>
                                 </td>
                                 <td>
                                     <input type="number"min="0"  disabled data-index={id} name="total_amount" className="form-control" onChange={e =>onChange(e,individual_label)} value={item.total_amount}/>

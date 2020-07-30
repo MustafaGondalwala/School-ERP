@@ -37,6 +37,14 @@ export class ReactChartCard extends Component{
       type:"pie"
     }
   }
+  componentDidMount(){
+    const {type} = this.props
+    if(type){
+      this.setState({
+        type
+      })
+    }
+  }
   render(){
     const {title,options,file_name,dataPoints} = this.props
     const {type} = this.state

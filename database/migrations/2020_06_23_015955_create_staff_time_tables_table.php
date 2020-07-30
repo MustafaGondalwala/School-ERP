@@ -18,6 +18,7 @@ class CreateStaffTimeTablesTable extends Migration
             $table->string('time_table_name');
             $table->string('class_period_id');
             $table->integer('school_id');
+            $table->integer('year_id');
             $table->integer('monday_subject_name')->nullable()->default(-1);
             $table->string('monday_class_name')->nullable()->default(-1);
             $table->integer('tuesday_subject_name')->nullable()->default(-1);

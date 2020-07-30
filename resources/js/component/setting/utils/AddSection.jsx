@@ -111,7 +111,11 @@ class AddSection extends Component{
                                                 <td>{id+1}</td>
                                                 <td>{item.class_title}</td>
                                                 <td>{item.section}</td>
-                                                <td><button>Actions</button></td>
+                                                <td  className="table-actions">
+                                                    <a href="#!" onClick={e => this.removeClass(item)} className="table-action table-action-delete" data-toggle="tooltip" data-original-title="Delete product">
+                                                        <i className="fas fa-trash" />
+                                                    </a>
+                                                </td>
                                             </tr>
                                         })}
                                     </tbody>

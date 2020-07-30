@@ -9,19 +9,21 @@ use \DB;
 use App\Classes;
 
 class TimeTableController extends Controller
-{   
+{  
     public function getTimeTableMainStaff(Request $request){
         $request->validate([
             'timetable_name'=>'required|string'
         ]);
         $timetable_name = $request->timetable_name;
         $school_id = $this->getSchoolId($request);
-        $time_tables = $this->getTimetableStaff($timetable_name,$school_id);
+        $year_id = $this->getSchoolYearId($request);
+        $time_tables = $this->getTimetableStaff($timetable_name,$school_id,$year_id);
         return $this->ReS(["timetables"=>$time_tables]);
     }
     public function getTimeTableNameStaff(Request $request){
         $school_id = $this->getSchoolId($request);
-        $time_tables = StaffTimeTable::select('id','time_table_name')->where('school_id',$school_id)->get()->unique('time_table_name');
+        $year_id = $this->getSchoolYearId($request);
+        $time_tables = StaffTimeTable::select('id','time_table_name')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get()->unique('time_table_name');
         return $this->ReS(["time_tables"=>$time_tables]);
     }
     public function updateTimeTableStaff(Request $request){
@@ -62,18 +64,20 @@ class TimeTableController extends Controller
             'timetable_name'=>"required|string",
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $time_table_name = $request->timetable_name;
-        $checkIfExist = StaffTimeTable::where(['school_id'=>$school_id,"time_table_name"=>$time_table_name])->count();
+        $checkIfExist = StaffTimeTable::where(['school_id'=>$school_id,"year_id"=>$year_id,"time_table_name"=>$time_table_name])->count();
         if($checkIfExist > 0){
             return $this->ReE(["message"=>"TimeTable is Already Exist.Please Try Another Name."],400);
         }
         try{
             DB::beginTransaction();
-            foreach($this->getClassPeriods($school_id) as $class_periods){
+            foreach($this->getClassPeriods($school_id,$year_id) as $class_periods){
                 $new_timetable = new StaffTimeTable;
                 $new_timetable->time_table_name = $time_table_name;
                 $new_timetable->class_period_id = $class_periods['id'];
                 $new_timetable->school_id = $school_id;   
+                $new_timetable->year_id = $year_id;   
                 $new_timetable->save();
             }
         }catch(\Exception $e){
@@ -81,17 +85,20 @@ class TimeTableController extends Controller
             return $this->ReE(["message"=>$e->getMessage()],400);
         }
         DB::commit();
-        $new_timetable_name = StaffTimeTable::select('id','time_table_name')->where('school_id',$school_id)->get()->unique('time_table_name');
-        $time_table = $this->getTimetableStaff($time_table_name,$school_id);
+        $new_timetable_name = StaffTimeTable::select('id','time_table_name')->where(['school_id'=>$school_id,'year_id'=>$year_id])->get()->unique('time_table_name');
+        $time_table = $this->getTimetableStaff($time_table_name,$school_id,$year_id);
         return $this->ReS(["timetable"=>$time_table,"new_timetable_names"=>$new_timetable_name]);
     }
     public function getClassWiseTimeTable(Request $request,$class_id){
         $school_id = $this->getSchoolId($request);
-        $timetable_name = Classes::with('timetable')->where(["school_info_id"=>$school_id,"id"=>$class_id])->first()['timetable']['time_table_name'];
+        if(Classes::find($class_id)->time_table_id == null){
+            return $this->ReE(['message'=>'TimeTable is not Allocated']);
+        }
+        $timetable_name = Classes::with('timetable')->find($class_id)->first()['timetable']['time_table_name'];
         if($timetable_name == null){
             return $this->ReS(["message"=>"Not TimeTable is Assigned for Class"],400);
         }
-        return $this->ReS(['classwise_timetable'=>[$class_id => $this->getTimetable($timetable_name,$school_id)]]);
+        return $this->ReS(['classwise_timetable'=> $this->getTimetable($timetable_name,$school_id)]);
     }
     public function getTimeTableMain(Request $request){
         $request->validate([
@@ -99,12 +106,14 @@ class TimeTableController extends Controller
         ]);
         $timetable_name = $request->timetable_name;
         $school_id = $this->getSchoolId($request);
-        $time_tables = $this->getTimetable($timetable_name,$school_id);
+        $time_tables = $this->getTimetable($timetable_name,$school_id,$request);
         return $this->ReS(["timetables"=>$time_tables]);
     }
     public function getTimeTableName(Request $request){
         $school_id = $this->getSchoolId($request);
-        $time_tables = StudentTimeTable::select('id','time_table_name')->where('school_id',$school_id)->get()->unique('time_table_name');
+        $year_id = $this->getSchoolYearId($request);
+
+        $time_tables = StudentTimeTable::select('id','time_table_name')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get()->unique('time_table_name');
         return $this->ReS(["time_tables"=>$time_tables]);
     }
     public function updateTimeTable(Request $request){
@@ -145,18 +154,21 @@ class TimeTableController extends Controller
             'timetable_name'=>"required|string",
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+
         $time_table_name = $request->timetable_name;
-        $checkIfExist = StudentTimeTable::where(['school_id'=>$school_id,"time_table_name"=>$time_table_name])->count();
+        $checkIfExist = StudentTimeTable::where(['school_id'=>$school_id,"year_id"=>$year_id,"time_table_name"=>$time_table_name])->count();
         if($checkIfExist > 0){
             return $this->ReE(["message"=>"TimeTable is Already Exist.Please Try Another Name."],400);
         }
         try{
             DB::beginTransaction();
-            foreach($this->getClassPeriods($school_id) as $class_periods){
+            foreach($this->getClassPeriods($school_id,$year_id) as $class_periods){
                 $new_timetable = new StudentTimeTable;
                 $new_timetable->time_table_name = $time_table_name;
                 $new_timetable->class_period_id = $class_periods['id'];
                 $new_timetable->school_id = $school_id;   
+                $new_timetable->year_id = $year_id;   
                 $new_timetable->save();
             }
         }catch(\Exception $e){
@@ -164,23 +176,24 @@ class TimeTableController extends Controller
             return $this->ReE(["message"=>$e->getMessage()],400);
         }
         DB::commit();
-        $new_timetable_name = StudentTimeTable::select('id','time_table_name')->where('school_id',$school_id)->get()->unique('time_table_name');
-        $time_table = $this->getTimetable($time_table_name,$school_id);
+        $new_timetable_name = StudentTimeTable::select('id','time_table_name')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get()->unique('time_table_name');
+        $time_table = $this->getTimetable($time_table_name,$school_id,$request);
         return $this->ReS(["timetable"=>$time_table,"new_timetable_names"=>$new_timetable_name]);
     }
-    private function getTimetable($time_table,$school_id){
+    private function getTimetable($time_table,$school_id,$request){
         $send_array = array();
-        foreach($this->getClassPeriods($school_id) as $ids){
-            $time_table_row =  StudentTimeTable::where(['school_id'=>$school_id,"time_table_name"=>$time_table,"class_period_id"=>$ids['id']])->first();
+        $year_id = $this->getSchoolYearId($request);
+        foreach($this->getClassPeriods($school_id,$year_id) as $ids){
+            $time_table_row =  StudentTimeTable::where(['school_id'=>$school_id,"year_id"=>$year_id,"time_table_name"=>$time_table,"class_period_id"=>$ids['id']])->first();
             $time_table_row['start_time'] = $ids['start_time'];
             $time_table_row['end_time'] = $ids['end_time'];
             $send_array[$ids['period_id']] = $time_table_row;
         }
         return $send_array;
     }
-    private function getTimetableStaff($time_table,$school_id){
+    private function getTimetableStaff($time_table,$school_id,$year_id){
         $send_array = array();
-        foreach($this->getClassPeriods($school_id) as $ids){
+        foreach($this->getClassPeriods($school_id,$year_id) as $ids){
             $time_table_row =  StaffTimeTable::where(['school_id'=>$school_id,"time_table_name"=>$time_table,"class_period_id"=>$ids['id']])->first();
             $time_table_row['start_time'] = $ids['start_time'];
             $time_table_row['end_time'] = $ids['end_time'];

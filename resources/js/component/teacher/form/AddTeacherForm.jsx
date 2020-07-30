@@ -24,8 +24,7 @@ import {
 export default class AddTeacherForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data : {
+    this.initialData = {
       empid: "",
       teacher_name: "",
       gender: "male",
@@ -40,22 +39,26 @@ export default class AddTeacherForm extends Component {
       bank_name: "",
       bank_number: "",
       pf_no: "",
-      pf_amount: "",
-      da_amount: "",
-      hra_amount: "",
+      pf_amount: "0",
+      da_amount: "0",
+      hra_amount: "0",
       salary_remark: "",
-      casual_leave: "",
-      sick_leave: "",
-      pay_earn_leave: "",
-      other_leave: "",
+      casual_leave: "0",
+      sick_leave: "0",
+      pay_earn_leave: "0",
+      other_leave: "0",
       emp_photo: "",
       id_proof: "",
       experience_letter: "",
       other_documents1: "",
       other_documents2: "",
       salary: "",
+      tds_amount:"0",
+      professional_tax:"0",
       send_sms: true,
-      },
+    }
+    this.state = {
+      data : this.initialData,
       errors: {},
       button_text:"Add"
     };
@@ -173,40 +176,8 @@ export default class AddTeacherForm extends Component {
     }
   }
   makeInputNull(){
-    const data = {
-      empid: "",
-      teacher_name: "",
-      gender: "male",
-      relative_name: "",
-      email: "",
-      contact_no: "",
-      qualification: "",
-      address: "",
-      dob: "",
-      blood_group: "",
-      aadhar_card: "",
-      bank_name: "",
-      bank_number: "",
-      pf_no: "",
-      pf_amount: "",
-      da_amount: "",
-      hra_amount: "",
-      salary_remark: "",
-      casual_leave: "",
-      sick_leave: "",
-      pay_earn_leave: "",
-      other_leave: "",
-      emp_photo: "",
-      id_proof: "",
-      experience_letter: "",
-      other_documents1: "",
-      other_documents2: "",
-      salary: "",
-      date_of_join:"",
-      send_sms: true,
-    }
     this.setState({
-      data
+      data:this.initialData
     })
   }
   toggleSmsChange() {
@@ -222,7 +193,18 @@ export default class AddTeacherForm extends Component {
         button_text:"Update",
         edit:true
       })
+    else{
+      api.empid.get().then(data => {
+        const {next_empid} = data
+        this.setState({
+          data: { ...this.state.data, ["empid"]: next_empid },
+        });
+      })
+    }
   }
+  
+
+
   onChange(e) {
     this.setState({
       data: { ...this.state.data, [e.target.name]: e.target.value },
@@ -238,12 +220,7 @@ export default class AddTeacherForm extends Component {
             <Col md="4" sm="6">
               <FormGroup>
                 <FormLabel>Empid: </FormLabel>
-                <Input
-                  errors={errors}
-                  name="empid"
-                  onChange={this.onChange}
-                  value={data.empid || ''} 
-                />
+                {data.empid ? <h2>{data.empid}</h2> : <h2>Loading ... </h2>}
               </FormGroup>
             </Col>
             {/* teacher_name */}
@@ -252,6 +229,7 @@ export default class AddTeacherForm extends Component {
                 <FormLabel>Teacher Name*</FormLabel>
                 <Input
                   errors={errors}
+                  placeholder="Teacher Name"
                   name="teacher_name"
                   value={data.teacher_name || ''}
                   onChange={this.onChange}
@@ -263,6 +241,7 @@ export default class AddTeacherForm extends Component {
                 <FormLabel>Husband/Father Name*</FormLabel>
                 <Input
                   errors={errors}
+                  placeholder="Husband/Father Name"
                   name="relative_name"
                   value={data.relative_name || ''}
                   onChange={this.onChange}
@@ -273,6 +252,7 @@ export default class AddTeacherForm extends Component {
               <FormGroup>
                 <FormLabel>Email*</FormLabel>
                 <Input
+                  placeholder="Email"
                   errors={errors}
                   name="email"
                   value={data.email || ''}
@@ -303,6 +283,7 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="contact_no"
+                  placeholder="Contact No"
                   value={data.contact_no || ''}
                   onChange={this.onChange}
                 />
@@ -313,6 +294,7 @@ export default class AddTeacherForm extends Component {
                 <FormLabel>Address*</FormLabel>
                 <Input
                   errors={errors}
+                  placeholder="Address"
                   name="address"
                   value={data.address || ''}
                   onChange={this.onChange}
@@ -321,13 +303,18 @@ export default class AddTeacherForm extends Component {
             </Col>
             <Col md="4" sm="6">
               <FormGroup>
-                <FormLabel>Qualification</FormLabel>
-                <Input
-                  errors={errors}
-                  name="qualification"
-                  value={data.qualification || ''}
-                  onChange={this.onChange}
-                />
+                <FormLabel>Qualification*:</FormLabel>
+                <Select errors={errors} name="qualification" value={data.qualification} onChange={this.onChange}>
+                <option value="" selected="selected" disabled="disabled">--  Select --</option>
+                <option value="No formal education">No formal education</option>
+                <option value="Primary education">Primary education</option>
+                <option value="Secondary education">Secondary education or high school</option>
+                <option value="GED">GED</option>
+                <option value="Vocational qualification">Vocational qualification</option>
+                <option value="Bachelor's degree">Bachelor's degree</option>
+                <option value="Master's degree">Master's degree</option>
+                <option value="Doctorate or higher">Doctorate or higher</option>
+                </Select>
               </FormGroup>
             </Col>
             <Col md="4" sm="6">
@@ -346,12 +333,23 @@ export default class AddTeacherForm extends Component {
             <Col md="4" sm="6">
               <FormGroup>
                 <FormLabel>Blood Group*</FormLabel>
-                <Input
-                  errors={errors}
-                  name="blood_group"
-                  value={data.blood_group  || ''}
-                  onChange={this.onChange}
-                />
+                <Select errors={errors} name="blood_group" value={data.blood_group  || ''} onChange={this.onChange}>
+                    <option value="" selected="selected" disabled="disabled">--  Select --</option>
+                    <option value="A Positive">A Positive</option>
+                    <option value="A Negative">A Negative</option>
+                    <option value="A Unknown">A Unknown</option>
+                    <option value="B Positive">B Positive</option>
+                    <option value="B Negative">B Negative</option>
+                    <option value="B Unknown">B Unknown</option>
+                    <option value="AB Positive">AB Positive</option>
+                    <option value="AB Negative">AB Negative</option>
+                    <option value="AB Unknown">AB Unknown</option>
+                    <option value="O Positive">O Positive</option>
+                    <option value="O Negative">O Negative</option>
+                    <option value="O Unknown">O Unknown</option>
+                    <option value="Unknown">Unknown</option>
+                </Select>
+
               </FormGroup>
             </Col>
             <Col md="4" sm="6">
@@ -499,6 +497,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="pf_amount"
+                  type="number"
+
                   value={data.pf_amount || ''}
                   onChange={this.onChange}
                 />
@@ -509,8 +509,9 @@ export default class AddTeacherForm extends Component {
                 <FormLabel>TDS Amount</FormLabel>
                 <Input
                   errors={errors}
+                  type="number"
                   name="tds_amount"
-                  value={data.tds_amount || ''}
+                  value={data.tds_amount || 0}
                   onChange={this.onChange}
                 />
               </FormGroup>
@@ -520,8 +521,10 @@ export default class AddTeacherForm extends Component {
                 <FormLabel>Professional TAX Amount</FormLabel>
                 <Input
                   errors={errors}
+                  type="number"
+
                   name="professional_tax"
-                  value={data.professional_tax || ''}
+                  value={data.professional_tax || 0}
                   onChange={this.onChange}
                 />
               </FormGroup>
@@ -532,6 +535,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="da_amount"
+                  type="number"
+
                   value={data.da_amount || ''}
                   onChange={this.onChange}
                 />
@@ -543,6 +548,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="hra_amount"
+                  type="number"
+
                   value={data.hra_amount || ''}
                   onChange={this.onChange}
                 />
@@ -568,6 +575,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="casual_leave"
+                  type="number"
+
                   value={data.casual_leave || ''}
                   onChange={this.onChange}
                 />
@@ -579,6 +588,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="pay_earn_leave"
+                  type="number"
+
                   value={data.pay_earn_leave || ''}
                   onChange={this.onChange}
                 />
@@ -590,6 +601,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="sick_leave"
+                  type="number"
+
                   value={data.sick_leave || ''}
                   onChange={this.onChange}
                 />
@@ -601,6 +614,8 @@ export default class AddTeacherForm extends Component {
                 <Input
                   errors={errors}
                   name="other_leave"
+                  type="number"
+
                   value={data.other_leave || ''}
                   onChange={this.onChange}
                 />

@@ -78,10 +78,10 @@ class ClassController extends Controller
         $school_id = $this->getSchoolId($request);
         foreach($request->publish_timetable as $key => $value){
             if($value != null){
-                Classes::where(['id'=>$key,'school_info_id'=>$school_id])->update(['time_table_id'=>$value]);
+                Classes::where(['id'=>$key,'school_id'=>$school_id])->update(['time_table_id'=>$value]);
             }
         }
-        $classes = Classes::select('id','class_title','section','time_table_id')->where('school_info_id',$school_id)->get();
+        $classes = Classes::select('id','class_title','section','time_table_id')->where('school_id',$school_id)->get();
         return $this->ReS(["classes"=>$classes]);
     }
     public function deleteClassPeriod(Request $request,$period_id){
@@ -112,19 +112,22 @@ class ClassController extends Controller
             "end_time"=>"required|date_format:H:i|after:start_time"
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $start_time = $request->start_time;
         $end_time = $request->end_time;
         $period_id = $request->period_id;
         
         $checkIfExist = ClassPeriod::where([
             'school_id'=>$school_id,
+            'year_id'=>$year_id,
             'period_id'=>$period_id
         ])->count();
 
         if($checkIfExist){
             $exist_class_period = ClassPeriod::where([
                 'school_id'=>$school_id,
-                'period_id'=>$period_id
+                'period_id'=>$period_id,
+                'year_id'=>$year_id,
             ])->first();
             $exist_class_period->update([
                 "start_time" => $start_time,
@@ -137,6 +140,7 @@ class ClassController extends Controller
             $new_class_period->period_id = $period_id;
             $new_class_period->start_time = $start_time;
             $new_class_period->end_time = $end_time;
+            $new_class_period->year_id = $year_id;
             $new_class_period->save();
             $message = "Class Period Added!!";
         }

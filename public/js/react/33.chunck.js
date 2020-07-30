@@ -1,34 +1,24 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[33],{
 
-/***/ "./resources/js/component/timetable/form/AddTimeTableStudent.jsx":
-/*!***********************************************************************!*\
-  !*** ./resources/js/component/timetable/form/AddTimeTableStudent.jsx ***!
-  \***********************************************************************/
+/***/ "./resources/js/component/setting/utils/AddExamType.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/component/setting/utils/AddExamType.jsx ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _utils_GetClassId__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/GetClassId */ "./resources/js/component/utils/GetClassId.jsx");
-/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _actions_timetable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../actions/timetable */ "./resources/js/component/actions/timetable.jsx");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _form_ViewEditStudentTimeTable__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../form/ViewEditStudentTimeTable */ "./resources/js/component/timetable/form/ViewEditStudentTimeTable.jsx");
-
-
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_exam__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../actions/exam */ "./resources/js/component/actions/exam.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -60,117 +50,97 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var AddExamType = /*#__PURE__*/function (_Component) {
+  _inherits(AddExamType, _Component);
 
+  var _super = _createSuper(AddExamType);
 
-var AddTimeTableStudent = /*#__PURE__*/function (_Component) {
-  _inherits(AddTimeTableStudent, _Component);
-
-  var _super = _createSuper(AddTimeTableStudent);
-
-  function AddTimeTableStudent(props) {
+  function AddExamType(props) {
     var _this;
 
-    _classCallCheck(this, AddTimeTableStudent);
+    _classCallCheck(this, AddExamType);
 
     _this = _super.call(this, props);
     _this.state = {
-      fetch_button: "Fetch",
-      timetable_name: "",
-      timetable: "",
-      errors: {}
+      exam_type: "",
+      error: "",
+      button_text: "Add Exam Type"
     };
-    _this.onChange = _this.onChange.bind(_assertThisInitialized(_this));
-    _this.fetchForm = _this.fetchForm.bind(_assertThisInitialized(_this));
-    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(AddTimeTableStudent, [{
+  _createClass(AddExamType, [{
     key: "onChange",
     value: function onChange(e) {
       this.setState(_defineProperty({}, e.target.name, e.target.value));
     }
   }, {
-    key: "validate",
-    value: function validate(data) {
-      var errors = {};
-      if (!data.timetable_name) errors.timetable_name = "Can't be blank";
-      return errors;
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var examType = this.props.examType;
+      if (Object.keys(examType).length == 0) this.props.getExamTypeDispatch();
     }
   }, {
-    key: "fetchForm",
-    value: function () {
-      var _fetchForm = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _this2 = this;
+    key: "removeExamType",
+    value: function removeExamType(exam_type_id) {
+      var _this2 = this;
 
-        var errors, timetable_name;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                errors = this.validate(this.state);
-                this.setState({
-                  errors: errors
-                });
+      sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_3__["default"].admin.exam.exam_type.remove(exam_type_id).then(function (data) {
+            var message = data.message,
+                exam_types = data.exam_types;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire('Deleted!', message, 'success');
 
-                if (!(Object.keys(errors).length == 0)) {
-                  _context.next = 7;
-                  break;
-                }
-
-                this.setState({
-                  fetch_button: "Fetching TimeTable ..."
-                });
-                timetable_name = this.state.timetable_name;
-                _context.next = 7;
-                return _api__WEBPACK_IMPORTED_MODULE_5__["default"].admin.timetable.add(timetable_name).then(function (data) {
-                  _this2.props.setTimetable(data.new_timetable_names);
-
-                  _this2.setState({
-                    timetable: data.timetable,
-                    fetch_button: "Fetch"
-                  });
-                })["catch"](function (error) {
-                  if (error.response) {
-                    if (error.response.status == 400) {
-                      _this2.setState({
-                        fetch_button: "Fetch"
-                      });
-
-                      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire("Validation Error", error.response.data.error.message, "warning");
-                    }
-                  }
-                });
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function fetchForm() {
-        return _fetchForm.apply(this, arguments);
-      }
-
-      return fetchForm;
-    }()
+            _this2.props.getExamType(exam_types);
+          })["catch"](function (error) {
+            console.log(error);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Error", "Error Occured in Proccess", "error");
+          });
+        }
+      });
+    }
   }, {
-    key: "submit",
-    value: function submit(timetable) {
+    key: "onSubmit",
+    value: function onSubmit() {
       var _this3 = this;
 
-      _api__WEBPACK_IMPORTED_MODULE_5__["default"].admin.timetable.update(timetable).then(function (data) {
-        _this3.setState({
-          timetable_name: "",
-          timetable: ""
+      var exam_type = this.state.exam_type;
+      if (exam_type == "") this.setState({
+        error: "Cannot be Blank"
+      });else {
+        this.setState({
+          button_text: "Adding ..."
         });
+        _api__WEBPACK_IMPORTED_MODULE_3__["default"].admin.exam.exam_type.add(exam_type).then(function (data) {
+          var message = data.message;
 
-        sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire("success", data.message, "success");
-      })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire("Error Occured", "Error Occured in Process. Try again Later", "error");
-      });
+          _this3.props.getExamType(data.exam_types);
+
+          _this3.setState({
+            button_text: "Add Exam Type",
+            exam_type: "",
+            error: ""
+          });
+
+          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", message, "success");
+        })["catch"](function (error) {
+          if (error.response.status == 422) {
+            var message = error.response.data.error.message;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Validation Error", message, "warning");
+          } else {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Error Occured", "Error Occured in Process", "error");
+          }
+        });
+      }
     }
   }, {
     key: "render",
@@ -178,55 +148,67 @@ var AddTimeTableStudent = /*#__PURE__*/function (_Component) {
       var _this4 = this;
 
       var _this$state = this.state,
-          fetch_button = _this$state.fetch_button,
-          errors = _this$state.errors,
-          timetable = _this$state.timetable;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Add TimeTable"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          exam_type = _this$state.exam_type,
+          error = _this$state.error,
+          button_text = _this$state.button_text;
+      var examType = this.props.examType;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Exam Type"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "form-group col-md-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         className: "form-control-label"
-      }, "TimeTable Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      }, "Add Exam Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
-        name: "timetable_name",
-        placeholder: "Time Table Name",
-        value: this.state.timetable_name,
+        name: "exam_type",
+        value: exam_type,
         onChange: function onChange(e) {
           return _this4.onChange(e);
         },
         className: "form-control"
-      }), errors.timetable_name && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        text: errors.timetable_name
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        text: error
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-primary",
         onClick: function onClick(e) {
-          return _this4.fetchForm();
+          return _this4.onSubmit();
         }
-      }, fetch_button))), timetable && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_form_ViewEditStudentTimeTable__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        submit: this.submit,
-        type: "add",
-        timetable: timetable
-      }));
+      }, button_text)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "table"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr.no"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Exam Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Remove")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, Object.keys(examType).length > 0 && examType.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.exam_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: function onClick(e) {
+            return _this4.removeExamType(item.id);
+          },
+          className: "btn btn-danger btn-sm"
+        }, "Remove")));
+      }))))));
     }
   }]);
 
-  return AddTimeTableStudent;
-}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+  return AddExamType;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 function mapStateToProps(state) {
   return {
-    timetables: state.timetables
+    examType: state.examType
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_7__["connect"])(mapStateToProps, {
-  setTimetable: _actions_timetable__WEBPACK_IMPORTED_MODULE_6__["setTimetable"]
-})(AddTimeTableStudent));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapStateToProps, {
+  getExamTypeDispatch: _actions_exam__WEBPACK_IMPORTED_MODULE_6__["getExamTypeDispatch"],
+  getExamType: _actions_exam__WEBPACK_IMPORTED_MODULE_6__["getExamType"]
+})(AddExamType));
 
 /***/ })
 

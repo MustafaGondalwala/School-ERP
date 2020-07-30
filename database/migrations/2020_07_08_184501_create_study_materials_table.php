@@ -19,10 +19,8 @@ class CreateStudyMaterialsTable extends Migration
             $table->string('subtitle')->nullable();
             $table->text('description')->nullable();
             $table->integer('group_id');
-            $table->morphs('user');
             $table->integer('school_id');
             $table->integer('year_id');
-            $table->integer('class_id');
             $table->timestamps();
         });
     }

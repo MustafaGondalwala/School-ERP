@@ -18,7 +18,8 @@ class CreateStudyMaterialGroupsTable extends Migration
             $table->integer('class_id');
             $table->integer('school_id');
             $table->integer('year_id');
-
+            $table->morphs('teacher');
+            $table->integer('subject_id');
             $table->string('group_name',100);
             $table->timestamps();
         });

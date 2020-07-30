@@ -1,19 +1,21 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[30],{
 
-/***/ "./resources/js/component/teacher/form/SelectTeacher.jsx":
-/*!***************************************************************!*\
-  !*** ./resources/js/component/teacher/form/SelectTeacher.jsx ***!
-  \***************************************************************/
+/***/ "./resources/js/component/noticeboard/form/ViewEditNoticeBoard.jsx":
+/*!*************************************************************************!*\
+  !*** ./resources/js/component/noticeboard/form/ViewEditNoticeBoard.jsx ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewEditNoticeBoard; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_teacher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/teacher */ "./resources/js/component/actions/teacher.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-data-table-component */ "./node_modules/react-data-table-component/dist/index.cjs.js");
+/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_data_table_component__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41,60 +43,133 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var SelectTeacher = /*#__PURE__*/function (_Component) {
-  _inherits(SelectTeacher, _Component);
+var ViewEditNoticeBoard = /*#__PURE__*/function (_Component) {
+  _inherits(ViewEditNoticeBoard, _Component);
 
-  var _super = _createSuper(SelectTeacher);
+  var _super = _createSuper(ViewEditNoticeBoard);
 
-  function SelectTeacher() {
-    _classCallCheck(this, SelectTeacher);
+  function ViewEditNoticeBoard(props) {
+    var _this;
 
-    return _super.apply(this, arguments);
+    _classCallCheck(this, ViewEditNoticeBoard);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      notices: ""
+    };
+    return _this;
   }
 
-  _createClass(SelectTeacher, [{
+  _createClass(ViewEditNoticeBoard, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this$props = this.props,
-          teachers_name = _this$props.teachers_name,
-          setTeachersNameDispatch = _this$props.setTeachersNameDispatch;
-
-      if (Object.keys(teachers_name).length == 0) {
-        setTeachersNameDispatch();
-      }
+      var notices = this.props.notices;
+      this.setState({
+        notices: notices
+      });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this$props2 = this.props,
-          teachers_name = _this$props2.teachers_name,
-          value = _this$props2.value,
-          onChange = _this$props2.onChange;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Select"], {
-        name: "assigned_teacher",
-        onChange: onChange,
-        value: value || ""
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], null, " -- Select -- "), Object.keys(teachers_name).length > 0 && teachers_name.map(function (teacher, index) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], {
-          key: index,
-          value: teacher.id
-        }, teacher.teacher_name);
+      var eventType = this.props.eventType;
+      var columns = [{
+        name: "id",
+        selector: "id",
+        sortable: true
+      }, {
+        name: 'title',
+        selector: 'title',
+        sortable: true
+      }, {
+        name: 'Student',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            readOnly: true,
+            type: "checkbox",
+            checked: row.student
+          }));
+        }
+      }, {
+        name: 'Staff',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            readOnly: true,
+            type: "checkbox",
+            checked: row.staff
+          }));
+        }
+      }, {
+        name: 'Parent',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            readOnly: true,
+            type: "checkbox",
+            checked: row.parent
+          }));
+        }
+      }, {
+        name: 'Publish',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            readOnly: true,
+            type: "checkbox",
+            checked: row.publish
+          }));
+        }
+      }, {
+        name: 'View',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+            primary: true,
+            sm: true,
+            onClick: function onClick() {
+              return eventType("view", row.id);
+            }
+          }, "View"));
+        }
+      }, {
+        name: 'Edit',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+            warning: true,
+            sm: true,
+            onClick: function onClick() {
+              return eventType("edit", row.id);
+            }
+          }, "Edit"));
+        }
+      }, {
+        name: 'Remove',
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+            danger: true,
+            sm: true,
+            onClick: function onClick() {
+              return eventType("remove", row.id);
+            }
+          }, "Remove"));
+        }
+      }];
+      var notices = this.state.notices;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        title: "All Notice's",
+        columns: columns,
+        data: notices
       }));
     }
   }]);
 
-  return SelectTeacher;
+  return ViewEditNoticeBoard;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-function mapStateToProps(state) {
-  return {
-    teachers_name: state.teachers_name
-  };
-}
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
-  setTeachersNameDispatch: _actions_teacher__WEBPACK_IMPORTED_MODULE_1__["setTeachersNameDispatch"]
-})(SelectTeacher));
 
 /***/ })
 

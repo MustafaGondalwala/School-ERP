@@ -86,7 +86,7 @@ class AddExamType extends Component{
         const {examType} = this.props
         return(
             <CardComponent title="Exam Type">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                         <div className="row">
                             <div className="form-group">
                              <label className="form-control-label">Add Exam Type</label>
@@ -117,7 +117,6 @@ class AddExamType extends Component{
                             </table>
                         </div>
                     </div>
-                    
                 </CardComponent>
         )
     }

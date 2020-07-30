@@ -1,40 +1,18 @@
-import React,{Component} from "react"
+import React,{PureComponent} from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
+import api from "../../api"
+import {setAdminFeeHeaderDispatch} from "../../actions/header"
 
-class AdminStudentHeader extends Component{
-    constructor(props){
-      super(props)
-      this.state = {
-        total_students:"Loading ...",
-        total_admission:"Loading ..."
-      }
-    //   this.updateProps = this.updateProps.bind(this)
+
+class AdminStudentHeader extends PureComponent{
+    componentDidMount(){
+      const {adminFeeHeader,setAdminFeeHeaderDispatch} = this.props
+      if(Object.keys(adminFeeHeader).length == 0)
+        setAdminFeeHeaderDispatch()
     }
-    // updateProps(){
-    //   var self = this;
-    //   if(Object.keys(this.props.adminStudentHeader).length != 0){
-    //     const { total_students, total_admission} = this.props.adminStudentHeader
-    //     self.setState({
-    //       total_students,total_admission
-    //     })
-    //   }else{
-    //     axios({
-    //     url:"/api/v1/student/admin/header"
-    //     }).then(response => {
-    //       self.props.newAdminStudentHeader(response.data.success.header)
-    //       const { total_students, total_admission} = response.data.success.header
-    //       self.setState({
-    //       total_students,total_admission
-    //       })
-    //     })
-    //   }
-    // }
-    // componentDidMount(){
-    //   this.updateProps()
-    // }
     render(){
-      const {mainHeader,header,sub_header} = this.props
+      const {mainHeader,header,sub_header,adminFeeHeader} = this.props
       return(
         <div className="header bg-primary pb-6">
           <div className="container-fluid">
@@ -46,7 +24,8 @@ class AdminStudentHeader extends Component{
                     <ol className="breadcrumb breadcrumb-links breadcrumb-dark">
                       <li className="breadcrumb-item"><a href="#"><i className="fas fa-home" /></a></li>
                       <li className="breadcrumb-item"><a href="#">{header}</a></li>
-                      {sub_header && 
+                        {
+                          sub_header && 
                           <li className="breadcrumb-item active" aria-current="page">{sub_header}</li>
                         }
                     </ol>
@@ -63,8 +42,8 @@ class AdminStudentHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Register Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_students}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Today's New Fee Receipts Generated</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminFeeHeader.total_receipts}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -80,8 +59,8 @@ class AdminStudentHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Admission Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_admission}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Todays's Fee Collection</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminFeeHeader.total_collection}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -100,4 +79,9 @@ class AdminStudentHeader extends Component{
     }
   }
 
-  export default AdminStudentHeader;
+  function mapStateToProps(state) {
+    return {
+      adminFeeHeader:state.adminFeeHeader
+    };
+  }
+  export default connect(mapStateToProps,{setAdminFeeHeaderDispatch})(AdminStudentHeader);

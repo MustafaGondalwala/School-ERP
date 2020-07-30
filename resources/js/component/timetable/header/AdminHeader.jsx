@@ -1,40 +1,18 @@
-import React,{Component} from "react"
+import React,{Component, PureComponent} from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
+import {setAdminTimeTableHeaderDispatch,setAdminTimeTableHeader} from "../../actions/header"
+import api from "../../api"
 
-class AdminStudentHeader extends Component{
-    constructor(props){
-      super(props)
-      this.state = {
-        total_students:"Loading ...",
-        total_admission:"Loading ..."
+class AdminHeader extends PureComponent{
+    componentDidMount(){
+      const {adminTimeTableHeader,setAdminTimeTableHeaderDispatch} = this.props
+      if(Object.keys(adminTimeTableHeader).length == 0){
+        setAdminTimeTableHeaderDispatch()
       }
-    //   this.updateProps = this.updateProps.bind(this)
     }
-    // updateProps(){
-    //   var self = this;
-    //   if(Object.keys(this.props.adminStudentHeader).length != 0){
-    //     const { total_students, total_admission} = this.props.adminStudentHeader
-    //     self.setState({
-    //       total_students,total_admission
-    //     })
-    //   }else{
-    //     axios({
-    //     url:"/api/v1/student/admin/header"
-    //     }).then(response => {
-    //       self.props.newAdminStudentHeader(response.data.success.header)
-    //       const { total_students, total_admission} = response.data.success.header
-    //       self.setState({
-    //       total_students,total_admission
-    //       })
-    //     })
-    //   }
-    // }
-    // componentDidMount(){
-    //   this.updateProps()
-    // }
     render(){
-      const {mainHeader,header,sub_header} = this.props
+      const {mainHeader,header,sub_header,adminTimeTableHeader} = this.props
       return(
         <div className="header bg-primary pb-6">
           <div className="container-fluid">
@@ -63,8 +41,8 @@ class AdminStudentHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Register Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_students}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Total Class Periods</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminTimeTableHeader.total_classperiods}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -80,8 +58,25 @@ class AdminStudentHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Admission Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_admission}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Total Student TimeTable</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminTimeTableHeader.totalStudentTimeTable}</span>
+                        </div>
+                        <div className="col-auto">
+                          <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                            <i className="ni ni-chart-pie-35" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-md-6">
+                  <div className="card card-stats">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col">
+                          <h5 className="card-title text-uppercase text-muted mb-0">Total Staff TimeTable</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminTimeTableHeader.totalStaffTimeTable}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -100,4 +95,10 @@ class AdminStudentHeader extends Component{
     }
   }
 
-  export default AdminStudentHeader;
+  function mapStateToProps(state) {
+    return {
+      adminTimeTableHeader:state.adminTimeTableHeader
+    };
+}
+
+export default connect(mapStateToProps,{setAdminTimeTableHeaderDispatch,setAdminTimeTableHeader})(AdminHeader);

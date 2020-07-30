@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[40],{
 
-/***/ "./resources/js/component/homework/form/HomeWorkSubmittion.jsx":
-/*!*********************************************************************!*\
-  !*** ./resources/js/component/homework/form/HomeWorkSubmittion.jsx ***!
-  \*********************************************************************/
+/***/ "./resources/js/component/timetable/utils/ViewPanelStaff.jsx":
+/*!*******************************************************************!*\
+  !*** ./resources/js/component/timetable/utils/ViewPanelStaff.jsx ***!
+  \*******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,18 +11,11 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-data-table-component */ "./node_modules/react-data-table-component/dist/index.cjs.js");
-/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_data_table_component__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
-/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
-/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ckeditor/ckeditor5-react */ "./node_modules/@ckeditor/ckeditor5-react/dist/ckeditor.js");
-/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
-/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _actions_timetable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/timetable */ "./resources/js/component/actions/timetable.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51,239 +44,98 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var ViewPanelStaff = /*#__PURE__*/function (_Component) {
+  _inherits(ViewPanelStaff, _Component);
 
+  var _super = _createSuper(ViewPanelStaff);
 
-
-
-
-var HomeWorkSubmittion = /*#__PURE__*/function (_Component) {
-  _inherits(HomeWorkSubmittion, _Component);
-
-  var _super = _createSuper(HomeWorkSubmittion);
-
-  function HomeWorkSubmittion(props) {
+  function ViewPanelStaff(props) {
     var _this;
 
-    _classCallCheck(this, HomeWorkSubmittion);
+    _classCallCheck(this, ViewPanelStaff);
 
     _this = _super.call(this, props);
-    _this.state = {
-      homework_submission: "",
-      check: ""
-    };
-    _this.updateHomeWorkSubmission = _this.updateHomeWorkSubmission.bind(_assertThisInitialized(_this));
+    _this.addClickFunction = _this.addClickFunction.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(HomeWorkSubmittion, [{
-    key: "fetchSubmission",
-    value: function fetchSubmission(homework_id) {
-      var _this2 = this;
-
-      _api__WEBPACK_IMPORTED_MODULE_2__["default"].teacher.homework.get_submission(homework_id).then(function (data) {
-        var homework_submission = data.homework_submission;
-
-        _this2.setState({
-          homework_submission: homework_submission
-        });
-      });
+  _createClass(ViewPanelStaff, [{
+    key: "addClickFunction",
+    value: function addClickFunction() {
+      this.props.sendEventType("add", null);
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var homework_id = this.props.homework_id;
-      this.fetchSubmission(homework_id);
+      var _this$props = this.props,
+          teacher_timetables = _this$props.teacher_timetables,
+          setTimetableTeacherDispatch = _this$props.setTimetableTeacherDispatch;
+      if (Object.keys(teacher_timetables).length == 0) setTimetableTeacherDispatch();
     }
   }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps() {
-      var homework_id = this.props.homework_id;
-      this.fetchSubmission(homework_id);
-    }
-  }, {
-    key: "viewSubmition",
-    value: function viewSubmition(data) {
-      this.setState({
-        check: data
-      });
-    }
-  }, {
-    key: "fetchStatus",
-    value: function fetchStatus(status) {
-      switch (status) {
-        case 1:
-          return "Pending";
-
-        case 2:
-          return "Completed";
-
-        case 3:
-          return "Issue Raised";
-
-        case 4:
-          return "Submitted";
-
-        case 5:
-          return "Rejected";
-      }
-    }
-  }, {
-    key: "updateHomeWorkSubmission",
-    value: function updateHomeWorkSubmission(type, student_homework_id) {
-      var _this3 = this;
-
-      return _api__WEBPACK_IMPORTED_MODULE_2__["default"].teacher.homework.homework_check(type, student_homework_id).then(function (data) {
-        _this3.setState({
-          check: ""
-        });
-      })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire("Error Occured", "Error Occured in Process. Try again Later", "error");
-      });
+    key: "updateTimeTable",
+    value: function updateTimeTable(time_table_name) {
+      this.props.sendEventType("edit", time_table_name);
     }
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this2 = this;
 
-      var columns = [{
-        name: "Sr no.",
-        selector: "id",
-        sortable: true
-      }, {
-        name: "Student Roll No",
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, row.student.roll_no);
+      var teacher_timetables = this.props.teacher_timetables;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "TimeTable",
+        back_link: "/admin/timetable",
+        add_object: {
+          'text': "Add",
+          'clickFunction': this.addClickFunction
         }
-      }, {
-        name: "Student Name",
-        sortable: true,
-        right: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, row.student.student_name);
-        }
-      }, {
-        name: "Status",
-        sortable: true,
-        right: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, _this4.fetchStatus(row.status));
-        }
-      }, {
-        name: "Check",
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
-            onClick: function onClick(e) {
-              return _this4.viewSubmition(row);
-            },
-            primary: true,
-            sm: true
-          }, "Check"));
-        }
-      }];
-      var _this$state = this.state,
-          homework_submission = _this$state.homework_submission,
-          check = _this$state.check;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "HomeWork Submission"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_3___default.a, {
-        title: null,
-        columns: columns,
-        data: homework_submission
-      })), check && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ViewStudentSubmition, {
-        updateHomeWorkSubmission: this.updateHomeWorkSubmission,
-        data: check
-      }));
+      }, Object.keys(teacher_timetables).length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "table-responsive"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "table"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Time Table Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Actions"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, Object.keys(teacher_timetables).map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, teacher_timetables[item].time_table_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "table-actions"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this2.updateTimeTable(teacher_timetables[item].time_table_name);
+          },
+          className: "table-action",
+          "data-toggle": "tooltip",
+          "data-original-title": "Edit TimeTable"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-user-edit"
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this2.removeClass(teacher_timetables[item].time_table_name);
+          },
+          className: "table-action table-action-delete",
+          "data-toggle": "tooltip",
+          "data-original-title": "Delete TimeTable"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-trash"
+        }))));
+      })))));
     }
   }]);
 
-  return HomeWorkSubmittion;
+  return ViewPanelStaff;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-var ViewStudentSubmition = /*#__PURE__*/function (_Component2) {
-  _inherits(ViewStudentSubmition, _Component2);
+function mapStateToProps(state) {
+  return {
+    teacher_timetables: state.teacher_timetables
+  };
+}
 
-  var _super2 = _createSuper(ViewStudentSubmition);
-
-  function ViewStudentSubmition(props) {
-    var _this5;
-
-    _classCallCheck(this, ViewStudentSubmition);
-
-    _this5 = _super2.call(this, props);
-    _this5.submit = _this5.submit.bind(_assertThisInitialized(_this5));
-    return _this5;
-  }
-
-  _createClass(ViewStudentSubmition, [{
-    key: "submit",
-    value: function submit(type) {
-      var _this6 = this;
-
-      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(function (result) {
-        if (result.value) {
-          var data = _this6.props.data;
-
-          _this6.props.updateHomeWorkSubmission(type, data.id).then(function (data) {
-            console.log(data);
-            sweetalert2__WEBPACK_IMPORTED_MODULE_8___default.a.fire("Success", "Student HomeWork Updated !!", "success");
-          });
-        }
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this7 = this;
-
-      var data = this.props.data;
-      var title = "Submission: " + data.student.student_name;
-      var description = data.description,
-          files = data.files;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: title
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Col"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormLabel"], null, "Description"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_6___default.a, {
-        disabled: true,
-        editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_7___default.a,
-        data: description,
-        onChange: function onChange(event, editor) {
-          var data = editor.getData();
-
-          _this7.setState({
-            description: data
-          });
-        },
-        onInit: function onInit(editor) {
-          editor.setData(description);
-        }
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["PreviewServerFiles"], {
-        files: files
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
-        success: true,
-        onClick: function onClick(e) {
-          return _this7.submit(1);
-        }
-      }, "Correct"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
-        danger: true,
-        onClick: function onClick(e) {
-          return _this7.submit(2);
-        }
-      }, "Reject")))));
-    }
-  }]);
-
-  return ViewStudentSubmition;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (HomeWorkSubmittion);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, {
+  setTimetableTeacherDispatch: _actions_timetable__WEBPACK_IMPORTED_MODULE_3__["setTimetableTeacherDispatch"]
+})(ViewPanelStaff));
 
 /***/ })
 

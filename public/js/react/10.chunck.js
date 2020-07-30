@@ -1,78 +1,24 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[10],{
 
-/***/ "./resources/js/component/actions/homework.js":
-/*!****************************************************!*\
-  !*** ./resources/js/component/actions/homework.js ***!
-  \****************************************************/
-/*! exports provided: setHomeWorks, setParentHomeWork, setHomeWorksDispatch, setParentHomeWorkDispatch */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setHomeWorks", function() { return setHomeWorks; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setParentHomeWork", function() { return setParentHomeWork; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setHomeWorksDispatch", function() { return setHomeWorksDispatch; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setParentHomeWorkDispatch", function() { return setParentHomeWorkDispatch; });
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../types */ "./resources/js/component/types.js");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api */ "./resources/js/component/api/index.jsx");
-
-
-var setHomeWorks = function setHomeWorks(class_homeworks) {
-  return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["SET_CLASS_HOMEWORK"],
-    class_homeworks: class_homeworks
-  };
-};
-var setParentHomeWork = function setParentHomeWork(parent_homework) {
-  return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["SET_PARENT_HOMEWORK"],
-    parent_homework: parent_homework
-  };
-};
-var setHomeWorksDispatch = function setHomeWorksDispatch(class_id) {
-  return function (dispatch) {
-    _api__WEBPACK_IMPORTED_MODULE_1__["default"].teacher.homework.get(class_id).then(function (data) {
-      dispatch(setHomeWorks(data.class_homeworks));
-    });
-  };
-};
-var setParentHomeWorkDispatch = function setParentHomeWorkDispatch(student_ids) {
-  return function (dispatch) {
-    return _api__WEBPACK_IMPORTED_MODULE_1__["default"].parent.homework.get(student_ids).then(function (data) {
-      dispatch(setParentHomeWork(data.student_homework));
-      return data.student_homework;
-    });
-  };
-};
-
-/***/ }),
-
-/***/ "./resources/js/component/homework/panel/ViewPanelHomeWorkParent.jsx":
-/*!***************************************************************************!*\
-  !*** ./resources/js/component/homework/panel/ViewPanelHomeWorkParent.jsx ***!
-  \***************************************************************************/
+/***/ "./resources/js/component/attendance/form/FillViewFormStaff.jsx":
+/*!**********************************************************************!*\
+  !*** ./resources/js/component/attendance/form/FillViewFormStaff.jsx ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _actions_homework__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/homework */ "./resources/js/component/actions/homework.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-data-table-component */ "./node_modules/react-data-table-component/dist/index.cjs.js");
-/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_data_table_component__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FillViewFormStaff; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -98,194 +44,228 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var Chart = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
+  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../../utils/Chart */ "./resources/js/component/utils/Chart.jsx"));
+});
 
+var FillViewFormStaff = /*#__PURE__*/function (_Component) {
+  _inherits(FillViewFormStaff, _Component);
 
+  var _super = _createSuper(FillViewFormStaff);
 
-var ViewPanelHomeWorkParent = /*#__PURE__*/function (_Component) {
-  _inherits(ViewPanelHomeWorkParent, _Component);
-
-  var _super = _createSuper(ViewPanelHomeWorkParent);
-
-  function ViewPanelHomeWorkParent(props) {
+  function FillViewFormStaff(props) {
     var _this;
 
-    _classCallCheck(this, ViewPanelHomeWorkParent);
+    _classCallCheck(this, FillViewFormStaff);
 
     _this = _super.call(this, props);
     _this.state = {
-      rows: ""
+      title: "",
+      staff_attendance: "",
+      view_type: "",
+      update_attendance: [],
+      update_button: "Update Attendance",
+      total_present: 0,
+      total_absent: 0,
+      total_leave: 0,
+      total_half_leave: 0,
+      total_none: 0
     };
+    _this.stateChange = _this.stateChange.bind(_assertThisInitialized(_this));
+    _this.changeSelectStatus = _this.changeSelectStatus.bind(_assertThisInitialized(_this));
+    _this.updateTotalInputs = _this.updateTotalInputs.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ViewPanelHomeWorkParent, [{
+  _createClass(FillViewFormStaff, [{
+    key: "stateChange",
+    value: function stateChange(name, value, callback) {
+      this.setState(_defineProperty({}, name, value), callback);
+    }
+  }, {
     key: "componentDidMount",
-    value: function () {
-      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _this$props, student_id, parent_childs, parent_homework, student_data, student_homework;
+    value: function componentDidMount() {
+      var title = "";
+      if (this.props.view_type == "fill") title = "Fill Attendance";else title = "View Attendance";
+      var _this$props = this.props,
+          view_type = _this$props.view_type,
+          staff_attendance = _this$props.staff_attendance;
+      this.stateChange("title", title);
+      this.stateChange("staff_attendance", staff_attendance);
+      this.stateChange("view_type", view_type);
+      this.updateTotalInputs(staff_attendance);
+    }
+  }, {
+    key: "updateTotalInputs",
+    value: function updateTotalInputs(data) {
+      var total_present = 0;
+      var total_absent = 0;
+      var total_leave = 0;
+      var total_half_leave = 0;
+      var total_none = 0;
+      data.map(function (item) {
+        switch (item.status) {
+          case 1:
+            total_present += 1;
+            break;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this$props = this.props, student_id = _this$props.student_id, parent_childs = _this$props.parent_childs, parent_homework = _this$props.parent_homework;
-                student_data = this.findArrayElementByTitle(this.props.parent_childs, student_id);
+          case 2:
+            total_absent += 1;
+            break;
 
-                if (!parent_homework[student_id]) {
-                  _context.next = 6;
-                  break;
-                }
+          case 3:
+            total_leave += 1;
+            break;
 
-                this.setState({
-                  rows: parent_homework[student_id]
-                });
-                _context.next = 10;
-                break;
+          case 4:
+            total_half_leave += 1;
+            break;
 
-              case 6:
-                _context.next = 8;
-                return this.props.setParentHomeWorkDispatch(this.getStudentIds(parent_childs));
+          case 5:
+            total_none += 1;
+            break;
+        }
+      });
+      this.setState({
+        total_leave: total_leave,
+        total_present: total_present,
+        total_absent: total_absent,
+        total_none: total_none,
+        total_half_leave: total_half_leave
+      });
+    }
+  }, {
+    key: "changeSelectStatus",
+    value: function changeSelectStatus(e, index) {
+      var temp = this.state.staff_attendance;
+      var value = e.target.value;
+      temp[index].status = value;
+      this.stateChange("staff_attendance", temp);
+      var update_temp = this.state.update_attendance;
+      update_temp[index] = [temp[index].id, temp[index].status];
+      this.stateChange("update_attendance", update_temp);
+    }
+  }, {
+    key: "onSubmit",
+    value: function onSubmit() {
+      var _this2 = this;
 
-              case 8:
-                student_homework = _context.sent;
-                this.setState({
-                  rows: student_homework[student_id]
-                });
+      this.stateChange("update_button", "Updating ...");
+      this.props.updateStudentAttendance(this.state.update_attendance).then(function (data) {
+        _this2.stateChange("update_button", "Update Attendance");
 
-              case 10:
-              case "end":
-                return _context.stop();
-            }
+        _this2.stateChange("update_attendance", []);
+
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Done", "Staff Attendance Updated !!", "success");
+      })["catch"](function (error) {
+        if (error.response) {
+          if (error.response.status == 422) {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Validation Error", "Please update Aleast One Staff Attendance", "warning");
+          } else {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Error Occured", "Error Occured. Please try later", "error");
           }
-        }, _callee, this);
-      }));
+        } else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Error Occured", "Error Occured. Please try later", "error");
+        }
 
-      function componentDidMount() {
-        return _componentDidMount.apply(this, arguments);
-      }
-
-      return componentDidMount;
-    }()
-  }, {
-    key: "getStudentIds",
-    value: function getStudentIds(parent_childs) {
-      var new_array = [];
-      parent_childs.map(function (item) {
-        new_array.push(item.id);
+        _this2.stateChange("update_button", "Update Attendance");
       });
-      return new_array;
-    }
-  }, {
-    key: "findArrayElementByTitle",
-    value: function findArrayElementByTitle(array, student_id) {
-      return array.find(function (element) {
-        return element.id == student_id;
-      });
-    }
-  }, {
-    key: "fetchStatus",
-    value: function fetchStatus(status) {
-      switch (status) {
-        case 1:
-          return "Pending";
-
-        case 2:
-          return "Completed";
-
-        case 3:
-          return "Issue Raised";
-
-        case 4:
-          return "Submitted";
-
-        case 5:
-          return "Rejected";
-      }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
-      var columns = [{
-        name: "id",
-        selector: "id",
-        sortable: true
+      var _this$state = this.state,
+          title = _this$state.title,
+          staff_attendance = _this$state.staff_attendance,
+          view_type = _this$state.view_type,
+          update_button = _this$state.update_button;
+      var _this$state2 = this.state,
+          total_present = _this$state2.total_present,
+          total_absent = _this$state2.total_absent,
+          total_leave = _this$state2.total_leave,
+          total_none = _this$state2.total_none,
+          total_half_leave = _this$state2.total_half_leave;
+      var select_date = this.props.select_date;
+      var dataPoints = [{
+        "y": total_present,
+        label: "Total Present"
       }, {
-        name: 'title',
-        selector: 'title',
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, row.homework.title);
-        }
+        "y": total_absent,
+        label: "Total Absent"
       }, {
-        name: 'Teacher',
-        sortable: true,
-        right: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, row.homework.teacher.teacher_name);
-        }
+        "y": total_leave,
+        label: "Total Leave"
       }, {
-        name: 'Subject',
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, row.homework.subject.subject_name);
-        }
+        "y": total_half_leave,
+        label: "Total Half Leave"
       }, {
-        name: "Status",
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, _this2.fetchStatus(row.status));
-        }
-      }, {
-        name: 'View',
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-            onClick: function onClick(e) {
-              return _this2.props.sendEventType("view", row.id);
-            },
-            className: "btn btn-sm btn-primary"
-          }, "View"));
-        }
-      }, {
-        name: 'Action',
-        sortable: true,
-        cell: function cell(row) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, (row.status == 1 || row.status == 5 || row.status == 3) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-            onClick: function onClick(e) {
-              return _this2.props.sendEventType("submit", row.homework.id);
-            },
-            className: "btn btn-sm btn-success"
-          }, "Submit"));
-        }
+        "y": total_none,
+        label: "Total None Entry"
       }];
-      var student_id = this.props.student_id;
-      var back_link = "/parent/homework/student/" + student_id;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "View HomeWork",
-        back_link: back_link
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_5___default.a, {
-        title: "Student HomeWorks",
-        columns: columns,
-        data: this.state.rows
-      }));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: title
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "table-responsive"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "table datatable"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "S.no"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Empid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Staff Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Staff Mobileno"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Attendance"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Checkbox"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, staff_attendance && staff_attendance.map(function (item, id) {
+        var _React$createElement;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EachAttendanceRow, (_React$createElement = {
+          key: id,
+          view_type: view_type,
+          onChange: _this3.changeSelectStatus
+        }, _defineProperty(_React$createElement, "view_type", view_type), _defineProperty(_React$createElement, "index", id), _defineProperty(_React$createElement, "row", item), _React$createElement));
+      }))), view_type == "fill" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-primary",
+        onClick: function onClick(e) {
+          return _this3.onSubmit();
+        }
+      }, update_button))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_3__["default"], null, view_type == "view" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Chart, {
+        title: "Staff Attendance for ".concat(select_date),
+        filename: "staff_attendance",
+        type: "pie",
+        dataPoints: dataPoints
+      })));
     }
   }]);
 
-  return ViewPanelHomeWorkParent;
-}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+  return FillViewFormStaff;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-function mapStateToProps(state) {
-  return {
-    parent_childs: state.parent_childs,
-    parent_homework: state.parent_homework
-  };
-}
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, {
-  setParentHomeWorkDispatch: _actions_homework__WEBPACK_IMPORTED_MODULE_3__["setParentHomeWorkDispatch"]
-})(ViewPanelHomeWorkParent));
+
+var EachAttendanceRow = function EachAttendanceRow(_ref) {
+  var view_type = _ref.view_type,
+      index = _ref.index,
+      row = _ref.row,
+      _onChange = _ref.onChange;
+  var disable = view_type === "view" ? true : false;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+    key: index
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, index + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.empid), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.staff_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.contact_no), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    disabled: disable,
+    onChange: function onChange(e) {
+      return _onChange(e, index);
+    },
+    value: row.status,
+    className: "form-control"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    value: "1"
+  }, "Present"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    value: "2"
+  }, "Absent"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    value: "3"
+  }, "Leave"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    value: "4"
+  }, "Half Present"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    value: "5"
+  }, "None"))));
+};
 
 /***/ })
 

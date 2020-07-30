@@ -12,4 +12,7 @@ class MonthlyTestStudent extends Model
     public function student(){
         return $this->belongsTo('App\StudentInfo','student_id');
     }
+    public function monthlyTest(){
+        return $this->belongsTo('App\MonthlyTestType','monthly_test_type');
+    }
 }

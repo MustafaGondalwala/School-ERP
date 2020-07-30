@@ -67,7 +67,7 @@ export default class FillViewFormStaff extends Component {
       }
     })
     this.setState({
-      total_leave,total_present,total_absent,total_none
+      total_leave,total_present,total_absent,total_none,total_half_leave
     })
 }
 
@@ -162,9 +162,6 @@ const EachAttendanceRow = ({view_type,index,row,onChange}) => {
                     <option value="4">Half Present</option>
                     <option value="5">None</option>
                 </select>
-            </td>
-            <td>
-              <input type="checkbox"/>
             </td>
         </tr>
     )

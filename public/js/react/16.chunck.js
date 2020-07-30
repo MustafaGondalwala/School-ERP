@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[16],{
 
-/***/ "./resources/js/component/exam/form/ViewStudentDetailsExamMarksheet.jsx":
-/*!******************************************************************************!*\
-  !*** ./resources/js/component/exam/form/ViewStudentDetailsExamMarksheet.jsx ***!
-  \******************************************************************************/
+/***/ "./resources/js/component/exam/form/ViewStudentDetailsMonthlyTest.jsx":
+/*!****************************************************************************!*\
+  !*** ./resources/js/component/exam/form/ViewStudentDetailsMonthlyTest.jsx ***!
+  \****************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -48,22 +48,21 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
-  _inherits(ViewStudentDetailsExamMarksheet, _Component);
+var ViewStudentDetailsMonthlyTest = /*#__PURE__*/function (_Component) {
+  _inherits(ViewStudentDetailsMonthlyTest, _Component);
 
-  var _super = _createSuper(ViewStudentDetailsExamMarksheet);
+  var _super = _createSuper(ViewStudentDetailsMonthlyTest);
 
-  function ViewStudentDetailsExamMarksheet(props) {
+  function ViewStudentDetailsMonthlyTest(props) {
     var _this;
 
-    _classCallCheck(this, ViewStudentDetailsExamMarksheet);
+    _classCallCheck(this, ViewStudentDetailsMonthlyTest);
 
     _this = _super.call(this, props);
     _this.state = {
       marksheet: "",
       row: "",
       marksheet_id: "",
-      exam_type: "",
       studentDetails: ""
     };
     _this.updateMarksheet = _this.updateMarksheet.bind(_assertThisInitialized(_this));
@@ -71,15 +70,12 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
     return _this;
   }
 
-  _createClass(ViewStudentDetailsExamMarksheet, [{
+  _createClass(ViewStudentDetailsMonthlyTest, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this$props = this.props,
-          studentDetails = _this$props.studentDetails,
-          exam_type = _this$props.exam_type;
+      var studentDetails = this.props.studentDetails;
       this.setState({
-        studentDetails: studentDetails,
-        exam_type: exam_type
+        studentDetails: studentDetails
       });
     }
   }, {
@@ -106,11 +102,10 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "updateStudentMarksheet",
-    value: function updateStudentMarksheet(remark, grade, marksheet, marksheet_id, student_id) {
+    value: function updateStudentMarksheet(remark, grade, marksheet, marksheet_id, monthly_test, student_id) {
       var _this3 = this;
 
-      var exam_type = this.props.exam_type;
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.marksheet.update_marksheet(remark, grade, marksheet, marksheet_id, exam_type, student_id).then(function (data) {
+      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.update_marksheet(remark, grade, marksheet, marksheet_id, monthly_test, student_id).then(function (data) {
         var message = data.message,
             marksheet = data.marksheet;
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("Success", message, "success");
@@ -159,7 +154,7 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
         confirmButtonText: 'Yes, UnPublish this Marksheet !'
       }).then(function (result) {
         if (result.value) {
-          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.marksheet.unpublishMarksheet(marksheet_id).then(function (data) {
+          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.unpublishMarksheet(marksheet_id).then(function (data) {
             var message = data.message,
                 studentDetails = data.studentDetails;
 
@@ -191,7 +186,7 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
         confirmButtonText: 'Yes, Publish this Marksheet !'
       }).then(function (result) {
         if (result.value) {
-          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.marksheet.publishMarksheet(marksheet_id).then(function (data) {
+          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.publishMarksheet(marksheet_id).then(function (data) {
             var message = data.message,
                 studentDetails = data.studentDetails;
 
@@ -213,9 +208,9 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
     value: function render() {
       var _this6 = this;
 
-      var _this$props2 = this.props,
-          submit = _this$props2.submit,
-          monthly_test_type = _this$props2.monthly_test_type;
+      var _this$props = this.props,
+          submit = _this$props.submit,
+          exam_type = _this$props.exam_type;
       var _this$state = this.state,
           row = _this$state.row,
           marksheet_id = _this$state.marksheet_id,
@@ -245,7 +240,7 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
           }
         }, "UnPublish")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.publish_at && item.status == 3 && new Date(item.publish_at).toLocaleString()));
       })))), row && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(MonthlyTestMarksheet, {
-        monthly_test_type: monthly_test_type,
+        exam_type: exam_type,
         submit: this.updateStudentMarksheet,
         marksheet_id: marksheet_id,
         row: row
@@ -253,7 +248,7 @@ var ViewStudentDetailsExamMarksheet = /*#__PURE__*/function (_Component) {
     }
   }]);
 
-  return ViewStudentDetailsExamMarksheet;
+  return ViewStudentDetailsMonthlyTest;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 var MonthlyTestMarksheet = /*#__PURE__*/function (_Component2) {
@@ -283,16 +278,16 @@ var MonthlyTestMarksheet = /*#__PURE__*/function (_Component2) {
     value: function componentDidMount() {
       var _this8 = this;
 
-      var _this$props3 = this.props,
-          marksheet_id = _this$props3.marksheet_id,
-          row = _this$props3.row;
+      var _this$props2 = this.props,
+          marksheet_id = _this$props2.marksheet_id,
+          row = _this$props2.row;
       var remark = row.remark,
           grade = row.grade;
       this.setState({
         remark: remark,
         grade: grade
       });
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.marksheet.get_individual(marksheet_id).then(function (data) {
+      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.exam.monthly_test.get_individual(marksheet_id).then(function (data) {
         var marksheet = data.marksheet;
 
         _this8.setState({
@@ -319,9 +314,11 @@ var MonthlyTestMarksheet = /*#__PURE__*/function (_Component2) {
           remark = _this$state2.remark,
           grade = _this$state2.grade,
           marksheet = _this$state2.marksheet;
-      var marksheet_id = this.props.marksheet_id;
+      var _this$props3 = this.props,
+          marksheet_id = _this$props3.marksheet_id,
+          exam_type = _this$props3.exam_type;
       var student_id = this.props.row.student_id;
-      this.props.submit(remark, grade, marksheet, marksheet_id, student_id);
+      this.props.submit(remark, grade, marksheet, marksheet_id, exam_type, student_id);
     }
   }, {
     key: "onChangeRow",
@@ -344,7 +341,7 @@ var MonthlyTestMarksheet = /*#__PURE__*/function (_Component2) {
       var total_marks = 0;
       var max_marks = 0;
       var min_marks = 0;
-      var title = "Exam  Marksheet: " + row.student.roll_no;
+      var title = "Month Test Marksheet: " + row.student.roll_no;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
         title: title
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
@@ -502,7 +499,7 @@ var EveryRow = function EveryRow(_ref) {
   }, "F"))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (ViewStudentDetailsExamMarksheet);
+/* harmony default export */ __webpack_exports__["default"] = (ViewStudentDetailsMonthlyTest);
 
 /***/ })
 

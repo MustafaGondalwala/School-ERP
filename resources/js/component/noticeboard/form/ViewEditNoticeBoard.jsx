@@ -52,11 +52,6 @@ export default class ViewEditNoticeBoard extends Component{
             cell:row => <div><input readOnly type="checkbox" checked={row.publish} /></div>
           },
           {
-            name: 'Publish',
-            right: true,
-            cell:row => <div><input readOnly type="checkbox" checked={row.publish} /></div>
-          },
-          {
             name: 'View',
             right: true,
             cell:row => <div><Button primary sm onClick={() => eventType("view",row.id)}>View</Button></div>

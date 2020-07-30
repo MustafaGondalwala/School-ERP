@@ -78,7 +78,7 @@ class HomeWorkController extends Controller
         return $this->ReS(["student_homework"=>$send_array]);
     }
     public function getHomeWorks($school_id,$class_id){
-        return StudentHomeWork::with('classes','teacher','subject','files')->where([
+        return StudentHomeWork::with('classes','teacher','studenthomework','subject','files')->where([
             'school_id'=>$school_id,
             'class_id'=>$class_id,
         ])->orderBy('status')->get();
@@ -87,30 +87,99 @@ class HomeWorkController extends Controller
         $school_id = $this->getSchoolId($request);
         return $this->ReS(['class_homeworks'=>$this->getHomeWorks($school_id,$class_id)]);
     }
+    public function updateHomeWork(Request $request){
+        $request->validate([
+            'title'=>'required|string',
+            'description'=>'required|string',
+            'submission_date'=>"required|date",
+            'subject_id'=>'required|string',
+            'class_id'=>"required|integer"
+        ]);
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $class_id = $request->class_id;
+        $teacher_id = $this->getTeacherId();
+
+        $new_homeWork = StudentHomeWork::find($request->id);
+        $new_homeWork->school_id = $school_id;
+        $new_homeWork->class_id = $class_id;
+        $new_homeWork->teacher_id = $teacher_id;
+        $new_homeWork->homework_type = 1;
+        $new_homeWork->title = $request->title;
+        $new_homeWork->subtitle = $request->subtitle;
+        $new_homeWork->description = $request->description;
+        $new_homeWork->submission_date = $request->submission_date;
+        $new_homeWork->subject_id = $request->subject_id;
+        $new_homeWork->year_id = $year_id;
+        $new_homeWork->save();
+
+        // dd($request->attachments,);
+        // Store json data
+        $jsonArray = [];
+        $newFile = [];
+        foreach($request->attachments as $attachments){
+            if(gettype($attachments) == "string")
+                array_push($jsonArray,json_decode($attachments)->id);
+            else
+                array_push($newFile,$attachments);
+        }
+
+        $oldAttachments = $new_homeWork->attachments()->pluck('id');
+        foreach($oldAttachments as $old){
+            if(!in_array($old,$jsonArray))
+                $this->removeFile($old);
+        }
+        if(count($newFile)){
+            $this->bulkFileUpdate($newFile,$new_homeWork,$school_id);
+        }
+        return $this->ReS(["message"=>"HomeWork Updated!!",'teacher_homework'=>$this->getHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
+    }
+
+    public function deleteHomeWork(Request $request,$homework_id){
+        $homework = StudentHomeWork::find($homework_id);
+
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $class_id = $homework->class_id;
+        $teacher_id = $this->getTeacherId();
+        
+        foreach($homework->attachments()->pluck('id') as $old){
+            $this->removeFile($old);
+        }
+        $homework->studenthomework()->delete();
+        $homework->delete();
+        return $this->ReS(["message"=>"HomeWork Deleted!!",'teacher_homework'=>$this->getHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
+    }
+
+
     public function addHomeWork(Request $request){
         $request->validate([
             'title'=>'required|string',
             'description'=>'required|string',
-            'submition_date'=>"required|date",
-            'subject'=>'required|string',
+            'submission_date'=>"required|date",
+            'subject_id'=>'required|string',
             'class_id'=>"required|integer"
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $class_id = $request->class_id;
         $teacher_id = $this->getTeacherId();
+
         $checkIfExists = StudentHomeWork::where([
             'school_id'=>$school_id,
             'class_id'=>$class_id,
+            'year_id'=>$year_id,
             'teacher_id'=>$teacher_id,
             'homework_type'=>1,
+            'subject_id'=>$request->subject_id,
             'title'=>$request->title
         ])->count();
         if($checkIfExists > 0){
             return $this->ReE(["message"=>"HomeWork Already Exists"]);
         }
+
         try {
             DB::beginTransaction();
-
             $new_homeWork = new StudentHomeWork;
             $new_homeWork->school_id = $school_id;
             $new_homeWork->class_id = $class_id;
@@ -119,31 +188,21 @@ class HomeWorkController extends Controller
             $new_homeWork->title = $request->title;
             $new_homeWork->subtitle = $request->subtitle;
             $new_homeWork->description = $request->description;
-            $new_homeWork->submition_date = $request->submition_date;
-            $new_homeWork->subject = $request->subject;
+            $new_homeWork->submission_date = $request->submission_date;
+            $new_homeWork->subject_id = $request->subject_id;
+            $new_homeWork->year_id = $year_id;
             $new_homeWork->save();
-            if($request->has('files')){
-                $files = $request->files;
-                foreach($files as $file){
-                    foreach($file as $each){
-                        $upload_data = $this->uploadFile($each);
-                        $new_file = new File;
-                        $new_file->public_id = $upload_data['public_id'];
-                        $new_file->file_url = $upload_data['url'];
-                        $new_file->file_type = $each->getClientOriginalExtension();
-                        $new_file->type_type = "App\StudentHomeWork";
-                        $new_file->type_id = $new_homeWork->id;
-                        $new_file->save();
-                    }
-                }
-            }
+            if($request->attachments != null)
+                $this->bulkFileUpdate($request->attachments,$new_homeWork,$school_id);
 
             $homework_id = $new_homeWork->id;
-
             $student_ids = StudentInfo::select('id')->where([
-                'school_info_id'=>$school_id,
+                'school_id'=>$school_id,
+                'year_id'=>$year_id,
                 'class_id'=>$class_id
             ])->pluck('id');
+
+
             $insert_array = array();
             foreach($student_ids as $id){
                 $insert = array("school_id"=>$school_id,
@@ -157,6 +216,52 @@ class HomeWorkController extends Controller
             DB::rollback();
             throw $e;
         }
-        return $this->ReS(["message"=>"HomeWork Added",'class_homeworks'=>$this->getHomeWorks($school_id,$class_id)]);
+        return $this->ReS(["message"=>"HomeWork Added",'teacher_homework'=>$this->getHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
     }
+    public function teacherHomeWork(Request $request){
+        
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $teacher_id = $this->getTeacherId();
+        return $this->ReS(['teacherwise_homework'=>$this->getHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
+    }
+    private function getHomeWorksTeacher($school_id,$year_id,$teacher_id){
+        return StudentHomeWork::with('classes','teacher','studenthomework','subject','attachments')->where([
+            'school_id'=>$school_id,
+            'teacher_id'=>$teacher_id,
+            'year_id'=>$year_id,
+        ])->orderBy('created_at')->get();
+    }
+    private function getPastHomeWorksTeacher($school_id,$year_id,$teacher_id){
+        return StudentHomeWork::with('classes','teacher','studenthomework','subject','attachments')->where([
+            'school_id'=>$school_id,
+            'teacher_id'=>$teacher_id,
+            'year_id'=>$year_id,
+        ])->where('submission_date','>',\Carbon\Carbon::now())->orderBy('created_at')->get();
+    }
+
+
+
+    public function getCurrentHomeWorkStudent(Request $request,$student_id){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $class_id = StudentInfo::find($student_id)->class_id;
+        
+        return $this->ReS(["current_homework"=>$this->studentwise_CurrentHomework($class_id,$school_id,$year_id)]);
+    }
+    public function getPastTeacherHomeWork(Request $request){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $teacher_id = $this->getTeacherId();
+        return $this->ReS(['teacherwise_past_homework'=>$this->getPastHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
+
+    }
+    private function studentwise_CurrentHomework($class_id,$school_id,$year_id){
+        return StudentHomeWork::with('classes','homeworkcheck','subject','attachments','teacherwithStaff')->where([
+            'class_id'=>$class_id,
+            'year_id'=>$year_id,
+            ])->where('submission_date','<=',\Carbon\Carbon::now())->get();
+    }
+
 }
+

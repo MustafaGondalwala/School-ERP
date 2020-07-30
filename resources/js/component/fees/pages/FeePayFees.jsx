@@ -24,14 +24,6 @@ export default class FeePayFees extends Component{
         this.onFetch = this.onFetch.bind(this)
         this.payFees = this.payFees.bind(this)
     }  
-    componentDidMount(){
-        this.setState({
-            student_id:10
-        },() => {
-            this.onFetch()
-        })
-    }
-    
     
     getStudentId(student_id){
         this.setState({
@@ -63,7 +55,14 @@ export default class FeePayFees extends Component{
                     fee_individual:data.fee_individual
                 })
             }).catch(error => {
-                Swal.fire("Error Occurred","Error Occurred in Process. Please try again Later..","error")
+                const {data,status} = error.response
+                console.log(data,status)
+                if(status == 400){
+                    Swal.fire("Invalid Data",data.error.message,"warning")
+                    this.setState({
+                        fetch_button:"Fetch"
+                    })
+                }
             })
         }
     }

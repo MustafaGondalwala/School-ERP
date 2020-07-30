@@ -23,6 +23,7 @@ class CreateNoticeBoardsTable extends Migration
             $table->boolean('parent');
             $table->boolean('publish');
             $table->integer('year_id');
+            $table->integer('school_id');
             $table->timestamps();
         });
     }

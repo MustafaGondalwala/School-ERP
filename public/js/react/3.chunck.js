@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[3],{
 
-/***/ "./resources/js/component/exam/form/ClassHallTicketEdit.jsx":
-/*!******************************************************************!*\
-  !*** ./resources/js/component/exam/form/ClassHallTicketEdit.jsx ***!
-  \******************************************************************/
+/***/ "./resources/js/component/attendance/utils/StudentIndividualReport.jsx":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/component/attendance/utils/StudentIndividualReport.jsx ***!
+  \*****************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14,25 +14,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
-/* harmony import */ var _utils_Col__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Col */ "./resources/js/component/utils/Col.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var _utils_Chart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Chart */ "./resources/js/component/utils/Chart.jsx");
 
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -59,54 +49,77 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var StudentIndividualReport = /*#__PURE__*/function (_Component) {
+  _inherits(StudentIndividualReport, _Component);
 
+  var _super = _createSuper(StudentIndividualReport);
 
-
-var ClassHallTicketEdit = /*#__PURE__*/function (_Component) {
-  _inherits(ClassHallTicketEdit, _Component);
-
-  var _super = _createSuper(ClassHallTicketEdit);
-
-  function ClassHallTicketEdit(props) {
+  function StudentIndividualReport(props) {
     var _this;
 
-    _classCallCheck(this, ClassHallTicketEdit);
+    _classCallCheck(this, StudentIndividualReport);
 
     _this = _super.call(this, props);
     _this.state = {
-      class_hallticket: "",
-      button_text: "Update Hall Ticket",
-      display_data: ""
+      student_id: "",
+      select_month: "",
+      total_present: 0,
+      total_absent: 0,
+      total_leave: 0,
+      total_half_leave: 0,
+      total_none: 0,
+      chart_type: "pie",
+      student_details: "",
+      details_fetch: ""
     };
-    _this.onChange = _this.onChange.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ClassHallTicketEdit, [{
-    key: "setStateData",
-    value: function setStateData(name, value) {
-      this.setState(_defineProperty({}, name, value));
-    }
-  }, {
-    key: "componentDidMount",
+  _createClass(StudentIndividualReport, [{
+    key: "updateDatapoints",
     value: function () {
-      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _this$props, class_hallticket, classes, class_id, class_to_display, display_data;
-
+      var _updateDatapoints = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(attendance_details) {
+        var total_present, total_absent, total_leave, total_half_leave, total_none;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this$props = this.props, class_hallticket = _this$props.class_hallticket, classes = _this$props.classes, class_id = _this$props.class_id;
-                this.setStateData("class_hallticket", class_hallticket);
-                class_to_display = classes.filter(function (item) {
-                  return item.id == class_id;
-                })[0];
-                display_data = class_to_display.class_title;
-                if (class_to_display.section) display_data += " " + class_to_display.section;
-                this.setStateData("display_data", display_data);
+                total_present = 0;
+                total_absent = 0;
+                total_leave = 0;
+                total_half_leave = 0;
+                total_none = 0;
+                attendance_details.map(function (item) {
+                  switch (item.status) {
+                    case 1:
+                      total_present = item.total;
+                      break;
 
-              case 6:
+                    case 2:
+                      total_absent = item.total;
+                      break;
+
+                    case 3:
+                      total_leave = item.total;
+                      break;
+
+                    case 4:
+                      total_half_leave = item.total;
+                      break;
+
+                    case 5:
+                      total_none = item.total;
+                      break;
+                  }
+                });
+                this.setState({
+                  total_leave: total_leave,
+                  total_present: total_present,
+                  total_absent: total_absent,
+                  total_none: total_none
+                });
+
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -114,63 +127,66 @@ var ClassHallTicketEdit = /*#__PURE__*/function (_Component) {
         }, _callee, this);
       }));
 
-      function componentDidMount() {
-        return _componentDidMount.apply(this, arguments);
+      function updateDatapoints(_x) {
+        return _updateDatapoints.apply(this, arguments);
       }
 
-      return componentDidMount;
+      return updateDatapoints;
     }()
   }, {
-    key: "onChange",
+    key: "fetchData",
     value: function () {
-      var _onChange = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(e, index) {
-        var _e$target, name, value, class_hallticket;
+      var _fetchData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(student_id, select_month) {
+        var _this2 = this;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _e$target = e.target, name = _e$target.name, value = _e$target.value;
-                class_hallticket = this.state.class_hallticket;
-                class_hallticket[index][name] = value;
-                this.setStateData("class_hallticket", class_hallticket);
+                _context2.next = 2;
+                return _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.student_attendance.get_individual(student_id, select_month).then(function (data) {
+                  var attendance_details = data.attendance_details,
+                      student_details = data.student_details,
+                      details_fetch = data.details_fetch;
 
-              case 4:
+                  _this2.updateDatapoints(attendance_details);
+
+                  _this2.setState({
+                    student_details: student_details,
+                    details_fetch: details_fetch
+                  });
+                });
+
+              case 2:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee2);
       }));
 
-      function onChange(_x, _x2) {
-        return _onChange.apply(this, arguments);
+      function fetchData(_x2, _x3) {
+        return _fetchData.apply(this, arguments);
       }
 
-      return onChange;
+      return fetchData;
     }()
   }, {
-    key: "updateHallTicket",
+    key: "updateStudentInfo",
     value: function () {
-      var _updateHallTicket = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var _this2 = this;
-
-        var class_hallticket, submit;
+      var _updateStudentInfo = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var data, student_id, select_month;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                class_hallticket = this.state.class_hallticket;
-                submit = this.props.submit;
-                this.setStateData("button_text", "Updating Hall Ticket ...");
-                submit(class_hallticket).then(function (data) {
-                  var message = data.message;
-                  sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire("Success", message, "success");
-
-                  _this2.setStateData("button_text", "Update Hall Ticket");
-                })["catch"](function (error) {
-                  sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire("Error Occured", "Errror Occured in Process", "error");
+                data = this.props.data;
+                student_id = data.student_id, select_month = data.select_month;
+                this.setState({
+                  student_id: student_id,
+                  select_month: select_month
                 });
+                this.fetchData(student_id, select_month);
 
               case 4:
               case "end":
@@ -180,106 +196,280 @@ var ClassHallTicketEdit = /*#__PURE__*/function (_Component) {
         }, _callee3, this);
       }));
 
-      function updateHallTicket() {
-        return _updateHallTicket.apply(this, arguments);
+      function updateStudentInfo() {
+        return _updateStudentInfo.apply(this, arguments);
       }
 
-      return updateHallTicket;
+      return updateStudentInfo;
+    }()
+  }, {
+    key: "componentWillMount",
+    value: function () {
+      var _componentWillMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                this.updateStudentInfo();
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function componentWillMount() {
+        return _componentWillMount.apply(this, arguments);
+      }
+
+      return componentWillMount;
+    }()
+  }, {
+    key: "componentWillReceiveProps",
+    value: function () {
+      var _componentWillReceiveProps = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                this.updateStudentInfo();
+
+              case 1:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function componentWillReceiveProps() {
+        return _componentWillReceiveProps.apply(this, arguments);
+      }
+
+      return componentWillReceiveProps;
     }()
   }, {
     key: "render",
     value: function render() {
       var _this3 = this;
 
-      var _this$props2 = this.props,
-          title = _this$props2.title,
-          class_id = _this$props2.class_id,
-          type = _this$props2.type;
       var _this$state = this.state,
-          class_hallticket = _this$state.class_hallticket,
-          button_text = _this$state.button_text,
-          display_data = _this$state.display_data;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: title
-      }, display_data && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_3__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Col__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        md: "4"
+          student_details = _this$state.student_details,
+          details_fetch = _this$state.details_fetch;
+      var _this$state2 = this.state,
+          student_id = _this$state2.student_id,
+          select_month = _this$state2.select_month,
+          chart_type = _this$state2.chart_type;
+      var _this$state3 = this.state,
+          total_present = _this$state3.total_present,
+          total_absent = _this$state3.total_absent,
+          total_leave = _this$state3.total_leave,
+          total_none = _this$state3.total_none,
+          total_half_leave = _this$state3.total_half_leave;
+      var dataPoints = [{
+        y: total_present,
+        label: "Total Present"
+      }, {
+        y: total_absent,
+        label: "Total Absent"
+      }, {
+        y: total_leave,
+        label: "Total Leave"
+      }, {
+        y: total_half_leave,
+        label: "Total Half Leave"
+      }, {
+        y: total_none,
+        label: "Total None Entry"
+      }];
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, details_fetch && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StudentAttendancePanel, {
+        details_fetch: details_fetch
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "Student Attendance Report"
+      }, student_details && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StudentInfoPanel, {
+        student_details: student_details
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Present Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_present,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Leave Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_leave,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Absent Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_absent,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Attendance Half Leave:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_half_leave,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Attendance Pending:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_none,
+        className: "form-control"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
         className: "form-control-label"
-      }, "Class"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        disabled: true,
-        value: display_data
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_3__["default"], null, class_hallticket && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "table-responsive"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
-        className: "table"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Sr.no"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Exam Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Start Time"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "End Time"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, class_hallticket.map(function (item, id) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(EveryRow, {
-          type: type,
-          key: id,
-          index: id,
-          onChange: _this3.onChange,
-          row: item
-        });
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-        onClick: function onClick(e) {
-          return _this3.updateHallTicket();
+      }, "Chart Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+        defaultValue: "pie",
+        onChange: function onChange(e) {
+          _this3.setState({
+            chart_type: e.target.value
+          });
         },
-        className: "btn btn-primary"
-      }, button_text))));
+        className: "form-control"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "pie"
+      }, "Pie"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "line"
+      }, "Line"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "bar"
+      }, "Bar"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "area"
+      }, "Area"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "doughnut"
+      }, "Doughnut"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+        value: "scatter"
+      }, "Scatter"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Chart__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        title: "Student Attendance for ".concat(select_month),
+        filename: "individual_student",
+        type: chart_type,
+        dataPoints: dataPoints
+      }))));
     }
   }]);
 
-  return ClassHallTicketEdit;
+  return StudentIndividualReport;
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
-var EveryRow = function EveryRow(_ref) {
-  var index = _ref.index,
-      row = _ref.row,
-      _onChange2 = _ref.onChange,
-      type = _ref.type,
-      props = _objectWithoutProperties(_ref, ["index", "row", "onChange", "type"]);
+var StudentAttendancePanel = function StudentAttendancePanel(_ref) {
+  var details_fetch = _ref.details_fetch;
 
-  var disabled = "";
-  if (type == "view") disabled = true;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", props, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, index + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, row.subject.subject_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    disabled: disabled,
-    type: "date",
-    name: "exam_date",
-    onChange: function onChange(e) {
-      return _onChange2(e, index);
-    },
-    className: "form-control",
-    value: row.exam_date || ''
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    disabled: disabled,
-    type: "time",
-    name: "start_time",
-    onChange: function onChange(e) {
-      return _onChange2(e, index);
-    },
-    className: "form-control",
-    value: row.start_time || ''
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    disabled: disabled,
-    type: "time",
-    name: "end_time",
-    onChange: function onChange(e) {
-      return _onChange2(e, index);
-    },
-    className: "form-control",
-    value: row.end_time || ''
-  })));
+  function intToAttendanceStatus(status) {
+    switch (status) {
+      case 1:
+        return "Present";
+
+      case 2:
+        return "Absent";
+
+      case 3:
+        return "Leave";
+
+      case 4:
+        return "Half Leave";
+
+      case 5:
+        return "None";
+    }
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    title: "Month Attendance"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "table-responsive"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
+    className: "table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Sr.no "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Date "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Attendance Status "))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, details_fetch && details_fetch.map(function (item, id) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
+      key: id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item.attendance_date), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, intToAttendanceStatus(item.status)));
+  })))));
 };
 
-function mapStateToProps(state) {
-  return {
-    classes: state.classes
-  };
-}
+var StudentInfoPanel = function StudentInfoPanel(_ref2) {
+  var student_details = _ref2.student_details;
+  var classes = "";
+  var section = "";
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_7__["connect"])(mapStateToProps)(ClassHallTicketEdit));
+  if (typeof student_details["class"] != "undefined") {
+    Object.keys(student_details["class"]).map(function (item) {
+      if (item === "class_title") {
+        classes = student_details["class"]['class_title'];
+      }
+
+      if (item === "section") {
+        section = student_details["class"]['section'];
+      }
+    });
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-4"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "form-control-label"
+  }, "Student Name: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    disabled: true,
+    defaultValue: student_details.student_name
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-4"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "form-control-label"
+  }, "Father Name "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    disabled: true,
+    defaultValue: student_details.father_name
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-4"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "form-control-label"
+  }, "Father Contact Number "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    disabled: true,
+    defaultValue: student_details.father_contact_no1
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "form-control-label"
+  }, "Class"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    disabled: true,
+    defaultValue: classes
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "form-control-label"
+  }, "Section"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    disabled: true,
+    defaultValue: section
+  }))));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (StudentIndividualReport);
 
 /***/ })
 

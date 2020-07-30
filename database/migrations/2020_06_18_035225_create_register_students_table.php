@@ -16,7 +16,7 @@ class CreateRegisterStudentsTable extends Migration
         Schema::create('register_students', function (Blueprint $table) {
             $table->id();
             $table->string('register_no');
-            $table->integer('class');
+            $table->string('class',20);
             $table->string('student_name');
             $table->string('father_name');
             $table->string('mother_name')->nullable();

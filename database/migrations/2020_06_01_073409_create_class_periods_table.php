@@ -16,6 +16,7 @@ class CreateClassPeriodsTable extends Migration
         Schema::create('class_periods', function (Blueprint $table) {
             $table->id();
             $table->integer('school_id');
+            $table->integer('year_id');
             $table->string('period_id',20);
             $table->time('start_time');
             $table->time('end_time');

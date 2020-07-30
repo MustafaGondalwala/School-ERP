@@ -1,32 +1,29 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[20],{
 
-/***/ "./resources/js/component/fees/form/SetInstallments.jsx":
-/*!**************************************************************!*\
-  !*** ./resources/js/component/fees/form/SetInstallments.jsx ***!
-  \**************************************************************/
+/***/ "./resources/js/component/fees/utils/FeeTypeShow.jsx":
+/*!***********************************************************!*\
+  !*** ./resources/js/component/fees/utils/FeeTypeShow.jsx ***!
+  \***********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FeeTypeShow; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
 /* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _actions_fee__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../actions/fee */ "./resources/js/component/actions/fee.js");
-
-
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var shortid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! shortid */ "./node_modules/shortid/index.js");
+/* harmony import */ var shortid__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(shortid__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_7__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -56,166 +53,348 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var SetInstallmentsForm = /*#__PURE__*/function (_Component) {
-  _inherits(SetInstallmentsForm, _Component);
 
-  var _super = _createSuper(SetInstallmentsForm);
+var FeeTypeShow = /*#__PURE__*/function (_Component) {
+  _inherits(FeeTypeShow, _Component);
 
-  function SetInstallmentsForm(props) {
+  var _super = _createSuper(FeeTypeShow);
+
+  function FeeTypeShow(props) {
     var _this;
 
-    _classCallCheck(this, SetInstallmentsForm);
+    _classCallCheck(this, FeeTypeShow);
 
     _this = _super.call(this, props);
     _this.state = {
-      total: ["Installment1", "Installment2", "Installment3", "Installment4", "Installment5", "Installment6", "Installment7", "Installment8", "Installment9", "Installment10", "Installment11", "Installment12"],
-      total_installment: [],
-      errors: {},
-      button_text: "Update"
+      add: false,
+      new_fee_type_loading: false,
+      edit: ""
     };
+    _this.newFeeType = _this.newFeeType.bind(_assertThisInitialized(_this));
+    _this.updateFeeType = _this.updateFeeType.bind(_assertThisInitialized(_this));
+    _this.changeStatus = _this.changeStatus.bind(_assertThisInitialized(_this));
+    _this.eventType = _this.eventType.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(SetInstallmentsForm, [{
-    key: "componentDidMount",
-    value: function () {
-      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _this$props, setFeeInstallmentsDispatch, total_installment, _total_installment;
+  _createClass(FeeTypeShow, [{
+    key: "newFeeType",
+    value: function newFeeType(fee_type) {
+      var _this2 = this;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this$props = this.props, setFeeInstallmentsDispatch = _this$props.setFeeInstallmentsDispatch, total_installment = _this$props.total_installment;
+      sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire({
+        title: 'Are you sure?',
+        text: "You able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Add Fee Type it!'
+      }).then(function (result) {
+        if (result.value) {
+          var class_id = _this2.props.class_id;
 
-                if (!(Object.keys(total_installment).length == 0)) {
-                  _context.next = 8;
-                  break;
-                }
+          _this2.setState({
+            new_fee_type_loading: true
+          });
 
-                _context.next = 4;
-                return setFeeInstallmentsDispatch();
+          _this2.props.submitNewFeeType(class_id, fee_type)["catch"](function (error) {
+            if (error.response) {
+              var _error$response = error.response,
+                  data = _error$response.data,
+                  status = _error$response.status;
 
-              case 4:
-                _total_installment = _context.sent;
-                this.setState({
-                  total_installment: _total_installment
-                });
-                _context.next = 9;
-                break;
-
-              case 8:
-                this.setState({
-                  total_installment: total_installment
-                });
-
-              case 9:
-              case "end":
-                return _context.stop();
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire("Invalid Fee Type", message, "warning");
+              }
             }
-          }
-        }, _callee, this);
-      }));
 
-      function componentDidMount() {
-        return _componentDidMount.apply(this, arguments);
-      }
-
-      return componentDidMount;
-    }()
-  }, {
-    key: "onChange",
-    value: function onChange(e) {
-      var getCurrent = this.state.total_installment;
-
-      if (e.target.checked) {
-        getCurrent.push(e.target.name);
-      } else {
-        var new_current = [];
-        getCurrent.map(function (item) {
-          if (item !== e.target.name) new_current.push(item);
-        });
-        getCurrent = new_current;
-      }
-
-      this.setState({
-        total_installment: getCurrent,
-        errors: {}
+            _this2.setState({
+              new_fee_type_loading: false
+            });
+          });
+        }
       });
     }
   }, {
-    key: "onSubmit",
-    value: function onSubmit() {
-      var total_installment = this.state.total_installment;
+    key: "updateFeeType",
+    value: function updateFeeType(fee_type, id) {
+      var _this3 = this;
 
-      if (total_installment.length == 0) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Validation Error", "Please select atleast One Installment", "warning");
-      } else {
-        _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminclerk.fee.update_installments(total_installment).then(function (data) {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", "Fee Installments Updated!!", "success");
-        })["catch"](function (error) {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Error Occurred", "Please try again later..", "error");
+      sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire({
+        title: 'Are you sure?',
+        text: "You able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Update Fee Type it!'
+      }).then(function (result) {
+        if (result.value) {
+          var class_id = _this3.props.class_id;
+
+          _this3.setState({
+            new_fee_type_loading: true
+          });
+
+          _this3.props.submitUpdateFeeType(class_id, fee_type, id)["catch"](function (error) {
+            if (error.response) {
+              var _error$response2 = error.response,
+                  data = _error$response2.data,
+                  status = _error$response2.status;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire("Invalid Fee Type", message, "warning");
+              }
+            }
+
+            _this3.setState({
+              new_fee_type_loading: false
+            });
+          });
+        }
+      });
+    }
+  }, {
+    key: "changeStatus",
+    value: function changeStatus(name, value) {
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: "eventType",
+    value: function eventType(type, data) {
+      var _this4 = this;
+
+      switch (type) {
+        case "edit":
+          this.changeStatus("add", false);
+          this.setState({
+            edit: ""
+          }, function () {
+            _this4.setState({
+              edit: data
+            });
+          });
+          break;
+
+        case "add":
+          this.changeStatus("add", true);
+          this.changeStatus("edit", "");
+          break;
+      }
+    }
+  }, {
+    key: "removeFeeType",
+    value: function removeFeeType(row_id) {
+      var _this5 = this;
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire({
+        title: 'Are you sure?',
+        text: "You wont able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete Fee Type it!'
+      }).then(function (result) {
+        if (result.value) {
+          var class_id = _this5.props.class_id;
+
+          _this5.setState({
+            new_fee_type_loading: true
+          });
+
+          _this5.props.submitDeleteFeeType(class_id, row_id)["catch"](function (error) {
+            if (error.response) {
+              var _error$response3 = error.response,
+                  data = _error$response3.data,
+                  status = _error$response3.status;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_7___default.a.fire("Invalid Fee Type", message, "warning");
+              }
+            }
+
+            _this5.setState({
+              new_fee_type_loading: false
+            });
+          });
+        }
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this6 = this;
+
+      var _this$state = this.state,
+          add = _this$state.add,
+          new_fee_type_loading = _this$state.new_fee_type_loading,
+          edit = _this$state.edit,
+          type = _this$state.type;
+      var _this$props = this.props,
+          class_id = _this$props.class_id,
+          fee_type = _this$props.fee_type;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, add && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewFeeType, {
+        title: "Add Fee Type",
+        loading: new_fee_type_loading,
+        type: "add",
+        submit: this.newFeeType
+      }), edit && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewFeeType, {
+        data: edit,
+        title: "Edit Fee Type",
+        loading: new_fee_type_loading,
+        type: "edit",
+        submit: this.updateFeeType
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "Class Fee Type",
+        add_object: {
+          text: "Add",
+          clickFunction: function clickFunction() {
+            return _this6.eventType("add", true);
+          }
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Actions")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, fee_type && fee_type.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: shortid__WEBPACK_IMPORTED_MODULE_4___default.a.generate()
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.fee_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "table-actions"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this6.eventType("edit", item);
+          },
+          className: "table-action",
+          "data-toggle": "tooltip",
+          "data-original-title": "Edit Fee Type"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-user-edit"
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this6.removeFeeType(item.id);
+          },
+          className: "table-action table-action-delete",
+          "data-toggle": "tooltip",
+          "data-original-title": "Delete Fee Type"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-trash"
+        }))));
+      })))));
+    }
+  }]);
+
+  return FeeTypeShow;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+var NewFeeType = /*#__PURE__*/function (_Component2) {
+  _inherits(NewFeeType, _Component2);
+
+  var _super2 = _createSuper(NewFeeType);
+
+  function NewFeeType(props) {
+    var _this7;
+
+    _classCallCheck(this, NewFeeType);
+
+    _this7 = _super2.call(this, props);
+    _this7.state = {
+      fee_type: "",
+      id: "",
+      type: "",
+      error: ""
+    };
+    _this7.submit = _this7.submit.bind(_assertThisInitialized(_this7));
+    return _this7;
+  }
+
+  _createClass(NewFeeType, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props2 = this.props,
+          data = _this$props2.data,
+          type = _this$props2.type;
+
+      if (data) {
+        this.setState({
+          id: data.id,
+          fee_type: data.fee_type,
+          type: type
         });
+      } else {
+        this.setState({
+          type: type
+        });
+      }
+    }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this$state2 = this.state,
+          fee_type = _this$state2.fee_type,
+          id = _this$state2.id;
+      if (fee_type == "") this.setState({
+        error: "Can't be Blank"
+      });else {
+        this.setState({
+          error: ""
+        });
+        if (id == "") this.props.submit(fee_type);else this.props.submit(fee_type, id);
       }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this8 = this;
 
-      var _this$state = this.state,
-          total = _this$state.total,
-          button_text = _this$state.button_text,
-          total_installment = _this$state.total_installment;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Set Installments",
-        back_link: "/admin/fees"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "row col-md-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Installment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Enabled/Disabled")), total_installment && total.map(function (item) {
-        if (total_installment.indexOf(item) > -1) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-            name: item,
-            value: item || '',
-            checked: true,
-            onChange: function onChange(e) {
-              return _this2.onChange(e);
-            },
-            type: "checkbox"
-          })));
-        } else {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-            name: item,
-            value: item || '',
-            onChange: function onChange(e) {
-              return _this2.onChange(e);
-            },
-            type: "checkbox"
-          })));
-        }
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col-md-4"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-        className: "btn btn-primary",
-        onClick: function onClick(e) {
-          return _this2.onSubmit();
-        }
-      }, button_text))));
+      var _this$state3 = this.state,
+          fee_type = _this$state3.fee_type,
+          error = _this$state3.error;
+      var _this$props3 = this.props,
+          loading = _this$props3.loading,
+          title = _this$props3.title,
+          type = _this$props3.type;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: title
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Col"], {
+        md: "6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormLabel"], null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+        value: fee_type,
+        onChange: function onChange(e) {
+          _this8.setState({
+            fee_type: e.target.value
+          });
+        },
+        placeholder: "Fee Type"
+      }), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        text: error
+      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_5__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Col"], {
+        md: "6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], null, type == "add" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, loading == false ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        onClick: this.submit,
+        primary: true,
+        sm: true
+      }, "Add") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        primary: true,
+        sm: true
+      }, "Adding ..")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, loading == false ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        onClick: this.submit,
+        primary: true,
+        sm: true
+      }, "Edit") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        primary: true,
+        sm: true
+      }, "Editing .."))))));
     }
   }]);
 
-  return SetInstallmentsForm;
-}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
-
-function mapStateToProps(state) {
-  return {
-    total_installment: state.installments
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, {
-  setFeeInstallmentsDispatch: _actions_fee__WEBPACK_IMPORTED_MODULE_7__["setFeeInstallmentsDispatch"]
-})(SetInstallmentsForm));
+  return NewFeeType;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /***/ })
 

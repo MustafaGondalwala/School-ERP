@@ -1,18 +1,23 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
 
-/***/ "./resources/js/component/attendance/utils/ClassSectionWise.jsx":
-/*!**********************************************************************!*\
-  !*** ./resources/js/component/attendance/utils/ClassSectionWise.jsx ***!
-  \**********************************************************************/
+/***/ "./resources/js/component/fees/utils/StudentReceipt.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/component/fees/utils/StudentReceipt.jsx ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return StudentReceipt; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38,209 +43,111 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var Chart = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
-  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../../utils/Chart */ "./resources/js/component/utils/Chart.jsx"));
-});
 
-var ClassSectionWise = /*#__PURE__*/function (_Component) {
-  _inherits(ClassSectionWise, _Component);
 
-  var _super = _createSuper(ClassSectionWise);
 
-  function ClassSectionWise(props) {
+
+var StudentReceipt = /*#__PURE__*/function (_Component) {
+  _inherits(StudentReceipt, _Component);
+
+  var _super = _createSuper(StudentReceipt);
+
+  function StudentReceipt(props) {
     var _this;
 
-    _classCallCheck(this, ClassSectionWise);
+    _classCallCheck(this, StudentReceipt);
 
     _this = _super.call(this, props);
     _this.state = {
-      class_id: "",
-      select_month: "",
-      total_present: 0,
-      total_absent: 0,
-      total_leave: 0,
-      total_half_leave: 0,
-      total_none: 0,
-      chart_type: "pie"
+      receiptDetails: "",
+      rowInfo: ""
     };
+    _this.viewReceipt = _this.viewReceipt.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(ClassSectionWise, [{
-    key: "fetchData",
-    value: function fetchData(class_id, select_month) {
+  _createClass(StudentReceipt, [{
+    key: "viewReceipt",
+    value: function viewReceipt(receipt_id, index) {
       var _this2 = this;
 
-      _api__WEBPACK_IMPORTED_MODULE_1__["default"].adminteacher.student_attendance.get_classwise(class_id, select_month).then(function (data) {
-        var attendance_details = data.attendance_details;
-        var total_present = 0;
-        var total_absent = 0;
-        var total_leave = 0;
-        var total_half_leave = 0;
-        var total_none = 0;
-        attendance_details.map(function (item) {
-          switch (item.status) {
-            case 1:
-              total_present = item.total;
-              break;
-
-            case 2:
-              total_absent = item.total;
-              break;
-
-            case 3:
-              total_leave = item.total;
-              break;
-
-            case 4:
-              total_half_leave = item.total;
-              break;
-
-            case 5:
-              total_none = item.total;
-              break;
-          }
-        });
+      var fee_receipts = this.props.fee_receipts;
+      this.setState({
+        rowInfo: fee_receipts[index],
+        receiptDetails: ""
+      });
+      _api__WEBPACK_IMPORTED_MODULE_2__["default"].adminclerk.fee.view_receipt(receipt_id).then(function (data) {
+        var receiptDetails = data.receiptDetails;
 
         _this2.setState({
-          total_leave: total_leave,
-          total_present: total_present,
-          total_absent: total_absent,
-          total_none: total_none
+          receiptDetails: receiptDetails
         });
       });
-    }
-  }, {
-    key: "updateClassWise",
-    value: function updateClassWise() {
-      var data = this.props.data;
-      var class_id = data.class_id,
-          select_month = data.select_month;
-      this.setState({
-        class_id: class_id,
-        select_month: select_month
-      });
-      this.fetchData(class_id, select_month);
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.updateClassWise();
-    }
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps() {
-      this.updateClassWise();
     }
   }, {
     key: "render",
     value: function render() {
       var _this3 = this;
 
+      var fee_receipts = this.props.fee_receipts;
       var _this$state = this.state,
-          class_id = _this$state.class_id,
-          select_month = _this$state.select_month,
-          chart_type = _this$state.chart_type;
-      var _this$state2 = this.state,
-          total_present = _this$state2.total_present,
-          total_absent = _this$state2.total_absent,
-          total_leave = _this$state2.total_leave,
-          total_none = _this$state2.total_none,
-          total_half_leave = _this$state2.total_half_leave;
-      var dataPoints = [{
-        y: total_present,
-        label: "Total Present"
-      }, {
-        y: total_absent,
-        label: "Total Absent"
-      }, {
-        y: total_leave,
-        label: "Total Leave"
-      }, {
-        y: total_half_leave,
-        label: "Total Half Leave"
-      }, {
-        y: total_none,
-        label: "Total None Entry"
-      }];
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "ClassWise Details"
+          receiptDetails = _this$state.receiptDetails,
+          rowInfo = _this$state.rowInfo;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, fee_receipts.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Fee Receipts",
+        back_link: this.props.back_link
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Present Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_present,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Leave Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_leave,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Absent Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_absent,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Attendance Half Leave:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_half_leave,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Attendance Pending:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_none,
-        className: "form-control"
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        className: "form-control-label"
-      }, "Chart Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        defaultValue: "pie",
-        onChange: function onChange(e) {
-          _this3.setState({
-            "chart_type": e.target.value
-          });
-        },
-        className: "form-control"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "pie"
-      }, "Pie"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "line"
-      }, "Line"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "bar"
-      }, "Bar"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "area"
-      }, "Area"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "doughnut"
-      }, "Doughnut"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "scatter"
-      }, "Scatter"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Chart, {
-        title: "Class/Section Wise Attendance for ".concat(select_month),
-        filename: "classwise_attendance",
-        type: chart_type,
-        dataPoints: dataPoints
-      })));
+        className: "table-responsive"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "table"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Receipts ID:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "View"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Print"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Created By"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, fee_receipts.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.id), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-primary",
+          onClick: function onClick(e) {
+            return _this3.viewReceipt(item.id, id);
+          }
+        }, "View")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-success"
+        }, "Print")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.amount_name));
+      }))))), receiptDetails && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ViewReceipt, {
+        rowInfo: rowInfo,
+        receipt: receiptDetails
+      }));
     }
   }]);
 
-  return ClassSectionWise;
+  return StudentReceipt;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (ClassSectionWise);
+
+
+var ViewReceipt = function ViewReceipt(_ref) {
+  var receipt = _ref.receipt,
+      rowInfo = _ref.rowInfo;
+  var payment_type = rowInfo.payment_type,
+      id = rowInfo.id,
+      amount_name = rowInfo.amount_name,
+      created_at = rowInfo.created_at;
+  var title = "Receipt ID: " + rowInfo.id;
+  var current_paid = 0;
+  var new_pending = 0;
+  var old_pending = 0;
+  var total_amount = 0;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: title
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Col"], {
+    md: "6",
+    sm: "6"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Payment Type: ", payment_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Created By: ", amount_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Publish At: ", new Date(created_at).toLocaleDateString()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Waiver Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Old Total Pending"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Paid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Current Paid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "New Total Pending")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, receipt.map(function (item, id) {
+    current_paid += item.current_paid;
+    old_pending += item.total_pending;
+    total_amount += item.total_amount;
+    new_pending += item.total_pending - item.current_paid;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.fee_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.total_amount), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.waiver_amount), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.total_pending), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.total_paid), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.current_paid), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.total_pending - item.current_paid));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, total_amount), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, old_pending), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, current_paid), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, new_pending))))));
+};
 
 /***/ })
 

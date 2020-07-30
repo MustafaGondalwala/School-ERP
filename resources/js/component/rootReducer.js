@@ -4,16 +4,23 @@ import {user,assigned_class} from "./reducers/user";
 import installments from "./reducers/setInstallments"
 import year from "./reducers/setYear"
 import feeType from "./reducers/feeType"
-import {setClass as classes ,setDistinctClass as distinct_classes,classPeriod as class_periods,setClassWiseTimeTable as classwise_timetable} from "./reducers/classes"
+import {setClass as classes ,setDistinctClass as distinct_classes,classPeriod as class_periods} from "./reducers/classes"
 import {setSubjects as subjects} from "./reducers/subjects"
-import {setTeachers as teachers,setTeachersName as teachers_name} from "./reducers/teachers"
-import {setTimetable as timetables,setTimetableTeacher as teacher_timetables} from "./reducers/timetable"
-import {class_homeworks} from "./reducers/homework"
+import {setTeachers as teachers,setTeachersName as teachers_name,setTeacherWiseOnlinExam as teacher_onlineexam,setTeacherOnlineTestAnswers as monthlytest_withstudentanswers} from "./reducers/teachers"
+import {setTimetable as timetables,setTimetableTeacher as teacher_timetables,classwiseTimeTable as classwise_timetable} from "./reducers/timetable"
+import {class_homeworks,teacherwise_homework,studentCurrent_homework,teacherwise_past_homework} from "./reducers/homework"
 import {parent_childs,parent_homework} from "./reducers/parent"
 import {examType,monthlyTest} from "./reducers/exam"
-import {adminStudentHeader} from "./reducers/header"
+import {adminStudentHeader,adminTeacherHeader,adminFeeHeader,adminTimeTableHeader} from "./reducers/header"
 import {schoolClerks} from "./reducers/clerk"
-import {studyMaterialGroup} from "./reducers/study_material"
+import {studyMaterialGroup,studyMaterialGroupTeacher as teacher_groups} from "./reducers/study_material"
+import {classwiseSubject} from "./reducers/classwiseSubject"
+import {questionpaper} from "./reducers/questionpaper"
+import {classwiseMonthlyTest,classwiseOnlineMonthlyTest} from "./reducers/classwiseExam"
+import {monthlyTestResult} from "./reducers/view_results"
+import {select_student} from "./reducers/select_student"
+
+
 
 export default combineReducers({
     user,
@@ -35,7 +42,22 @@ export default combineReducers({
     teachers_name,
     teacher_timetables,
     adminStudentHeader,
+    adminTeacherHeader,
     schoolClerks,
     monthlyTest,
-    studyMaterialGroup
+    studyMaterialGroup,
+    classwiseSubject,
+    questionpaper,
+    classwiseMonthlyTest,
+    classwiseOnlineMonthlyTest,
+    teacher_groups,
+    monthlyTestResult,
+    teacherwise_homework,
+    studentCurrent_homework,
+    teacherwise_past_homework,
+    teacher_onlineexam,
+    monthlytest_withstudentanswers,
+    select_student,
+    adminFeeHeader,
+    adminTimeTableHeader
   });

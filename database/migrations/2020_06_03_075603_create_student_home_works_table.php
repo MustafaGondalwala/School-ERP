@@ -16,14 +16,15 @@ class CreateStudentHomeWorksTable extends Migration
         Schema::create('student_home_works', function (Blueprint $table) {
             $table->id();
             $table->integer('school_id');
+            $table->integer('year_id');
             $table->integer('class_id');
             $table->integer('teacher_id');
             $table->integer('homework_type')->comment("1=> HomeWork 2=> Assignment 3=> Project");
             $table->string('title',200);
             $table->string('subtitle',200);
-            $table->date('submition_date');
+            $table->date('submission_date');
             $table->binary('description');
-            $table->integer('subject');
+            $table->integer('subject_id');
             $table->integer('status')->comment("1=> Open 2=> Closed")->default(1);
             $table->integer('file_id')->nullable();
             $table->timestamps();

@@ -147,14 +147,14 @@ class AdmissionStudent extends Component {
         this.setState({
           data: { ...this.state.data, ["roll_no"]: new_roll_no },
         });
+        this.setState({
+          data: { ...this.state.data, ["class_id"]: class_id },
+        });
       }
         
     })
   }
   sendClassId(class_id) {
-    this.setState({
-      data: { ...this.state.data, ["class_id"]: class_id },
-    });
     this.getRollNoSequence(class_id)
   }
   async componentWillMount() {
@@ -195,7 +195,6 @@ class AdmissionStudent extends Component {
     const { data,update_student } = this.state;
     const errors = this.validate(data);
     this.setState({ errors });
-    console.log(errors);
     if (Object.keys(errors).length == 0) {
       let formData = new FormData(); //formdata object
       Object.keys(data).map((item) => {

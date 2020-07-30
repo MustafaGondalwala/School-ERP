@@ -1,5 +1,5 @@
 import React,{Component,Suspense} from "react"
-const AdminHeader = React.lazy(() => import("../../header/admin/AdminTeacherHeader"))
+const AdminHeader = React.lazy(() => import("../header/AdminHeader"))
 const AddTeacherForm =   React.lazy(() => import("../form/AddTeacherForm"))
 import {Link} from "react-router-dom"
 import Swal from 'sweetalert2'
@@ -21,11 +21,9 @@ export default class TeacherAddTeacher extends Component{
     render(){
         return(
             <div>
-            <TopBreadCrumb mainHeader="Teacher" header="Add Teacher" >
                 <Suspense fallback={<h1>Loading ...</h1>}>
-                    <AdminHeader/>
+                    <AdminHeader mainHeader="Teacher" header="Add Teacher"/>
                 </Suspense>
-            </TopBreadCrumb>
                 <BodyComponent>
                     <Suspense fallback={<h1>Loading ...</h1>}>
                         <AddTeacherForm submit={this.submit} title="Add Teacher" back_link="/admin/teacher"/>

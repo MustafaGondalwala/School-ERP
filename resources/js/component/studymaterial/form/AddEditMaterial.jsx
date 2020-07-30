@@ -19,32 +19,38 @@ import api from "../../api";
 import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import CkEditor from "../../utils/CkEditor";
-import { setGroup } from "../../actions/study_material";
+import { setTeacherGroup } from "../../actions/study_material";
 
 
 class AddEditMaterial extends Component {
     constructor(props) {
       super(props);
+      this.initialData = {
+        title: "",
+        subtitle: "",
+        description: "",
+        group_id: "",
+        attachments: [],
+      }
       this.state = {
-        data: {
-          title: "",
-          subtitle: "",
-          description: "",
-          group: "",
-          attachments: [],
-        },
+        data: this.initialData,
         errors: "",
       };
       this.onFileChange = this.onFileChange.bind(this);
       this.submit = this.submit.bind(this);
       this.onChange = this.onChange.bind(this);
+      this.deleteFunc = this.deleteFunc.bind(this);
+      this.update = this.update.bind(this);
     }
   
     componentDidMount(){
-        console.log("this New")
-        const {data} = this.props
+        const {data,group_id} = this.props
+        if(group_id){
+          this.setState({
+            data: { ...this.state.data, ["group_id"]: group_id },
+          });
+        }
         if(data){
-            console.log(data)
             this.setState({
                 data
             })
@@ -54,6 +60,7 @@ class AddEditMaterial extends Component {
       const files = e.currentTarget.files;
       const { attachments } = this.state.data;
       Array.from(files).forEach((file) => attachments.push(file));
+      console.log(attachments)
       this.setState({
         attachments,
       });
@@ -61,43 +68,88 @@ class AddEditMaterial extends Component {
     validate(data) {
       const errors = {};
       if (!data.title) errors.title = "Can't be blank";
-      if (!data.group) errors.group = "Can't be blank";
+      if (!data.group_id) errors.group_id = "Can't be blank";
       return errors;
     }
-  
+    
+    update(){
+      const { data } = this.state;
+      const errors = this.validate(data);
+      this.setState({ errors });
+      const { setTeacherGroup } = this.props;
+      if (Object.keys(errors).length == 0) {
+        const formData = new FormData();
+        formData.append("id",data.id);
+        formData.append("title", data.title);
+        formData.append("subtitle", data.subtitle);
+        formData.append("description", data.description);
+        formData.append("group_id", data.group_id);
+
+        //check for files ids
+        data.attachments.map((file, id) => {
+          if(file.id){
+            formData.append(`attachments[${id}]`, JSON.stringify(file));
+          }else
+            formData.append(`attachments[${id}]`, file);
+        });
+        return api.adminteacher.study_material.teacher.material.update(formData)
+        .then(data => {
+            const {message,groups} = data
+            setTeacherGroup(groups)
+            Swal.fire("Success",message,"success")
+        })
+      }
+    }
+
+
+
     submit() {
       const { data } = this.state;
       const errors = this.validate(data);
       this.setState({ errors });
-      const { class_id,setGroup } = this.props;
-  
+      const { setTeacherGroup } = this.props;
       if (Object.keys(errors).length == 0) {
         const formData = new FormData();
         formData.append("title", data.title);
         formData.append("subtitle", data.subtitle);
         formData.append("description", data.description);
-        formData.append("group", data.group);
+        formData.append("group_id", data.group_id);
         data.attachments.map((file, id) => {
           formData.append(`attachments[${id}]`, file);
         });
-        api.adminteacher.study_material.material.add(class_id, formData).then(data => {
-            console.log(data)
+        return api.adminteacher.study_material.teacher.material.add(formData)
+        .then(data => {
             const {message,groups} = data
-            setGroup(groups,class_id)
+            this.setState({
+              data:this.initialData
+            })
+            setTeacherGroup(groups)
+            Swal.fire("Success",message,"success")
         })
       }
     }
   
     onChange(e) {
       const { name, value } = e.target;
+      console.log(this.state.data.attachments)
       this.setState({
         data: { ...this.state.data, [name]: value },
+      });
+    }
+    deleteFunc(nameOrId,type){
+      const {attachments} = this.state.data
+      var newAttachments = ""
+      if(type == 1)
+        newAttachments = attachments.filter(item => item.name != nameOrId)
+      else
+        newAttachments = attachments.filter(item => item.id != nameOrId)
+      this.setState({
+        data: { ...this.state.data, ["attachments"]: newAttachments },
       });
     }
     render() {
       const { groups,class_id,title,type } = this.props;
       const { data, errors } = this.state;
-      console.log(data.attachments)
       var disabled = false
       if(type == 2)
         disabled = true
@@ -147,33 +199,6 @@ class AddEditMaterial extends Component {
               </FormGroup>
             </Col>
           </Row>
-          
-          {type == 1 &&
-            <Row>
-            <Col md={6} sm={6}>
-              <FormGroup>
-                <FormLabel>Select Group</FormLabel>
-                <Select
-                  errors={errors}
-                  value={data.group}
-                  onChange={this.onChange}
-                  name="group"
-                >
-                  <SelectOption>-- Select --</SelectOption>
-                  {groups[class_id] !== undefined &&
-                    groups[class_id].map((item, id) => {
-                      return (
-                        <SelectOption key={id} value={item.id}>
-                          {item.group_name}
-                        </SelectOption>
-                      );
-                    })}
-                </Select>
-              </FormGroup>
-            </Col>
-          </Row>
-        }
-
             <Row>
             <Col md={4} sm={4}>
               <FormGroup>
@@ -189,20 +214,31 @@ class AddEditMaterial extends Component {
               </FormGroup>
             </Col>
             <Col md={12} sm={12}>
-            {type != 2 && 
-              <PreviewAttachment attachments={data.attachments} />
-            }
-            {type == 2 && 
-              <PreviewAttachmentFile attachments={data.attachments} />
-            }
+              {(type == 1 && data.attachments)  && 
+                <PreviewAttachment showDelete={true} deleteFunc={this.deleteFunc} attachments={data.attachments} />
+              }
+              {(type == 2  && data.attachments) && 
+                <PreviewAttachmentFile showDelete={false} deleteFunc={this.deleteFunc} attachments={data.attachments} />
+              }
+              {(type == 3  && data.attachments) && 
+                <PreviewAttachmentFile showDelete={true} deleteFunc={this.deleteFunc} attachments={data.attachments} />
+              }
             </Col>
           </Row>
+          <br />
           <Row>
             <Col>
               <FormGroup>
+          {type == 1 && 
                 <Button primary onClick={this.submit}>
-                  Submit
+                  Add
                 </Button>
+          }
+          {type == 3 && 
+                <Button warning onClick={this.update}>
+                  Update
+                </Button>
+          }
               </FormGroup>
             </Col>
           </Row>
@@ -219,5 +255,5 @@ function mapStateToProps(state) {
     };
   }
   
-  export default connect(mapStateToProps,{setGroup})(AddEditMaterial);
+  export default connect(mapStateToProps,{setTeacherGroup})(AddEditMaterial);
   

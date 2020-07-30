@@ -33,10 +33,12 @@ class SelectGroup extends Component {
     super(props);
     this.state = {
       selected_group: "",
+      selected_value:"",
       addshow:false
     };
     this.onChange = this.onChange.bind(this);
     this.addShow = this.addShow.bind(this);
+    this.deleteLession = this.deleteLession.bind(this)
   }
   async componentDidMount() {
     const { class_id } = this.props.match.params;
@@ -59,11 +61,40 @@ class SelectGroup extends Component {
     )[0];
     this.setState({
       selected_group,
+      selected_value:value,
       addshow:false,
     });
   }
+
+  deleteLession(lession_row){
+    const { class_id } = this.props.match.params;
+    const {setGroup} = this.props
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        const {id} = lession_row
+        api.adminteacher.study_material.material.delete(class_id,id).then(data => {
+          const {message,groups} = data
+          setGroup(groups,class_id)
+          this.setState({
+            selected_group:"",
+            selected_value:""
+          })
+          Swal.fire("Success",message,"success")
+      })
+      }
+    })
+  }
+
   addShow(){
-      const {addshow} = this.state
+      const {addshow,selected_value} = this.state
       if(addshow == true)
         this.onStateChange("addshow",false)
     else
@@ -71,8 +102,8 @@ class SelectGroup extends Component {
   }
   render() {
     const { class_id } = this.props.match.params;
-    const { groups } = this.props;
-    const { selected_group,addshow } = this.state;
+    const { groups,setGroup } = this.props;
+    const { selected_group,selected_value,addshow } = this.state;
     return (
       <div>
         <TopBreadCrumb mainHeader="Study Material" header="Group">
@@ -85,7 +116,7 @@ class SelectGroup extends Component {
                 <FormGroup>
                   <FormLabel>Select Group</FormLabel>
                   <Select
-                    value={data.group}
+                    value={selected_value}
                     onChange={this.onChange}
                     name="group"
                   >
@@ -105,7 +136,7 @@ class SelectGroup extends Component {
           </CardComponent>
           {addshow && <AddEditMaterial type={1} title={"Add Study Material"} class_id={class_id} />}
           {selected_group && (
-            <StudyMaterialPanel selected_group={selected_group} />
+            <StudyMaterialPanel selected_group={selected_group} deleteLession={this.deleteLession} setGroup={setGroup} class_id={class_id} />
           )}
         </BodyComponent>
       </div>
@@ -127,17 +158,29 @@ class StudyMaterialPanel extends Component {
             [name]:value
         })
     }
+    
     eventType(type,row){
         switch(type){
             case "view":
                 this.setState({
-                    view:""
+                    view:"",
+                    edit:""
                 },() => {
                     this.setState({
                         view:row
                     })
                 })
                 break
+            case "edit":
+              this.setState({
+                edit:"",
+                view:""
+            },() => {
+                this.setState({
+                    edit:row
+                })
+            })
+            break
         }
     }
     render() {
@@ -180,7 +223,7 @@ class StudyMaterialPanel extends Component {
               </a>
               <a
                 href="#!"
-                onClick={(e) => this.removeClass(row)}
+                onClick={(e) => this.props.deleteLession(row)}
                 className="table-action table-action-delete"
                 data-toggle="tooltip"
                 data-original-title="Delete product"
@@ -191,7 +234,8 @@ class StudyMaterialPanel extends Component {
         ),
       },
     ];
-    const {view} = this.state
+    const {view,edit} = this.state
+    const {class_id} = this.props
     return [
         <span>
             <DataTable
@@ -205,6 +249,8 @@ class StudyMaterialPanel extends Component {
         </span>,
         <span>
             {view && <AddEditMaterial title="View Study Material" type={2} data={view}/>}
+            {edit && <AddEditMaterial title="Edit Study Material" type={3} data={edit} class_id={class_id}/>}
+        
         </span>
     ];
   }

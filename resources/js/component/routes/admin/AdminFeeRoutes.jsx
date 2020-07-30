@@ -9,6 +9,9 @@ import FeePayFees from "../../fees/pages/FeePayFees"
 import FeeUpdateType from "../../fees/pages/FeeUpdateType"
 import FeeViewReceipt from "../../fees/pages/FeeViewReceipt"
 import FeeViewPendingFees from "../../fees/pages/FeeViewPendingFees"
+import FeeCollection from "../../fees/pages/FeeCollection"
+import FeeCollectionClasswise from "../../fees/pages/FeeCollectionClasswise"
+import FeeCollectionInstallment from "../../fees/pages/FeeCollectionInstallment"
 const AdminFeeRoutes = () => (
     <span>
         <AdminDashboardRoutes exact path="/admin/fees" component={FeesAdminHomePage} />
@@ -20,7 +23,9 @@ const AdminFeeRoutes = () => (
         <AdminDashboardRoutes exact path="/admin/fees/view-receipt" component={FeeViewReceipt} />
         <AdminDashboardRoutes exact path="/admin/fees/fee-type" component={FeeUpdateType} />
         <AdminDashboardRoutes exact path="/admin/fees/pending-fees" component={FeeViewPendingFees} />
-
+        <AdminDashboardRoutes exact path="/admin/fees/collection" component={FeeCollection} />
+        <AdminDashboardRoutes exact path="/admin/fees/collection/classwise" component={FeeCollectionClasswise} />
+        <AdminDashboardRoutes exact path="/admin/fees/collection/installment" component={FeeCollectionInstallment} />
     </span>
 )
 

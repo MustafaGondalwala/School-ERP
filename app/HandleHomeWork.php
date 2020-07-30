@@ -12,7 +12,7 @@ class HandleHomeWork extends Model
     public function student(){
         return $this->belongsTo(StudentInfo::class,'student_id');
     }
-    public function files() 
+    public function attachments() 
     { 
         return $this->morphMany(File::class, 'type');
     }

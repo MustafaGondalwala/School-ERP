@@ -9,6 +9,26 @@ class NoticeBoardController extends Controller
     public function getIndividualNotice(Request $request,$notice_id){
         return $this->ReS(["notice"=>NoticeBoard::find($notice_id)]);
     }
+    public function getNoticeByType(Request $request,$type){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $query = NoticeBoard::where([
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
+        ]);
+        switch($type){
+            case 1:
+                $query->where(['staff'=>'1']);
+            break;
+            case 2:
+                $query->where(['student'=>'1']);
+            break;
+            default:
+            return $this->ReE(["message"=>"Notice not Found"],400);
+            break;
+        }
+        return $this->ReS(["notices"=>$query->get()]);
+    }
     public function addNoticeBoard(Request $request){
         $request->validate([
             'title'=>'required|string',
@@ -22,7 +42,9 @@ class NoticeBoardController extends Controller
         $staff = $request->staff == "true" ? 1 : 0;
         $student = $request->student == "true" ? 1 : 0;
         $publish = $request->publish == "true" ? 1 : 0;
+
         $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
         if($request->id)
             $new_notice = NoticeBoard::find($request->id);
         else
@@ -33,6 +55,7 @@ class NoticeBoardController extends Controller
         $new_notice->staff = $staff;
         $new_notice->student = $student;
         $new_notice->publish = $publish;
+        $new_notice->school_id = $school_id;
         if($request->image != NULL){
             if(!is_string($request->image)){
                 $image_url = $this->uploadFile($request->image)['url'];
@@ -54,10 +77,8 @@ class NoticeBoardController extends Controller
     }
     public function getAllNoticeBoard(Request $request){
         $year_id = $this->getSchoolYearId($request);
-        $data = NoticeBoard::where(["year_id"=>$year_id])->get();
+        $school_id = $this->getSchoolId($request);
+        $data = NoticeBoard::where(["year_id"=>$year_id,"school_id"=>$school_id])->get();
         return $this->ReS(["notices"=>$data]);
-    }
-    public function updateIndividualNotice(Request $request){
-        dd($request->all());
     }
 }

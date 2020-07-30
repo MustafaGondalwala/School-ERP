@@ -34,12 +34,20 @@ class SetInstallmentsForm extends Component{
         const {setFeeInstallmentsDispatch,total_installment} = this.props
         if(Object.keys(total_installment).length == 0){
             const total_installment = await setFeeInstallmentsDispatch()
+            const total = []
+            total_installment.map(item => {
+                total.push(item.installment)
+            })
             this.setState({
-                total_installment
+                total_installment:total
             }) 
         }else{
+            const total = []
+            total_installment.map(item => {
+                total.push(item.installment)
+            })
             this.setState({
-                total_installment
+                total_installment:total
             }) 
         }
     }
@@ -57,6 +65,8 @@ class SetInstallmentsForm extends Component{
         this.setState({
           total_installment: getCurrent,
           errors: {},
+        },() => {
+            console.log(this.state.total_installment)
         });
     }
 
@@ -65,12 +75,11 @@ class SetInstallmentsForm extends Component{
           if(total_installment.length == 0){
             Swal.fire("Validation Error","Please select atleast One Installment","warning")
           }else{
-                
-                api.adminclerk.fee.update_installments(total_installment).then(data => {
-                    Swal.fire("Success","Fee Installments Updated!!","success");
-                }).catch(error => {
-                  Swal.fire("Error Occurred","Please try again later..","error");
-                 })
+            api.adminclerk.fee.update_installments(total_installment).then(data => {
+                Swal.fire("Success","Fee Installments Updated!!","success");
+            }).catch(error => {
+                Swal.fire("Error Occurred","Please try again later..","error");
+            })
           }
       }
     render(){
@@ -83,6 +92,7 @@ class SetInstallmentsForm extends Component{
                         <th>Installment</th>
                         <th>Enabled/Disabled</th>
                     </Thead>
+                    <tbody>
                     {total_installment && total.map(item => {
                             if(total_installment.indexOf(item) > -1)
                             {
@@ -98,6 +108,7 @@ class SetInstallmentsForm extends Component{
                             }
                         })
                     }
+                    </tbody>
                 </Table>
                     
                 <div className="col-md-4">

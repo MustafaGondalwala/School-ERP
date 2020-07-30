@@ -99,7 +99,6 @@ export default class AdminViewNoticeBoard extends Component{
                 this.changeStateValue("view","")
                 this.changeStateValue("edit","")
                 this.removeNotice(id)
-
         }
     }
     render(){

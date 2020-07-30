@@ -15,7 +15,6 @@
         <link rel="stylesheet" href="/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
         <link rel="stylesheet" href="/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
         <link rel="stylesheet" href="/assets/vendor/animate.css/animate.min.css" />
-        <link rel="stylesheet" href="/assets/vendor/fullcalendar/dist/fullcalendar.min.css" />
         <link rel="stylesheet" href="{{ secure_asset('css/argon.css')}}" type="text/css">
         <link rel="stylesheet" href="{{ secure_asset('css/video-react.css')}}" type="text/css"/>
         <title>School Erp</title>
@@ -28,6 +27,5 @@
         <script src="/assets/vendor/js-cookie/js.cookie.js"></script>
         <script src="/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
         <script src="/assets/js/argon.min5438.js?v=1.2.0"></script>
-        
     </body>
     </html>

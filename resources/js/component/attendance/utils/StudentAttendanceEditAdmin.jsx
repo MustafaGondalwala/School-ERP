@@ -28,6 +28,7 @@ export default class StudentAttendanceEditAdmin extends Component{
         this.submit = this.submit.bind(this)
         this.onChange = this.onChange.bind(this)
         this.changeState = this.changeState.bind(this)
+        this.updateStudentAttendance = this.updateStudentAttendance.bind(this)
     }
     onChange(e){
         this.setState({
@@ -86,6 +87,15 @@ export default class StudentAttendanceEditAdmin extends Component{
     }
     updateStudentAttendance(student_attendance){
         return api.adminteacher.student_attendance.update(student_attendance).then(data => {
+            // const {studentAttendances,message} = data
+            // Swal.fire("Data Updated!!",message,"success");
+            // this.setState({
+            //     student_attendance:""
+            // },() => {
+            //     this.setState({
+            //         student_attendance:studentAttendances
+            //     })
+            // })
             return data
         })
     }
@@ -94,7 +104,6 @@ export default class StudentAttendanceEditAdmin extends Component{
         var back_link = "/admin/attendance"
         if(user_type != "")
             back_link = "/teacher/attendance/class/"+data.class_id
-
         return(
             <div>
                 <CardComponent title="Select Class" back_link={back_link}>

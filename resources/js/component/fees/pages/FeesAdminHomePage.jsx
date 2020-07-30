@@ -2,67 +2,74 @@ import React, { Component } from "react";
 import AdminHeader from "../header/AdminHeader";
 import CardComponent from "../../utils/CardComponent";
 import ColComponent from "../../utils/ColComponent";
-export default class FeesAdminHomePage extends Component {
+import {setAdminFeeHeaderDispatch} from "../../actions/header"
+import { connect } from "react-redux"
+
+class FeesAdminHomePage extends Component {
+  componentDidMount(){
+    const {header,setAdminFeeHeaderDispatch} = this.props
+    if(Object.keys(header).length == 0)
+      setAdminFeeHeaderDispatch()
+  }
   render() {
+    const {header} = this
     return (
       <div>
         <AdminHeader mainHeader="Home" header="Fees" />
         <div className="container-fluid mt--6">
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Update Fees Type">
-            <div className="row card-wrapper">
-              <ColComponent
-                title="Set Fee Installments"
-                description="Set the Total Numbe of Fee Installments"
-                link="/admin/fees/set-installments"
-                button_text="Set"
-              />
-              <ColComponent
-              title="Set Fee Type per Classes"
-              description="Set Fee Type"
-              link="/admin/fees/fee-type"
-              button_text="Set"
-            />
-            </div>
+              <div className="row card-wrapper">
+                <ColComponent
+                  title="Set Fee Installments"
+                  description="Set the Total Numbe of Fee Installments"
+                  link="/admin/fees/set-installments"
+                  button_text="Set"
+                />
+                <ColComponent
+                  title="Set Fee Type per Classes"
+                  description="Set Fee Type"
+                  link="/admin/fees/fee-type"
+                  button_text="Set"
+                />
+              </div>
             </CardComponent>
           </div>
           <div className="card-deck flex-column flex-xl-row">
-          <CardComponent title="Pay Fees">
-          <div className="row card-wrapper">
-            <ColComponent
-              title="Pay Fees"
-              description="Pay Fees for Individual Student"
-              link="/admin/fees/pay-fees"
-              button_text="Pay"
-            />
-            <ColComponent
-              title="View/Print Receipt"
-              description="View/Print The Fees Receipt for Student"
-              link="/admin/fees/view-receipt"
-              button_text="View"
-            />
-          </div>
-          </CardComponent>>
+            <CardComponent title="Pay Fees">
+              <div className="row card-wrapper">
+                <ColComponent
+                  title="Pay Fees"
+                  description="Pay Fees for Individual Student"
+                  link="/admin/fees/pay-fees"
+                  button_text="Pay"
+                />
+                <ColComponent
+                  title="View/Print Receipt"
+                  description="View/Print The Fees Receipt for Student"
+                  link="/admin/fees/view-receipt"
+                  button_text="View"
+                />
+              </div>
+            </CardComponent>
           </div>
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Pending Fees">
-          <div className="row card-wrapper">
+              <div className="row card-wrapper">
                 <ColComponent
-                title="Pending Fees"
-                description="Check Total Pending Fees"
-                link="/admin/fees/pending-fees"
-                button_text="View"
+                  title="Pending Fees"
+                  description="Check Total Pending Fees"
+                  link="/admin/fees/pending-fees"
+                  button_text="View"
                 />
                 <ColComponent
-                title="Set Fee Due Date"
-                description="Set the Due date for Fee Payments."
-                link="/admin/fees/set-due-dates"
-                button_text="Set"
-              />  
-            </div>
-
+                  title="Set Fee Due Date"
+                  description="Set the Due date for Fee Payments."
+                  link="/admin/fees/set-due-dates"
+                  button_text="Set"
+                />
+              </div>
             </CardComponent>
-
           </div>
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Set Fees">
@@ -83,23 +90,23 @@ export default class FeesAdminHomePage extends Component {
             </CardComponent>
           </div>
           <div className="card-deck flex-column flex-xl-row">
-          <CardComponent title="Manage Clerk">
-            <div className="row card-wrapper">
-              <ColComponent
-                title="Add/Edit/View Clerk"
-                description="Add/Edit/View Clerk"
-                link="/admin/student/clerk"
-                button_text="Manage"
-              />
-              <ColComponent
-                title="Change Password"
-                description="Update Password of Clerk"
-                link="/admin/clerk/changepassword"
-                button_text="View"
-              />
-            </div>
-          </CardComponent>
-        </div>
+            <CardComponent title="Manage Clerk">
+              <div className="row card-wrapper">
+                <ColComponent
+                  title="Add/Edit/View Clerk"
+                  description="Add/Edit/View Clerk"
+                  link="/admin/student/clerk"
+                  button_text="Manage"
+                />
+                <ColComponent
+                  title="Change Password"
+                  description="Update Password of Clerk"
+                  link="/admin/clerk/changepassword"
+                  button_text="View"
+                />
+              </div>
+            </CardComponent>
+          </div>
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Report">
               <div className="row card-wrapper">
@@ -115,12 +122,12 @@ export default class FeesAdminHomePage extends Component {
                 />
                 <ColComponent
                   title="ClassWise Collection"
-                  link="/admin/student/collection/classwise"
+                  link="/admin/fees/collection/classwise"
                   button_text="View"
                 />
                 <ColComponent
-                  title="Pending Fees"
-                  link="/admin/student/collection/classwise"
+                  title="InstallmentsWise Fees"
+                  link="/admin/fees/collection/installment"
                   button_text="View"
                 />
               </div>
@@ -131,3 +138,13 @@ export default class FeesAdminHomePage extends Component {
     );
   }
 }
+
+
+
+
+function mapStateToProps(state) {
+  return {
+    header:state.adminFeeHeader
+  };
+}
+export default connect(mapStateToProps,{setAdminFeeHeaderDispatch})(FeesAdminHomePage);

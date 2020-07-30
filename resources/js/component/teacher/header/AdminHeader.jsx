@@ -1,6 +1,7 @@
 import React,{Component} from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
+import {setAdminTeacherHomeWorkDispatch} from "../../actions/header"
 
 class AdminTeacherHeader extends Component{
     constructor(props){
@@ -12,32 +13,14 @@ class AdminTeacherHeader extends Component{
         total_leave:"Loading ...",
         total_absent:"Loading ...",
       }
-    //   this.updateProps = this.updateProps.bind(this)
     }
-    // updateProps(){
-    //   var self = this;
-    //   if(Object.keys(this.props.adminStudentHeader).length != 0){
-    //     const { total_students, total_admission} = this.props.adminStudentHeader
-    //     self.setState({
-    //       total_students,total_admission
-    //     })
-    //   }else{
-    //     axios({
-    //     url:"/api/v1/student/admin/header"
-    //     }).then(response => {
-    //       self.props.newAdminStudentHeader(response.data.success.header)
-    //       const { total_students, total_admission} = response.data.success.header
-    //       self.setState({
-    //       total_students,total_admission
-    //       })
-    //     })
-    //   }
-    // }
-    // componentDidMount(){
-    //   this.updateProps()
-    // }
+    componentDidMount(){
+      const {adminTeacherHeader,setAdminTeacherHomeWorkDispatch} = this.props
+      if(Object.keys(adminTeacherHeader).length == 0)
+        setAdminTeacherHomeWorkDispatch()
+    }
     render(){
-      const {mainHeader,header,sub_header} = this.props
+      const {mainHeader,header,sub_header,adminTeacherHeader} = this.props
       return(
         <div className="header bg-primary pb-6">
           <div className="container-fluid">
@@ -66,8 +49,8 @@ class AdminTeacherHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Register Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_teacher}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Total Teachers</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminTeacherHeader.teacher_count ||  <h5>Loading ...</h5>}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -83,8 +66,8 @@ class AdminTeacherHeader extends Component{
                     <div className="card-body">
                       <div className="row">
                         <div className="col">
-                          <h5 className="card-title text-uppercase text-muted mb-0">Total Admission Students</h5>
-                          <span className="h2 font-weight-bold mb-0">{this.state.total_assigned_teacher}</span>
+                          <h5 className="card-title text-uppercase text-muted mb-0">Total Assigned Teachers</h5>
+                          <span className="h2 font-weight-bold mb-0">{adminTeacherHeader.total_assignedTeacher ||  <h5>Loading ...</h5>}</span>
                         </div>
                         <div className="col-auto">
                           <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -103,4 +86,10 @@ class AdminTeacherHeader extends Component{
     }
   }
 
-  export default AdminTeacherHeader;
+  function mapStateToProps(state) {
+    return {
+      adminTeacherHeader:state.adminTeacherHeader
+    };
+}
+
+export default connect(mapStateToProps,{setAdminTeacherHomeWorkDispatch})(AdminTeacherHeader);

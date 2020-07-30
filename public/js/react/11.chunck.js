@@ -1,21 +1,20 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[11],{
 
-/***/ "./resources/js/component/attendance/form/FillViewFormStaff.jsx":
-/*!**********************************************************************!*\
-  !*** ./resources/js/component/attendance/form/FillViewFormStaff.jsx ***!
-  \**********************************************************************/
+/***/ "./resources/js/component/attendance/form/FillViewFormStudent.jsx":
+/*!************************************************************************!*\
+  !*** ./resources/js/component/attendance/form/FillViewFormStudent.jsx ***!
+  \************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FillViewFormStaff; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FillViewFormStudent; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -43,25 +42,24 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-
 var Chart = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../../utils/Chart */ "./resources/js/component/utils/Chart.jsx"));
 });
 
-var FillViewFormStaff = /*#__PURE__*/function (_Component) {
-  _inherits(FillViewFormStaff, _Component);
+var FillViewFormStudent = /*#__PURE__*/function (_Component) {
+  _inherits(FillViewFormStudent, _Component);
 
-  var _super = _createSuper(FillViewFormStaff);
+  var _super = _createSuper(FillViewFormStudent);
 
-  function FillViewFormStaff(props) {
+  function FillViewFormStudent(props) {
     var _this;
 
-    _classCallCheck(this, FillViewFormStaff);
+    _classCallCheck(this, FillViewFormStudent);
 
     _this = _super.call(this, props);
     _this.state = {
       title: "",
-      staff_attendance: "",
+      student_attendance: "",
       view_type: "",
       update_attendance: [],
       update_button: "Update Attendance",
@@ -72,28 +70,20 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
       total_none: 0
     };
     _this.stateChange = _this.stateChange.bind(_assertThisInitialized(_this));
-    _this.changeSelectStatus = _this.changeSelectStatus.bind(_assertThisInitialized(_this));
     _this.updateTotalInputs = _this.updateTotalInputs.bind(_assertThisInitialized(_this));
+    _this.changeSelectStatus = _this.changeSelectStatus.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(FillViewFormStaff, [{
+  _createClass(FillViewFormStudent, [{
     key: "stateChange",
     value: function stateChange(name, value, callback) {
       this.setState(_defineProperty({}, name, value), callback);
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var title = "";
-      if (this.props.view_type == "fill") title = "Fill Attendance";else title = "View Attendance";
-      var _this$props = this.props,
-          view_type = _this$props.view_type,
-          staff_attendance = _this$props.staff_attendance;
-      this.stateChange("title", title);
-      this.stateChange("staff_attendance", staff_attendance);
-      this.stateChange("view_type", view_type);
-      this.updateTotalInputs(staff_attendance);
+    key: "onCheckBox",
+    value: function onCheckBox(value, index) {
+      console.log(value, index);
     }
   }, {
     key: "updateTotalInputs",
@@ -104,6 +94,8 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
       var total_half_leave = 0;
       var total_none = 0;
       data.map(function (item) {
+        console.log(item.status);
+
         switch (item.status) {
           case 1:
             total_present += 1;
@@ -130,16 +122,30 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
         total_leave: total_leave,
         total_present: total_present,
         total_absent: total_absent,
-        total_none: total_none
+        total_none: total_none,
+        total_half_leave: total_half_leave
       });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var title = "";
+      var _this$props = this.props,
+          view_type = _this$props.view_type,
+          student_attendance = _this$props.student_attendance;
+      if (view_type == "fill") title = "Fill Attendance";else title = "View Attendance";
+      this.stateChange("title", title);
+      this.stateChange("student_attendance", student_attendance);
+      this.stateChange("view_type", view_type);
+      this.updateTotalInputs(student_attendance);
     }
   }, {
     key: "changeSelectStatus",
     value: function changeSelectStatus(e, index) {
-      var temp = this.state.staff_attendance;
+      var temp = this.state.student_attendance;
       var value = e.target.value;
       temp[index].status = value;
-      this.stateChange("staff_attendance", temp);
+      this.stateChange("student_attendance", temp);
       var update_temp = this.state.update_attendance;
       update_temp[index] = [temp[index].id, temp[index].status];
       this.stateChange("update_attendance", update_temp);
@@ -149,17 +155,18 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
     value: function onSubmit() {
       var _this2 = this;
 
+      var update_attendance = this.state.update_attendance;
       this.stateChange("update_button", "Updating ...");
       this.props.updateStudentAttendance(this.state.update_attendance).then(function (data) {
         _this2.stateChange("update_button", "Update Attendance");
 
         _this2.stateChange("update_attendance", []);
 
-        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Done", "Staff Attendance Updated !!", "success");
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Done", "Student Attendance Updated !!", "success");
       })["catch"](function (error) {
         if (error.response) {
           if (error.response.status == 422) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Validation Error", "Please update Aleast One Staff Attendance", "warning");
+            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Validation Error", "Please update Aleast One Student Attendance", "warning");
           } else {
             sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire("Error Occured", "Error Occured. Please try later", "error");
           }
@@ -177,7 +184,7 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
 
       var _this$state = this.state,
           title = _this$state.title,
-          staff_attendance = _this$state.staff_attendance,
+          student_attendance = _this$state.student_attendance,
           view_type = _this$state.view_type,
           update_button = _this$state.update_button;
       var _this$state2 = this.state,
@@ -208,13 +215,51 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Present Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_present,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Leave Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_leave,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Absent Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_absent,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Attendance Half Leave:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_half_leave,
+        className: "form-control"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, "Attendance Pending:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        disabled: true,
+        value: total_none,
+        className: "form-control"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "table-responsive"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
         className: "table datatable"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "S.no"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Empid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Staff Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Staff Mobileno"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Attendance"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Checkbox"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, staff_attendance && staff_attendance.map(function (item, id) {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "S.no"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Roll No"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Student Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Father Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Attendance"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Checkbox"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, student_attendance && student_attendance.map(function (item, id) {
         var _React$createElement;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EachAttendanceRow, (_React$createElement = {
+          onCheckBox: _this3.onCheckBox,
           key: id,
           view_type: view_type,
           onChange: _this3.changeSelectStatus
@@ -224,16 +269,18 @@ var FillViewFormStaff = /*#__PURE__*/function (_Component) {
         onClick: function onClick(e) {
           return _this3.onSubmit();
         }
-      }, update_button))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_3__["default"], null, view_type == "view" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Chart, {
-        title: "Staff Attendance for ".concat(select_date),
-        filename: "staff_attendance",
+      }, update_button))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), view_type == "view" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Chart, {
+        title: "Student Attendance for ".concat(select_date),
+        filename: "student_attendance",
         type: "pie",
         dataPoints: dataPoints
       })));
     }
   }]);
 
-  return FillViewFormStaff;
+  return FillViewFormStudent;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 
@@ -242,11 +289,12 @@ var EachAttendanceRow = function EachAttendanceRow(_ref) {
   var view_type = _ref.view_type,
       index = _ref.index,
       row = _ref.row,
-      _onChange = _ref.onChange;
+      _onChange = _ref.onChange,
+      onCheckBox = _ref.onCheckBox;
   var disable = view_type === "view" ? true : false;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
     key: index
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, index + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.empid), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.staff_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.staff.contact_no), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, index + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.student_info.roll_no), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.student_info.student_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, row.student_info.father_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     disabled: disable,
     onChange: function onChange(e) {
       return _onChange(e, index);
@@ -264,6 +312,9 @@ var EachAttendanceRow = function EachAttendanceRow(_ref) {
   }, "Half Present"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
     value: "5"
   }, "None"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    onChange: function onChange(e) {
+      return onCheckBox(e.target.checked, index);
+    },
     type: "checkbox"
   })));
 };

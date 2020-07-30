@@ -30,7 +30,9 @@ export default class FillViewFormStudent extends Component {
       callback
     );
   }
-
+  onCheckBox(value,index){
+      console.log(value,index)
+  }
   updateTotalInputs(data){
       var total_present = 0;
 			var total_absent = 0;
@@ -38,6 +40,7 @@ export default class FillViewFormStudent extends Component {
       var total_half_leave = 0;
 			var total_none = 0;
 			data.map(item => {
+        console.log(item.status)
 				switch(item.status){
 					case 1:
 						total_present += 1;
@@ -57,7 +60,7 @@ export default class FillViewFormStudent extends Component {
 				}
 			})
 			this.setState({
-				total_leave,total_present,total_absent,total_none
+				total_leave,total_present,total_absent,total_none,total_half_leave
 			})
   }
   componentDidMount() {
@@ -151,7 +154,7 @@ export default class FillViewFormStudent extends Component {
               </thead>
               <tbody>
                 {student_attendance && student_attendance.map((item,id) => {
-                    return <EachAttendanceRow key={id} view_type={view_type} onChange={this.changeSelectStatus} view_type={view_type} index={id} row={item}/>
+                    return <EachAttendanceRow onCheckBox={this.onCheckBox} key={id} view_type={view_type} onChange={this.changeSelectStatus} view_type={view_type} index={id} row={item}/>
                 })}
               </tbody>
             </table>
@@ -171,7 +174,7 @@ export default class FillViewFormStudent extends Component {
   }
 }
 
-const EachAttendanceRow = ({view_type,index,row,onChange}) => {
+const EachAttendanceRow = ({view_type,index,row,onChange,onCheckBox}) => {
   const disable = view_type === "view" ? true: false   
   return(
         <tr key={index}>
@@ -189,7 +192,7 @@ const EachAttendanceRow = ({view_type,index,row,onChange}) => {
                 </select>
             </td>
             <td>
-              <input type="checkbox"/>
+              <input onChange={e => onCheckBox(e.target.checked,index)} type="checkbox"/>
             </td>
         </tr>
     )

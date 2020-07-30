@@ -10,6 +10,7 @@ import {setFeeType} from "../../actions/fee"
 import { connect } from "react-redux";
 import { Button } from "../../utils/Components"
 import Row from "../../utils/Row"
+import Swal from "sweetalert2"
 
 class FeeSetClassWise extends Component{
     constructor(props){
@@ -49,6 +50,14 @@ class FeeSetClassWise extends Component{
                 fee_class_wise:data.fee_class_wise,
                 fetch_button:"Fetch",
             })
+        }).catch(error => {
+            const {data,status} = error.response
+            if(status == 400){
+                Swal.fire("Invalid Data",data.error.message,"warning");
+                this.setState({
+                    fetch_button:"Fetch",
+                })
+            }
         })
     }
     render(){

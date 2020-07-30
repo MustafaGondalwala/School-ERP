@@ -137,6 +137,7 @@ class FeeController extends Controller
             $new_fee_receipt->school_id = $this->getSchoolId($request);
             $new_fee_receipt->student_id = $request->student_id;
             $new_fee_receipt->year_id = $year_id;
+            $new_fee_receipt->class_id = $class_id;
             $new_fee_receipt->save();
 
             $fee_individual = $request->fee_individual;
@@ -237,6 +238,8 @@ class FeeController extends Controller
             'school_id'=>$school_id
         ])->get();
         $fee_types = $this->getAllFeeType($class_id,$school_id,$year_id)->pluck('id');
+        if(count($fee_types) == 0)
+            return $this->ReE(["message"=>"Fees is not Set for this Year"],400);
         try{
             DB::beginTransaction();
             foreach($fee_installments as $installment){
@@ -442,6 +445,8 @@ class FeeController extends Controller
             'school_id'=>$school_id,
             'classes_id'=>$class_id,
         ])->count();
+        if($this->getAllFeeType($class_id,$school_id,$year_id)->count() == 0)
+            return $this->ReE(["message"=>"Fee Types is not Set."],400);
         if($checkifExist == 0){
             DB::beginTransaction();
             try{
@@ -528,7 +533,7 @@ class FeeController extends Controller
                     'year_id'=>$year_id,
                     'fee_installment_id'=>$installment_id
                     ])->first();
-        if(!$selectFeeDueDate){
+        if($selectFeeDueDate == null){
             $new_due_date = new FeeDueDate;
             $new_due_date->school_id = $school_id;
             $new_due_date->year_id = $year_id;

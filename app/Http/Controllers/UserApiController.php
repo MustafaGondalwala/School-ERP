@@ -9,6 +9,7 @@ use App\Teacher;
 use App\StudentInfo;
 use App\AdminInfo;
 use App\Classes;
+use App\ParentInfo;
 use App\Clerk;
 class UserApiController extends Controller
 {
@@ -37,9 +38,16 @@ class UserApiController extends Controller
             }else if($user['user_type'] == 5){
                 $user['info'] = Clerk::with('school')->where('empid',$user->login_text)->first();
             }
-            // else if($user['user_type'] == 3){
-            //     $user['info'] = StudentInfo::where('parent_id',Auth()->user()->profile_id)->get();
-            // }
+            else if($user['user_type'] == 3){
+                $parent_id = ParentInfo::select('id')->where('mobile_no',Auth()->user()->login_text)->first()->id;
+                $user['info'] = StudentInfo::where('parent_id',$parent_id)->get();
+            }else if($user['user_type'] == 2){
+                $user['info'] = StudentInfo::with('class')->where([
+                    'roll_no'=>$user->login_text,
+                    'school_id'=>$user->school_id,
+                    'year_id'=>$user->year_id
+                ])->first();
+            }
             // else if($user['user_type'] == 4){
             //     $user['info'] = Teacher::with('class')->where(["empid"=>$user['login_text'],'school_info_id'=>$user['school_id']])->first();
             // }

@@ -1,28 +1,29 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[14],{
 
-/***/ "./resources/js/component/attendance/utils/StaffIndividualReport.jsx":
-/*!***************************************************************************!*\
-  !*** ./resources/js/component/attendance/utils/StaffIndividualReport.jsx ***!
-  \***************************************************************************/
+/***/ "./resources/js/component/exam/form/AllocateSubjectForm.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/component/exam/form/AllocateSubjectForm.jsx ***!
+  \******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _utils_Chart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Chart */ "./resources/js/component/utils/Chart.jsx");
-
-
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var _utils_MultipleSelectSubject__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/MultipleSelectSubject */ "./resources/js/component/utils/MultipleSelectSubject.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_subjects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../actions/subjects */ "./resources/js/component/actions/subjects.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_9__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -49,393 +50,298 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var StaffIndividualReport = /*#__PURE__*/function (_Component) {
-  _inherits(StaffIndividualReport, _Component);
 
-  var _super = _createSuper(StaffIndividualReport);
 
-  function StaffIndividualReport(props) {
+
+
+
+
+var AllocateSubjectForm = /*#__PURE__*/function (_Component) {
+  _inherits(AllocateSubjectForm, _Component);
+
+  var _super = _createSuper(AllocateSubjectForm);
+
+  function AllocateSubjectForm(props) {
     var _this;
 
-    _classCallCheck(this, StaffIndividualReport);
+    _classCallCheck(this, AllocateSubjectForm);
 
     _this = _super.call(this, props);
     _this.state = {
-      staff_id: "",
-      select_month: "",
-      total_present: 0,
-      total_absent: 0,
-      total_leave: 0,
-      total_half_leave: 0,
-      total_none: 0,
-      chart_type: "pie",
-      staff_details: "",
-      details_fetch: ""
+      class_id: "",
+      subjectclasswise: "",
+      add: false
     };
+    _this.changeStateType = _this.changeStateType.bind(_assertThisInitialized(_this));
+    _this.eventType = _this.eventType.bind(_assertThisInitialized(_this));
+    _this.updateSubjectPerClass = _this.updateSubjectPerClass.bind(_assertThisInitialized(_this));
+    _this.deleteClass = _this.deleteClass.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(StaffIndividualReport, [{
-    key: "updateDatapoints",
-    value: function () {
-      var _updateDatapoints = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(attendance_details) {
-        var total_present, total_absent, total_leave, total_half_leave, total_none;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                total_present = 0;
-                total_absent = 0;
-                total_leave = 0;
-                total_half_leave = 0;
-                total_none = 0;
-                attendance_details.map(function (item) {
-                  switch (item.status) {
-                    case 1:
-                      total_present = item.total;
-                      break;
-
-                    case 2:
-                      total_absent = item.total;
-                      break;
-
-                    case 3:
-                      total_leave = item.total;
-                      break;
-
-                    case 4:
-                      total_half_leave = item.total;
-                      break;
-
-                    case 5:
-                      total_none = item.total;
-                      break;
-                  }
-                });
-                this.setState({
-                  total_leave: total_leave,
-                  total_present: total_present,
-                  total_absent: total_absent,
-                  total_none: total_none
-                });
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function updateDatapoints(_x) {
-        return _updateDatapoints.apply(this, arguments);
-      }
-
-      return updateDatapoints;
-    }()
+  _createClass(AllocateSubjectForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props = this.props,
+          subjectclasswise = _this$props.subjectclasswise,
+          class_id = _this$props.class_id,
+          setSubjects = _this$props.setSubjects,
+          subjects = _this$props.subjects;
+      if (Object.keys(subjects).length == 0) _api__WEBPACK_IMPORTED_MODULE_6__["default"].subjects().then(function (data) {
+        setSubjects(data.subjects);
+      });
+      this.setState({
+        subjectclasswise: subjectclasswise,
+        class_id: class_id
+      });
+    }
   }, {
-    key: "fetchData",
-    value: function () {
-      var _fetchData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(staff_id, select_month) {
-        var _this2 = this;
-
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.staff_attendance.get_individual(staff_id, select_month).then(function (data) {
-                  var attendance_details = data.attendance_details,
-                      staff_details = data.staff_details,
-                      details_fetch = data.details_fetch;
-
-                  _this2.updateDatapoints(attendance_details);
-
-                  _this2.setState({
-                    staff_details: staff_details,
-                    details_fetch: details_fetch
-                  });
-                });
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }));
-
-      function fetchData(_x2, _x3) {
-        return _fetchData.apply(this, arguments);
-      }
-
-      return fetchData;
-    }()
+    key: "changeStateType",
+    value: function changeStateType(name, value) {
+      this.setState(_defineProperty({}, name, value));
+    }
   }, {
-    key: "updateStudentInfo",
-    value: function () {
-      var _updateStudentInfo = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var data, staff_id, select_month;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                data = this.props.data;
-                staff_id = data.staff_id, select_month = data.select_month;
-                this.setState({
-                  staff_id: staff_id,
-                  select_month: select_month
-                });
-                this.fetchData(staff_id, select_month);
+    key: "eventType",
+    value: function eventType(type, row) {
+      switch (type) {
+        case "add":
+          this.changeStateType("add", true);
+          break;
 
-              case 4:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function updateStudentInfo() {
-        return _updateStudentInfo.apply(this, arguments);
+        case "delete":
+          this.deleteClass(row);
+          break;
       }
-
-      return updateStudentInfo;
-    }()
+    }
   }, {
-    key: "componentWillMount",
-    value: function () {
-      var _componentWillMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                this.updateStudentInfo();
+    key: "deleteClass",
+    value: function deleteClass(subject_id) {
+      var _this2 = this;
 
-              case 1:
-              case "end":
-                return _context4.stop();
+      var class_id = this.props.class_id;
+      sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire({
+        title: 'Are you sure?',
+        text: "You will able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Subject From Class!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_6__["default"].admin["class"].delete_subject_class_wise(class_id, subject_id).then(function (data) {
+            var subjectclasswise = data.subjectclasswise,
+                message = data.message;
+
+            _this2.setState({
+              subjectclasswise: subjectclasswise,
+              add: false
+            });
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Success", message, "success");
+          })["catch"](function (error) {
+            if (error.response) {
+              var _error$response = error.response,
+                  status = _error$response.status,
+                  data = _error$response.data;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Invalid Data", message, "warning");
+              } else if (status == 400 || status == 500) {
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Error Occurred", "Problem Occurred in Process. Try again Later.", "warning");
+              }
             }
-          }
-        }, _callee4, this);
-      }));
-
-      function componentWillMount() {
-        return _componentWillMount.apply(this, arguments);
-      }
-
-      return componentWillMount;
-    }()
+          });
+        }
+      });
+    }
   }, {
-    key: "componentWillReceiveProps",
-    value: function () {
-      var _componentWillReceiveProps = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                this.updateStudentInfo();
+    key: "updateSubjectPerClass",
+    value: function updateSubjectPerClass(subject) {
+      var _this3 = this;
 
-              case 1:
-              case "end":
-                return _context5.stop();
+      var class_id = this.props.class_id;
+      sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire({
+        title: 'Are you sure?',
+        text: "You will able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, update subject to class!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_6__["default"].admin["class"].update_subject_class_wise(class_id, subject).then(function (data) {
+            var subjectclasswise = data.subjectclasswise,
+                message = data.message;
+
+            _this3.setState({
+              subjectclasswise: subjectclasswise,
+              add: false
+            });
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Success", message, "success");
+          })["catch"](function (error) {
+            if (error.response) {
+              var _error$response2 = error.response,
+                  status = _error$response2.status,
+                  data = _error$response2.data;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Invalid Data", message, "warning");
+              }
             }
-          }
-        }, _callee5, this);
-      }));
-
-      function componentWillReceiveProps() {
-        return _componentWillReceiveProps.apply(this, arguments);
-      }
-
-      return componentWillReceiveProps;
-    }()
+          });
+        }
+      });
+    }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _this$state = this.state,
-          staff_details = _this$state.staff_details,
-          details_fetch = _this$state.details_fetch;
-      var _this$state2 = this.state,
-          staff_id = _this$state2.staff_id,
-          select_month = _this$state2.select_month,
-          chart_type = _this$state2.chart_type;
-      var _this$state3 = this.state,
-          total_present = _this$state3.total_present,
-          total_absent = _this$state3.total_absent,
-          total_leave = _this$state3.total_leave,
-          total_none = _this$state3.total_none,
-          total_half_leave = _this$state3.total_half_leave;
-      var dataPoints = [{
-        y: total_present,
-        label: "Total Present"
-      }, {
-        y: total_absent,
-        label: "Total Absent"
-      }, {
-        y: total_leave,
-        label: "Total Leave"
-      }, {
-        y: total_half_leave,
-        label: "Total Half Leave"
-      }, {
-        y: total_none,
-        label: "Total None Entry"
-      }];
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, details_fetch && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StudentAttendancePanel, {
-        details_fetch: details_fetch
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Student Attendance Report"
-      }, staff_details && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StaffPanel, {
-        staff_details: staff_details
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Present Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_present,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Leave Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_leave,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Absent Student:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_absent,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Attendance Half Leave:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_half_leave,
-        className: "form-control"
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "col"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", null, "Attendance Pending:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "text",
-        disabled: true,
-        value: total_none,
-        className: "form-control"
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-        className: "form-control-label"
-      }, "Chart Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
-        defaultValue: "pie",
-        onChange: function onChange(e) {
-          _this3.setState({
-            chart_type: e.target.value
-          });
-        },
-        className: "form-control"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "pie"
-      }, "Pie"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "line"
-      }, "Line"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "bar"
-      }, "Bar"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "area"
-      }, "Area"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "doughnut"
-      }, "Doughnut"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-        value: "scatter"
-      }, "Scatter"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "row"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Chart__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        title: "Student Attendance for ".concat(select_month),
-        filename: "individual_student",
-        type: chart_type,
-        dataPoints: dataPoints
-      }))));
+          subjectclasswise = _this$state.subjectclasswise,
+          class_id = _this$state.class_id,
+          add = _this$state.add;
+      var subjects = this.props.subjects;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Subject List Per Class",
+        download: true,
+        add_object: {
+          text: "Add",
+          clickFunction: function clickFunction() {
+            return _this4.eventType("add", true);
+          }
+        }
+      }, subjectclasswise.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Actions")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, subjectclasswise.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.subject.subject_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "table-actions"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this4.eventType("delete", item.id);
+          },
+          className: "table-action table-action-delete",
+          "data-toggle": "tooltip",
+          "data-original-title": "Delete Subject"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-trash"
+        }))));
+      }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " No Subject Found for Class ")), add && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddSubjectClass, {
+        submit: this.updateSubjectPerClass,
+        type: "add",
+        title: "Add Subject Class",
+        subjects: subjects,
+        subjectclasswise: subjectclasswise
+      }));
     }
   }]);
 
-  return StaffIndividualReport;
-}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+  return AllocateSubjectForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-var StudentAttendancePanel = function StudentAttendancePanel(_ref) {
-  var details_fetch = _ref.details_fetch;
-  console.log(details_fetch);
+var AddSubjectClass = /*#__PURE__*/function (_Component2) {
+  _inherits(AddSubjectClass, _Component2);
 
-  function intToAttendanceStatus(status) {
-    switch (status) {
-      case 1:
-        return "Present";
+  var _super2 = _createSuper(AddSubjectClass);
 
-      case 2:
-        return "Absent";
+  function AddSubjectClass(props) {
+    var _this5;
 
-      case 3:
-        return "Leave";
+    _classCallCheck(this, AddSubjectClass);
 
-      case 4:
-        return "Half Leave";
-
-      case 5:
-        return "None";
-    }
+    _this5 = _super2.call(this, props);
+    _this5.state = {
+      select_subject: "",
+      error: ""
+    };
+    _this5.onChange = _this5.onChange.bind(_assertThisInitialized(_this5));
+    _this5.submit = _this5.submit.bind(_assertThisInitialized(_this5));
+    return _this5;
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    title: "Month Attendance"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "table-responsive"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
-    className: "table"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Sr.no "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Date "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Attendance Status "))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, details_fetch && details_fetch.map(function (item, id) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
-      key: id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item.attendance_date), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, intToAttendanceStatus(item.status)));
-  })))));
-};
+  _createClass(AddSubjectClass, [{
+    key: "onChange",
+    value: function onChange(e) {
+      var _e$target = e.target,
+          name = _e$target.name,
+          value = _e$target.value;
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this$state2 = this.state,
+          select_subject = _this$state2.select_subject,
+          error = _this$state2.error;
 
-var StaffPanel = function StaffPanel(_ref2) {
-  var staff_details = _ref2.staff_details;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-    className: "form-control-label"
-  }, "Staff Name: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    type: "text",
-    className: "form-control",
-    disabled: true,
-    defaultValue: staff_details.staff_name
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-    className: "form-control-label"
-  }, "Relative Name "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    type: "text",
-    className: "form-control",
-    disabled: true,
-    defaultValue: staff_details.relative_name
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-    className: "form-control-label"
-  }, "Contact Number "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-    type: "text",
-    className: "form-control",
-    disabled: true,
-    defaultValue: staff_details.contact_no
-  }))));
-};
+      if (select_subject == "") {
+        this.setState({
+          error: "Select Subject"
+        });
+        return false;
+      }
 
-/* harmony default export */ __webpack_exports__["default"] = (StaffIndividualReport);
+      this.setState({
+        error: ""
+      });
+      this.props.submit(select_subject);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          type = _this$props2.type,
+          subjects = _this$props2.subjects,
+          title = _this$props2.title,
+          subjectclasswise = _this$props2.subjectclasswise;
+      var _this$state3 = this.state,
+          select_subject = _this$state3.select_subject,
+          error = _this$state3.error;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: title
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
+        md: "6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Select Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+        name: "select_subject",
+        onChange: this.onChange,
+        value: select_subject
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
+        selected: true
+      }, "-- Select --"), Object.keys(subjects).length > 0 && subjects.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
+          key: id,
+          value: item.id
+        }, item.subject_name);
+      })), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        text: error
+      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
+        md: 6
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        primary: true,
+        sm: true,
+        onClick: this.submit
+      }, "Add"))));
+    }
+  }]);
+
+  return AddSubjectClass;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+function mapStateToProps(state) {
+  return {
+    subjects: state.subjects
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, {
+  setSubjects: _actions_subjects__WEBPACK_IMPORTED_MODULE_5__["setSubjects"]
+})(AllocateSubjectForm));
 
 /***/ })
 

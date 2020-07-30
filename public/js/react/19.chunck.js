@@ -1,27 +1,32 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[19],{
 
-/***/ "./resources/js/component/fees/form/PayFeesForm.jsx":
-/*!**********************************************************!*\
-  !*** ./resources/js/component/fees/form/PayFeesForm.jsx ***!
-  \**********************************************************/
-/*! exports provided: default, PayFeesPanel */
+/***/ "./resources/js/component/fees/form/SetInstallments.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/component/fees/form/SetInstallments.jsx ***!
+  \**************************************************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PayFeesForm; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PayFeesPanel", function() { return PayFeesPanel; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
-/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_fee__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../actions/fee */ "./resources/js/component/actions/fee.js");
+
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -47,286 +52,184 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var StudentReceipt = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.lazy(function () {
-  return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ../utils/StudentReceipt */ "./resources/js/component/fees/utils/StudentReceipt.jsx"));
-});
 
 
 
-var PayFeesForm = /*#__PURE__*/function (_Component) {
-  _inherits(PayFeesForm, _Component);
 
-  var _super = _createSuper(PayFeesForm);
+var SetInstallmentsForm = /*#__PURE__*/function (_Component) {
+  _inherits(SetInstallmentsForm, _Component);
 
-  function PayFeesForm(props) {
+  var _super = _createSuper(SetInstallmentsForm);
+
+  function SetInstallmentsForm(props) {
     var _this;
 
-    _classCallCheck(this, PayFeesForm);
+    _classCallCheck(this, SetInstallmentsForm);
 
     _this = _super.call(this, props);
     _this.state = {
-      fee_individual: "",
-      send_message: true,
-      payment_type: "1",
-      fee_receipts: "",
+      total: ["Installment1", "Installment2", "Installment3", "Installment4", "Installment5", "Installment6", "Installment7", "Installment8", "Installment9", "Installment10", "Installment11", "Installment12"],
+      total_installment: [],
+      errors: {},
       button_text: "Update"
     };
-    _this.changeAmountData = _this.changeAmountData.bind(_assertThisInitialized(_this));
-    _this.submit = _this.submit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(PayFeesForm, [{
+  _createClass(SetInstallmentsForm, [{
     key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
+    value: function () {
+      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _this$props, setFeeInstallmentsDispatch, total_installment, _total_installment, total, _total;
 
-      var fee_individual = this.props.fee_individual;
-      this.setState({
-        fee_individual: fee_individual
-      });
-      var _this$props = this.props,
-          student_id = _this$props.student_id,
-          year_id = _this$props.year_id;
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminclerk.fee.get_receipts(student_id, year_id).then(function (data) {
-        _this2.setState({
-          fee_receipts: data.fee_receipts
-        });
-      });
-    }
-  }, {
-    key: "submit",
-    value: function submit(data) {
-      var payment_type = data.payment_type;
-      var fee_individual = this.state.fee_individual;
-      this.setState({
-        button_text: "Updating ..."
-      });
-      this.props.payFees(fee_individual, payment_type);
-    }
-  }, {
-    key: "changeAmountData",
-    value: function changeAmountData(e, installment_label) {
-      var name = e.target.name;
-      var value = parseInt(e.target.value);
-      var index = e.target.getAttribute('data-index');
-      var fee_individual = this.state.fee_individual;
-      var individual_installment = fee_individual[installment_label];
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this$props = this.props, setFeeInstallmentsDispatch = _this$props.setFeeInstallmentsDispatch, total_installment = _this$props.total_installment;
 
-      switch (name) {
-        case "temp_paid":
-          if (value >= individual_installment[index].total_pending + 1) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire('Current Paid is Greater than Total Pending', "Please Check Data", "warning");
-          } else {
-            individual_installment[index].temp_paid = value;
+                if (!(Object.keys(total_installment).length == 0)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                _context.next = 4;
+                return setFeeInstallmentsDispatch();
+
+              case 4:
+                _total_installment = _context.sent;
+                total = [];
+
+                _total_installment.map(function (item) {
+                  total.push(item.installment);
+                });
+
+                this.setState({
+                  total_installment: total
+                });
+                _context.next = 13;
+                break;
+
+              case 10:
+                _total = [];
+                total_installment.map(function (item) {
+                  _total.push(item.installment);
+                });
+                this.setState({
+                  total_installment: _total
+                });
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
           }
+        }, _callee, this);
+      }));
 
-          break;
+      function componentDidMount() {
+        return _componentDidMount.apply(this, arguments);
       }
 
-      fee_individual[installment_label] = individual_installment;
-      this.setState({
-        fee_individual: fee_individual
-      });
-    }
+      return componentDidMount;
+    }()
   }, {
     key: "onChange",
     value: function onChange(e) {
-      this.setState(_defineProperty({}, e.target.name, e.target.value));
+      var _this2 = this;
+
+      var getCurrent = this.state.total_installment;
+
+      if (e.target.checked) {
+        getCurrent.push(e.target.name);
+      } else {
+        var new_current = [];
+        getCurrent.map(function (item) {
+          if (item !== e.target.name) new_current.push(item);
+        });
+        getCurrent = new_current;
+      }
+
+      this.setState({
+        total_installment: getCurrent,
+        errors: {}
+      }, function () {
+        console.log(_this2.state.total_installment);
+      });
+    }
+  }, {
+    key: "onSubmit",
+    value: function onSubmit() {
+      var total_installment = this.state.total_installment;
+
+      if (total_installment.length == 0) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Validation Error", "Please select atleast One Installment", "warning");
+      } else {
+        _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminclerk.fee.update_installments(total_installment).then(function (data) {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Success", "Fee Installments Updated!!", "success");
+        })["catch"](function (error) {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire("Error Occurred", "Please try again later..", "error");
+        });
+      }
     }
   }, {
     key: "render",
     value: function render() {
       var _this3 = this;
 
-      var button_text = this.state.button_text;
       var _this$state = this.state,
-          fee_individual = _this$state.fee_individual,
-          send_message = _this$state.send_message,
-          payment_type = _this$state.payment_type,
-          fee_receipts = _this$state.fee_receipts;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, fee_receipts && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Suspense"], {
-        fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Loading ...")
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StudentReceipt, {
-        fee_receipts: fee_receipts
-      })), fee_individual && Object.keys(fee_individual).map(function (item, key) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PayInstallmentFeesForm, {
-          onChange: _this3.changeAmountData,
-          key: key,
-          individual: fee_individual[item],
-          individual_label: item
-        });
-      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PayFeesPanel, {
-        onSubmit: this.submit,
-        button_text: button_text
-      }));
-    }
-  }]);
-
-  return PayFeesForm;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-
-var PayFeesPanel = /*#__PURE__*/function (_Component2) {
-  _inherits(PayFeesPanel, _Component2);
-
-  var _super2 = _createSuper(PayFeesPanel);
-
-  function PayFeesPanel(props) {
-    var _this4;
-
-    _classCallCheck(this, PayFeesPanel);
-
-    _this4 = _super2.call(this, props);
-    _this4.state = {
-      payment_type: "1"
-    };
-    _this4.changePaymentType = _this4.changePaymentType.bind(_assertThisInitialized(_this4));
-    _this4.payDetailsSend = _this4.payDetailsSend.bind(_assertThisInitialized(_this4));
-    return _this4;
-  }
-
-  _createClass(PayFeesPanel, [{
-    key: "changePaymentType",
-    value: function changePaymentType(e) {
-      this.setState({
-        payment_type: e.target.value
-      });
-    }
-  }, {
-    key: "payDetailsSend",
-    value: function payDetailsSend(e) {
-      this.props.onSubmit(this.state);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props2 = this.props,
-          button_text = _this$props2.button_text,
-          payment_type = _this$props2.payment_type;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "Pay Fee Details"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Col"], {
-        md: "6",
-        sm: "6"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["FormLabel"], null, "User Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Input"], {
-        disabled: true,
-        value: JSON.parse(localStorage.getItem('userAccount')).name
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Col"], {
-        md: "6",
-        sm: "6"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["FormLabel"], null, "Payment Type:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Select"], {
-        value: payment_type,
-        onChange: this.changePaymentType
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "1"
-      }, "Cash"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "2"
-      }, "Cheque"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "3"
-      }, "Bank Transfer"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Col"], {
-        md: "6",
-        sm: "6"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Button"], {
-        onClick: this.payDetailsSend,
-        primary: true
+          total = _this$state.total,
+          button_text = _this$state.button_text,
+          total_installment = _this$state.total_installment;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "Set Installments",
+        back_link: "/admin/fees"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "row col-md-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_5__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Installment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Enabled/Disabled")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, total_installment && total.map(function (item) {
+        if (total_installment.indexOf(item) > -1) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+            name: item,
+            value: item || '',
+            checked: true,
+            onChange: function onChange(e) {
+              return _this3.onChange(e);
+            },
+            type: "checkbox"
+          })));
+        } else {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, item), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+            name: item,
+            value: item || '',
+            onChange: function onChange(e) {
+              return _this3.onChange(e);
+            },
+            type: "checkbox"
+          })));
+        }
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "col-md-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        className: "btn btn-primary",
+        onClick: function onClick(e) {
+          return _this3.onSubmit();
+        }
       }, button_text))));
     }
   }]);
 
-  return PayFeesPanel;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+  return SetInstallmentsForm;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
-var PayInstallmentFeesForm = function PayInstallmentFeesForm(_ref) {
-  var individual_label = _ref.individual_label,
-      individual = _ref.individual,
-      _onChange = _ref.onChange;
-  var total_amount = 0;
-  var amount = 0;
-  var total_pending = 0;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    title: "".concat(individual_label, " Fees")
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "table-responsive"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Waiver Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Pending"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Paid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Current Paid"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, individual.map(function (item, id) {
-    total_amount += item.total_amount;
-    amount += item.amount;
-    total_pending += item.total_pending;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-      key: id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.fee_type.fee_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      disabled: true,
-      "data-index": id,
-      name: "amount",
-      className: "form-control",
-      value: item.amount
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      disabled: true,
-      "data-index": id,
-      name: "waiver_amount",
-      className: "form-control",
-      value: item.waiver_amount
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      disabled: true,
-      "data-index": id,
-      name: "total_amount",
-      className: "form-control",
-      value: item.total_amount
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      disabled: true,
-      "data-index": id,
-      name: "total_pending",
-      className: "form-control",
-      value: item.total_pending
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      disabled: true,
-      "data-index": id,
-      onChange: function onChange(e) {
-        return _onChange(e, individual_label);
-      },
-      name: "current_paid",
-      className: "form-control",
-      value: item.current_paid
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "number",
-      min: "0",
-      "data-index": id,
-      onChange: function onChange(e) {
-        return _onChange(e, individual_label);
-      },
-      name: "temp_paid",
-      className: "form-control",
-      value: item.temp_paid
-    })));
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "form-control",
-    value: amount,
-    type: "number",
-    disabled: true
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "form-control",
-    value: total_amount,
-    type: "number",
-    disabled: true
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    className: "form-control",
-    value: total_pending,
-    type: "number",
-    disabled: true
-  })))))));
-};
+function mapStateToProps(state) {
+  return {
+    total_installment: state.installments
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, {
+  setFeeInstallmentsDispatch: _actions_fee__WEBPACK_IMPORTED_MODULE_7__["setFeeInstallmentsDispatch"]
+})(SetInstallmentsForm));
 
 /***/ })
 

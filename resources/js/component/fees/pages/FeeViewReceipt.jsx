@@ -23,7 +23,8 @@ class FeeViewReceipt extends Component{
         this.setState({
             fee_receipts:""
         })
-        api.adminclerk.fee.get_receipts(student_id).then(data => {
+        api.adminclerk.fee.get_receipts(student_id)
+        .then(data => {
             const {fee_receipts} = data
             this.setState({
                 fee_receipts
