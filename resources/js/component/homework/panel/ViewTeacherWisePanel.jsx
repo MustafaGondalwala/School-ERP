@@ -17,7 +17,7 @@ const ViewTeacherWisePanel = ({teacherwise_homework,setTeacherwiseHomeWorkDispat
                 <th>Title</th>
                 <th>View</th>
                 {type == "editdelete" && [ <th>Edit</th>,<th>Delete</th>]}
-                {type == "check" && [ <th>Check</th>]}
+                {type == "check" && [ <th>Student Homework</th>]}
             </Thead>
             <tbody>
                 {Object.keys(teacherwise_homework).length > 0 && teacherwise_homework.map((item,id) => {
@@ -27,6 +27,7 @@ const ViewTeacherWisePanel = ({teacherwise_homework,setTeacherwiseHomeWorkDispat
                         <td>{item.title}</td>
                         <td><Button primary sm onClick={e => sendEventType("view",item)}>View</Button></td>
                         {type == "editdelete" && [<td><Button warning sm onClick={e => sendEventType("edit",item) }>Edit</Button></td>,<td><Button onClick={e => sendEventType("delete",item) } danger sm>Delete</Button></td>]}
+                        {type == "check" && [<td><Button primary sm onClick={e => sendEventType("check",item) }>View</Button></td>]}
                     </tr> 
                 })}
             </tbody>

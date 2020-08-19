@@ -64,8 +64,14 @@ import AdminSettingHomePage from "./setting/pages/AdminHomePage"
 
 import {TeacherDashboardHome} from "./dashboard/Teacher"
 import TeacherHomeWorkHomePage from "./homework/pages/TeacherHomeWorkHomePage"
+import TeacherClassCurrentHomeWork from "./homework/pages/TeacherClassCurrentHomeWork"
+import TeacherClassHomeWorkHomePage from "./homework/pages/TeacherClassHomeWorkHomePage"
 import TeacherManageHomeWork from "./homework/pages/TeacherManageHomeWork"
 import TeacherPastManageHomeWork from "./homework/pages/TeacherPastManageHomeWork"
+import TeacherCheckStudentHomeWork from "./homework/pages/TeacherCheckStudentHomeWork"
+import TeacherOnlineTestClassView from "./onlineexam/pages/TeacherOnlineTestClassView"
+import TeacherOnlineTestPastClassView from "./onlineexam/pages/TeacherOnlineTestPastClassView"
+
 import TeacherHomeWorkAdd from "./homework/pages/TeacherHomeWorkAdd"
 
 import ViewHomeWork from "./homework/pages/ViewHomeWork"
@@ -80,12 +86,17 @@ import TeacherAttendanceEditView from "./attendance/pages/teacher/TeacherAttenda
 import TeacherAttendanceClassWiseEdit from "./attendance/pages/teacher/TeacherAttendanceClassWiseEdit"
 import TeacherAttendancIndividualStudent from "./attendance/pages/teacher/TeacherAttendancIndividualStudent"
 import TeacherLeaveHomePage from "./leave/pages/teacher/TeacherLeaveHomePage"
+import TeacherLeaveCurrentRequest from "./leave/pages/TeacherLeaveCurrentRequest"
+import TeacherLeaveViewPastRequest from "./leave/pages/TeacherLeaveViewPastRequest"
+import TeacherLeaveClasswiseReport from "./leave/pages/TeacherLeaveClasswiseReport"
 import TeacherExamHomePage from "./exam/pages/teacher/TeacherExamHomePage"
+
 
 import AdminExamHomePage from "./exam/pages/AdminExamHomePage"
 import AdminClassHallTicket from "./exam/pages/AdminClassHallTicket"
 import AdminIndividualClassHallTicket from "./exam/pages/AdminIndividualClassHallTicket"
 import AdminExamFillMarksheet from "./exam/pages/AdminExamFillMarksheet"
+import AdminGradeType from "./exam/pages/AdminGradeType"
 
 import TeacherFillMonthlyTestMarksheet from "./exam/pages/TeacherFillMonthlyTestMarksheet"
 
@@ -131,6 +142,9 @@ import ParentFeeHomePage from "./fees/pages/ParentFeeHomePage"
 import ParentFeeTotalFees from "./fees/pages/ParentFeeTotalFees"
 import ParentFeeViewReceipt from "./fees/pages/ParentFeeViewReceipt"
 
+import ParentLeaveHomePage from "./leave/pages/ParentLeaveHomePage"
+import ParentLeaveApplyLeave from "./leave/pages/ParentLeaveApplyLeave"
+import ParentLeaveViewAll from "./leave/pages/ParentLeaveViewAll"
 
 if (localStorage.token) {
   var payload = JSON.parse(localStorage.getItem('userAccount'));
@@ -165,9 +179,11 @@ import StudyMaterialTeacherMaterial from "./studymaterial/pages/StudyMaterialTea
 
 import TeacherStudyMaterialHomePage from "./studymaterial/pages/TeacherStudyMaterialHomePage"
 import StudentViewResults from "./exam/pages/StudentViewResults"
+import StudentViewExamResult from "./exam/pages/StudentViewExamResult"
 import StudentViewMonthlytestResult from "./exam/pages/StudentViewMonthlytestResult"
 import StudentParentHomeWorkHome from "./homework/pages/StudentParentHomeWorkHome"
 import StudentParentCurrentHomeWork from "./homework/pages/StudentParentCurrentHomeWork"
+import StudentParentPastHomeWork from "./homework/pages/StudentParentPastHomeWork"
 
 import NoticeboardTeacherwise from "./noticeboard/pages/NoticeboardTeacherwise"
 import NoticeboardStudentwise from "./noticeboard/pages/NoticeboardStudentwise"
@@ -177,8 +193,9 @@ import StudentOnlinTestHomePage from "./onlineexam/pages/StudentOnlinTestHomePag
 import StudentOnlineTestCurrent from "./onlineexam/pages/StudentOnlineTestCurrent"
 import StudentOnlineTestAttend from "./onlineexam/pages/StudentOnlineTestAttend"
 import TeacherOnlineTestFillMarksheet from "./onlineexam/pages/TeacherOnlineTestFillMarksheet"
+import TeacherClassMonthyTestReport from "./exam/pages/TeacherClassMonthyTestReport"
 
-
+import TeacherExamMarksheetFill from "./exam/pages/TeacherExamMarksheetFill"
 
 class Index extends Component {
     render() {
@@ -202,7 +219,9 @@ class Index extends Component {
             
             <TeacherDashboardRoutes exact path="/teacher/online-exam/class/:class_id" component={TeacherOnlineExamHome} />
             <TeacherDashboardRoutes exact path="/teacher/online-exam/test-add/:class_id" component={TeacherOnlineTestAdd} />
-            {/* <TeacherDashboardRoutes exact path="/teacher/online-exam/test-manage/:class_id" component={TeacherOnlineTestManage} /> */}
+            <TeacherDashboardRoutes exact path="/teacher/online-exam/classwise/view-current/:class_id" component={TeacherOnlineTestClassView} />
+            <TeacherDashboardRoutes exact path="/teacher/online-exam/classwise/test-past/:class_id" component={TeacherOnlineTestPastClassView} />
+
             <TeacherDashboardRoutes exact path="/teacher/online-exam" component={TeacherOnlineExamHomePage} />
             <TeacherDashboardRoutes exact path="/teacher/online-exam/add" component={TeacherOnlineTestAdd} />
             <TeacherDashboardRoutes exact path="/teacher/online-exam/manage" component={TeacherOnlineTestManage} />
@@ -214,14 +233,22 @@ class Index extends Component {
             <TeacherDashboardRoutes exact path="/teacher/attendance/view-particular-student-attendance/:class_id" component={TeacherAttendancIndividualStudent} />
             <TeacherDashboardRoutes exact path="/teacher/attendance/view-class-wise-student-attendance/:class_id" component={TeacherAttendanceClassWiseEdit} />
             <TeacherDashboardRoutes exact path="/teacher/leave/:class_id" component={TeacherLeaveHomePage} />
+            <TeacherDashboardRoutes exact path="/teacher/leave/request/:class_id" component={TeacherLeaveCurrentRequest} />
+            <TeacherDashboardRoutes exact path="/teacher/leave/past/:class_id" component={TeacherLeaveViewPastRequest} />
+            <TeacherDashboardRoutes exact path="/teacher/leave/report/:class_id" component={TeacherLeaveClasswiseReport} />
 
+
+            {/* teacher/leave/past/1 */}
             <TeacherDashboardRoutes exact path="/teacher/homework/view/:class_id" component={ViewHomeWork} />
-            <TeacherDashboardRoutes exact path="/teacher/homework/class/:class_id" component={TeacherHomeWorkHomePage} />
-            
+            <TeacherDashboardRoutes exact path="/teacher/homework/class/:class_id" component={TeacherClassHomeWorkHomePage} />
+            <TeacherDashboardRoutes exact path="/teacher/homework/view-current-homework/:class_id" component={TeacherClassCurrentHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework" component={TeacherHomeWorkHomePage} />
             <TeacherDashboardRoutes exact path="/teacher/homework/current/manage" component={TeacherManageHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework/past/manage" component={TeacherPastManageHomeWork} />
+            <TeacherDashboardRoutes exact path="/teacher/homework/check" component={TeacherCheckStudentHomeWork} />
 
+
+            
 
             <TeacherDashboardRoutes exact path="/teacher/homework/add" component={TeacherHomeWorkAdd} />
 
@@ -231,16 +258,22 @@ class Index extends Component {
             <TeacherDashboardRoutes exact path="/teacher/questionpaper/add" component={TeacherQuestionPaperAdd} />
             <TeacherDashboardRoutes exact path="/teacher/questionpaper/manage" component={TeacherQuestionPaperManage} />
             <TeacherDashboardRoutes exact path="/teacher/exam/class/:class_id" component={TeacherExamHomePage} />
-            <TeacherDashboardRoutes exact path="/teacher/monthlytest/fill/:class_id" component={TeacherFillMonthlyTestMarksheet} />
-            {/* <TeacherDashboardRoutes exact path="/teacher/online-exam" component={TeacherOnlinExam} /> */}
+            <TeacherDashboardRoutes exact path="/teacher/exam/fill/:class_id" component={TeacherExamMarksheetFill} />
             
-
+            <TeacherDashboardRoutes exact path="/teacher/monthlytest/fill/:class_id" component={TeacherFillMonthlyTestMarksheet} />
+            <TeacherDashboardRoutes exact path="/teacher/exam/monthlytest/report/:class_id" component={TeacherClassMonthyTestReport} />
 
 
             <ParentDashboardRoutes exact path="/parent/dashboard" component={ParentDashboardHome} />
             <StudentDashboardRoutes exact path="/student/dashboard" component={StudentDashboardHome} />
             <StudentDashboardRoutes exact path="/student/homework/:student_id" component={StudentParentHomeWorkHome} />
             <StudentDashboardRoutes exact path="/student/homework/current/:student_id" component={StudentParentCurrentHomeWork} />
+            <ParentDashboardRoutes exact path="/parent/homework/current/:student_id" component={StudentParentCurrentHomeWork} />
+
+
+            <StudentDashboardRoutes exact path="/student/homework/past/:student_id" component={StudentParentPastHomeWork} />
+            <ParentDashboardRoutes exact path="/parent/homework/past/:student_id" component={StudentParentPastHomeWork} />
+
             <StudentDashboardRoutes exact path="/student/noticeboard" component={NoticeboardStudentwise} />
             <StudentDashboardRoutes exact path="/student/online-test" component={StudentOnlinTestHomePage} />
             <StudentDashboardRoutes exact path="/student/online-test/view" component={StudentOnlineTestCurrent} />
@@ -248,12 +281,13 @@ class Index extends Component {
             
             <StudentDashboardRoutes exact path="/student/view-result" component={StudentViewResults} />
             <StudentDashboardRoutes exact path="/student/view-result/monthlytest/:student_id" component={StudentViewMonthlytestResult} />
+            <StudentDashboardRoutes exact path="/student/view-result/exam/:student_id" component={StudentViewExamResult} />
 
 
 
 
             <ParentDashboardRoutes exact path="/parent/homework/view/:student_id" component={ViewHomeWorkParent} />
-            <ParentDashboardRoutes exact path="/parent/homework/student/:student_id" component={ParentHomeWorkHomePage} />
+            <ParentDashboardRoutes exact path="/parent/homework/:student_id" component={StudentParentHomeWorkHome} />
             <ParentDashboardRoutes exact path="/parent/attendance/:student_id" component={ParentAttendanceHomePage} />
             <ParentDashboardRoutes exact path="/parent/timetable/:student_id" component={ParentTimeTable} />
             <ParentDashboardRoutes exact path="/parent/exam/:student_id" component={ParentExamHomePage} />
@@ -265,6 +299,11 @@ class Index extends Component {
             <ParentDashboardRoutes exact path="/parent/fees/:student_id" component={ParentFeeHomePage} />
             <ParentDashboardRoutes exact path="/parent/fees/total-fees/:student_id" component={ParentFeeTotalFees} />
             <ParentDashboardRoutes exact path="/parent/fees/view-receipt/:student_id" component={ParentFeeViewReceipt} />
+            <ParentDashboardRoutes exact path="/parent/leave/apply/:student_id" component={ParentLeaveApplyLeave} />
+            <ParentDashboardRoutes exact path="/parent/leave/:student_id" component={ParentLeaveHomePage} />
+            <ParentDashboardRoutes exact path="/parent/leave/manage/:student_id" component={ParentLeaveViewAll} />
+
+
 
             <AdminDashboardRoutes exact path="/admin/dashboard" component={AdminDashboardHome} />
 
@@ -305,6 +344,9 @@ class Index extends Component {
             <AdminDashboardRoutes exact path="/admin/fillmarksheet/exam" component={AdminExamFillMarksheet} />
             <AdminDashboardRoutes exact path="/admin/fillmarksheet/test" component={AdminMonthlyTestFillMarksheet} />
             <AdminDashboardRoutes exact path="/admin/exam" component={AdminExamHomePage} />
+            <AdminDashboardRoutes exact path="/admin/exam/grade-type" component={AdminGradeType} />
+
+
             <AdminDashboardRoutes exact path="/admin/exam/allocate-subject" component={AdminAllocateSubject} />
             <AdminDashboardRoutes exact path="/admin/exam/exam-type" component={AdminExamType} />
 

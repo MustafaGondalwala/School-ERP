@@ -17,6 +17,12 @@ const StudentViewResults = () => {
                             link={"/student/view-result/monthlytest/"+student_id}
                             button_text="View"
                         />
+                        <ColComponent
+                            title="View Exam Result"
+                            description="View Exam Results"
+                            link={"/student/view-result/exam/"+student_id}
+                            button_text="View"
+                        />
                     </div>
                 </BodyComponent>
             </div>

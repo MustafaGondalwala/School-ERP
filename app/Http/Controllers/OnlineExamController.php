@@ -108,6 +108,17 @@ class OnlineExamController extends Controller
         $onlineExams = $this->getOnlineMonthlyTestTeacher($school_id,$year_id);
         return $this->ReS(["onlineExam"=>$onlineExams]);
     }
+    function getOnlineExamMonthlyTestPast(Request $request,$class_id){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $data = OnlineExam::with('monthyTestType','examType','teacher','withStudentAnswers')->where([
+            'school_id'=>$school_id,
+            'year_id'=>$year_id,
+            'class_id'=>$class_id,
+            'exam_type'=>1
+        ])->where("exam_date",">=",\Carbon\Carbon::now())->get();
+        return $this->ReS(["onlineTest"=>$data]);
+    }
     function addOnlineExamMonthlyTest(Request $request){
         $request->validate([
             "monthly_test" => "required|integer",

@@ -17,6 +17,11 @@ class CreateExamTypesTable extends Migration
             $table->id();
             $table->integer('school_id');
             $table->string('exam_type',50);
+            $table->integer('max_marks');
+            $table->integer('min_marks');
+            $table->integer('year_id');
+            $table->boolean('publish')->default(0);
+            $table->datetime('publish_at')->nullable();
             $table->timestamps();
         });
     }

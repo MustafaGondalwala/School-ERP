@@ -1,27 +1,39 @@
 import React, { Component } from "react"
 import api from "../../api"
 import CardComponent from "../../utils/CardComponent"
-import { Table, Thead, Button, Col, FormGroup, FormLabel, Input, Select, SelectOption } from "../../utils/Components"
+import { Table, Thead, Button, Col, FormGroup, FormLabel, Input, Select, SelectOption, getGrade } from "../../utils/Components"
 import Row from "../../utils/Row"
 import Swal from "sweetalert2"
+
+import { setClasswiseMonthlyTest } from "../../actions/classwiseExam";
+import {setGradeType,setGradeTypeDispatch} from "../../actions/grade"
+import { connect } from "react-redux";
+
 class FillMarksheetMonthTest extends Component{
     constructor(props){
         super(props)
         this.state = {
             students:"",
             show_marksheet:"",
+            update_students:[]
         }
-        this.update_marksheet = this.update_marksheet.bind(this)
+        this.onChange = this.onChange.bind(this)
     }
     componentDidMount(){
-        const {monthly_test} = this.props
-        api.adminteacher.exam.monthly_test.get_students(this.props).then(data => {
+        const {class_id,monthly_test} = this.props
+        const {setGradeTypeDispatch,gradeType} = this.props
+
+        if(Object.keys(gradeType).length == 0)
+            setGradeTypeDispatch()
+        api.adminteacher.exam.monthly_test.get_students(class_id,monthly_test.id).then(data => {
             this.setState({
                 students:data.studentDetails
             })
         })
+
     }
     showMarksheet(item){
+        const {monthly_test} = this.props
         this.setState({
             show_marksheet:""
         },() => {
@@ -30,38 +42,32 @@ class FillMarksheetMonthTest extends Component{
             })
         })
     }
-    update_marksheet(remark,grade,marksheet,monthtest_id,marksheet_id){
-        api.adminteacher.exam.monthly_test.update_marksheet(remark,grade,marksheet,monthtest_id,marksheet_id).then(data => {
-            this.setState({
-                students:data.marksheet
-            })
-            Swal.fire("Data Uploaded",data.message,"success");
+    onChange(value,index,item_id){
+        const {students,update_students} = this.state
+        students[index].total_marks = value
+        update_students[item_id] = value
+        this.setState({
+            students,update_students
         })
     }
-
-    unpublishMarksheet(marksheet_id){
-        api.adminteacher.exam.monthly_test.unpublishMarksheet(marksheet_id).then(data =>{
-            this.setState({
-                students:data.studentDetails
-            })
-            Swal.fire("Data Uploaded","Marksheet UnPublished.","warning");
+    submit(){
+        const {students,update_students} = this.state
+        const {class_id} = this.props.monthly_test
+        if(update_students.length == 0){
+            Swal.fire("Invalid Data","Update Aleast One Marks","warning")
+            return false
+        }
+        return api.adminteacher.exam.monthly_test.update_marksheet(update_students,class_id).then(data => {
+            Swal.fire("Data Updated",data.message,"success");
+            this.props.setClasswiseMonthlyTest(data.monthlyTest,class_id)
         })
     }
-    publishMarksheet(marksheet_id){
-        api.adminteacher.exam.monthly_test.publishMarksheet(marksheet_id).then(data =>{
-            this.setState({
-                students:data.studentDetails
-            })
-            Swal.fire("Data Uploaded","Marksheet Published.","success");
-        })
-    }
+  
     render(){
         const {students,show_marksheet} = this.state
-        const {monthly_test} = this.props
+        const {monthly_test,gradeType} = this.props
+        console.log(monthly_test)
         return <div>
-            {show_marksheet &&
-               <FillMarksheet submit={this.update_marksheet} monthtest_id={monthly_test} marksheet={show_marksheet}/>
-            }
             <CardComponent title="Students List">
             {
                 students ? <div>
@@ -70,9 +76,8 @@ class FillMarksheetMonthTest extends Component{
                             <th>Sr no.</th>
                             <th>Student Roll No.</th>
                             <th>Student Name</th>
-                            <th>Fill</th>
-                            <th>Edit</th>
-                            <th>Publish/Unpublish</th>
+                            <th>Marks</th>
+                            <th>Grade</th>
                         </Thead>
                         <tbody>
                             {students.map((item,id) => {
@@ -80,26 +85,16 @@ class FillMarksheetMonthTest extends Component{
                                     <td>{id+1}</td>
                                     <td>{item.student.roll_no}</td>
                                     <td>{item.student.student_name}</td>
-                                    <td>
-                                    {item.status == 2 && <span>Edited</span>}
-                                    {item.status == 3 && <span>Publish</span>}
-                                    </td>
-                                    <td>
-                                    {item.status == 1 &&
-                                        <Button onClick={e => this.showMarksheet(item)} sm primary>Fill</Button>
-                                    }
-                                    </td>
-                                    <td>
-                                        {item.status == 2 &&
-                                            <Button onClick={e => this.publishMarksheet(item.id)} primary sm>Publish</Button>
-                                        }
-                                        {item.status == 3 &&
-                                            <Button onClick={e => this.unpublishMarksheet(item.id)} danger sm>UnPublish</Button>
-                                        }
-                                    </td>
+                                   <td><Input value={item.total_marks || ''} type="number" onChange={e => this.onChange(e.target.value,id,item.id)} name="total_marks"/></td>
+                                   <td>{getGrade(gradeType,item.total_marks,monthly_test.max_marks)}</td>
                                 </tr>
                             })}
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td><Button primary sm onClick={e => this.submit()}>Update</Button></td>
+                        </tr>
+                        </tfoot>
                     </Table>
                 </div>
                 :
@@ -111,193 +106,180 @@ class FillMarksheetMonthTest extends Component{
 }
 
 
-class FillMarksheet extends Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            marksheet:"",
-            title:"",
-            student:"",
-            remark:"",
-            marksheet_id:""
-        }
-        this.onChange  = this.onChange.bind(this)
-        this.onChangeRow = this.onChangeRow.bind(this)
-        this.submit = this.submit.bind(this)
-    }
+// class FillMarksheet extends Component{
+//     constructor(props){
+//         super(props)
+//         this.state = {
+//             marksheet:"",
+//             title:"",
+//             student:"",
+//             remark:"",
+//             marksheet_id:"",
+//             button_text:"Update",
+//         }
+//         this.onChange  = this.onChange.bind(this)
+//         this.onChangeRow = this.onChangeRow.bind(this)
+//         this.submit = this.submit.bind(this)
+//     }
 
-    submit(){
-        const {remark,grade,marksheet,marksheet_id} = this.state
-        const  {monthtest_id} = this.props
-        this.props.submit(remark,grade,marksheet,monthtest_id,marksheet_id)
-    }
+//     submit(){
+//         const {remark,grade,marksheet,marksheet_id} = this.state
+//         const  {monthly_test} = this.props
+//         this.setState({
+//             button_text:"Updating ..."
+//         })
+//         this.props.submit(remark,grade,marksheet,monthly_test.id,marksheet_id).then(() => {
+//             this.setState({
+//                 button_text:"Update"
+//             })
+//         })
+//     }
 
-    onChange(e,index){
-        const {name,value} = e.target
-        const {marksheet} = this.state
-        marksheet[index][name] = value
-        this.setState({
-            marksheet
-        })
-    }
+//     onChange(e,index){
+//         const {name,value} = e.target
+//         const {marksheet} = this.state
+//         marksheet[index][name] = value
+//         this.setState({
+//             marksheet
+//         })
+//     }
 
-    onChangeRow(e){
-        const {name,value} = e.target
-        this.setState({
-            [name]:value
-        })
-    }
+//     onChangeRow(e){
+//         const {name,value} = e.target
+//         this.setState({
+//             [name]:value
+//         })
+//     }
 
-    componentDidMount(){
-        const {marksheet} = this.props
-        const {student} = marksheet
-        const marksheet_id = marksheet.id
-        const title = "Month Test Marksheet: "+student.roll_no
-        this.setState({
-            student,
-            title,
-            marksheet_id
-        })
+//     componentDidMount(){
+//         const {marksheet,monthly_test,gradeType,max_marks,min_marks} = this.props
+//         const {student} = marksheet
+//         const marksheet_id = marksheet.id
 
-        api.adminteacher.exam.monthly_test.get_individual(marksheet.id).then(data => {
-            const {marksheet} = data
-            this.setState({
-                marksheet
-            })
-        })
-    }
-    render(){
-        const {marksheet,student,title} = this.state
-        const {remark,grade} = this.state
-        var total_marks = 0;
-        var max_marks = 0;
-        var min_marks = 0;
-        return(
-            <div>
-                <CardComponent title={title}>
-                    <Row>
-                        <Col md={6} sm={4}>
-                            <FormGroup>
-                                <FormLabel>Student Name</FormLabel>
-                                <Input value={student.student_name} disabled/>
-                            </FormGroup>
-                        </Col>
-                        <Col md={6} sm={4}>
-                            <FormGroup>
-                                <FormLabel>Student Roll No</FormLabel>
-                                <Input value={student.roll_no} disabled />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6} sm={4}>
-                            <FormGroup>
-                                <FormLabel>Father Name</FormLabel>
-                                <Input value={student.father_name} disabled />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6} sm={4}>
-                            <FormGroup>
-                                <FormLabel>Father Contact No</FormLabel>
-                                <Input value={student.father_contact_no1} disabled />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    {marksheet ? 
-                        <div className="table_responsive">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Sr no.</th>
-                                    <th>Subject</th>
-                                    <th>Min Marks</th>
-                                    <th>Max Marks</th>
-                                    <th>Total Marks</th>
-                                    <th>Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {marksheet.map((item,id) => {
-                                    total_marks += parseInt(item.total_marks)
-                                    min_marks += parseInt(item.min_marks)
-                                    max_marks += parseInt(item.max_marks)
-                                    return <EveryRow key={id} onChange={this.onChange} index={id} row={item} />
-                                })}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <Input value={min_marks} disabled/>
-                                    </td>
-                                    <td>
-                                        <Input value={max_marks} disabled/>
-                                    </td>
-                                    <td>
-                                        <Input value={total_marks} disabled/>
-                                    </td>
-                                    <td>
-                                    <Select name="grade" onChange={this.onChangeRow} value={grade}>
-                                        <SelectOption value={""}> -- Select -- </SelectOption>
-                                        <SelectOption value={1}>A</SelectOption>
-                                        <SelectOption value={2}>A-</SelectOption>
-                                        <SelectOption value={3}>A+</SelectOption>
-                                        <SelectOption value={4}>B</SelectOption>
-                                        <SelectOption value={5}>B-</SelectOption>
-                                        <SelectOption value={6}>B+</SelectOption>
-                                        <SelectOption value={7}>C</SelectOption>
-                                        <SelectOption value={8}>D</SelectOption>
-                                        <SelectOption value={9}>E</SelectOption>
-                                        <SelectOption value={10}>F</SelectOption>
-                                    </Select>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        </div>
-                        : <h3>Loading Marksheet ...</h3>
-                        }
-                        <Row>
-                            <Col md={6} sm={4}>
-                                <FormGroup>
-                                    <FormLabel>Remark</FormLabel>
-                                    <Input type="text" name="remark" onChange={this.onChangeRow} value={remark}/>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <button className="btn btn-primary" onClick={this.submit}>Update</button>
-                        </Row>
-                </CardComponent>
-            </div>
-        )
-    }
+//         const title = "Month Test Marksheet: "+student.roll_no
+//         this.setState({
+//             student,
+//             title,
+//             marksheet_id
+//         })
+
+//         api.adminteacher.exam.monthly_test.get_individual(marksheet.id).then(data => {
+//             const {marksheet} = data
+//             this.setState({
+//                 marksheet
+//             })
+//         })
+//     }
+//     render(){
+//         const {marksheet,student,title,remark,grade,button_text} = this.state
+//         const {monthly_test,max_marks,min_marks,gradeType} = this.props
+//         var total_marks = 0;
+//         return(
+//             <div>
+//                 <CardComponent title={title}>
+//                     <Row>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Student Name</FormLabel>
+//                                 <Input value={student.student_name} disabled/>
+//                             </FormGroup>
+//                         </Col>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Student Roll No</FormLabel>
+//                                 <Input value={student.roll_no} disabled />
+//                             </FormGroup>
+//                         </Col>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Father Name</FormLabel>
+//                                 <Input value={student.father_name} disabled />
+//                             </FormGroup>
+//                         </Col>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Father Contact No</FormLabel>
+//                                 <Input value={student.father_contact_no1} disabled />
+//                             </FormGroup>
+//                         </Col>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Min. Marks</FormLabel>
+//                                 <Input value={monthly_test.min_marks} disabled />
+//                             </FormGroup>
+//                         </Col>
+//                         <Col md={6} sm={4}>
+//                             <FormGroup>
+//                                 <FormLabel>Max. Marks</FormLabel>
+//                                 <Input value={monthly_test.max_marks} disabled />
+//                             </FormGroup>
+//                         </Col>
+//                     </Row>
+//                     {marksheet ? 
+//                         <div className="table_responsive">
+//                         <table className="table">
+//                             <thead>
+//                                 <tr>
+//                                     <th>Sr no.</th>
+//                                     <th>Subject</th>
+//                                     <th>Total Marks</th>
+//                                     <th>Grade</th>
+//                                 </tr>
+//                             </thead>
+//                             <tbody>
+//                                 {marksheet.map((item,id) => {
+//                                     total_marks += parseInt(item.total_marks)
+//                                     return <EveryRow key={id} onChange={this.onChange} max_marks={max_marks} gradeType={gradeType} index={id} row={item} />
+//                                 })}
+//                             </tbody>
+//                             <tfoot>
+//                                 <tr>
+//                                     <td></td>
+//                                     <td></td>
+//                                     <td>
+//                                         <Input value={total_marks} disabled/>
+//                                     </td>
+//                                     <td>
+//                                     </td>
+//                                 </tr>
+//                             </tfoot>
+//                         </table>
+//                         </div>
+//                         : <h3>Loading Marksheet ...</h3>
+//                         }
+//                         <Row>
+//                             <Col md={6} sm={4}>
+//                                 <FormGroup>
+//                                     <FormLabel>Remark</FormLabel>
+//                                     <Input type="text" name="remark" onChange={this.onChangeRow} value={remark}/>
+//                                 </FormGroup>
+//                             </Col>
+//                         </Row>
+//                         <Row>
+//                             <button className="btn btn-primary" onClick={this.submit}>{button_text}</button>
+//                         </Row>
+//                 </CardComponent>
+//             </div>
+//         )
+//     }
+// }
+
+// const EveryRow = ({index,row,onChange,gradeType,max_marks}) => {
+//     return(
+//         <tr key={index}>
+//             <td>{index+1}</td>
+//             <td>{row.subject.subject_name}</td>
+//             <td><input type="number" min="0" name="total_marks" onChange={e => onChange(e,index)} value={row.total_marks} className="form-control" /></td>
+//             <td>
+//                {getGrade(gradeType,row.total_marks,max_marks)}
+//             </td>
+//         </tr>
+//     )
+// }
+
+function mapStateToProps(state) {
+    return {
+        gradeType:state.gradeType
+    };
 }
-
-const EveryRow = ({index,row,onChange}) => {
-    return(
-        <tr key={index}>
-            <td>{index+1}</td>
-            <td>{row.subject.subject_name}</td>
-            <td><input type="number" min="0" name="min_marks" onChange={e => onChange(e,index)} value={row.min_marks || 0} className="form-control" /></td>
-            <td><input type="number" min="0" name="max_marks" onChange={e => onChange(e,index)} value={row.max_marks || 0} className="form-control" /></td>
-            <td><input type="number" min="0" name="total_marks" onChange={e => onChange(e,index)} value={row.total_marks || 0} className="form-control" /></td>
-            <td>
-                <Select name="grade" onChange={e => onChange(e,index)} value={row.grade || 0}>
-                    <SelectOption value=""> -- Select -- </SelectOption>
-                    <SelectOption value={1}>A</SelectOption>
-                    <SelectOption value={2}>A-</SelectOption>
-                    <SelectOption value={3}>A+</SelectOption>
-                    <SelectOption value={4}>B</SelectOption>
-                    <SelectOption value={5}>B-</SelectOption>
-                    <SelectOption value={6}>B+</SelectOption>
-                    <SelectOption value={7}>C</SelectOption>
-                    <SelectOption value={8}>D</SelectOption>
-                    <SelectOption value={9}>E</SelectOption>
-                    <SelectOption value={10}>F</SelectOption>
-                </Select>
-            </td>
-        </tr>
-    )
-}
-
-export default FillMarksheetMonthTest
+export default connect(mapStateToProps,{setClasswiseMonthlyTest,setGradeType,setGradeTypeDispatch})(FillMarksheetMonthTest);

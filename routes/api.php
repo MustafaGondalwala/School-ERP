@@ -33,23 +33,35 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::get("class","ClassController@getAllClassSection");
     Route::get("/timetable/{class_id}","TimeTableController@getClassWiseTimeTable");
     Route::get("/online-monthlytest-classwise/{class_id}","OnlineExamController@getOnlineExamMonthlyTest");
+    Route::get("/online-monthlytest-classwise/past/{class_id}","OnlineExamController@getOnlineExamMonthlyTestPast");
+    Route::get("/exam/type","ExamController@getExamType");
     Route::get("/studymaterial/group/{class_id}","StudyMaterialController@getClasswiseGroups");
     Route::get("monthly_test/individual/{student_marksheet_id}","ExamController@getIndividualMarksheet");
     Route::post("/parent/fee/individual","FeeController@getIndividualFees");
     Route::post('/parent/fee/receipts',"FeeController@getReceipts");
     Route::get('/parent/fee/receipts/{receipt_id}',"FeeController@getReceiptDetails");
     Route::post('/empid',"EmpIDController@getCurrentEmpID");
+    Route::get("/grade_type","GradeController@getCurrentGradesType");
+
+
     Route::group(["prefix"=>"parentstudent"],function(){
+        Route::group(["prefix"=>"leave"],function(){
+            Route::post("","LeaveController@addStudentLeave");
+            Route::get("{class_id}","LeaveController@viewAllStudentLeave");
+        });
         Route::group(["prefix"=>"timetable"],function(){
             Route::get("{class_id}","TimeTableController@getClassWiseTimeTable");
         });
         Route::group(["prefix"=>"results"],function(){
             Route::get("monthlytest/{student_id}","ExamController@getMonthlyTestResults");
+            Route::get("exam/{student_id}","ExamController@getExamResults");
+
         });
         Route::group(["prefix"=>"homework"],function(){
             Route::get("/current/{student_id}","HomeWorkController@getCurrentHomeWorkStudent");
-        });
+            Route::get("/past/{student_id}","HomeWorkController@getPastHomeWorkStudent");
 
+        });
         Route::group(["prefix"=>"exam"],function(){
             Route::group(["prefix"=>"monthtest"],function(){
                 Route::get('/current/{student_id}',"OnlineExamController@getCurrentMonthTestStudent");
@@ -60,6 +72,12 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::post("/homework/submit","HomeWorkController@submitHomeWork");
     });
     Route::group(["prefix"=>"adminteacher","middleware"=>"adminOrTeacherCheck"],function(){
+        Route::group(["prefix"=>"leave"],function(){
+            Route::get("viewcurrent/{class_id}","LeaveController@viewAllCurrentRequest");
+            Route::get("changeStatus/{leave_id}/{status}","LeaveController@changeLeaveStatus");
+            Route::get("viewall/{class_id}","LeaveController@viewAllLeaveRequestClass");
+            Route::get("classReport/{class_id}","LeaveController@classwiseReport");
+        });
         Route::group(["prefix"=>"studymaterial"],function(){
             Route::group(["prefix"=>"teacher"],function(){
                 Route::group(["prefix"=>"group"],function(){
@@ -72,7 +90,6 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
                     Route::post("","StudyMaterialController@addMaterialTeacher");
                     Route::post("/update","StudyMaterialController@updateMaterialTeacher");
                     Route::delete("{lession_id}","StudyMaterialController@deleteMaterialTeacher");
-                
                 });
             });
             Route::group(["prefix"=>"group"],function(){
@@ -89,7 +106,6 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::group(["prefix"=>"student"],function(){
                 Route::get("/subject-classwise/{class_id}","ClassController@getSubjectClassWise");
             });
-            
         });
         Route::group(["prefix"=>"onlineexam"],function(){
             Route::group(["prefix"=>"monthlytest"],function(){
@@ -120,9 +136,12 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::post("monthly_test/get_students","ExamController@getStudentsMonthlyTest");
             Route::get("monthly_test/individual/{student_marksheet_id}","ExamController@getIndividualMarksheet");
             Route::put("monthly_test","ExamController@updateMonthlyTestMarkhsheet");
+            Route::post("monthly_test/classwise/report","ReportController@getClasswiseMonthlyTestReport");
             Route::get("monthly_test/individual-publish/{marksheet_id}","ExamController@publishMarksheet");
             Route::get("monthly_test/individual-unpublish/{marksheet_id}","ExamController@unpublishMarksheet");
-        
+            Route::post("monthly_test/publish_change","ExamController@publishChangeStatus");
+
+
             Route::post("marksheet/get_students","ExamController@getStudentsMarksheet");
             Route::get("marksheet/individual/{student_marksheet_id}","ExamController@getIndividualExamMarksheet");
             Route::put("marksheet","ExamController@updateExamMarksheet");
@@ -211,7 +230,11 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::get("submission/{homework_id}","HomeWorkController@getHomeWorkSubmission");
             Route::put("submission","HomeWorkController@checkHomeWorkSubmission");
             Route::get("student_status/all/{homework_id}","HomeWorkController@getStudentStatus");
-            
+
+
+            Route::group(["prefix"=>"classwise"],function(){
+                Route::get("{class_id}","HomeWorkController@getClasswiseCurrentHomeWork");
+            });
         });
     });
     Route::group(["prefix"=>"admin","middleware"=>"adminCheck"],function(){
@@ -302,7 +325,6 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
        
        Route::group(["prefix"=>"exam"],function(){
             Route::post("type","ExamController@addExamType");
-            Route::get("type","ExamController@getExamType");
             Route::delete("type/{exam_type_id}","ExamController@removeExamType");
             Route::post("monthly_test","ExamController@addMonthlyTest");
             Route::delete("monthly_test/{month_test_id}","ExamController@deleteMonthlyTest");

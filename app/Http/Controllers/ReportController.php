@@ -6,9 +6,30 @@ use Illuminate\Http\Request;
 use App\StudentInfo;
 use App\FeeReceipt;
 use App\HandleReceipt;
+use App\MonthlyTestStudent;
+use App\MonthlyTestType;
 use \DB;
 class ReportController extends Controller
 {
+    public function getClasswiseMonthlyTestReport(Request $request){
+        $request->validate([
+            'class_id'=>'required|integer',
+            'monthlytest_id'=>'required|integer'
+        ]);
+        $monthlytest_id = $request->monthlytest_id;
+        $max_marks = MonthlyTestType::find($monthlytest_id)->max_marks;
+        $count_monthlyTest = MonthlyTestStudent::where([
+            'monthly_test_type'=>$monthlytest_id
+        ])->count();
+        $class_marks = $count_monthlyTest * $max_marks;
+        $class_sum_total_marks = (int) MonthlyTestStudent::select("total_marks")->where([
+            'monthly_test_type'=>$monthlytest_id
+        ])->sum('total_marks');
+        $total_marks =  MonthlyTestStudent::select("total_marks")->where([
+            'monthly_test_type'=>$monthlytest_id
+        ])->pluck('total_marks');
+        return $this->ReS(['max_marks'=>$max_marks,'count_monthlyTest'=>$count_monthlyTest,'class_marks'=>$class_marks,'class_sum_total_marks'=>$class_sum_total_marks,'total_marks'=>$total_marks]);
+    }
     public function getInstallmentClassWiseReport(Request $request){
         $school_id = $this->getSchoolId($request);
         $year_id = $this->getSchoolYearId($request);

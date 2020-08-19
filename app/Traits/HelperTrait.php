@@ -25,7 +25,12 @@ trait HelperTrait{
     public function ReE($data,$status=400){
         return response()->json(["error"=>$data],$status);
     }
-
+    // public function homeWorkStatus(status){
+    //     switch(status){
+    //         case 1:
+    //         break;
+    //     }
+    // }
     public function EmpIDIncrement($school_id){
         $data = EmpID::where(['school_id'=>$school_id])->first();
         $data->increment('empid');

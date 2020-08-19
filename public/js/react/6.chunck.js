@@ -1,1 +1,240 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[6],{352:function(e,t,n){"use strict";n.r(t);var r=n(0),l=n.n(r),a=n(2),u=n(7),o=(n(32),n(1));function c(e){return(c="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function m(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function s(e,t){return(s=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function f(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}();return function(){var n,r=E(e);if(t){var l=E(this).constructor;n=Reflect.construct(r,arguments,l)}else n=r.apply(this,arguments);return p(this,n)}}function p(e,t){return!t||"object"!==c(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e):t}function E(e){return(E=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}var y=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&s(e,t)}(c,e);var t,n,r,u=f(c);function c(){return i(this,c),u.apply(this,arguments)}return t=c,(n=[{key:"render",value:function(){var e=this.props,t=e.questionpaper,n=e.title,r=e.question_id;return l.a.createElement(a.default,{title:n},l.a.createElement(o.o,null,l.a.createElement(o.p,null,l.a.createElement("th",null,"ID"),l.a.createElement("th",null,"Question Type"),l.a.createElement("th",{width:"100px"},"Question"),l.a.createElement("th",null,"Teacher Prevention"),l.a.createElement("th",null,"Marks"),l.a.createElement("th",null,"Edit"),l.a.createElement("th",null,"Delete")),t&&t.map((function(e){if(e.id==r)return l.a.createElement(d,{questions:e.question})}))))}}])&&m(t.prototype,n),r&&m(t,r),c}(r.Component),d=function(e){var t=e.questions;return l.a.createElement("tbody",null,t&&t.map((function(e,t){return l.a.createElement("tr",{key:t},l.a.createElement("td",null,t+1),l.a.createElement("td",null,function(e){switch(e){case 1:return"Mutitple Choice Question";case 2:return"True or False";case 3:return"Fill in Blanks";case 4:return"Short Question";case 5:return"Long Question"}}(e.question_type)),l.a.createElement("td",null,1==e.question_type&&v(e),2==e.question_type&&_(e),3==e.question_type&&h(e),(4==e.question_type||5==e.question_type)&&b(e)),l.a.createElement("td",null,4==e.question_type||5==e.question_type?l.a.createElement("span",null,"Yes"):l.a.createElement("span",null,"No")),l.a.createElement("td",null,e.marks),l.a.createElement("td",null,l.a.createElement(o.a,{warning:!0,sm:!0},"Edit")),l.a.createElement("td",null,l.a.createElement(o.a,{danger:!0,sm:!0},"Delete")))})))},b=function(e){return l.a.createElement("div",null,l.a.createElement("b",null,"Q:")," ",l.a.createElement("div",{dangerouslySetInnerHTML:{__html:e.question}}))},h=function(e){return l.a.createElement("div",null,l.a.createElement("b",null,"Q:")," ",l.a.createElement("div",{dangerouslySetInnerHTML:{__html:e.question}}),l.a.createElement(o.o,null,l.a.createElement("tbody",null,l.a.createElement("tr",null,l.a.createElement("th",null,"Correct:"),l.a.createElement("th",null,l.a.createElement("div",{dangerouslySetInnerHTML:{__html:e.correct}}))))))},_=function(e){return l.a.createElement("div",null,l.a.createElement("b",null,"Q:")," ",l.a.createElement("div",{dangerouslySetInnerHTML:{__html:e.question}}),l.a.createElement(o.o,null,l.a.createElement("tbody",null,l.a.createElement("tr",null,l.a.createElement("th",null,"Correct:"),l.a.createElement("th",null,1==e.correct?l.a.createElement("b",null,"True"):l.a.createElement("b",null,"False"))))))},v=function(e){return l.a.createElement("div",null,l.a.createElement("b",null,"Q:")," ",l.a.createElement("div",{dangerouslySetInnerHTML:{__html:e.question}}),l.a.createElement(o.o,null,l.a.createElement("tbody",null,l.a.createElement("tr",null,l.a.createElement("td",null,l.a.createElement("b",null,"1.")," ",e.option_1),l.a.createElement("td",null,l.a.createElement("b",null,"2.")," ",e.option_2)),l.a.createElement("tr",null,l.a.createElement("td",null,l.a.createElement("b",null,"3.")," ",e.option_1),l.a.createElement("td",null,l.a.createElement("b",null,"4.")," ",e.option_2)),l.a.createElement("tr",null,l.a.createElement("th",null,"Correct:"),l.a.createElement("th",null,e.correct)))))};t.default=Object(u.b)((function(e){return{questionpaper:e.questionpaper}}))(y)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[6],{
+
+/***/ "./resources/js/component/fees/form/FeeSetIndividualForm.jsx":
+/*!*******************************************************************!*\
+  !*** ./resources/js/component/fees/form/FeeSetIndividualForm.jsx ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FeeSetIndividualForm; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+var FeeSetIndividualForm = /*#__PURE__*/function (_Component) {
+  _inherits(FeeSetIndividualForm, _Component);
+
+  var _super = _createSuper(FeeSetIndividualForm);
+
+  function FeeSetIndividualForm(props) {
+    var _this;
+
+    _classCallCheck(this, FeeSetIndividualForm);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      fee_individual: "",
+      send_message: true
+    };
+    _this.changeAmountData = _this.changeAmountData.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(FeeSetIndividualForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var fee_individual = this.props.fee_individual;
+      this.setState({
+        fee_individual: fee_individual
+      });
+    }
+  }, {
+    key: "changeAmountData",
+    value: function changeAmountData(e, installment_label) {
+      var name = e.target.name;
+      var value = parseInt(e.target.value);
+      if (isNaN(value)) value = 0;
+      var index = e.target.getAttribute('data-index');
+      var temp_state = this.state.fee_individual;
+      var individual_installment = temp_state[installment_label];
+
+      switch (name) {
+        case "amount":
+          individual_installment[index].amount = value;
+          individual_installment[index].total_amount = parseInt(individual_installment[index].amount) - parseInt(individual_installment[index].waiver_amount);
+          individual_installment[index].total_pending = parseInt(individual_installment[index].total_amount) - individual_installment[index].current_paid;
+          break;
+
+        case "waiver_amount":
+          if (value > individual_installment[index].amount) {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire('Waiver Amount Greater than Fee Amount', "Please Check Data", "warning");
+          } else {
+            individual_installment[index].waiver_amount = value;
+            individual_installment[index].total_amount = parseInt(individual_installment[index].amount) - parseInt(individual_installment[index].waiver_amount);
+          }
+
+          break;
+      }
+
+      temp_state[installment_label] = individual_installment;
+      this.setState({
+        fee_individual: temp_state
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$state = this.state,
+          fee_individual = _this$state.fee_individual,
+          send_message = _this$state.send_message;
+      var type = this.props.type;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, fee_individual && Object.keys(fee_individual).map(function (item, key) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditInstallment, {
+          type: type,
+          onChange: _this2.changeAmountData,
+          key: key,
+          individual: fee_individual[item],
+          individual_label: item
+        });
+      }), type != "2" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, fee_individual && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Update Fees Individual"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: "checkbox-inline"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "checkbox",
+        checked: send_message,
+        onChange: function onChange(e) {
+          _this2.setState(_defineProperty({}, e.target.name, e.target.checked));
+        },
+        name: "send_message"
+      }), "\xA0\xA0Send Message to Parents"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick(e) {
+          return _this2.props.updateFees(fee_individual, send_message);
+        },
+        className: "btn btn-primary"
+      }, this.props.update_button)))));
+    }
+  }]);
+
+  return FeeSetIndividualForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+var EditInstallment = function EditInstallment(_ref) {
+  var individual_label = _ref.individual_label,
+      type = _ref.type,
+      individual = _ref.individual,
+      _onChange = _ref.onChange;
+  var total_amount = 0;
+  var amount = 0;
+  var disabled = false;
+  if (type == "2") disabled = true;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "".concat(individual_label, " Fees")
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "table-responsive"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+    className: "table"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fee Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Waiver Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Amount"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Current Paid"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Pending"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, individual.map(function (item, id) {
+    var _React$createElement;
+
+    total_amount += item.total_amount;
+    amount += item.amount;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      key: id
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.fee_type.fee_type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "number",
+      min: "0",
+      disabled: disabled,
+      "data-index": id,
+      name: "amount",
+      onChange: function onChange(e) {
+        return _onChange(e, individual_label);
+      },
+      className: "form-control",
+      value: item.amount
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "number",
+      min: "0",
+      disabled: disabled,
+      "data-index": id,
+      name: "waiver_amount",
+      className: "form-control",
+      onChange: function onChange(e) {
+        return _onChange(e, individual_label);
+      },
+      value: item.waiver_amount
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "number",
+      min: "0",
+      disabled: true,
+      "data-index": id,
+      name: "total_amount",
+      className: "form-control",
+      onChange: function onChange(e) {
+        return _onChange(e, individual_label);
+      },
+      value: item.total_amount
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "number",
+      min: "0",
+      className: "form-control",
+      disabled: true,
+      value: item.current_paid
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", (_React$createElement = {
+      type: "number",
+      min: "0",
+      className: "form-control",
+      disabled: true,
+      "data-index": id,
+      name: "total_pending"
+    }, _defineProperty(_React$createElement, "className", "form-control"), _defineProperty(_React$createElement, "onChange", function onChange(e) {
+      return _onChange(e, individual_label);
+    }), _defineProperty(_React$createElement, "value", item.total_pending), _React$createElement))));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "form-control",
+    value: amount,
+    type: "number",
+    disabled: true
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    className: "form-control",
+    value: total_amount,
+    type: "number",
+    disabled: true
+  })))))));
+};
+
+/***/ })
+
+}]);

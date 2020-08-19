@@ -22,8 +22,8 @@ class AdminExamFillMarksheet extends Component {
     super(props);
     this.state = {
       data: {
-        class_id: "1",
-        exam_type: "1",
+        class_id: "",
+        exam_type: "",
       },
       button_text: "Fetch Students",
       students: "",
@@ -31,8 +31,9 @@ class AdminExamFillMarksheet extends Component {
     };
     this.setStateData = this.setStateData.bind(this);
     this.sendClassId = this.sendClassId.bind(this);
-    this.submit = this.submit.bind(this);
     this.onChange = this.onChange.bind(this);
+
+    this.submit = this.submit.bind(this);
     this.fetchMarksheet = this.fetchMarksheet.bind(this)
     this.updateStudentMarksheet = this.updateStudentMarksheet.bind(this)
   }

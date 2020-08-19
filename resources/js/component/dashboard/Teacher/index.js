@@ -39,7 +39,7 @@ export const TeacherLeftSide = ({assigned_class}) => {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link to={`/teacher/leave/class/${classes.id}`} className="nav-link">
+                      <Link to={`/teacher/leave/${classes.id}`} className="nav-link">
                         <span className="sidenav-mini-icon"> L </span>
                         <span className="sidenav-normal"> Leave </span>
                       </Link>
@@ -90,18 +90,6 @@ export const TeacherLeftSide = ({assigned_class}) => {
                 </div>
               </li>
               })}
-                <li className="nav-item">
-                  <Link to="/teacher/events" className="nav-link" >
-                    <i className="ni ni-ungroup text-orange" />
-                    <span className="nav-link-text">Events</span>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/teacher/meetings" className="nav-link" >
-                    <i className="ni ni-ungroup text-orange" />
-                    <span className="nav-link-text">Parent Meeting</span>
-                  </Link>
-                </li>
                 <li className="nav-item">
                   <Link to="/teacher/noticeboard" className="nav-link" >
                     <i className="ni ni-ungroup text-orange" />

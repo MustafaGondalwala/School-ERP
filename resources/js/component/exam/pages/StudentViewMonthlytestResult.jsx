@@ -3,47 +3,42 @@ import EmptyHeader from "../../utils/EmptyHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import CardComponent from "../../utils/CardComponent"
 import Row from "../../utils/Row"
-
+import {setGradeTypeDispatch} from "../../actions/grade"
 import {setMonthlyTestResultsDispatch,setMonthlyTestResults} from "../../actions/view_results"
 import { connect } from "react-redux";
-import { Table, Thead, Button, Col, FormGroup, FormLabel, Input, Select, SelectOption } from "../../utils/Components"
+import { Table, Thead, Button, Col, FormGroup, FormLabel, Input, Select, SelectOption, getKey, getGrade } from "../../utils/Components"
 import api from "../../api"
 
 class StudentViewMonthlytestResult extends Component{
     constructor(props){
         super(props)
         this.state = {
-            marksheet:"",
-            remark:"",
-            grade:"",
             row:""
         }
         this.showMarksheet = this.showMarksheet.bind(this)
     }
     componentDidMount(){
-        const {setMonthlyTestResultsDispatch,monthlyTestResult} = this.props
+        const {setMonthlyTestResultsDispatch,monthlyTestResult,setGradeTypeDispatch,gradeType} = this.props
         const {student_id} = this.props.match.params
         if(monthlyTestResult[student_id] == undefined)
             setMonthlyTestResultsDispatch(student_id)
+        if(Object.keys(gradeType).length == 0){
+            setGradeTypeDispatch()
+        }
     }
     showMarksheet(row){
-        const {remark,grade} = row
         this.setState({
-            remark,
-            grade
-        })
-        api.adminteacher.exam.monthly_test.get_individual(row.id).then(data => {
-            const {marksheet} = data
+            row:"",
+        },() => {
             this.setState({
-                marksheet,
                 row
             })
         })
     }
     render(){
         const {student_id} = this.props.match.params
-        const {remark,row,grade,marksheet} = this.state
-        const {monthlyTestResult} = this.props
+        const {row} = this.state
+        const {monthlyTestResult,gradeType} = this.props
         var total_marks = 0;
         var max_marks = 0;
         var min_marks = 0;
@@ -52,10 +47,12 @@ class StudentViewMonthlytestResult extends Component{
                 <EmptyHeader mainHeader="Exam" header="View Results" sub_header="Monthly Test"/>
                 <BodyComponent>
                     <CardComponent title="Results List">
+                    {
+                        monthlyTestResult[student_id] !== undefined ?
                         <Table>
                             <Thead>
                                 <th>Sr no</th>
-                                <th>Name</th>
+                                <th>Montly Test</th>
                                 <th>Publish At</th>
                                 <th>View</th>
                             </Thead>
@@ -63,38 +60,47 @@ class StudentViewMonthlytestResult extends Component{
                                 {monthlyTestResult[student_id] !== undefined && monthlyTestResult[student_id].map((item,id) => {
                                     return <tr key={id}>
                                         <td>{id+1}</td>
-                                        <td>{item.monthly_test.monthly_test}</td>
+                                        <td>{item.monthly_test}</td>
                                         <td>{new Date(item.publish_at).toTimeString()}</td>
                                         <td><Button sm primary onClick={e => this.showMarksheet(item)}>View</Button></td>
                                     </tr>
                                 })}
                             </tbody>
                         </Table>
+                        : <h3>Loading ...</h3>
+                    }
                     </CardComponent>
-                    {marksheet &&
-                    <CardComponent title={"Result: "+row.monthly_test.monthly_test || ''}>
+                    {row &&
+                    <CardComponent title={"Result: "+row.monthly_test || ''}>
                     <Table>
                         <Thead>
                             <th>Sr no.</th>
-                            <th>Subject</th>
-                            <th>Min Marks</th>
-                            <th>Max Marks</th>
-                            <th>Total Marks</th>
+                            <th>Student Name</th>
+                            <th>Student Roll No</th>
+                            <th>Marks</th>
                             <th>Grade</th>
                         </Thead>
                         <tbody>
-                        {marksheet.map((item,id) => {
-                            total_marks += parseInt(item.total_marks)
-                            min_marks += parseInt(item.min_marks)
-                            max_marks += parseInt(item.max_marks)
-                            return <EveryRow key={id} onChange={this.onChange} index={id} row={item} />
-                        })}
+                            {
+                                row.student_marks.map((item,id) => {
+                                    var showBackground = ''
+                                    if(student_id == item.student.id)
+                                        showBackground = 'lightblue'
+                                    return <tr style={{backgroundColor:showBackground }}  key={getKey()} >
+                                        <td>{id+1}</td>
+                                        <td>{item.student.student_name}</td>
+                                        <td >{item.student.roll_no}</td>
+                                        <td>{item.total_marks}</td>
+                                        <td>{getGrade(gradeType,item.total_marks,row.max_marks)}</td>
+                                    </tr>
+                                })
+                            }
                         </tbody>
                         <tfoot>
                         <tr>
                             <td></td>
                             <td></td>
-                            <td>
+                            {/* <td>
                                 <Input value={min_marks} disabled/>
                             </td>
                             <td>
@@ -117,19 +123,10 @@ class StudentViewMonthlytestResult extends Component{
                                 <SelectOption value={9}>E</SelectOption>
                                 <SelectOption value={10}>F</SelectOption>
                             </Select>
-                            </td>
+                            </td> */}
                         </tr>
 </tfoot>
                     </Table>
-                
-                <Row>
-                    <Col md={6} sm={4}>
-                        <FormGroup>
-                            <FormLabel>Remark</FormLabel>
-                            <p>{remark}</p>
-                        </FormGroup>
-                    </Col>
-                </Row>
                 </CardComponent>
                
                 }
@@ -140,38 +137,11 @@ class StudentViewMonthlytestResult extends Component{
     }
 }
 
-const EveryRow = ({index,row,onChange}) => {
-    return(
-        <tr key={index}>
-            <td>{index+1}</td>
-            <td>{row.subject.subject_name}</td>
-            <th>{row.min_marks || 0}</th>
-            <th>{row.max_marks || 0}</th>
-            <th>{row.total_marks || 0}</th>
-            <td>
-                <Select disabled={true} name="grade" onChange={e => onChange(e,index)} value={row.grade || 0}>
-                    <SelectOption value=""> -- Select -- </SelectOption>
-                    <SelectOption value={1}>A</SelectOption>
-                    <SelectOption value={2}>A-</SelectOption>
-                    <SelectOption value={3}>A+</SelectOption>
-                    <SelectOption value={4}>B</SelectOption>
-                    <SelectOption value={5}>B-</SelectOption>
-                    <SelectOption value={6}>B+</SelectOption>
-                    <SelectOption value={7}>C</SelectOption>
-                    <SelectOption value={8}>D</SelectOption>
-                    <SelectOption value={9}>E</SelectOption>
-                    <SelectOption value={10}>F</SelectOption>
-                </Select>
-            </td>
-        </tr>
-    )
-}
-
-
 function mapStateToProps(state) {
     return {
+        gradeType:state.gradeType,
         monthlyTestResult:state.monthlyTestResult
     };
 }
 
-export default connect(mapStateToProps,{setMonthlyTestResultsDispatch,setMonthlyTestResults})(StudentViewMonthlytestResult);
+export default connect(mapStateToProps,{setMonthlyTestResultsDispatch,setMonthlyTestResults,setGradeTypeDispatch})(StudentViewMonthlytestResult);

@@ -26,6 +26,8 @@ const AdminHomePage = () => (
                     <div className="row card-wrapper">
                         <ColComponent title="Allocate Subjects to Class" description="Add/Edit/View Subject to Class" link="/admin/exam/allocate-subject" button_text="Enter"/>
                         <ColComponent title="Exam Type" description="View/Add/Edit Exam Type" link="/admin/exam/exam-type" button_text="Enter"/>
+                        <ColComponent title="Grade Type" description="Update Grade Type" link="/admin/exam/grade-type" button_text="Enter"/>
+                    
                     </div>
                 </CardComponent>
             </div>

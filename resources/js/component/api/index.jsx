@@ -14,6 +14,7 @@ api.interceptors.response.use((response) => response, (error) => {
         Swal.fire("Error",data.message+". Please Login Page.",'error')
         localStorage.clear();
         setAuthorizationHeader();
+        window.reload();
     }else if(status == 500){
         Swal.fire("Error","Server Error has Occured Please again later.",'error')
     }else if(status == 404){
@@ -161,8 +162,7 @@ export default {
             add_section: data => api.post("/api/v1/admin/class/section",data).then(response => response.data.success),
             exam:{
                 exam_type:{
-                    add: exam_type => api.post("/api/v1/admin/exam/type",{exam_type}).then(response => response.data.success),
-                    get: () => api("/api/v1/admin/exam/type").then(response => response.data.success),
+                    add: data => api.post("/api/v1/admin/exam/type",data).then(response => response.data.success),
                     remove: exam_type_id => api.delete("/api/v1/admin/exam/type/"+exam_type_id).then(response => response.data.success),
                 },
                 monthly_test:{
@@ -197,6 +197,12 @@ export default {
             }
         },
     adminteacher:{
+        leave:{
+            viewAll: class_id => api("/api/v1/adminteacher/leave/viewall/"+class_id).then(response => response.data.success),
+            viewCurrent: class_id => api("/api/v1/adminteacher/leave/viewcurrent/"+class_id).then(response => response.data.success),
+            changeStatus: (leave_id,status) => api("/api/v1/adminteacher/leave/changeStatus/"+leave_id+"/"+status).then(response => response.data.success),
+            classReport: class_id => api("/api/v1/adminteacher/leave/classReport/"+class_id).then(response => response.data.success),
+        },
         homework:{
             add: (data) => api.post("/api/v1/teacher/homework",data,formDataConfig).then(response => response.data.success),
             get: (class_id) => api("/api/v1/teacher/homework/"+class_id).then(response => response.data.success),
@@ -204,6 +210,9 @@ export default {
             delete: homework_id => api.delete("/api/v1/teacher/homework/"+homework_id,data).then(response => response.data.success),
             past:{
                 get: class_id => api("/api/v1/teacher/homework/past").then(response => response.data.success),
+            },
+            classwise:{
+                current: (class_id) => api("/api/v1/teacher/homework/classwise/"+class_id).then(response => response.data.success),
             },
             get_submission: homework_id => api("/api/v1/teacher/homework/submission/"+homework_id).then(response => response.data.success),
             homework_check: (type,student_homework_id) => api.put("/api/v1/teacher/homework/submission",{type,student_homework_id}).then(response => response.data.success),
@@ -265,14 +274,14 @@ export default {
         },
         exam:{
             monthly_test:{
-                get_students: data => api.post("/api/v1/adminteacher/exam/monthly_test/get_students",data).then(response => response.data.success),
+                get_students: (class_id,monthly_test) => api.post("/api/v1/adminteacher/exam/monthly_test/get_students",{class_id,monthly_test}).then(response => response.data.success),
                 get_individual: id => api.get("/api/v1/monthly_test/individual/"+id).then(response => response.data.success),
-                update_marksheet: (remark,grade,marksheet,monthtest_id,marksheet_id) => api.put("/api/v1/adminteacher/exam/monthly_test",{remark,grade,marksheet,monthtest_id,marksheet_id}).then(response => response.data.success),
-                publishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/monthly_test/individual-publish/"+marksheet_id).then(response => response.data.success),
-                unpublishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/monthly_test/individual-unpublish/"+marksheet_id).then(response => response.data.success),
+                update_marksheet: (update_students,class_id) => api.put("/api/v1/adminteacher/exam/monthly_test",{update_students,class_id}).then(response => response.data.success),
+                publish_change: (status,monthlytest_id,class_id) => api.post("/api/v1/adminteacher/exam/monthly_test/publish_change",{status,monthlytest_id,class_id}).then(response => response.data.success),
                 get_monthly_test: class_id => api.get("/api/v1/adminteacher/exam/monthly_test/get_all/"+class_id).then(response => response.data.success),
                 add: (data,class_id) => api.post("/api/v1/adminteacher/exam/monthly_test/add/"+class_id,data).then(response => response.data.success),
                 remove: (monthly_test_id,class_id) => api.delete("/api/v1/adminteacher/exam/monthly_test/delete/"+class_id+"/"+monthly_test_id).then(response => response.data.success),
+                classwiseReport: (class_id,monthlytest_id) => api.post("/api/v1/adminteacher/exam/monthly_test/classwise/report",{class_id,monthlytest_id}).then(response => response.data.success),
             },
             marksheet:{
                 get: (data) => api.post("/api/v1/adminteacher/exam/marksheet",data).then(response => response.data.success),
@@ -280,7 +289,7 @@ export default {
                 get_individual: id => api.get("/api/v1/adminteacher/exam/marksheet/individual/"+id).then(response => response.data.success),
                 student: (data) => api.post("/api/v1/adminteacher/exam/marksheet/individual",data).then(response => response.data.success),
                 update: (exam_marksheet) => api.put("/api/v1/adminteacher/exam/marksheet/individual",{exam_marksheet}).then(response => response.data.success),
-                update_marksheet: (remark,grade,marksheet,marksheet_id,exam_type,student_id) => api.put("/api/v1/adminteacher/exam/marksheet",{remark,grade,marksheet,marksheet_id,exam_type,student_id}).then(response => response.data.success),
+                update_marksheet: (remark,marksheet,marksheet_id,exam_type,student_id) => api.put("/api/v1/adminteacher/exam/marksheet",{remark,marksheet,marksheet_id,exam_type,student_id}).then(response => response.data.success),
                 publishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/marksheet/individual-publish/"+marksheet_id).then(response => response.data.success),
                 unpublishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/monthly_test/individual-unpublish/"+marksheet_id).then(response => response.data.success),
             }
@@ -298,6 +307,7 @@ export default {
     },
     class: () => api("/api/v1/class").then(response => response.data.success),
     subjects: () => api("/api/v1/subject").then(response => response.data.success),
+    exam_type: () => api("/api/v1/exam/type").then(response => response.data.success),
     classwise_timetable: (class_id) => api("/api/v1/classwise_timetable/"+class_id).then(response => response.data.success),
     teachers: () => api("/api/v1/teacher").then(response => response.data.success),
     teacher_names: () => api("/api/v1/teacher/names").then(response => response.data.success),
@@ -305,15 +315,24 @@ export default {
     subject_class_wise: class_id =>  api("/api/v1/subject-classwise/"+class_id).then(response => response.data.success),
     monthlytest_classwise: class_id =>  api("/api/v1/monthlytest-classwise/"+class_id).then(response => response.data.success),
     online_monthlytest_classwise: class_id => api("/api/v1/online-monthlytest-classwise/"+class_id).then(response => response.data.success),
+    online_monthlytest_classwise_past: class_id => api("/api/v1/online-monthlytest-classwise/past/"+class_id).then(response => response.data.success),
     timetable_classwise: class_id => api("/api/v1/timetable/"+class_id).then(response => response.data.success),
+    grade_type: () => api("/api/v1/grade_type").then(response => response.data.success),
     empid:{
         get: () => api.post("/api/v1/empid").then(response => response.data.success),
     },
     parentstudent: {
+        leave:{
+            add: data => api.post("/api/v1/parentstudent/leave",data).then(response => response.data.success),
+            viewAll: student_id => api("/api/v1/parentstudent/leave/"+student_id).then(response => response.data.success),
+        },
         homework:{
             submit: data => api.post("/api/v1/parentstudent/homework/submit",data,formDataConfig).then(response => response.data.success),
             current:{
                 get: student_id => api("/api/v1/parentstudent/homework/current/"+student_id).then(response => response.data.success),
+            },
+            past:{
+                get: student_id => api("/api/v1/parentstudent/homework/past/"+student_id).then(response => response.data.success),
             }
         },
         timetable: {
@@ -328,6 +347,8 @@ export default {
         },
         results:{
             monthlytest: student_id => api("/api/v1/parentstudent/results/monthlytest/"+student_id).then(response => response.data.success),
+            exam: student_id => api("/api/v1/parentstudent/results/exam/"+student_id).then(response => response.data.success),
+       
         }
     },
     header:{

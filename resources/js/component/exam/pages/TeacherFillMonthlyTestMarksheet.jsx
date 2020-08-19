@@ -4,6 +4,7 @@ import EmptyHeader from "../../utils/EmptyHeader";
 import BodyComponent from "../../utils/BodyComponent";
 import CardComponent from "../../utils/CardComponent";
 import { connect } from "react-redux";
+import {setGradeTypeDispatch} from "../../actions/grade"
 import { setClasswiseMonthlyTestDispatch, setClasswiseMonthlyTest } from "../../actions/classwiseExam";
 import Row from "../../utils/Row";
 import {
@@ -15,8 +16,10 @@ import {
   Table,
   Thead,
 } from "../../utils/Components";
-
+import Swal from "sweetalert2"
 import FillMarksheetMonthTest from "../form/FillMarksheetMonthTest"
+import api from "../../api";
+
 class TeacherFillMonthlyTestMarksheet extends Component{
     constructor(props){
         super(props)
@@ -27,9 +30,11 @@ class TeacherFillMonthlyTestMarksheet extends Component{
     }
     componentWillMount() {
         const {class_id} = this.props.match.params
-        const {setClasswiseMonthlyTestDispatch,classwiseMonthlyTest} = this.props
+        const {setClasswiseMonthlyTestDispatch,classwiseMonthlyTest,setGradeTypeDispatch,gradeType} = this.props
         if(classwiseMonthlyTest[class_id] == undefined)
           setClasswiseMonthlyTestDispatch(class_id)
+        if(Object.keys(gradeType).length == 0)
+            setGradeTypeDispatch()
     }
     showFillMarksheet(show_monthlytest_id){
         this.setState({
@@ -38,6 +43,13 @@ class TeacherFillMonthlyTestMarksheet extends Component{
             this.setState({
                 show_monthlytest_id
             })
+        })
+    }
+    publish(status,monthlytest_id){
+        const {class_id} = this.props.match.params
+        api.adminteacher.exam.monthly_test.publish_change(status,monthlytest_id,class_id).then(data => {
+            Swal.fire("Data Updated !!","MonthlyTest Updated","success");
+            this.props.setClasswiseMonthlyTest(data.monthyTest,class_id)
         })
     }
     render(){
@@ -52,9 +64,9 @@ class TeacherFillMonthlyTestMarksheet extends Component{
                     sub_header="Fill Marksheet"
                 />
                 <BodyComponent>
-                    <CardComponent title="Monthly Test List">
+                    <CardComponent title="Monthly Test List" back_link={'/teacher/exam/class/'+class_id}>
                     <Row>
-                        <Col md={6}>
+                        <Col md={12} lg={12}>
                             <Table>
                             <Thead>
                                 <th>Sr.no</th>
@@ -62,6 +74,7 @@ class TeacherFillMonthlyTestMarksheet extends Component{
                                 <th>Subjects</th>
                                 <th>Fill Marksheet</th>
                                 <th>Publish Marksheet</th>
+                                <th>Publish At</th>
                             </Thead>
                             <tbody>
                                 { classwiseMonthlyTest[class_id] != undefined &&
@@ -77,10 +90,13 @@ class TeacherFillMonthlyTestMarksheet extends Component{
 
                                         </td>
                                         <td>
-                                            <Button onClick={e => this.showFillMarksheet(item.id)} primary sm>Fill</Button>
+                                            <Button onClick={e => this.showFillMarksheet(item)} primary sm>Fill</Button>
                                         </td>
                                         <td>
-                                            <Button danger sm>Publish</Button>
+                                            {item.publish == 0 ? <Button onClick={e => this.publish(1,item.id)} danger sm>Publish</Button> : <Button warning sm onClick={e => this.publish(0,item.id)}>Unpublish</Button>}
+                                        </td>
+                                        <td>
+                                        {item.publish == 1 && item.publish_at}
                                         </td>
                                     </tr>
                                     );
@@ -100,9 +116,11 @@ class TeacherFillMonthlyTestMarksheet extends Component{
 function mapStateToProps(state) {
     return {
       classwiseMonthlyTest: state.classwiseMonthlyTest,
+      gradeType:state.gradeType
     };
   }
   
   export default connect(mapStateToProps, {
+    setGradeTypeDispatch,
     setClasswiseMonthlyTestDispatch, setClasswiseMonthlyTest,
   })(TeacherFillMonthlyTestMarksheet);

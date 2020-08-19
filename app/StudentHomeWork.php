@@ -17,7 +17,7 @@ class StudentHomeWork extends Model
         return $this->belongsTo(Teacher::class,'teacher_id')->with('user');
     }
     public function studenthomework(){
-        return $this->hasMany(HandleHomeWork::class,'homework_id');
+        return $this->hasMany(HandleHomeWork::class,'homework_id')->with('student','attachments');
     }
     public function subject(){
         return $this->belongsTo(Subjects::class,'subject_id');

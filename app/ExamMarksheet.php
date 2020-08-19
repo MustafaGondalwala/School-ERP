@@ -16,5 +16,8 @@ class ExamMarksheet extends Model
     ];
     public function subject(){
         return $this->belongsTo(Subjects::class,'subject_id');
+    } 
+    public function student(){
+        return $this->belongsTo(StudentInfo::class,'student_id');
     }   
 }

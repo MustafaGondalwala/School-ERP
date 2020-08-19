@@ -3,6 +3,7 @@ import TopBreadCrumb from "../../utils/TopBreadcrumb"
 import ParentHeader from "../header/ParentHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import ColComponent from "../../utils/ColComponent"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 
 const StudentParentHomeWorkPage = (props) => {
@@ -11,8 +12,8 @@ const StudentParentHomeWorkPage = (props) => {
     if(localStorage.getItem('user_type') == 3)
         user_type = "parent"
     return(
-        <div>   
-            <ParentHeader mainHeader="Homework" header="Home"/>
+        <div>
+            <EmptyHeader mainHeader="Homework" header="Home"/>
             <BodyComponent>
                 <div className="row">
                     <ColComponent

@@ -1,4 +1,4 @@
-import { SET_CLASS_HOMEWORK,SET_TEACHER_HOMEWORK,SET_STUDENT_CURRENT_HOMEWORK,SET_TEACHER_PAST_HOMEWORK } from "../types";
+import { SET_CLASS_HOMEWORK,SET_TEACHER_HOMEWORK,SET_STUDENT_PAST_HOMEWORK,SET_STUDENT_CURRENT_HOMEWORK,SET_TEACHER_PAST_HOMEWORK } from "../types";
 
 export function class_homeworks(state = {}, action = {}) {
   switch (action.type) {
@@ -9,6 +9,18 @@ export function class_homeworks(state = {}, action = {}) {
   }
 }
 
+
+
+export function studentPast_homework(state = {}, action = {}) {
+  switch (action.type) {
+    case SET_STUDENT_PAST_HOMEWORK:
+      var newData={};
+      newData[action.student_id]=action.studentPast_homework;
+      return Object.assign({}, state, newData)
+    default:
+      return state;
+  }
+}
 
 export function studentCurrent_homework(state = {}, action = {}) {
   switch (action.type) {

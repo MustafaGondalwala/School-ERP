@@ -19,12 +19,6 @@ const TeacherQuestionPaperHome = () => (
                 button_text="Add"
             />
             <ColComponent
-                title="View/Print Question Paper"
-                description="View/Print Question Paper in System"
-                link="/teacher/questionpaper/view"
-                button_text="View"
-            />
-            <ColComponent
                 title="Manage Question Paper"
                 description="Manage Question Paper in System"
                 link="/teacher/questionpaper/manage"

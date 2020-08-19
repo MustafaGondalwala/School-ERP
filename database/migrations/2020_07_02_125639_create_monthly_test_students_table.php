@@ -20,9 +20,7 @@ class CreateMonthlyTestStudentsTable extends Migration
             $table->integer('class_id');
             $table->integer('year_id');
             $table->integer('status')->comment("1=> Not Edit 2=> Editing 3=> Publish 4=> Unpublish")->default(1);
-            $table->string('remark')->nullable();
-            $table->integer('grade')->nullable();
-            $table->datetime('publish_at')->nullable();
+            $table->integer('total_marks')->nullable();
             $table->integer('monthly_test_type');
             $table->timestamps();
         });

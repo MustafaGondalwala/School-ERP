@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MonthlyTestStudent extends Model
 {
     protected $fillable = [
-        'grade', 'remark','status','publish_at'
+        'grade', 'remark','status','publish_at','total_marks'
     ];
     public function student(){
         return $this->belongsTo('App\StudentInfo','student_id');

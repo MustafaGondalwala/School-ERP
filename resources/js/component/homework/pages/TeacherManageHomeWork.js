@@ -82,7 +82,7 @@ class TeacherManageHomeWork extends Component{
                 <EmptyHeader mainHeader="HomeWork" header="Current" sub_header="Manage"/>
                 <BodyComponent>
                     <CardComponent title="View HomeWork" back_link="/teacher/homework">
-                        <ViewTeacherWisePanel sendEventType={this.sendEventType} type="editdelete" />
+                    <ViewTeacherWisePanel sendEventType={this.sendEventType} type="editdelete" />
                     </CardComponent>
 
                     {view && <AddEditHomeWork data={view} type="3" />}

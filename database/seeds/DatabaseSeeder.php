@@ -225,7 +225,7 @@ class DatabaseSeeder extends Seeder
 
 
 
-       foreach(range(1,200) as $index){
+       foreach(range(1,50) as $index){
         try{
 
             $new_addmission = new StudentInfo;

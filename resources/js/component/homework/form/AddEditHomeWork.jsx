@@ -147,7 +147,8 @@ class AddEditHomeWork extends Component{
             <CardComponent title={title} back_link={back_link}>
                 <Row>
                     <Col md={12} sm={12} lg={12}>
-                                <GetClassId disabled={disabled} errors={errors} sendClassId={class_id => {
+                                {disabled && <p>{data.class_id}</p>}
+                                <GetClassId disabled={disabled} class_id={data.class_id} errors={errors} sendClassId={class_id => {
                                     this.setState({
                                         data: { ...this.state.data, ["class_id"]: class_id },
                                     },() => {

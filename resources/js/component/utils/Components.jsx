@@ -13,6 +13,50 @@ export const getOnlineTestStatusText = (status) => {
     }
 }
 
+export const getLeaveStatus = (status) => {
+    switch(status){
+        case 1:
+            return "Pending ...";
+            break;
+        case 2:
+            return "Accepted";
+        case 3:
+            return "Rejected";
+    }
+}
+
+
+export const getGrade = (gradeType,total_marks,max_marks) => {
+    var percentage = (total_marks / max_marks) * 100
+    var grade = ""
+    gradeType.map(item => {
+        if(item.percentage >= percentage && item.percentage <= percentage){
+            grade = item.grade
+        }
+    })
+    return grade;
+}
+
+export const homeWorkStatus = (status) => {
+    switch(status){
+        case 1:
+            return "Pending"
+            break;
+        case 2:
+            return "Completed"
+            break;
+        case 4:
+            return "Submitted"
+            break;
+        case 5:
+            return "Rejected"
+            break;
+        case 6:
+            return "Closed"
+            break;
+    }
+}
+
 export const getKey = () => {
     return shortid.generate()
 }
@@ -105,7 +149,7 @@ const getFileType = (name) => {
 
 export const PreviewWithDeleteDownload = ({url,showDelete,type,deleteFunction}) => {
     return(
-        <Col md={3} sm={6} lg={6}>
+        <Col md={3} sm={6} lg={6} key={getKey()}>
             {type == 1 &&
                 <span>
                     <img src={url} width="220" height="200" className="img-thumbnail img"/>
@@ -149,7 +193,7 @@ export const PreviewWithDeleteDownload = ({url,showDelete,type,deleteFunction}) 
     )
 }
 
-export const PreviewAttachmentFile = ({attachments,deleteFunc,showDelete}) => {
+export const PreviewAttachmentFile = ({attachments,deleteFunc,showDelete=false}) => {
     return(
         <Row>
             {
@@ -382,6 +426,8 @@ export const Col = ({md="",lg="",sm="",children}) => {
         </div>
     )    
 }
+
+
 
 export const Table = ({children}) => (
     <div className="table-responsive">

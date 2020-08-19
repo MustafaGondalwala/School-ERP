@@ -1,1 +1,101 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[34],{351:function(e,t,n){"use strict";n.r(t);var a=n(0),r=n.n(a),l=n(2),o=n(7),u=n(52),i=n(1),s=n(5),c=n(12),m=n(14),d=n(3),h=n(6),p=n.n(h);function f(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(e);t&&(a=a.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,a)}return n}function E(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?f(Object(n),!0).forEach((function(t){v(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):f(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function b(e){return(b="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function v(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function y(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function q(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}function C(e,t,n){return t&&q(e.prototype,t),n&&q(e,n),e}function g(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&k(e,t)}function k(e,t){return(k=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function _(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}();return function(){var n,a=P(e);if(t){var r=P(this).constructor;n=Reflect.construct(a,arguments,r)}else n=a.apply(this,arguments);return S(this,n)}}function S(e,t){return!t||"object"!==b(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function P(e){return(P=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}var Q=r.a.lazy((function(){return Promise.resolve().then(n.bind(null,75))})),j=function(e){g(n,e);var t=_(n);function n(e){var a;return y(this,n),(a=t.call(this,e)).state={question_type:"1"},a.onChange=a.onChange.bind(O(a)),a}return C(n,[{key:"componentDidMount",value:function(){var e=this.props,t=e.questionpaper,n=e.question_id;t.filter((function(e){return e.id==n}))[0]}},{key:"onChange",value:function(e){var t=e.target,n=t.name,a=t.value;this.setState(v({},n,a))}},{key:"render",value:function(){var e=this.state.question_type,t=this.props,n=t.question_id,a=t.setQuestionPaper;return r.a.createElement(l.default,{title:"Add Question"},r.a.createElement(i.o,null,r.a.createElement("tbody",null,r.a.createElement("tr",null,r.a.createElement("td",null,r.a.createElement("input",{name:"question_type",checked:"1"==e,value:"1",onChange:this.onChange,type:"radio"}),"Mutiple Choice Question"),r.a.createElement("td",null,r.a.createElement("input",{name:"question_type",checked:"2"==e,value:"2",onChange:this.onChange,type:"radio"}),"True or False"),r.a.createElement("td",null,r.a.createElement("input",{name:"question_type",checked:"3"==e,value:"3",onChange:this.onChange,type:"radio"}),"Fill in blanks"),r.a.createElement("td",null,r.a.createElement("input",{name:"question_type",checked:"4"==e,value:"4",onChange:this.onChange,type:"radio"}),"Short Question"),r.a.createElement("td",null,r.a.createElement("input",{name:"question_type",checked:"5"==e,value:"5",onChange:this.onChange,type:"radio"}),"Long Question")))),r.a.createElement("br",null),1==e&&r.a.createElement(A,{setQuestionPaper:a,question_id:n}),2==e&&r.a.createElement(M,{setQuestionPaper:a,question_id:n}),3==e&&r.a.createElement(D,{setQuestionPaper:a,question_id:n}),4==e&&r.a.createElement(w,{setQuestionPaper:a,question_id:n,question_type:e}),5==e&&r.a.createElement(w,{setQuestionPaper:a,question_id:n,question_type:e}))}}]),n}(a.Component),w=function(e){g(n,e);var t=_(n);function n(e){var a;return y(this,n),(a=t.call(this,e)).intialData={question:"",marks:""},a.state={data:a.intialData,errors:{}},a.submit=a.submit.bind(O(a)),a.onChange=a.onChange.bind(O(a)),a}return C(n,[{key:"onChange",value:function(e){var t=e.target,n=t.name,a=t.value;this.setState({data:E(E({},this.state.data),{},v({},n,a))})}},{key:"validate",value:function(e){var t={};return e.question||(t.question="Can't be blank"),t}},{key:"submit",value:function(){var e=this,t=this.state.data,n=this.validate(t);if(this.setState({errors:n}),0==Object.keys(n).length){var a=this.props,r=a.question_id,l=a.question_type;d.a.adminteacher.questionbank.question.add(t,r,l).then((function(t){(0,e.props.setQuestionPaper)(t.questionpaper),e.setState({data:e.intialData}),p.a.fire("Success","Question Added!!","success")}))}}},{key:"render",value:function(){var e=this,t=this.state,n=t.data,l=t.errors,o=this.props.question_type;return r.a.createElement("div",null,r.a.createElement(s.default,null,r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Question"),r.a.createElement(a.Suspense,{fallback:r.a.createElement("h3",null,"Loading Component")},r.a.createElement(Q,{value:n.question,onChange:function(t){e.setState({data:E(E({},e.state.data),{},v({},"question",t))})}})),l.question&&r.a.createElement(m.a,{text:l.question}))),r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Total Marks"),r.a.createElement(i.f,{errors:l,name:"marks",value:n.marks,onChange:this.onChange,placeholder:"Marks"})))),r.a.createElement(s.default,null,r.a.createElement(i.a,{primary:!0,sm:!0,onClick:this.submit},"Add ",4==o?r.a.createElement("span",null,"Short Questions"):r.a.createElement("span",null,"Longs Questions"))))}}]),n}(a.Component),D=function(e){g(n,e);var t=_(n);function n(e){var a;return y(this,n),(a=t.call(this,e)).intialData={question:"",correct:"",marks:""},a.state={data:a.intialData,errors:{}},a.submit=a.submit.bind(O(a)),a.onChange=a.onChange.bind(O(a)),a}return C(n,[{key:"onChange",value:function(e){var t=e.target,n=t.name,a=t.value;this.setState({data:E(E({},this.state.data),{},v({},n,a))})}},{key:"validate",value:function(e){var t={};return e.question||(t.question="Can't be blank"),e.correct||(t.correct="Can't be blank"),t}},{key:"submit",value:function(){var e=this,t=this.state.data,n=this.validate(t);if(this.setState({errors:n}),0==Object.keys(n).length){var a=this.props.question_id;d.a.adminteacher.questionbank.question.add(t,a,3).then((function(t){(0,e.props.setQuestionPaper)(t.questionpaper),e.setState({data:e.intialData}),p.a.fire("Success","Question Added!!","success")}))}}},{key:"render",value:function(){var e=this,t=this.state,n=t.data,l=t.errors;return r.a.createElement("div",null,r.a.createElement(s.default,null,r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Question"),r.a.createElement(a.Suspense,{fallback:r.a.createElement("h3",null,"Loading Component")},r.a.createElement(Q,{value:n.question,onChange:function(t){e.setState({data:E(E({},e.state.data),{},v({},"question",t))})}})),l.question&&r.a.createElement(m.a,{text:l.question}))),r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.o,null,r.a.createElement("tbody",null,r.a.createElement("tr",null,r.a.createElement("th",null,"Correct One:")),r.a.createElement("tr",null,r.a.createElement("td",null,r.a.createElement(i.f,{value:n.correct,name:"correct",onChange:this.onChange}))),r.a.createElement("tr",null,r.a.createElement("td",null,l.correct&&r.a.createElement(m.a,{text:l.correct})))))),r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Total Marks"),r.a.createElement(i.f,{errors:l,name:"marks",value:n.marks,onChange:this.onChange,placeholder:"Marks"})))),r.a.createElement(s.default,null,r.a.createElement(i.a,{primary:!0,sm:!0,onClick:this.submit},"Add Fill in Blanks")))}}]),n}(a.Component),M=function(e){g(n,e);var t=_(n);function n(e){var a;return y(this,n),(a=t.call(this,e)).intialData={question:"",correct:"",marks:""},a.state={data:a.intialData,errors:{}},a.submit=a.submit.bind(O(a)),a.onChange=a.onChange.bind(O(a)),a}return C(n,[{key:"onChange",value:function(e){var t=e.target,n=t.name,a=t.value;this.setState({data:E(E({},this.state.data),{},v({},n,a))})}},{key:"validate",value:function(e){var t={};return e.question||(t.question="Can't be blank"),e.correct||(t.correct="Can't be blank"),t}},{key:"submit",value:function(){var e=this,t=this.state.data,n=this.validate(t);if(this.setState({errors:n}),0==Object.keys(n).length){var a=this.props.question_id;d.a.adminteacher.questionbank.question.add(t,a,2).then((function(t){(0,e.props.setQuestionPaper)(t.questionpaper),e.setState({data:e.intialData}),p.a.fire("Success","Question Added!!","success")}))}}},{key:"render",value:function(){var e=this,t=this.state,n=t.data,l=t.errors;return r.a.createElement("div",null,r.a.createElement(s.default,null,r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Question"),r.a.createElement(a.Suspense,{fallback:r.a.createElement("h3",null,"Loading Component")},r.a.createElement(Q,{value:n.question,onChange:function(t){e.setState({data:E(E({},e.state.data),{},v({},"question",t))})}})),l.question&&r.a.createElement(m.a,{text:l.question}))),r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.o,null,r.a.createElement("tbody",null,r.a.createElement("tr",null,r.a.createElement("th",null,"Correct One:")),r.a.createElement("tr",null,r.a.createElement("td",null,"1."," ",r.a.createElement("input",{name:"correct",checked:"1"==n.correct,value:"1",onChange:this.onChange,type:"radio"})," ","True"),r.a.createElement("td",null,"2."," ",r.a.createElement("input",{name:"correct",checked:"2"==n.correct,value:"2",onChange:this.onChange,type:"radio"})," ","False")),r.a.createElement("tr",null,r.a.createElement("td",null,l.correct&&r.a.createElement(m.a,{text:l.correct})))))),r.a.createElement(c.a,{md:8,sm:12},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Total Marks"),r.a.createElement(i.f,{errors:l,name:"marks",value:n.marks,onChange:this.onChange,placeholder:"Marks"})))),r.a.createElement(s.default,null,r.a.createElement(i.a,{primary:!0,sm:!0,onClick:this.submit},"Add True or False")))}}]),n}(a.Component),A=function(e){g(n,e);var t=_(n);function n(e){var a;return y(this,n),(a=t.call(this,e)).intialData={question:"",question_1:"",question_2:"",question_3:"",question_4:"",correct:"",marks:""},a.state={data:a.intialData,errors:{}},a.submit=a.submit.bind(O(a)),a.onChange=a.onChange.bind(O(a)),a}return C(n,[{key:"onChange",value:function(e){var t=e.target,n=t.name,a=t.value;this.setState({data:E(E({},this.state.data),{},v({},n,a))})}},{key:"validate",value:function(e){var t={};return e.question||(t.question="Can't be blank"),e.question_1||(t.question_1="Can't be blank"),e.question_2||(t.question_2="Can't be blank"),e.question_3||(t.question_3="Can't be blank"),e.question_4||(t.question_4="Can't be blank"),e.correct||(t.correct="Can't be blank"),t}},{key:"submit",value:function(){var e=this,t=this.state.data,n=this.validate(t);if(this.setState({errors:n}),0==Object.keys(n).length){var a=this.props.question_id;d.a.adminteacher.questionbank.question.add(t,a,1).then((function(t){(0,e.props.setQuestionPaper)(t.questionpaper),e.setState({data:e.intialData}),p.a.fire("Success","Question Added!!","success")}))}}},{key:"render",value:function(){var e=this,t=this.state,n=t.data,l=t.errors;return r.a.createElement("div",null,r.a.createElement(s.default,null,r.a.createElement(c.a,{md:6,sm:6},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Question"),r.a.createElement(a.Suspense,{fallback:r.a.createElement("h3",null,"Loading Component")},r.a.createElement(Q,{value:n.question,onChange:function(t){e.setState({data:E(E({},e.state.data),{},v({},"question",t))})}})),l.question&&r.a.createElement(m.a,{text:l.question}))),r.a.createElement(i.o,null,r.a.createElement("tbody",null,r.a.createElement("tr",null,r.a.createElement("td",null,"1."," ",r.a.createElement(i.f,{errors:l,value:n.question_1,onChange:this.onChange,name:"question_1"})),r.a.createElement("td",null,"3."," ",r.a.createElement(i.f,{errors:l,value:n.question_3,onChange:this.onChange,name:"question_3"}))),r.a.createElement("tr",null,r.a.createElement("td",null,"2."," ",r.a.createElement(i.f,{errors:l,value:n.question_2,onChange:this.onChange,name:"question_2"})),r.a.createElement("td",null,"4."," ",r.a.createElement(i.f,{errors:l,value:n.question_4,onChange:this.onChange,name:"question_4"})))))),r.a.createElement(s.default,null,r.a.createElement(c.a,{md:6,sm:6},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Correct One"),r.a.createElement(i.m,{errors:l,name:"correct",value:n.correct,onChange:this.onChange},r.a.createElement(i.n,null," -- Select -- "),r.a.createElement(i.n,{value:"1"},"1"),r.a.createElement(i.n,{value:"2"},"2"),r.a.createElement(i.n,{value:"3"},"3"),r.a.createElement(i.n,{value:"4"},"4")))),r.a.createElement(c.a,{md:6,sm:6},r.a.createElement(i.d,null,r.a.createElement(i.e,null,"Total Marks"),r.a.createElement(i.d,null,r.a.createElement(i.f,{errors:l,name:"marks",value:n.marks,onChange:this.onChange,placeholder:"Marks"}))))),r.a.createElement(s.default,null,r.a.createElement(i.a,{primary:!0,sm:!0,onClick:this.submit},"Add MCB")))}}]),n}(a.Component);t.default=Object(o.b)((function(e){return{questionpaper:e.questionpaper}}),{setQuestionPaperDispatch:u.b,setQuestionPaper:u.a})(j)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[34],{
+
+/***/ "./resources/js/component/teacher/form/SelectTeacher.jsx":
+/*!***************************************************************!*\
+  !*** ./resources/js/component/teacher/form/SelectTeacher.jsx ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_teacher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/teacher */ "./resources/js/component/actions/teacher.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+
+var SelectTeacher = /*#__PURE__*/function (_Component) {
+  _inherits(SelectTeacher, _Component);
+
+  var _super = _createSuper(SelectTeacher);
+
+  function SelectTeacher() {
+    _classCallCheck(this, SelectTeacher);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SelectTeacher, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props = this.props,
+          teachers_name = _this$props.teachers_name,
+          setTeachersNameDispatch = _this$props.setTeachersNameDispatch;
+
+      if (Object.keys(teachers_name).length == 0) {
+        setTeachersNameDispatch();
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          teachers_name = _this$props2.teachers_name,
+          value = _this$props2.value,
+          onChange = _this$props2.onChange;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["Select"], {
+        name: "assigned_teacher",
+        onChange: onChange,
+        value: value || ""
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], null, " -- Select -- "), Object.keys(teachers_name).length > 0 && teachers_name.map(function (teacher, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_3__["SelectOption"], {
+          key: index,
+          value: teacher.id
+        }, teacher.teacher_name);
+      }));
+    }
+  }]);
+
+  return SelectTeacher;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+function mapStateToProps(state) {
+  return {
+    teachers_name: state.teachers_name
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
+  setTeachersNameDispatch: _actions_teacher__WEBPACK_IMPORTED_MODULE_1__["setTeachersNameDispatch"]
+})(SelectTeacher));
+
+/***/ })
+
+}]);

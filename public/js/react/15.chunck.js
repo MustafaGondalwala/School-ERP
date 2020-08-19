@@ -1,1 +1,348 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[15],{341:function(e,t,a){"use strict";a.r(t);var n=a(18),l=a.n(n),r=a(0),c=a.n(r),o=a(2),s=a(3),u=a(37);function i(e){return(i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function f(e,t,a,n,l,r,c){try{var o=e[r](c),s=o.value}catch(e){return void a(e)}o.done?t(s):Promise.resolve(s).then(n,l)}function m(e){return function(){var t=this,a=arguments;return new Promise((function(n,l){var r=e.apply(t,a);function c(e){f(r,n,l,c,o,"next",e)}function o(e){f(r,n,l,c,o,"throw",e)}c(void 0)}))}}function p(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function d(e,t){return(d=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function v(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}();return function(){var a,n=b(e);if(t){var l=b(this).constructor;a=Reflect.construct(n,arguments,l)}else a=n.apply(this,arguments);return h(this,a)}}function h(e,t){return!t||"object"!==i(t)&&"function"!=typeof t?function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e):t}function b(e){return(b=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}var E=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&d(e,t)}(w,e);var t,a,n,r,i,f,h,b,E=v(w);function w(e){var t;return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,w),(t=E.call(this,e)).state={staff_id:"",select_month:"",total_present:0,total_absent:0,total_leave:0,total_half_leave:0,total_none:0,chart_type:"pie",staff_details:"",details_fetch:""},t}return t=w,(a=[{key:"updateDatapoints",value:(b=m(l.a.mark((function e(t){var a,n,r,c;return l.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:a=0,n=0,r=0,c=0,t.map((function(e){switch(e.status){case 1:a=e.total;break;case 2:n=e.total;break;case 3:r=e.total;break;case 4:e.total;break;case 5:c=e.total}})),this.setState({total_leave:r,total_present:a,total_absent:n,total_none:c});case 7:case"end":return e.stop()}}),e,this)}))),function(e){return b.apply(this,arguments)})},{key:"fetchData",value:(h=m(l.a.mark((function e(t,a){var n=this;return l.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,s.a.adminteacher.staff_attendance.get_individual(t,a).then((function(e){var t=e.attendance_details,a=e.staff_details,l=e.details_fetch;n.updateDatapoints(t),n.setState({staff_details:a,details_fetch:l})}));case 2:case"end":return e.stop()}}),e)}))),function(e,t){return h.apply(this,arguments)})},{key:"updateStudentInfo",value:(f=m(l.a.mark((function e(){var t,a,n;return l.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:t=this.props.data,a=t.staff_id,n=t.select_month,this.setState({staff_id:a,select_month:n}),this.fetchData(a,n);case 4:case"end":return e.stop()}}),e,this)}))),function(){return f.apply(this,arguments)})},{key:"componentWillMount",value:(i=m(l.a.mark((function e(){return l.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:this.updateStudentInfo();case 1:case"end":return e.stop()}}),e,this)}))),function(){return i.apply(this,arguments)})},{key:"componentWillReceiveProps",value:(r=m(l.a.mark((function e(){return l.a.wrap((function(e){for(;;)switch(e.prev=e.next){case 0:this.updateStudentInfo();case 1:case"end":return e.stop()}}),e,this)}))),function(){return r.apply(this,arguments)})},{key:"render",value:function(){var e=this,t=this.state,a=t.staff_details,n=t.details_fetch,l=this.state,r=(l.staff_id,l.select_month),s=l.chart_type,i=this.state,f=i.total_present,m=i.total_absent,p=i.total_leave,d=i.total_none,v=i.total_half_leave,h=[{y:f,label:"Total Present"},{y:m,label:"Total Absent"},{y:p,label:"Total Leave"},{y:v,label:"Total Half Leave"},{y:d,label:"Total None Entry"}];return c.a.createElement("div",null,n&&c.a.createElement(y,{details_fetch:n}),c.a.createElement(o.default,{title:"Student Attendance Report"},a&&c.a.createElement(_,{staff_details:a}),c.a.createElement("br",null),c.a.createElement("div",{className:"row"},c.a.createElement("div",{className:"col"},c.a.createElement("label",null,c.a.createElement("h5",null,"Present Student:")),c.a.createElement("input",{type:"text",disabled:!0,value:f,className:"form-control"})),c.a.createElement("div",{className:"col"},c.a.createElement("label",null,c.a.createElement("h5",null,"Leave Student:")),c.a.createElement("input",{type:"text",disabled:!0,value:p,className:"form-control"})),c.a.createElement("div",{className:"col"},c.a.createElement("label",null,c.a.createElement("h5",null,"Absent Student:")),c.a.createElement("input",{type:"text",disabled:!0,value:m,className:"form-control"})),c.a.createElement("div",{className:"col"},c.a.createElement("label",null,c.a.createElement("h5",null,"Attendance Half Leave:")),c.a.createElement("input",{type:"text",disabled:!0,value:v,className:"form-control"})),c.a.createElement("div",{className:"col"},c.a.createElement("label",null,c.a.createElement("h5",null,"Attendance Pending:")),c.a.createElement("input",{type:"text",disabled:!0,value:d,className:"form-control"}))),c.a.createElement("br",null),c.a.createElement("div",{className:"row"},c.a.createElement("label",{className:"form-control-label"},"Chart Type"),c.a.createElement("select",{defaultValue:"pie",onChange:function(t){e.setState({chart_type:t.target.value})},className:"form-control"},c.a.createElement("option",{value:"pie"},"Pie"),c.a.createElement("option",{value:"line"},"Line"),c.a.createElement("option",{value:"bar"},"Bar"),c.a.createElement("option",{value:"area"},"Area"),c.a.createElement("option",{value:"doughnut"},"Doughnut"),c.a.createElement("option",{value:"scatter"},"Scatter"))),c.a.createElement("br",null),c.a.createElement("br",null),c.a.createElement("div",{className:"row"},c.a.createElement(u.default,{title:"Student Attendance for ".concat(r),filename:"individual_student",type:s,dataPoints:h}))))}}])&&p(t.prototype,a),n&&p(t,n),w}(r.Component),y=function(e){var t=e.details_fetch;return console.log(t),c.a.createElement(o.default,{title:"Month Attendance"},c.a.createElement("div",{className:"table-responsive"},c.a.createElement("table",{className:"table"},c.a.createElement("thead",null,c.a.createElement("tr",null,c.a.createElement("th",null,"Sr.no "),c.a.createElement("th",null,"Date "),c.a.createElement("th",null,"Attendance Status "))),c.a.createElement("tbody",null,t&&t.map((function(e,t){return c.a.createElement("tr",{key:t},c.a.createElement("td",null,t+1),c.a.createElement("td",null,e.attendance_date),c.a.createElement("td",null,function(e){switch(e){case 1:return"Present";case 2:return"Absent";case 3:return"Leave";case 4:return"Half Leave";case 5:return"None"}}(e.status)))}))))))},_=function(e){var t=e.staff_details;return c.a.createElement("div",null,c.a.createElement("div",{className:"row"},c.a.createElement("div",{className:"col-md-4"},c.a.createElement("label",{className:"form-control-label"},"Staff Name: "),c.a.createElement("input",{type:"text",className:"form-control",disabled:!0,defaultValue:t.staff_name})),c.a.createElement("div",{className:"col-md-4"},c.a.createElement("label",{className:"form-control-label"},"Relative Name "),c.a.createElement("input",{type:"text",className:"form-control",disabled:!0,defaultValue:t.relative_name})),c.a.createElement("div",{className:"col-md-4"},c.a.createElement("label",{className:"form-control-label"},"Contact Number "),c.a.createElement("input",{type:"text",className:"form-control",disabled:!0,defaultValue:t.contact_no}))))};t.default=E}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[15],{
+
+/***/ "./resources/js/component/exam/form/AllocateSubjectForm.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/component/exam/form/AllocateSubjectForm.jsx ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var _utils_MultipleSelectSubject__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/MultipleSelectSubject */ "./resources/js/component/utils/MultipleSelectSubject.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_subjects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../actions/subjects */ "./resources/js/component/actions/subjects.js");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+/* harmony import */ var _utils_InlineError__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/InlineError */ "./resources/js/component/utils/InlineError.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_9__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+
+
+
+
+
+
+
+var AllocateSubjectForm = /*#__PURE__*/function (_Component) {
+  _inherits(AllocateSubjectForm, _Component);
+
+  var _super = _createSuper(AllocateSubjectForm);
+
+  function AllocateSubjectForm(props) {
+    var _this;
+
+    _classCallCheck(this, AllocateSubjectForm);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      class_id: "",
+      subjectclasswise: "",
+      add: false
+    };
+    _this.changeStateType = _this.changeStateType.bind(_assertThisInitialized(_this));
+    _this.eventType = _this.eventType.bind(_assertThisInitialized(_this));
+    _this.updateSubjectPerClass = _this.updateSubjectPerClass.bind(_assertThisInitialized(_this));
+    _this.deleteClass = _this.deleteClass.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(AllocateSubjectForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props = this.props,
+          subjectclasswise = _this$props.subjectclasswise,
+          class_id = _this$props.class_id,
+          setSubjects = _this$props.setSubjects,
+          subjects = _this$props.subjects;
+      if (Object.keys(subjects).length == 0) _api__WEBPACK_IMPORTED_MODULE_6__["default"].subjects().then(function (data) {
+        setSubjects(data.subjects);
+      });
+      this.setState({
+        subjectclasswise: subjectclasswise,
+        class_id: class_id
+      });
+    }
+  }, {
+    key: "changeStateType",
+    value: function changeStateType(name, value) {
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: "eventType",
+    value: function eventType(type, row) {
+      switch (type) {
+        case "add":
+          this.changeStateType("add", true);
+          break;
+
+        case "delete":
+          this.deleteClass(row);
+          break;
+      }
+    }
+  }, {
+    key: "deleteClass",
+    value: function deleteClass(subject_id) {
+      var _this2 = this;
+
+      var class_id = this.props.class_id;
+      sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire({
+        title: 'Are you sure?',
+        text: "You will able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Subject From Class!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_6__["default"].admin["class"].delete_subject_class_wise(class_id, subject_id).then(function (data) {
+            var subjectclasswise = data.subjectclasswise,
+                message = data.message;
+
+            _this2.setState({
+              subjectclasswise: subjectclasswise,
+              add: false
+            });
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Success", message, "success");
+          })["catch"](function (error) {
+            if (error.response) {
+              var _error$response = error.response,
+                  status = _error$response.status,
+                  data = _error$response.data;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Invalid Data", message, "warning");
+              } else if (status == 400 || status == 500) {
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Error Occurred", "Problem Occurred in Process. Try again Later.", "warning");
+              }
+            }
+          });
+        }
+      });
+    }
+  }, {
+    key: "updateSubjectPerClass",
+    value: function updateSubjectPerClass(subject) {
+      var _this3 = this;
+
+      var class_id = this.props.class_id;
+      sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire({
+        title: 'Are you sure?',
+        text: "You will able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, update subject to class!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_6__["default"].admin["class"].update_subject_class_wise(class_id, subject).then(function (data) {
+            var subjectclasswise = data.subjectclasswise,
+                message = data.message;
+
+            _this3.setState({
+              subjectclasswise: subjectclasswise,
+              add: false
+            });
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Success", message, "success");
+          })["catch"](function (error) {
+            if (error.response) {
+              var _error$response2 = error.response,
+                  status = _error$response2.status,
+                  data = _error$response2.data;
+
+              if (status == 422) {
+                var message = data.error.message;
+                sweetalert2__WEBPACK_IMPORTED_MODULE_9___default.a.fire("Invalid Data", message, "warning");
+              }
+            }
+          });
+        }
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
+
+      var _this$state = this.state,
+          subjectclasswise = _this$state.subjectclasswise,
+          class_id = _this$state.class_id,
+          add = _this$state.add;
+      var subjects = this.props.subjects;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "Subject List Per Class",
+        download: true,
+        add_object: {
+          text: "Add",
+          clickFunction: function clickFunction() {
+            return _this4.eventType("add", true);
+          }
+        }
+      }, subjectclasswise.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Actions")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, subjectclasswise.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.subject.subject_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "table-actions"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#!",
+          onClick: function onClick(e) {
+            return _this4.eventType("delete", item.id);
+          },
+          className: "table-action table-action-delete",
+          "data-toggle": "tooltip",
+          "data-original-title": "Delete Subject"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-trash"
+        }))));
+      }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " No Subject Found for Class ")), add && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddSubjectClass, {
+        submit: this.updateSubjectPerClass,
+        type: "add",
+        title: "Add Subject Class",
+        subjects: subjects,
+        subjectclasswise: subjectclasswise
+      }));
+    }
+  }]);
+
+  return AllocateSubjectForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+var AddSubjectClass = /*#__PURE__*/function (_Component2) {
+  _inherits(AddSubjectClass, _Component2);
+
+  var _super2 = _createSuper(AddSubjectClass);
+
+  function AddSubjectClass(props) {
+    var _this5;
+
+    _classCallCheck(this, AddSubjectClass);
+
+    _this5 = _super2.call(this, props);
+    _this5.state = {
+      select_subject: "",
+      error: ""
+    };
+    _this5.onChange = _this5.onChange.bind(_assertThisInitialized(_this5));
+    _this5.submit = _this5.submit.bind(_assertThisInitialized(_this5));
+    return _this5;
+  }
+
+  _createClass(AddSubjectClass, [{
+    key: "onChange",
+    value: function onChange(e) {
+      var _e$target = e.target,
+          name = _e$target.name,
+          value = _e$target.value;
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this$state2 = this.state,
+          select_subject = _this$state2.select_subject,
+          error = _this$state2.error;
+
+      if (select_subject == "") {
+        this.setState({
+          error: "Select Subject"
+        });
+        return false;
+      }
+
+      this.setState({
+        error: ""
+      });
+      this.props.submit(select_subject);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          type = _this$props2.type,
+          subjects = _this$props2.subjects,
+          title = _this$props2.title,
+          subjectclasswise = _this$props2.subjectclasswise;
+      var _this$state3 = this.state,
+          select_subject = _this$state3.select_subject,
+          error = _this$state3.error;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: title
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
+        md: "6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["FormLabel"], null, "Select Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Select"], {
+        name: "select_subject",
+        onChange: this.onChange,
+        value: select_subject
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
+        selected: true
+      }, "-- Select --"), Object.keys(subjects).length > 0 && subjects.map(function (item, id) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["SelectOption"], {
+          key: id,
+          value: item.id
+        }, item.subject_name);
+      })), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_InlineError__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        text: error
+      })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Col"], {
+        md: 6
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        primary: true,
+        sm: true,
+        onClick: this.submit
+      }, "Add"))));
+    }
+  }]);
+
+  return AddSubjectClass;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+function mapStateToProps(state) {
+  return {
+    subjects: state.subjects
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, {
+  setSubjects: _actions_subjects__WEBPACK_IMPORTED_MODULE_5__["setSubjects"]
+})(AllocateSubjectForm));
+
+/***/ })
+
+}]);

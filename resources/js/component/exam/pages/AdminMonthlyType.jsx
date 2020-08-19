@@ -8,9 +8,11 @@ import {
   FormGroup,
   FormLabel,
   Input,
+  SelectOption,
   Button,
   Table,
   Thead,
+  Select,
 } from "../../utils/Components";
 import api from "../../api";
 import InlineError from "../../authentication/form/InlineError";
@@ -27,11 +29,15 @@ import { classwiseSubject } from "../../reducers/classwiseSubject";
 class AdminMonthlyType extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: {
+    this.initialData = {
         monthly_test:"",
         subject_ids:"",
-      },
+        test_type:"",
+        min_marks:"",
+        max_marks:""
+    }
+    this.state = {
+      data: this.initialData,
       errors: "",
       button_text: "Add Monthly Type",
     };
@@ -60,7 +66,10 @@ class AdminMonthlyType extends Component {
       const errors = {};
       if (!data.subject_ids) errors.subject_ids = "Can't be blank";
       if (!data.monthly_test) errors.monthly_test = "Can't be blank";
-      return errors;
+      if (!data.min_marks) errors.min_marks = "Can't be blank";
+      if (!data.max_marks) errors.max_marks = "Can't be blank";
+      if (!data.test_type) errors.test_type = "Can't be blank";
+        return errors;
   }
   submit() {
     const { data } = this.state;
@@ -86,6 +95,7 @@ class AdminMonthlyType extends Component {
             button_text: "Add Monthly Type",
             monthly_test: "",
             error: "",
+            data: this.initialData
           });
           Swal.fire("Success", message, "success");
         })
@@ -129,7 +139,6 @@ class AdminMonthlyType extends Component {
                 message,
                 'success'
               )
-              
           }).catch(error => {
               console.log(error)
               Swal.fire("Error","Error Occured in Proccess","error");
@@ -167,6 +176,44 @@ class AdminMonthlyType extends Component {
                   />
                 </FormGroup>
               </Col>
+
+              <Col md={6} sm={6}>
+                <FormGroup>
+                  <FormLabel>Min Marks</FormLabel>
+                  <Input
+                    onChange={this.onChange}
+                    errors={errors}
+                    type="number"
+                    name="min_marks"
+                    value={data.min_marks}
+                    placeholder="Min Marks"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6} sm={6}>
+                <FormGroup>
+                  <FormLabel>Max. Marks</FormLabel>
+                  <Input
+                    onChange={this.onChange}
+                    errors={errors}
+                    type="number"
+                    name="max_marks"
+                    value={data.max_marks}
+                    placeholder="Max Marks"
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6} sm={6}>
+                <FormGroup>
+                  <FormLabel>Test Type</FormLabel>
+                  <Select errors={errors} name="test_type" onChange={this.onChange} value={data.test_type}>
+                    <SelectOption value="" disabled={true} selected>-- Select --</SelectOption>
+                    <SelectOption value="1">Oral</SelectOption>
+                    <SelectOption value="2">Written</SelectOption>
+                  </Select>
+                </FormGroup>
+              </Col>
+
               <Col md={6} sm={6}>
                   <FormGroup>
                     <FormLabel>Subject: </FormLabel>
@@ -188,17 +235,21 @@ class AdminMonthlyType extends Component {
             </Row>
             <br />
             <Row>
-              <Col md={6}>
+              <Col md={6} lg={6}>
                 <Table>
                   <Thead>
                     <th>Sr.no</th>
                     <th>Monthly Test</th>
                     <th>Subjects</th>
+                    <th>Min. Marks</th>
+                    <th>Max. Marks</th>
+                    <th>Test Type</th>
                     <th>Remove</th>
                   </Thead>
                   <tbody>
                     { classwiseMonthlyTest[class_id] != undefined &&
                       classwiseMonthlyTest[class_id].map((item, id) => {
+                        console.log(item)
                         return (
                           <tr key={id}>
                             <td>{id + 1}</td>
@@ -207,8 +258,10 @@ class AdminMonthlyType extends Component {
                               {item.subjects.map(item => {
                                 return <span>{item.subject.subject_name},</span>
                               })}
-
                             </td>
+                            <td>{item.min_marks}</td>
+                            <td>{item.max_marks}</td>
+                            <td>{item.test_type == "1" ? "Oral" : "Written"}</td>
                             <td>
                               <button
                                 onClick={(e) => this.removeMonthlyTest(item.id)}

@@ -19,10 +19,7 @@ class CreateExamMarksheetsTable extends Migration
             $table->integer('student_id');
             $table->integer('class_id');
             $table->integer('subject_id');
-            $table->integer('min_marks')->default(0);
-            $table->integer('max_marks')->default(0);
             $table->integer('total_marks')->default(0);
-            $table->char('grade')->nullable();
             $table->integer('exam_type');
             $table->integer('year_id');
             $table->morphs('user');

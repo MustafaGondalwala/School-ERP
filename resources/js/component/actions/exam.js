@@ -12,7 +12,7 @@ export const setMonthlyTest = monthly_test => ({
 })
 
 export const getExamTypeDispatch = () => dispatch => {
-    api.admin.exam.exam_type.get().then(data => {
+    api.exam_type().then(data => {
       dispatch(getExamType(data.exam_types))
     })
   }

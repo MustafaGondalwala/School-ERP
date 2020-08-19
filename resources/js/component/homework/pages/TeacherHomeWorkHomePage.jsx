@@ -1,11 +1,12 @@
 import React,{Component} from "react"
 import TeacherHeader from "../header/TeacherHeader"
 import ColComponent from "../../utils/ColComponent"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 const TeacherHomeWorkHomePage = (props) => {
     return(
         <div>
-            <TeacherHeader mainHeader="HomeWork" header="HomePage"/>
+            <EmptyHeader mainHeader="HomeWork" header="HomePage"/>
             <div className="container-fluid mt--6">
                 <div className="row">
                     <ColComponent
@@ -27,23 +28,11 @@ const TeacherHomeWorkHomePage = (props) => {
                         button_text="Manage"
                         />
                     <ColComponent
-                        title="View Home"
-                        description="Add/Edit/Delete Current HomeWork"
-                        link={`/teacher/homework/manage`}
-                        button_text="Manage"
-                        />
-                    <ColComponent
                         title="Check Home Work"
                         description="Check Current/Past HomeWork"
                         link={`/teacher/homework/check`}
                         button_text="Manage"
                         />
-                    <ColComponent
-                        title="View Assignment"
-                        description="View Current/Past Assigment"
-                        link="/admin/fees/set-installments"
-                        button_text="Set"
-                    />
                 </div>
             </div>
         </div>

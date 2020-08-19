@@ -14,43 +14,25 @@ class TeacherOnlineExamHome extends Component{
                 </TopBreadCrumb>
                 <BodyComponent>
                     <div className="card-deck flex-column flex-xl-row">
-                    <CardComponent title="Test">
+                    <CardComponent title="Online Test">
                         <div className="row card-wrapper">
                         <ColComponent
-                            title="Add Online Test"
-                            description="Add Online Test"
-                            link={"/teacher/online-exam/test-add/"+class_id}
-                            button_text="Add"
-                        />
-                        <ColComponent
-                            title="Manage Online Test"
-                            description="View/Edit Online Test"
-                            link={"/teacher/online-exam/test-manage/"+class_id}
-                            button_text="Manage"
-                        />
-                        <ColComponent
-                            title="Test Attendance Report"
-                            description="View Test Attendance Report"
-                            link={"/teacher/online-exam/test-attendance-report/"+class_id}
+                            title="View Current Online Test"
+                            description="View Current Online Test"
+                            link={"/teacher/online-exam/classwise/view-current/"+class_id}
                             button_text="View"
                         />
                         <ColComponent
-                            title="Edit Marksheet"
-                            description="Edit Online Test Marksheet"
-                            link={"/teacher/online-exam/test-edit-marksheet/"+class_id}
-                            button_text="Edit Marksheet"
+                            title="View Past Online Test"
+                            description="View Past Online Test"
+                            link={"/teacher/online-exam/classwise/test-past/"+class_id}
+                            button_text="View"
                         />
                         <ColComponent
                             title="View/Print Marksheet"
                             description="View/Print Online Test Marksheet"
-                            link={"/teacher/online-exam/test-view-print-marksheet/"+class_id}
+                            link={"/teacher/online-exam/classwise/test-view-print-marksheet/"+class_id}
                             button_text="View Marksheet"
-                        />
-                        <ColComponent
-                            title="Online Test Result"
-                            description="View Online Test Result"
-                            link={"/teacher/online-exam/test-result/"+class_id}
-                            button_text="View"
                         />
                         </div>
                     </CardComponent>

@@ -25,6 +25,7 @@ export const ParentLeftSide = ({parent_childs}) => {
           <div className="collapse navbar-collapse" id="sidenav-collapse-main">
           <ul className="navbar-nav">
                 {Object.keys(parent_childs).length > 0  && parent_childs.map((item,key) => {
+                  {/* console.log(item) */}
                   return <li className="nav-item" key={key}>
                         <a className="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
                           <i className="ni ni-ungroup text-orange" />
@@ -39,7 +40,7 @@ export const ParentLeftSide = ({parent_childs}) => {
                               </Link>
                             </li>
                             <li className="nav-item">
-                              <Link to={`/parent/homework/student/${item.id}`} className="nav-link">
+                              <Link to={`/parent/homework/${item.id}`} className="nav-link">
                                 <span className="sidenav-mini-icon"> H </span>
                                 <span className="sidenav-normal"> HomeWork </span>
                               </Link>
@@ -68,6 +69,12 @@ export const ParentLeftSide = ({parent_childs}) => {
                               <Link to={`/parent/virtual_class/${item.id}`} className="nav-link">
                                 <span className="sidenav-mini-icon"> V </span>
                                 <span className="sidenav-normal"> Virtual Class </span>
+                              </Link>
+                            </li>
+                            <li className="nav-item">
+                              <Link to={`/parent/leave/${item.id}`} className="nav-link">
+                                <span className="sidenav-mini-icon"> L </span>
+                                <span className="sidenav-normal"> Leave </span>
                               </Link>
                             </li>
 

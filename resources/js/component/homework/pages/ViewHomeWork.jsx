@@ -3,7 +3,7 @@ const TeacherHomePage = React.lazy(() => import('../header/TeacherHeader'));
 const ViewPanelHomeWork = React.lazy(() => import('../panel/ViewPanelHomeWork'));
 const AddHomeWork = React.lazy(() => import('../form/AddHomeWork'));
 const ViewParticularHomeWork = React.lazy(() => import('../form/ViewParticularHomeWork'));
-const HomeWorkSubmittion = React.lazy(() => import('../form/HomeWorkSubmittion'));
+// const HomeWorkSubmittion = React.lazy(() => import('../form/HomeWorkSubmittion'));
 const StudentHomeWorkStatus = React.lazy(() => import("../form/StudentHomeWorkStatus"))
 const EditHomeWork = React.lazy(() => import("../form/EditHomeWork"))
 
@@ -113,7 +113,7 @@ class ViewHomeWork extends Component{
                     
                     {edit_homework_panel && <Suspense fallback={<div>Loading…</div>}><EditHomeWork data={edit_homework_data} /></Suspense>}
                     {view_panel && <Suspense fallback={<div>Loading…</div>}><ViewParticularHomeWork view_id={view_id}/></Suspense> }
-                    {home_check_panel && <Suspense fallback={<div>Loading…</div>}><HomeWorkSubmittion homework_id={home_check_id}/></Suspense>}
+                    {/* {home_check_panel && <Suspense fallback={<div>Loading…</div>}><HomeWorkSubmittion homework_id={home_check_id}/></Suspense>} */}
                     {student_status && <Suspense fallback={<div>Loading…</div>}><StudentHomeWorkStatus homework_id={student_status_id}/></Suspense>}
                 </div>
             </div>

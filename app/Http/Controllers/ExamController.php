@@ -18,14 +18,21 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
+    public function getExamResults(Request $request,$student_id){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $data = ExamType::with('student_marksheet')->where(['school_id'=>$school_id,'year_id'=>$year_id])->get();
+        return $this->ReS(["exam_results"=>$data]);
+    }
     public function getMonthlyTestResults(Request $request,$student_id){
         $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
-        $data = MonthlyTestStudent::with('monthlyTest')->where([
-            'student_id'=>$student_id,
+        $class_id = StudentInfo::find($student_id)->class_id;
+        $data = MonthlyTestType::with('student_marks')->where([
+            'school_id'=>$school_id,
             'year_id'=>$year_id,
-            'status'=>3,
-            'school_id'=>$school_id
+            'class_id'=>$class_id,
+            'publish'=>1
         ])->get();
         return $this->ReS(["monthly_test"=>$data]);
     }
@@ -58,6 +65,9 @@ class ExamController extends Controller
                 $request->validate([
                     'monthly_test'=>'required|string',
                     'subject_ids'=>'required',
+                    'min_marks'=>'required|integer',
+                    'max_marks'=>'required|integer',
+                    'test_type'=>'required|integer',
                 ]);
                 $year_id = $this->getSchoolYearId($request);
                 $school_id = $this->getSchoolId($request);
@@ -76,7 +86,11 @@ class ExamController extends Controller
                 $new_monthly->year_id = $year_id;
                 $new_monthly->monthly_test = $request->monthly_test;
                 $new_monthly->class_id = $class_id;
+                $new_monthly->min_marks = $request->min_marks;
+                $new_monthly->max_marks = $request->max_marks;
+                $new_monthly->test_type = $request->test_type;
                 $new_monthly->save();
+                
                 foreach($request->subject_ids as $subject_ids){
                     $new_monthly->subjects()->create([
                         'subject_id'=>$subject_ids
@@ -157,7 +171,7 @@ class ExamController extends Controller
         $school_id = $this->getSchoolId($request);
         $class_id = $request->class_id;
         $exam_type = $request->exam_type;
-
+        $max_marks = ExamType::find($exam_type)->max_marks;
         $all_students = StudentInfo::select('id')->where(["class_id"=>$class_id])->get()->pluck('id');
         foreach($all_students as $student){
             $checkIfExist = ExamMarkSheetStudents::where([
@@ -184,7 +198,8 @@ class ExamController extends Controller
                             'year_id'=>$year_id,
                             'exam_type'=>$exam_type
                         ])->get();
-        return $this->ReS(['studentDetails'=>$getAllData]);
+        // dd($exam_type);
+        return $this->ReS(['studentDetails'=>$getAllData,"max_marks"=>$max_marks]);
     }
     public function fetchExamHallTicketIndividual(Request $request){
         $request->validate([
@@ -279,16 +294,11 @@ class ExamController extends Controller
         try{
             DB::beginTransaction();
             $studentMarksheet = ExamMarkSheetStudents::find($student_marksheet_id)->update([
-                'grade'=>$request->grade,
-                'remark'=>$request->remark,
                 'status'=>2
             ]);
 
             foreach($request->marksheet as $marksheet){
                 ExamMarkSheet::find($marksheet['id'])->update([
-                    'grade'=>$marksheet['grade'],
-                    'min_marks'=>$marksheet['min_marks'],
-                    'max_marks'=>$marksheet['max_marks'],
                     'total_marks'=>$marksheet['total_marks'],
                 ]);
             }
@@ -303,49 +313,32 @@ class ExamController extends Controller
             'year_id'=>$year_id,
             'exam_type'=>$exam_type
         ])->get();
-
-        // $marksheet = $this->getMonthlyTestStudents($school_id,$student_id,$class_id,$monthy_test_type,$year_id,$this->getClassWiseOnlySubjectId($school_id,$year_id,$class_id));
         return $this->ReS(["message"=>"Student Marksheet Updated!!","marksheet"=>$getAllData]);
     
     }
     public function updateMonthlyTestMarkhsheet(Request $request){
         $request->validate([
-            'marksheet'=>'required|array',
-            'marksheet_id'=>'required|integer',
-            'monthtest_id'=>'required|integer'
+            'update_students'=>'required|array',
         ]);
-        $student_marksheet_id = $request->marksheet_id;
-        $studentMarksheet = MonthlyTestStudent::find($student_marksheet_id);
-        $class_id = $studentMarksheet['class_id'];
-        $year_id = $studentMarksheet['year_id'];
-        $student_id  = $studentMarksheet['student_id'];
-        $school_id = $studentMarksheet['school_id'];
-        $monthy_test_type = $studentMarksheet['monthly_test_type'];
-        $subjects = MonthlyTestType::with('subjects')->find($monthy_test_type)->subjects()->pluck('subject_id');
-        // $subjects = $this->getClassWiseOnlySubjectId($school_id,$year_id,$class_id);
-        try{
-            DB::beginTransaction();
-            $studentMarksheet = MonthlyTestStudent::find($student_marksheet_id)->update([
-                'grade'=>$request->grade,
-                'remark'=>$request->remark,
-                'status'=>2
-            ]);
-
-            foreach($request->marksheet as $marksheet){
-                MonthlyTestMarksheet::find($marksheet['id'])->update([
-                    'grade'=>$marksheet['grade'],
-                    'min_marks'=>$marksheet['min_marks'],
-                    'max_marks'=>$marksheet['max_marks'],
-                    'total_marks'=>$marksheet['total_marks'],
-                ]);
+        $update_students = $request->update_students;
+        foreach($update_students as $key => $value){
+            if($value != null){
+                $monthTestInstance = MonthlyTestStudent::find($key);
+                if($monthTestInstance != null)
+                    $monthTestInstance->update([
+                        'total_marks'=>$value
+                    ]);
             }
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollback();
-            return $this->ReE(["message"=>$e->getMessage()]);
         }
-        $marksheet = $this->getMonthlyTestStudents($school_id,$student_id,$class_id,$monthy_test_type,$year_id,$subjects);
-        return $this->ReS(["message"=>"Student Marksheet Updated!!","marksheet"=>$marksheet]);
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $class_id = $request->class_id;
+        $data = MonthlyTestType::with('subjects')->where([
+            'class_id'=>$class_id,
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
+        ])->get();
+        return $this->ReS(["message"=>"Student Marksheet Updated!!",'monthlyTest'=>$data]);
     }
 
     public function getIndividualExamMarksheet(Request $request,$student_marksheet_id){
@@ -547,8 +540,6 @@ class ExamController extends Controller
             $exam_marksheet = $request->exam_marksheet;
             foreach($exam_marksheet as $item){
                 ExamMarksheet::find($item['id'])->update([
-                    'min_marks'=>$item['min_marks'],
-                    'max_marks'=>$item['max_marks'],
                     'total_marks'=>$item['total_marks'],
                     'grade'=>$item['grade'],
                 ]);
@@ -651,27 +642,52 @@ class ExamController extends Controller
     }
     public function getExamType(Request $request){
         $school_id = $this->getSchoolId($request);
-        return $this->ReS(["exam_types"=>$this->getExamTypeP($school_id)]);
+        $year_id = $this->getSchoolYearId($request);
+        return $this->ReS(["exam_types"=>$this->getExamTypeP($school_id,$year_id)]);
     }
-    private function getExamTypeP($school_id){
-        return ExamType::select('id','exam_type')->where('school_id',$school_id)->get();
+    private function getExamTypeP($school_id,$year_id){
+        return ExamType::select('id','exam_type','max_marks','min_marks','publish','publish_at')->where(['school_id'=>$school_id,'year_id'=>$year_id])->get();
     }
     public function addExamType(Request $request){
         $request->validate([
-            'exam_type'=>'required|string'
+            'exam_type'=>'required|string',
+            'max_marks'=>'required|integer',
+            'min_marks'=>'required|integer',
         ]);
         $exam_type = $request->exam_type;
         $school_id = $this->getSchoolId($request);
-        $checkIfExist = ExamType::where(['school_id'=>$school_id,"exam_type"=>$exam_type])->count();
+        $year_id = $this->getSchoolYearId($request);
+        $checkIfExist = ExamType::where(['school_id'=>$school_id,"year_id"=>$year_id,"exam_type"=>$exam_type])->count();
         if($checkIfExist == 0){
             $new_type = new ExamType;
             $new_type->exam_type = $exam_type;
+            $new_type->year_id = $year_id;
             $new_type->school_id = $school_id;
+            $new_type->max_marks = $request->max_marks;
+            $new_type->min_marks = $request->min_marks;
             $new_type->save();
-            return $this->ReS(["exam_types"=>$this->getExamTypeP($school_id),"message"=>"New Exam Type Added!"]);
+            return $this->ReS(["exam_types"=>$this->getExamTypeP($school_id,$year_id),"message"=>"New Exam Type Added!"]);
         }else{
             return $this->ReE(["message"=>"Exam Type Already Exists"],422);
         }
     }
+    public function publishChangeStatus(Request $request){
+        $request->validate([
+            'status'=>'integer',
+            'monthlytest_id'=>'integer'
+        ]);
 
+        MonthlyTestType::find($request->monthlytest_id)->update([
+            'publish'=>$request->status,
+            'publish_at'=>\Carbon\Carbon::now()
+        ]);
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $data = MonthlyTestType::with('subjects')->where([
+            'class_id'=>$request->class_id,
+            'year_id'=>$year_id,
+            'school_id'=>$school_id
+        ])->get();
+        return $this->ReS(["message"=>"Data Updated","monthyTest"=>$data]);
+    }
 }

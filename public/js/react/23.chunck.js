@@ -1,1 +1,211 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[23],{343:function(e,t,n){"use strict";n.r(t);var a=n(0),r=n.n(a),o=n(2),i=n(100),c=n.n(i),l=n(101),s=n.n(l),u=n(14),m=n(48),f=n(7),b=(n(6),n(1));function p(e){return(p="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function d(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(e);t&&(a=a.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,a)}return n}function h(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?d(Object(n),!0).forEach((function(t){y(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):d(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function y(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function g(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}function v(e,t){return(v=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function E(e){var t=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}();return function(){var n,a=k(e);if(t){var r=k(this).constructor;n=Reflect.construct(a,arguments,r)}else n=a.apply(this,arguments);return j(this,n)}}function j(e,t){return!t||"object"!==p(t)&&"function"!=typeof t?O(e):t}function O(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function k(e){return(k=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}var S=function(e){!function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),t&&v(e,t)}(l,e);var t,n,a,i=E(l);function l(e){var t;return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,l),(t=i.call(this,e)).state={data:{title:"Science HomeWork",subtitle:"Science",description:"<p>Science HomeWork</p>",submition_date:"2020-03-03",image_url:[],subject:"1",class_id:""},errors:{},add_button:"Add HomeWork"},t.onSubmit=t.onSubmit.bind(O(t)),t.makeInputNull=t.makeInputNull.bind(O(t)),t.onFileChange=t.onFileChange.bind(O(t)),t}return t=l,(n=[{key:"onChange",value:function(e){this.setState({data:h(h({},this.state.data),{},y({},e.target.name,e.target.value))})}},{key:"componentDidMount",value:function(){var e=this.props,t=e.subject,n=e.setSubjectDispatch;0==Object.keys(t).length&&n(),this.setState({data:h(h({},this.state.data),{},y({},"class_id",this.props.class_id))})}},{key:"validate",value:function(e){var t={};return e.title||(t.title="Can't be blank"),e.subtitle||(t.subtitle="Can't be blank"),e.description||(t.description="Can't be blank"),e.submition_date||(t.submition_date="Can't be blank"),e.title.length<3&&(t.title="Min. Length 3 char."),e.description.length<3&&(t.student_address="Min. Length 5 char."),t}},{key:"onSubmit",value:function(e){var t=this;e.preventDefault();var n=this.state,a=n.data,r=n.files,o=this.validate(this.state.data);if(this.setState({errors:o}),0===Object.keys(o).length){this.setState({add_button:"Adding HomeWork ..."});var i=new FormData;Object.keys(a).map((function(e){i.append(e,a[e])}));for(var c=0;c<r.length;c++)i.append("files[".concat(c,"]"),r[c]);this.props.submit(i).then((function(){t.setState({add_button:"Add HomeWork"})})).catch((function(e){console.log("error occured")}))}}},{key:"makeInputNull",value:function(){this.setState({data:{title:"",subtitle:"",description:"",submition_date:"",images_url:[],subject:""}})}},{key:"onFileChange",value:function(e){var t=e.target,n=(t.name,t.files),a=[];Object.keys(n).map((function(e){a.push(n[e])})),this.setState({files:a});var r=[];Object.keys(n).length>0&&Object.keys(n).map((function(e){r.push(URL.createObjectURL(n[e]))})),this.setState({data:h(h({},this.state.data),{},y({},"image_url",r))})}},{key:"render",value:function(){var e=this,t=this.state,n=t.data,a=t.errors,i=t.add_button,l=this.props,m=l.insert_success,f=l.subject;return r.a.createElement(o.default,{title:"Add HomeWork"},r.a.createElement("form",null,r.a.createElement("div",{className:"row"},m&&r.a.createElement("div",{className:"alert alert-success alert-dismissible fade show",role:"alert"},r.a.createElement("span",{className:"alert-icon"},r.a.createElement("i",{className:"ni ni-like-2"})),r.a.createElement("span",{className:"alert-text"},r.a.createElement("div",null,"HomeWork Add Successfully.")),r.a.createElement("button",{type:"button",className:"close","data-dismiss":"alert","aria-label":"Close"},r.a.createElement("span",{"aria-hidden":"true"},"×")))),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Title: "),r.a.createElement("input",{type:"text",name:"title",value:n.title,onChange:function(t){return e.onChange(t)},className:"form-control"}),a.title&&r.a.createElement(u.a,{text:a.title})),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Sub Title: "),r.a.createElement("input",{type:"text",name:"subtitle",value:n.subtitle,onChange:function(t){return e.onChange(t)},className:"form-control"}),a.subtitle&&r.a.createElement(u.a,{text:a.subtitle})),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Subject:"),r.a.createElement("select",{className:"form-control",value:n.subject,onChange:function(t){return e.onChange(t)},name:"subject"},r.a.createElement("option",{value:""},"-- Select --"),Object.keys(f).length>0&&f.map((function(e){return r.a.createElement("option",{value:e.id},e.subject_name)})))),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Description: "),r.a.createElement(c.a,{editor:s.a,data:n.description,onChange:function(t,n){var a=n.getData();e.setState({data:h(h({},e.state.data),{},y({},"description",a))})},onInit:function(e){e.setData(n.description)}}),a.description&&r.a.createElement(u.a,{text:a.description})),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Update Files: "),r.a.createElement(b.s,{onChange:this.onFileChange,name:"files"}),r.a.createElement(b.i,{files:n.image_url})),r.a.createElement("div",{className:"form-group"},r.a.createElement("label",null,"Submition Date:"),r.a.createElement("input",{type:"date",className:"form-control",name:"submition_date",onChange:function(t){return e.onChange(t)},value:n.submition_date}),a.submition_date&&r.a.createElement(u.a,{text:a.submition_date})),r.a.createElement("div",{className:"form-group"},r.a.createElement("button",{className:"btn btn-primary",onClick:function(t){return e.onSubmit(t)}},i))))}}])&&g(t.prototype,n),a&&g(t,a),l}(a.Component);t.default=Object(f.b)((function(e){return{subject:e.subjects}}),{setSubjectDispatch:m.a})(S)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[23],{
+
+/***/ "./resources/js/component/homework/form/StudentHomeWorkStatus.jsx":
+/*!************************************************************************!*\
+  !*** ./resources/js/component/homework/form/StudentHomeWorkStatus.jsx ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/CardComponent */ "./resources/js/component/utils/CardComponent.jsx");
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-data-table-component */ "./node_modules/react-data-table-component/dist/index.cjs.js");
+/* harmony import */ var react_data_table_component__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_data_table_component__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ckeditor/ckeditor5-react */ "./node_modules/@ckeditor/ckeditor5-react/dist/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _utils_Row__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/Row */ "./resources/js/component/utils/Row.jsx");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+
+
+
+
+
+var StudentHomeWork = /*#__PURE__*/function (_React$Component) {
+  _inherits(StudentHomeWork, _React$Component);
+
+  var _super = _createSuper(StudentHomeWork);
+
+  function StudentHomeWork(props) {
+    var _this;
+
+    _classCallCheck(this, StudentHomeWork);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      student_status: "",
+      check: ""
+    };
+    return _this;
+  }
+
+  _createClass(StudentHomeWork, [{
+    key: "fetchData",
+    value: function fetchData(homework_id) {
+      var _this2 = this;
+
+      this.setState({
+        student_status: ""
+      });
+      _api__WEBPACK_IMPORTED_MODULE_2__["default"].teacher.homework.get_student_status(homework_id).then(function (data) {
+        var student_status = data.student_status;
+
+        _this2.setState({
+          student_status: student_status
+        });
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var homework_id = this.props.homework_id;
+      this.fetchData(homework_id);
+    }
+  }, {
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps() {
+      var homework_id = this.props.homework_id;
+      this.fetchData(homework_id);
+    }
+  }, {
+    key: "fetchStatus",
+    value: function fetchStatus(status) {
+      switch (status) {
+        case 1:
+          return "Pending";
+
+        case 2:
+          return "Completed";
+
+        case 3:
+          return "Issue Raised";
+
+        case 4:
+          return "Submitted";
+
+        case 5:
+          return "Rejected";
+      }
+    }
+  }, {
+    key: "viewSubmition",
+    value: function viewSubmition(data) {
+      this.setState({
+        check: data
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$state = this.state,
+          student_status = _this$state.student_status,
+          check = _this$state.check;
+      var columns = [{
+        name: "Sr no.",
+        selector: "id",
+        sortable: true
+      }, {
+        name: "Student Roll No",
+        sortable: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, row.student.roll_no);
+        }
+      }, {
+        name: "Student Name",
+        sortable: true,
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, row.student.student_name);
+        }
+      }, {
+        name: "Status",
+        sortable: true,
+        right: true,
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, _this3.fetchStatus(row.status));
+        }
+      }, {
+        name: "View Submission",
+        cell: function cell(row) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, (row.status == 2 || row.status == 4) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
+            onClick: function onClick(e) {
+              return _this3.viewSubmition(row);
+            },
+            primary: true,
+            sm: true
+          }, "Check"));
+        }
+      }];
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        title: "HomeWork Student Status"
+      }, student_status ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_data_table_component__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        title: null,
+        columns: columns,
+        data: student_status
+      })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Loading ...")), check && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ViewStudentSubmition, {
+        updateHomeWorkSubmission: this.updateHomeWorkSubmission,
+        data: check
+      }));
+    }
+  }]);
+
+  return StudentHomeWork;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var ViewStudentSubmition = function ViewStudentSubmition(props) {
+  var data = props.data;
+  var title = "Submission: " + data.student.student_name;
+  var description = data.description,
+      files = data.files;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: title
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Row__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Col"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormLabel"], null, "Description"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    disabled: true,
+    editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_6___default.a,
+    data: description,
+    onInit: function onInit(editor) {
+      editor.setData(description);
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["PreviewServerFiles"], {
+    files: files
+  })))));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (StudentHomeWork);
+
+/***/ })
+
+}]);

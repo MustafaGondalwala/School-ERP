@@ -39,7 +39,7 @@ const TeacherExamHomePage = (props) => {
               </div>
             </CardComponent>
           </div>
-
+          
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Exam">
               <div className="row card-wrapper">
