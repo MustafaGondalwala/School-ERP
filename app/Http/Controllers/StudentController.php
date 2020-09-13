@@ -252,14 +252,13 @@ class StudentController extends Controller
             return $this->ReE(["message"=>"Error Occured"]);
         }finally{
             $school_id = $this->getSchoolId($request);
-            $classes = Classes::with('teacher','roll_no')->where('school_id',$school_id)->get();
+            $classes = Classes::with('teacher','roll_no')->where(['school_id'=>$school_id,'year_id'=>$year_id])->get();
             return $this->ReS(["classes"=>$classes]);
         }
     }
     public function updateParticularCell(Request $request){
         $request->validate([
             'id'=>'required|integer',
-            'oldValue'=>'required|string',
             'newValue'=>'required|string',
             'field'=>'required|string'
         ]);

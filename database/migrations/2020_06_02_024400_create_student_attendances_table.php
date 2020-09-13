@@ -20,6 +20,7 @@ class CreateStudentAttendancesTable extends Migration
             $table->date('attendance_date');
             $table->integer('status')->comment("1=>Present 2=>Absent 3=> Leave 4=>Half Present 5=>None")->default(5);
             $table->integer('school_id');
+            $table->integer('year_id');
             $table->timestamps();
         });
     }

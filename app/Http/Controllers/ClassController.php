@@ -76,12 +76,14 @@ class ClassController extends Controller
             'publish_timetable'=>'required|array'
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+
         foreach($request->publish_timetable as $key => $value){
             if($value != null){
-                Classes::where(['id'=>$key,'school_id'=>$school_id])->update(['time_table_id'=>$value]);
+                Classes::where(['id'=>$key,'year_id'=>$year_id,'school_id'=>$school_id])->update(['time_table_id'=>$value]);
             }
         }
-        $classes = Classes::select('id','class_title','section','time_table_id')->where('school_id',$school_id)->get();
+        $classes = Classes::select('id','class_title','section','time_table_id')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get();
         return $this->ReS(["classes"=>$classes]);
     }
     public function deleteClassPeriod(Request $request,$period_id){
@@ -154,15 +156,16 @@ class ClassController extends Controller
             'section'=>'required|string'
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $class = $request->class;
         $section = $request->section;
-        $checkIfExist = Classes::where(['school_info_id'=>$school_id,"class_title"=>$class,"section"=>$section])->count();
+        $checkIfExist = Classes::where(['school_id'=>$school_id,"class_title"=>$class,"section"=>$section,"year_id"=>$year_id])->count();
         if($checkIfExist != 0){
             return $this->ReE(["message"=>"Section already Exist. Please Try other"],422);
         }
-        $checkClass = Classes::where(["school_info_id"=>$school_id,"class_title"=>$class,"section"=>NULL])->count();
+        $checkClass = Classes::where(["school_id"=>$school_id,"year_id"=>$year_id,"class_title"=>$class,"section"=>NULL])->count();
         if($checkClass == 1){  
-            $update_section = Classes::where(["school_info_id"=>$school_id,"class_title"=>$class])->update([
+            $update_section = Classes::where(["year_id"=>$year_id,"school_id"=>$school_id,"class_title"=>$class])->update([
                 'section'=>$section
             ]);
         }else{
@@ -170,12 +173,13 @@ class ClassController extends Controller
             $new_class = new Classes;
             $new_class->class_title = $class;
             $new_class->section = $section;
-            $new_class->school_info_id = $school_id;
+            $new_class->school_id = $school_id;
+            $new_class->year_id = $year_id;
             $new_class->save();
         }
         
 
-        $classes = Classes::select('id','class_title','section')->where('school_info_id',$school_id)->get();
+        $classes = Classes::select('id','class_title','section')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get();
         return $this->ReS(["message"=>"Section Added!!","classes"=>$classes]);
     }
     public function deleteClass(Request $request,$class_title){
@@ -235,9 +239,11 @@ class ClassController extends Controller
             'new_class'=>'required|string'
         ]);
         $school_info_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $new_class = $request->new_class;
         $checkIfExist = Classes::where([
-            'school_info_id'=>$school_info_id,
+            'school_id'=>$school_info_id,
+            'year_id'=>$year_id,
             'class_title'=>$new_class
         ])->count();
         if($checkIfExist!=0){
@@ -245,17 +251,19 @@ class ClassController extends Controller
         }
 
         $class = new Classes;
-        $class->school_info_id = $school_info_id;
+        $class->school_id = $school_info_id;
+        $class->year_id = $year_id;
         $class->class_title = $new_class;
         $class->save();
 
 
-        $classes = Classes::select('id','class_title')->distinct()->where('school_info_id',$school_info_id)->get()->unique('class_title');
+        $classes = Classes::select('id','class_title')->distinct()->where(['school_id'=>$school_info_id,"year_id"=>$year_id])->get()->unique('class_title');
         return $this->ReS(["classes"=>$classes]);
     }
     public function getAllClassSection(Request $request){
         $school_id = $this->getSchoolId($request);
-        $classes = Classes::with('teacher','roll_no')->where('school_id',$school_id)->get();
+        $year_id = $this->getSchoolYearId($request);
+        $classes = Classes::with('teacher','roll_no')->where(['school_id'=>$school_id,'year_id'=>$year_id])->get();
         return $this->ReS(["classes"=>$classes]);
     }
     public function getDistinctClass(Request $request){

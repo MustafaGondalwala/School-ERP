@@ -14,7 +14,7 @@ api.interceptors.response.use((response) => response, (error) => {
         Swal.fire("Error",data.message+". Please Login Page.",'error')
         localStorage.clear();
         setAuthorizationHeader();
-        window.reload();
+        location.reload();
     }else if(status == 500){
         Swal.fire("Error","Server Error has Occured Please again later.",'error')
     }else if(status == 404){
@@ -155,7 +155,6 @@ export default {
                 get_student_searchable: searchText => api("/api/v1/adminteacher/student/searchable/"+searchText).then(response => response.data.success),
                 setrollno: (rollno_string,roll_id,id) => api.post("/api/v1/admin/student/set_rollno",{rollno_string,roll_id,id}).then(response => response.data.success),
             },
-            get_years: () => api("/api/v1/year").then(response => response.data.success),
             add_class: (new_class) => api.post("/api/v1/admin/class",{new_class}).then(response => response.data.success),
             rename_class: (new_class_name,old_classname) => api.put("/api/v1/admin/class",{new_class_name,old_classname}).then(response => response.data.success),
             delete_class: (class_title) => api.delete("/api/v1/admin/class/"+class_title,{class_title}).then(response => response.data.success),
@@ -230,7 +229,9 @@ export default {
             update: staff_attendance => api.put("/api/v1/adminteacher/attendance/staff",{staff_attendance}).then(response => response.data.success),
             get_individual: (staff_id,select_month) => api.post("/api/v1/adminteacher/attendance/staff/getindividual",{staff_id,select_month}).then(response => response.data.success),
         },
-        
+        classinfo:{
+            get: class_id => api("/api/v1/adminteacher/class_info/"+class_id).then(response => response.data.success),
+        },
         study_material:{
             teacher:{
                 group:{
@@ -290,8 +291,9 @@ export default {
                 student: (data) => api.post("/api/v1/adminteacher/exam/marksheet/individual",data).then(response => response.data.success),
                 update: (exam_marksheet) => api.put("/api/v1/adminteacher/exam/marksheet/individual",{exam_marksheet}).then(response => response.data.success),
                 update_marksheet: (remark,marksheet,marksheet_id,exam_type,student_id) => api.put("/api/v1/adminteacher/exam/marksheet",{remark,marksheet,marksheet_id,exam_type,student_id}).then(response => response.data.success),
-                publishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/marksheet/individual-publish/"+marksheet_id).then(response => response.data.success),
-                unpublishMarksheet: marksheet_id => api.get("/api/v1/adminteacher/exam/monthly_test/individual-unpublish/"+marksheet_id).then(response => response.data.success),
+                publishMarksheet: (status,marksheet_id) => api.get("/api/v1/adminteacher/exam/marksheet/individual-publish/"+marksheet_id+"/"+status).then(response => response.data.success),
+                unpublishMarksheet: (status,marksheet_id) => api.get("/api/v1/adminteacher/exam/marksheet/individual-unpublish/"+marksheet_id+"/"+status).then(response => response.data.success),
+                changePublisStatus:(status,marksheet_id) => api.get("/api/v1/adminteacher/exam/marksheet/individual-change-publish/"+marksheet_id+"/"+status).then(response => response.data.success),
             }
         }
     },
@@ -305,6 +307,7 @@ export default {
             view_receipt: (receipt_id) => api("/api/v1/parent/fee/receipts/"+receipt_id).then(response => response.data.success),
         },
     },
+    get_years: () => api("/api/v1/year").then(response => response.data.success),
     class: () => api("/api/v1/class").then(response => response.data.success),
     subjects: () => api("/api/v1/subject").then(response => response.data.success),
     exam_type: () => api("/api/v1/exam/type").then(response => response.data.success),

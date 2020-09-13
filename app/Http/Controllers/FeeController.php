@@ -434,7 +434,7 @@ class FeeController extends Controller
     }
     public function getClassWiseFees(Request $request){
         $class_id = $request->class_id;
-        $year_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
         $fee_installments = FeeInstallments::where([
             'year_id'=>$year_id,
@@ -443,6 +443,7 @@ class FeeController extends Controller
         
         $checkifExist = FeeClassWise::where([
             'school_id'=>$school_id,
+            'year_id'=>$year_id,
             'classes_id'=>$class_id,
         ])->count();
         if($this->getAllFeeType($class_id,$school_id,$year_id)->count() == 0)
@@ -474,6 +475,7 @@ class FeeController extends Controller
             $getInstallmentFeeType = FeeClassWise::with('feeType','feeInstallment')->where([
                 'school_id'=>$school_id,
                 'classes_id'=>$class_id,
+                'year_id'=>$year_id,
                 'fee_installment_id'=>$installment['id']
             ])->get();
             $send_array[$installment_name] = $getInstallmentFeeType;
@@ -547,12 +549,14 @@ class FeeController extends Controller
     }
     public function updateFeeInstallments(Request $request){
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         DB::beginTransaction();
         try{
-            $delete = FeeInstallments::where("school_id",$school_id)->delete();
+            $delete = FeeInstallments::where(["school_id"=>$school_id,"year_id"=>$year_id])->delete();
             foreach($request->total_installments as $installment){
                 $new_installments = new FeeInstallments;
                 $new_installments->school_id = $school_id;
+                $new_installments->year_id = $year_id;
                 $new_installments->installment = $installment;
                 $new_installments->save();
             }
@@ -561,20 +565,22 @@ class FeeController extends Controller
             return $this->ReE(["message"=>$e->getMessage()]);
         }finally{
             DB::commit();
-            $fee_installments = $this->feeInstallments($school_id);
+            $fee_installments = $this->feeInstallments($school_id,$year_id);
             return $this->ReS(["installments"=>$fee_installments]);
         }
     }
 
     public function getFeeInstallments(Request $request){
         $school_id = $this->getSchoolId($request);
-        $fee_installments = $this->feeInstallments($school_id);
+        $year_id = $this->getSchoolYearId($request);
+        $fee_installments = $this->feeInstallments($school_id,$year_id);
         return $this->ReS(["installments"=>$fee_installments]);
     }
 
-    private function feeInstallments($school_id){
+    private function feeInstallments($school_id,$year_id){
         return FeeInstallments::where([
-            'school_id'=>$school_id
+            'school_id'=>$school_id,
+            'year_id'=>$year_id
         ])->get();
     }
 }

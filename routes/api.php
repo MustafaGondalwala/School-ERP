@@ -54,8 +54,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         });
         Route::group(["prefix"=>"results"],function(){
             Route::get("monthlytest/{student_id}","ExamController@getMonthlyTestResults");
-            Route::get("exam/{student_id}","ExamController@getExamResults");
-
+            Route::get("exam/{student_id}","ExamController@getExamResultsPublish");
         });
         Route::group(["prefix"=>"homework"],function(){
             Route::get("/current/{student_id}","HomeWorkController@getCurrentHomeWorkStudent");
@@ -77,6 +76,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::get("changeStatus/{leave_id}/{status}","LeaveController@changeLeaveStatus");
             Route::get("viewall/{class_id}","LeaveController@viewAllLeaveRequestClass");
             Route::get("classReport/{class_id}","LeaveController@classwiseReport");
+        });
+
+        Route::group(["prefix"=>"class_info"],function(){
+            Route::get("{class_id}","TeacherController@getClassInfo");
         });
         Route::group(["prefix"=>"studymaterial"],function(){
             Route::group(["prefix"=>"teacher"],function(){
@@ -146,8 +149,8 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::get("marksheet/individual/{student_marksheet_id}","ExamController@getIndividualExamMarksheet");
             Route::put("marksheet","ExamController@updateExamMarksheet");
             Route::get("marksheet/individual-publish/{marksheet_id}","ExamController@publishExamMarksheet");
-            Route::get("monthly_test/individual-unpublish/{marksheet_id}","ExamController@unpublishExamMarksheet");
-
+            Route::get("marksheet/individual-unpublish/{marksheet_id}","ExamController@unpublishExamMarksheet");
+            Route::get("marksheet/individual-change-publish/{marksheet_id}/{status}","ExamController@examChangePublishStatus");
             Route::get("monthly_test/get_all/{class_id}","ExamController@getAllMonthlyTestType");
             Route::post("monthly_test/add/{class_id}","ExamController@addMonthlyTestType");
             Route::delete("monthly_test/delete/{class_id}/{monthly_test_id}","ExamController@removeMonthlyTest");

@@ -196,7 +196,9 @@ import TeacherOnlineTestFillMarksheet from "./onlineexam/pages/TeacherOnlineTest
 import TeacherClassMonthyTestReport from "./exam/pages/TeacherClassMonthyTestReport"
 
 import TeacherExamMarksheetFill from "./exam/pages/TeacherExamMarksheetFill"
-
+import TeacherExamMarksheetPublish from "./exam/pages/TeacherExamMarksheetPublish"
+import TeacherClassInfo from "./teacher/pages/TeacherClassInfo"
+import TeacherVirtualClassInfo from "./teacher/pages/TeacherVirtualClassInfo"
 class Index extends Component {
     render() {
       return (
@@ -246,12 +248,10 @@ class Index extends Component {
             <TeacherDashboardRoutes exact path="/teacher/homework/current/manage" component={TeacherManageHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework/past/manage" component={TeacherPastManageHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework/check" component={TeacherCheckStudentHomeWork} />
-
-
-            
+            <TeacherDashboardRoutes exact path="/teacher/class-info/:class_id" component={TeacherClassInfo} />
+            <TeacherDashboardRoutes exact path="/teacher/virtual-classes/:class_id" component={TeacherVirtualClassInfo} />
 
             <TeacherDashboardRoutes exact path="/teacher/homework/add" component={TeacherHomeWorkAdd} />
-
             <TeacherDashboardRoutes exact path="/teacher/timetable/:class_id" component={TeacherClassWiseTimeTable} />
             <TeacherDashboardRoutes exact path="/teacher/homework/all" component={TeacherAllHomeWorkHome} />
             <TeacherDashboardRoutes exact path="/teacher/questionpaper" component={TeacherQuestionPaperHome} />
@@ -259,7 +259,8 @@ class Index extends Component {
             <TeacherDashboardRoutes exact path="/teacher/questionpaper/manage" component={TeacherQuestionPaperManage} />
             <TeacherDashboardRoutes exact path="/teacher/exam/class/:class_id" component={TeacherExamHomePage} />
             <TeacherDashboardRoutes exact path="/teacher/exam/fill/:class_id" component={TeacherExamMarksheetFill} />
-            
+            <TeacherDashboardRoutes exact path="/teacher/exam/publish/:class_id" component={TeacherExamMarksheetPublish} />
+
             <TeacherDashboardRoutes exact path="/teacher/monthlytest/fill/:class_id" component={TeacherFillMonthlyTestMarksheet} />
             <TeacherDashboardRoutes exact path="/teacher/exam/monthlytest/report/:class_id" component={TeacherClassMonthyTestReport} />
 

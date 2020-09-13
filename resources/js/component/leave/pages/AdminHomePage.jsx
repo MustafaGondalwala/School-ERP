@@ -4,11 +4,10 @@ import AdminLeaveHeader from "../../header/admin/AdminLeaveHeader"
 import CardComponent from "../../utils/CardComponent"
 import BodyComponent from "../../utils/BodyComponent"
 import ColComponent from "../../utils/ColComponent"
+import EmptyHeader from "../../utils/EmptyHeader"
 const AdminHomePage = () => (
     <div>
-        <TopBreadCrumb mainHeader="Leave" header="Home">
-            <AdminLeaveHeader />
-        </TopBreadCrumb>
+        <EmptyHeader mainHeader="Leave" header="Home"/>
         <BodyComponent>
         <div className="card-deck flex-column flex-xl-row">
           <CardComponent title="Student">

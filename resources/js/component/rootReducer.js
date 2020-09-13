@@ -5,7 +5,7 @@ import { combineReducers } from "redux";
 import {gradeType} from "./reducers/grade"
 import {user,assigned_class} from "./reducers/user";
 import installments from "./reducers/setInstallments"
-import year from "./reducers/setYear"
+import years from "./reducers/setYear"
 import feeType from "./reducers/feeType"
 import {setClass as classes ,setDistinctClass as distinct_classes,classPeriod as class_periods} from "./reducers/classes"
 import {setSubjects as subjects} from "./reducers/subjects"
@@ -28,7 +28,7 @@ import {parentStudentLeave as studentleaves} from "./reducers/leave"
 export default combineReducers({
     user,
     installments,
-    year,
+    years,
     feeType,
     distinct_classes,
     classes,

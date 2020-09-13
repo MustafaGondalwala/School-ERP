@@ -48,12 +48,14 @@ class AttendanceController extends Controller
         $carbon_date = Carbon::parse($request->select_month);
         $month = $carbon_date->month;
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+
         $year = $carbon_date->year;
         $student_id = $request->student_id;
         $every_count = StudentAttendance::select('status', DB::raw('count(*) as total'))
                  ->groupBy('status')
                  ->whereYear('attendance_date', '=', $year)
-              	 ->whereMonth('attendance_date', '=', $month)->where(["student_id"=>$student_id,"school_id"=>$school_id])
+              	 ->whereMonth('attendance_date', '=', $month)->where(["student_id"=>$student_id,"school_id"=>$school_id,"year_id"=>$year_id])
                  ->get();
 
         $details_fetch = StudentAttendance::select('attendance_date','status')->whereYear('attendance_date', '=', $year)
@@ -128,8 +130,8 @@ class AttendanceController extends Controller
         $staffAttendances = $this->getAttendanceStaffP($school_id,$select_date);
         return $this->ReS(["staff_attendance"=>$staffAttendances]);
     }
-    private function getAttendance($school_id,$class_id,$select_date){
-        return StudentAttendance::with('studentInfo','class')->select('id','student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->get();
+    private function getAttendance($school_id,$class_id,$select_date,$year_id){
+        return StudentAttendance::with('studentInfo','class')->select('id','student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"year_id"=>$year_id,"attendance_date"=>$select_date])->get();
     }
     public function getAttendanceStaffP($school_id,$select_date){
         return StaffAttendance::with('staff')->where(['school_id'=>$school_id,"attendance_date"=>$select_date])->get();
@@ -141,6 +143,7 @@ class AttendanceController extends Controller
         $student_attendance = $request->student_attendance;
         $class_id = "";
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $attendance_date = "";
         try{
             DB::beginTransaction();
@@ -151,7 +154,6 @@ class AttendanceController extends Controller
                     $data = StudentAttendance::find($id);
                     $class_id = $data->class_id;
                     $attendance_date = $data->attendance_date;
-
                     $data->update([
                         'status'=>$new_status
                     ]);
@@ -163,7 +165,7 @@ class AttendanceController extends Controller
         }finally{
             DB::commit();
         }
-        $studentAttendances = $this->getAttendance($school_id,$class_id,$attendance_date);
+        $studentAttendances = $this->getAttendance($school_id,$class_id,$attendance_date,$year_id);
         return $this->ReS(['message'=>"Student Attendance Updated","studentAttendances"=>$studentAttendances]);
     }
     public function getStudent(Request $request){
@@ -172,11 +174,12 @@ class AttendanceController extends Controller
             'select_date'=>'required|date'
         ]);
         $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
         $class_id = $request->class_id;
         $select_date = $request->select_date;
-        $checkIfExist = StudentAttendance::select('student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->count();
+        $checkIfExist = StudentAttendance::select('student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date,"year_id"=>$year_id])->count();
         if(!$checkIfExist){
-            $student_ids = StudentInfo::select('id')->where(['school_id'=>$school_id,"class_id"=>$request->class_id])->pluck('id');
+            $student_ids = StudentInfo::select('id')->where(['school_id'=>$school_id,"year_id"=>$year_id,"class_id"=>$request->class_id])->pluck('id');
             $studentAttendances = [];
             try{
                 DB::beginTransaction();
@@ -185,6 +188,7 @@ class AttendanceController extends Controller
                     $new_attendance->student_id = $ids;
                     $new_attendance->school_id = $school_id;
                     $new_attendance->class_id = $class_id;
+                    $new_attendance->year_id = $year_id;
                     $new_attendance->attendance_date = $select_date;
                     $new_attendance->save();
                 }
@@ -194,8 +198,7 @@ class AttendanceController extends Controller
             }
         }
         DB::commit();
-        $studentAttendances = $this->getAttendance($school_id,$class_id,$select_date);
-        //  StudentAttendance::with('studentInfo','class')->select('id','student_id','class_id','status')->where(['school_id'=>$school_id,"class_id"=>$class_id,"attendance_date"=>$select_date])->get();
+        $studentAttendances = $this->getAttendance($school_id,$class_id,$select_date,$year_id);
         return $this->ReS(["student_attendance"=>$studentAttendances]);
     }
 }

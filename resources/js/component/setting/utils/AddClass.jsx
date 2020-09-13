@@ -147,7 +147,7 @@ class AddClass extends Component{
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {Object.keys(classes).length > 1 && classes.map((item,id) => {
+                                    {Object.keys(classes).length > 0 && classes.map((item,id) => {
                                     return <tr key={id}>
                                         <td>{id+1}</td>
                                         <td>{item}</td>

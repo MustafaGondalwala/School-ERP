@@ -7,11 +7,22 @@ use Illuminate\Http\Request;
 use \DB;
 use App\User;
 use App\Classes;
+use App\StudentInfo;
 
 class TeacherController extends Controller
 {
+
+    public function getClassInfo(Request $request,$class_id){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $student_info = StudentInfo::with('parent')->where([
+            'year_id'=>$year_id,
+            'class_id'=>$class_id,
+            'school_id'=>$school_id
+        ])->get();
+        return $this->ReS(["student_info"=>$student_info]);
+    }
     public function publishTimeTable(Request $request){
-        dd($request->all());
         foreach($request->publish_timetable as $key => $value){
             if($value != null){
                 Classes::find($value)->update(['assigned_teacher_id'=>$key]);

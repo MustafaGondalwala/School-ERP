@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 class AdmissionStudent extends Component {
   constructor(props) {
     super(props);
-    const data = {
+    this.initialData = {
       roll_no: "",
       class_id: "",
       student_name: "",
@@ -69,9 +69,9 @@ class AdmissionStudent extends Component {
       pincode: "",
       caste: "",
       religion: "",
-    };
+    }
     this.state = {
-      data: data,
+      data: this.initialData,
       roll_no_placeholder:"Please Select Class",
       button_text: "Add Admission",
       title: "Admission Student",
@@ -121,6 +121,11 @@ class AdmissionStudent extends Component {
     if (!data.father_contact_no1) errors.father_contact_no1 = "Can't be blank";
     if (!data.class_id) errors.class_id = "Can't be blank";
     if (!data.religion) errors.religion = "Can't be blank";
+    if (!data.district) errors.district = "Can't be blank";
+    if (!data.block) errors.block = "Can't be blank";
+    if (!data.landmark) errors.landmark = "Can't be blank";
+    if (!data.state) errors.state = "Can't be blank";
+
     if (!data.caste) errors.caste = "Can't be blank";
     if (!data.dob) errors.dob = "Can't be blank";
     if (!data.student_address) errors.student_address = "Can't be blank";
@@ -217,7 +222,7 @@ class AdmissionStudent extends Component {
         api.adminclerk.student.admission
           .add(formData)
           .then((data) => {
-            this.setState({ data, button_text: " Add Admission" });
+            this.setState({ data:this.initialData, button_text: " Add Admission" });
             Swal.fire(
               "Data Inserted",
               "Student Successfully Added.",
@@ -371,6 +376,7 @@ class AdmissionStudent extends Component {
                     type="number"
                     name="age"
                     placeholder="Age"
+                    errors={errors}
                     disabled
                     value={data.age}
                   />
@@ -383,6 +389,7 @@ class AdmissionStudent extends Component {
                     type="email"
                     name="student_email"
                     onChange={this.onChange}
+                    errors={errors}
                     placeholder="Student Email"
                     value={data.student_email}
                   />
@@ -418,6 +425,7 @@ class AdmissionStudent extends Component {
                   <FormLabel>Block:</FormLabel>
                   <Input
                     name="block"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="Block"
                     value={data.block}
@@ -430,6 +438,7 @@ class AdmissionStudent extends Component {
                   <FormLabel>District:</FormLabel>
                   <Input
                     name="district"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="District"
                     value={data.district}
@@ -442,6 +451,7 @@ class AdmissionStudent extends Component {
                   <FormLabel>State:</FormLabel>
                   <Input
                     name="state"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="State"
                     value={data.state}
@@ -454,6 +464,7 @@ class AdmissionStudent extends Component {
                   <FormLabel>Landmark:</FormLabel>
                   <Input
                     name="landmark"
+                    errors={errors}
                     onChange={this.onChange}
                     placeholder="Landmark"
                     value={data.landmark}

@@ -277,7 +277,7 @@ class HomeWorkController extends Controller
             'class_id'=>$class_id,
             'school_id'=>$school_id,
             'year_id'=>$year_id,
-            ])->where('submission_date','>=',\Carbon\Carbon::now())->get();
+            ])->where('submission_date','<=',\Carbon\Carbon::now())->get();
     }
     private function studentwise_PastHomework($class_id,$school_id,$year_id){
         return StudentHomeWork::with('classes','homeworkcheck','subject','attachments','teacherwithStaff')->where([

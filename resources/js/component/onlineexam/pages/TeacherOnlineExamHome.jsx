@@ -4,14 +4,13 @@ import TopBreadCrumb from "../../utils/TopBreadcrumb"
 import BodyComponent from "../../utils/BodyComponent"
 import CardComponent from "../../utils/CardComponent"
 import ColComponent from "../../utils/ColComponent"
+import EmptyHeader from "../../utils/EmptyHeader"
 class TeacherOnlineExamHome extends Component{
     render(){
         const {class_id} = this.props.match.params
         return(
             <div>
-                <TopBreadCrumb mainHeader="Online Exam" header="Home">
-                    <TeacherHeader />
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="Online Exam" header="Home" />
                 <BodyComponent>
                     <div className="card-deck flex-column flex-xl-row">
                     <CardComponent title="Online Test">

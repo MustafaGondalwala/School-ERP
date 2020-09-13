@@ -18,6 +18,24 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
+    public function examChangePublishStatus(Request $request,$marksheet_id,$status){
+        $publish_at = null;
+        if($status == 1)
+            $publish_at = Carbon::now();
+        $update = ExamType::find($marksheet_id)->update([
+            'publish'=>$status,
+            'publish_at'=>$publish_at
+        ]);
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        return $this->ReS(["exam_types"=>$this->getExamTypeP($year_id,$school_id)]);
+    }
+    public function getExamResultsPublish(Request $request,$student_id){
+        $year_id = $this->getSchoolYearId($request);
+        $school_id = $this->getSchoolId($request);
+        $data = ExamType::with('student_marksheet')->where(['school_id'=>$school_id,'year_id'=>$year_id,'publish'=>1])->get();
+        return $this->ReS(["exam_results"=>$data]);
+    }
     public function getExamResults(Request $request,$student_id){
         $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
@@ -115,7 +133,7 @@ class ExamController extends Controller
 
         return $this->ReS(['monthlyTest'=>$data]);
     }
-    public function unpublishExamMarksheet(Request $request,$marksheet_id){
+    public function unpublishExamMarksheet(Request $request,$marksheet_id,$status){
         $update = ExamMarkSheetStudents::find($marksheet_id);
         $update->status = 2;
         $update->update();

@@ -42,7 +42,6 @@ class StudentReligionCasteReport extends Component{
     render(){
         const {caste_report} = this.state
         const {religion_report,type,type2,only_caste_wise_report} = this.state
-        console.log(only_caste_wise_report)
         const Capitalize = (str) => {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
@@ -67,22 +66,27 @@ class StudentReligionCasteReport extends Component{
                         <tbody>
                                 {caste_report && Object.keys(caste_report).map((item,id) => {
                                     var caste = caste_report[item]
+                                    console.log(caste)
                                     var total = 0;
                                     caste.map(item => {
-                                        total += item.total
+                                            total += item.total
                                     })
-                                    general_total += caste[0].total;
-                                    obc_total += caste[1].total;
-                                    SC_total += caste[2].total;
-                                    ST_total += caste[3].total;
+                                    if(caste.hasOwnProperty(0))
+                                        general_total += caste[0].total;
+                                    if(caste.hasOwnProperty(1))
+                                        obc_total += caste[1].total;
+                                    if(caste.hasOwnProperty(2))
+                                        SC_total += caste[2].total;
+                                    if(caste.hasOwnProperty(3))
+                                        ST_total += caste[3].total;
                                     mainTotal += total;
                                     return <tr>
                                         <td>{id+1}</td>
                                         <td>{Capitalize(item)}</td>
-                                        <td>{caste[0].total}</td>
-                                        <td>{caste[1].total}</td>
-                                        <td>{caste[2].total}</td>
-                                        <td>{caste[3].total}</td>
+                                        <td>{general_total}</td>
+                                        <td>{obc_total}</td>
+                                        <td>{SC_total}</td>
+                                        <td>{ST_total}</td>
                                         <td>{total}</td>
                                     </tr>
                                 })}

@@ -43,6 +43,9 @@ class AddSection extends Component{
             })
             api.admin.add_section(this.state.data).then(data => {
                 setClassSection(data.classes)
+                this.setState({
+                    add_section:"Add Section"
+                })
                 Swal.fire("Success",data.message,"success")
             }).catch(error =>{
                 if(error.response){

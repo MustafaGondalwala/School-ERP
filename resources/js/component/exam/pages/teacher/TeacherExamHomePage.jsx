@@ -31,8 +31,8 @@ const TeacherExamHomePage = (props) => {
                   button_text="Fill"
                 />
                 <ColComponent
-                  title="View Class Test Report"
-                  description="View Class Test Report in System"
+                  title="View Class Monthly Test Report"
+                  description="View Class Monthly Test Report in System"
                   link={"/teacher/exam/monthlytest/report/"+class_id}
                   button_text="View"
                 />
@@ -43,6 +43,12 @@ const TeacherExamHomePage = (props) => {
           <div className="card-deck flex-column flex-xl-row">
             <CardComponent title="Exam">
               <div className="row card-wrapper">
+              <ColComponent
+                  title="Publish/UnPublish Exam Marksheet"
+                  description="Publish/UnPublish Exam Marksheet in System"
+                  link={"/teacher/exam/publish/"+class_id}
+                  button_text="Publish"
+                />
                 <ColComponent
                   title="Fill Exam Marksheet"
                   description="Fill Exam Marksheet in System"

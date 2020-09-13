@@ -164,6 +164,7 @@ class TimeTableController extends Controller
         try{
             DB::beginTransaction();
             foreach($this->getClassPeriods($school_id,$year_id) as $class_periods){
+            
                 $new_timetable = new StudentTimeTable;
                 $new_timetable->time_table_name = $time_table_name;
                 $new_timetable->class_period_id = $class_periods['id'];
