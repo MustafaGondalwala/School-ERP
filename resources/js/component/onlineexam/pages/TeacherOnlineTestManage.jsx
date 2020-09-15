@@ -10,14 +10,22 @@ import {setQuestionPaperDispatch} from "../../actions/questionpaper"
 import { connect } from "react-redux";
 import CardComponent from "../../utils/CardComponent"
 import { Table, Thead, Button } from "../../utils/Components"
+import EmptyHeader from "../../utils/EmptyHeader"
+import AddEditOnlineTest from "../form/AddEditOnlineTest"
 const ViewQuestions = React.lazy(() => import("../../question/form/ViewQuestions"))
+import Swal from "sweetalert2"
+import api from "../../api"
+
+
 class TeacherOnlineTestManage extends Component{
     constructor(props){
         super(props)
         this.state = {
-            questionpaper_id:""
+            questionpaper_id:"",
+            online_exam:""
         }
         this.sendEventType = this.sendEventType.bind(this)
+        this.deleteOnlineTest = this.deleteOnlineTest.bind(this)
     }
     componentDidMount(){
         const {teacher_onlineexam,questionpaper} = this.props
@@ -37,17 +45,39 @@ class TeacherOnlineTestManage extends Component{
                     })
                 })
             break
+            case "editOnlineExam":
+                this.setState({
+                    online_exam:id
+                })
+            break
         }
+    }
+
+    deleteOnlineTest(online_testid){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result) {
+                api.adminteacher.onlineexam.monthly_test.remove(online_testid).then(data => {
+                    this.props.teacherWiseOnlineTest(data.onlineExam)
+                    Swal.fire("Success","Online Exam Deleted.","success")
+                })
+            }
+          })
     }
     render(){
         const {teacher_onlineexam} = this.props
-        const {questionpaper_id} = this.state
+        const {questionpaper_id,online_exam} = this.state
         return <div>
-            <TopBreadCrumb mainHeader="Online Exam" header="Test" sub_header="Manage">
-                <TeacherHeader />
-            </TopBreadCrumb>
+            <EmptyHeader mainHeader="Online Exam" header="Test" sub_header="Manage" />
             <BodyComponent>
-                <CardComponent title="Manage Online Test">
+                <CardComponent title="Manage Online Test" back_link={"/teacher/online-exam/"}>
                 <Table>
                     <Thead>
                             <th>Sr no.</th>
@@ -59,7 +89,6 @@ class TeacherOnlineTestManage extends Component{
                             <th>End Time</th>
                             <th>Remark</th>
                             <th>View Question Paper</th>
-                            <th>Edit</th>
                             <th>Delete</th>
                     </Thead>
                     <tbody>
@@ -75,8 +104,7 @@ class TeacherOnlineTestManage extends Component{
                                 <td>{item.end_time}</td>
                                 <td>{item.remark}</td>
                                 <td><Button primary sm onClick={e => this.sendEventType("view_question",item.questionpaper_id)}>View</Button></td>
-                                <td><Button warning sm>Edit</Button></td>
-                                <td><Button warning sm>Delete</Button></td>
+                                <td><Button warning sm onClick={e => this.deleteOnlineTest(item.id)}>Delete</Button></td>
                             </tr>
                         })
                     }
@@ -88,6 +116,10 @@ class TeacherOnlineTestManage extends Component{
                     <Suspense fallback={<h1>Loading Component</h1>}>
                         <ViewQuestions title={"View Question"} question_id={questionpaper_id}/>
                     </Suspense>
+                }
+                {
+                    online_exam && 
+                    <AddEditOnlineTest type={2} data={online_exam} title="Edit Online Test" />
                 }
             </BodyComponent>
         </div>
@@ -102,4 +134,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps,{teacherWiseOnlineTestDispatch,setQuestionPaperDispatch})(TeacherOnlineTestManage);
+export default connect(mapStateToProps,{teacherWiseOnlineTest,teacherWiseOnlineTestDispatch,setQuestionPaperDispatch})(TeacherOnlineTestManage);

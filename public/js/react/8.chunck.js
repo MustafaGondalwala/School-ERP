@@ -73,14 +73,6 @@ var ViewEditLession = /*#__PURE__*/function (_Component) {
   }
 
   _createClass(ViewEditLession, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var show_lessions = this.props.show_lessions;
-      this.setState({
-        lessions: show_lessions
-      });
-    }
-  }, {
     key: "viewLession",
     value: function viewLession(view_lession) {
       var _this2 = this;
@@ -98,11 +90,23 @@ var ViewEditLession = /*#__PURE__*/function (_Component) {
     key: "deleteLession",
     value: function deleteLession(lession_id) {
       var setTeacherGroup = this.props.setTeacherGroup;
-      _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.study_material.teacher.material["delete"](lession_id).then(function (data) {
-        var message = data.message,
-            groups = data.groups;
-        setTeacherGroup(groups);
-        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire("Success", message, "success");
+      sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.study_material.teacher.material["delete"](lession_id).then(function (data) {
+            var message = data.message,
+                groups = data.groups;
+            setTeacherGroup(groups);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire("Success", message, "success");
+          });
+        }
       });
     }
   }, {
@@ -128,10 +132,29 @@ var ViewEditLession = /*#__PURE__*/function (_Component) {
           lessions = _this$state.lessions,
           view_lession = _this$state.view_lession,
           edit_lession = _this$state.edit_lession;
-      var type = this.props.type;
+      var _this$props = this.props,
+          type = _this$props.type,
+          teacher_groups = _this$props.teacher_groups,
+          show_type = _this$props.show_type,
+          show_lession_id = _this$props.show_lession_id,
+          groups = _this$props.groups;
+      var our_material = [];
+
+      if (show_type == 2) {
+        var class_id = this.props.class_id;
+        var classwise_groups = groups[class_id];
+        our_material = classwise_groups.filter(function (item) {
+          return item.id == show_lession_id;
+        })[0].material;
+      } else {
+        our_material = teacher_groups.filter(function (item) {
+          return item.id == show_lession_id;
+        })[0].material;
+      }
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_1__["default"], {
         title: "Lessions List"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Sub-Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "View Details"), type != 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Edit"), type != 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Delete")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, lessions && lessions.map(function (item, id) {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Sr no."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Sub-Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "View Details"), type != 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Edit"), type != 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, "Delete")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, our_material && our_material.map(function (item, id) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
           key: id
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.subtitle), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_2__["Button"], {
@@ -168,7 +191,15 @@ var ViewEditLession = /*#__PURE__*/function (_Component) {
   return ViewEditLession;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(null, {
+function mapStateToProps(state) {
+  return {
+    teacher_groups: state.teacher_groups,
+    groups: state.studyMaterialGroup
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapStateToProps, {
+  setTeacherGroupDispatch: _actions_study_material__WEBPACK_IMPORTED_MODULE_4__["setTeacherGroupDispatch"],
   setTeacherGroup: _actions_study_material__WEBPACK_IMPORTED_MODULE_4__["setTeacherGroup"]
 })(ViewEditLession));
 

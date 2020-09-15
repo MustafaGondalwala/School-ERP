@@ -61,10 +61,15 @@ import AdminAttendanceIndividualStaff from "./attendance/pages/AdminAttendanceIn
 
 
 import AdminSettingHomePage from "./setting/pages/AdminHomePage"
+import TeacherSettingHomePage from "./setting/pages/TeacherSettingHomePage"
+
 
 import {TeacherDashboardHome} from "./dashboard/Teacher"
 import TeacherHomeWorkHomePage from "./homework/pages/TeacherHomeWorkHomePage"
 import TeacherClassCurrentHomeWork from "./homework/pages/TeacherClassCurrentHomeWork"
+import TeacherClassPastHomeWork from "./homework/pages/TeacherClassPastHomeWork"
+
+
 import TeacherClassHomeWorkHomePage from "./homework/pages/TeacherClassHomeWorkHomePage"
 import TeacherManageHomeWork from "./homework/pages/TeacherManageHomeWork"
 import TeacherPastManageHomeWork from "./homework/pages/TeacherPastManageHomeWork"
@@ -126,6 +131,8 @@ import ParentAttendanceHomePage from "./attendance/pages/ParentAttendanceHomePag
 
 import ParentExamHomePage from "./exam/pages/ParentExamHomePage"
 
+import ParentCurrentMonthlyTest from "./exam/pages/ParentCurrentMonthlyTest"
+
 import ParentTimeTable from "./timetable/pages/ParentTimeTable"
 
 import ParentEventHomePage from "./event/pages/ParentEventHomePage"
@@ -145,6 +152,9 @@ import ParentFeeViewReceipt from "./fees/pages/ParentFeeViewReceipt"
 import ParentLeaveHomePage from "./leave/pages/ParentLeaveHomePage"
 import ParentLeaveApplyLeave from "./leave/pages/ParentLeaveApplyLeave"
 import ParentLeaveViewAll from "./leave/pages/ParentLeaveViewAll"
+
+import TimeTableStudent from "./timetable/pages/StudentParentTimeTable"
+
 
 if (localStorage.token) {
   var payload = JSON.parse(localStorage.getItem('userAccount'));
@@ -243,7 +253,11 @@ class Index extends Component {
             {/* teacher/leave/past/1 */}
             <TeacherDashboardRoutes exact path="/teacher/homework/view/:class_id" component={ViewHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework/class/:class_id" component={TeacherClassHomeWorkHomePage} />
+
             <TeacherDashboardRoutes exact path="/teacher/homework/view-current-homework/:class_id" component={TeacherClassCurrentHomeWork} />
+            <TeacherDashboardRoutes exact path="/teacher/homework/view-past-homework/:class_id" component={TeacherClassPastHomeWork} />
+
+
             <TeacherDashboardRoutes exact path="/teacher/homework" component={TeacherHomeWorkHomePage} />
             <TeacherDashboardRoutes exact path="/teacher/homework/current/manage" component={TeacherManageHomeWork} />
             <TeacherDashboardRoutes exact path="/teacher/homework/past/manage" component={TeacherPastManageHomeWork} />
@@ -283,15 +297,25 @@ class Index extends Component {
             <StudentDashboardRoutes exact path="/student/view-result" component={StudentViewResults} />
             <StudentDashboardRoutes exact path="/student/view-result/monthlytest/:student_id" component={StudentViewMonthlytestResult} />
             <StudentDashboardRoutes exact path="/student/view-result/exam/:student_id" component={StudentViewExamResult} />
-
-
-
+            <ParentDashboardRoutes exact path="/parent/exam/exam-result/:student_id" component={StudentViewExamResult} />
 
             <ParentDashboardRoutes exact path="/parent/homework/view/:student_id" component={ViewHomeWorkParent} />
             <ParentDashboardRoutes exact path="/parent/homework/:student_id" component={StudentParentHomeWorkHome} />
+            
+            
+            
             <ParentDashboardRoutes exact path="/parent/attendance/:student_id" component={ParentAttendanceHomePage} />
-            <ParentDashboardRoutes exact path="/parent/timetable/:student_id" component={ParentTimeTable} />
+            <ParentDashboardRoutes exact path="/parent/attendance/view/:student_id" component={AdminAttendanceIndividualStudent} />
+            <ParentDashboardRoutes exact path="/parent/attendance/claswise-report/:student_id" component={AdminAttendanceClassWiseEdit} />
+
+            <ParentDashboardRoutes exact path="/parent/timetable/:student_id" component={TimeTableStudent} />
             <ParentDashboardRoutes exact path="/parent/exam/:student_id" component={ParentExamHomePage} />
+            <ParentDashboardRoutes exact path="/parent/exam/monthly-test-result/:student_id" component={StudentViewMonthlytestResult} />
+
+
+            <ParentDashboardRoutes exact path="/parent/exam/monthlytest/:student_id" component={ParentCurrentMonthlyTest} />
+
+
             <ParentDashboardRoutes exact path="/parent/student_info/:student_id" component={ParentStudentInfoPage} />
             <ParentDashboardRoutes exact path="/parent/virtual_class/:student_id" component={ParentVirtualClassHomePage} />
             <ParentDashboardRoutes exact path="/parent/events" component={ParentEventHomePage} />
@@ -366,7 +390,7 @@ class Index extends Component {
 
             <AdminDashboardRoutes exact path="/admin/leave" component={AdminLeaveHome} />
             <AdminDashboardRoutes exact path="/admin/setting" component={AdminSettingHomePage} />
-
+            <TeacherDashboardRoutes exact path="/teacher/setting" component={TeacherSettingHomePage} />
           </Provider>
           </React.StrictMode>
         </BrowserRouter>

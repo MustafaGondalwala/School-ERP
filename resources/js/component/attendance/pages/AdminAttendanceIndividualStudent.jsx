@@ -6,6 +6,7 @@ import BodyComponent from "../../utils/BodyComponent";
 import CardComponent from "../../utils/CardComponent";
 import SelectStudent from "../../utils/SelectStudent";
 import InlineError from "../../utils/InlineError";
+import EmptyHeader from "../../utils/EmptyHeader";
 const StudentIndividualReport = React.lazy(() => import("../utils/StudentIndividualReport"))
 
 export default class AdminAttendanceIndividualStudent extends Component {
@@ -16,12 +17,22 @@ export default class AdminAttendanceIndividualStudent extends Component {
         select_month: "",
         student_id: ''
       },
+      notshow_student:false,
       button_text: "Fetch",
       errors: {},
-      open_panel:true
+      open_panel:false
     };
     this.fetchStudent = this.fetchStudent.bind(this)
     this.sendStudentId = this.sendStudentId.bind(this)
+  }
+  componentDidMount(){
+    var {student_id} = this.props.match.params
+    if(student_id != undefined){
+      this.setState({
+        data: { ...this.state.data, ["student_id"]: student_id },
+        notshow_student:true
+      })
+    }
   }
   sendStudentId(student_id) {
     this.setState({
@@ -45,6 +56,7 @@ export default class AdminAttendanceIndividualStudent extends Component {
     this.setState({
         open_panel:false
     })
+    console.log(this.state.data)
     this.setState({ errors })
     if(Object.keys(errors).length == 0){
         this.setState({
@@ -54,23 +66,26 @@ export default class AdminAttendanceIndividualStudent extends Component {
   }
 
   render() {
-    const { button_text, data, errors,open_panel } = this.state;
+    const { button_text, data, errors,open_panel,notshow_student } = this.state;
 
     return (
       <div>
         <Suspense fallback={<h1>Loading ...</h1>}>
-                <TopBreadCrumb mainHeader="Attendance" header="Student" sub_header="Edit Attendance">
-                    <TeacherHeader mainHeader="Attendance" header="Edit/View"/>
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="Attendance" header="Student" sub_header="Student Attendance" />
             </Suspense>
         <BodyComponent>
           <CardComponent title="Select Student" back_link="/admin/attendance">
-            <div className="row">
-              <div className="col">
-                <label>Select Student:</label>
+            {
+              notshow_student != true &&
+              <div className="row">
+                <div className="col">
+                  <label>Select Student:</label>
+                </div>
               </div>
-            </div>
-            <div className="row">
+            }
+            {
+              notshow_student != true &&
+              <div className="row">
               <div className="col-md-6">
                 <SelectStudent sendStudentId={this.sendStudentId} />
                 {errors.student_id && (
@@ -78,7 +93,7 @@ export default class AdminAttendanceIndividualStudent extends Component {
                   )}
               </div>
             </div>
-            <br />
+              }
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">

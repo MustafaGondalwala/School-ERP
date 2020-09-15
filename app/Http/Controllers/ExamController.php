@@ -129,8 +129,7 @@ class ExamController extends Controller
             'class_id'=>$class_id,
             'year_id'=>$year_id,
             'school_id'=>$school_id
-        ])->get();
-
+        ])->orderBy('created_at')->get();
         return $this->ReS(['monthlyTest'=>$data]);
     }
     public function unpublishExamMarksheet(Request $request,$marksheet_id,$status){

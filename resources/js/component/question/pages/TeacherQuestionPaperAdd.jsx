@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { Select, SelectOption, FormGroup, FormLabel, Input, Button, RedLabel } from "../../utils/Components"
 import api from "../../api"
 import Swal from "sweetalert2"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 class TeacherQuestionPaperAdd extends Component{
     constructor(props){
@@ -102,9 +103,7 @@ class TeacherQuestionPaperAdd extends Component{
         const {classwiseSubject} = this.props
         return(
             <div>
-                <TopBreadCrumb mainHeader="Question Paper" header="Add">
-                    <QuestionPaperHeader />
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="Question Paper" header="Add" />
                 <BodyComponent>
                     <CardComponent title={title} back_link={back_link}>
                             <GetClassId errors={errors} class_id={data.class_id} sendClassId={this.sendClassId} sm="12" md="4" error=""/>

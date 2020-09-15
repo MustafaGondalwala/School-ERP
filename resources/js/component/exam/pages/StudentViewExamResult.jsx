@@ -21,7 +21,6 @@ class StudentViewExamResult extends Component{
     componentDidMount(){
         const {setGradeTypeDispatch,gradeType} = this.props
         const {student_id} = this.props.match.params
-
         if(examResult[student_id] == undefined)
             this.props.setExamResultsDispatch(student_id)
 
@@ -54,7 +53,6 @@ class StudentViewExamResult extends Component{
             <BodyComponent>
                 <CardComponent title="Exam List">
                     {
-                        
                         examResult[student_id] != undefined ? 
                         <Table>
                             <Thead>

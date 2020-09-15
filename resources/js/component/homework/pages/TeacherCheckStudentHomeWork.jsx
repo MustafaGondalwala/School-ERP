@@ -56,7 +56,7 @@ export default class TeacherCheckStudentHomeWork extends Component{
                         <ViewTeacherWisePanel sendEventType={this.sendEventType}  type="check"/>
                     </CardComponent>
                     {view && <AddEditHomeWork data={view} type="3" />}
-                    {check && <StudentHomeWorkView data={check}/>}
+                    {check && <StudentHomeWorkView check_id={check}/>}
                 </BodyComponent>
             </div>
         )

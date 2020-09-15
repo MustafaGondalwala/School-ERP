@@ -13,6 +13,16 @@ use \DB;
 
 class OnlineExamController extends Controller
 {
+    public function getOnlineExamMonthlyTestRemove(Request $request,$onlinetest_id){
+        $onlinetest = OnlineExam::find($onlinetest_id);
+        if($onlinetest != null){
+            $onlinetest->delete();
+        }
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $onlineExams = $this->getOnlineMonthlyTestTeacher($school_id,$year_id);
+        return $this->ReS(["onlineExam"=>$onlineExams]);
+    }
     public function update_marksheet(Request $request){
         $request->validate([
             'answers'=>'required|array',

@@ -225,19 +225,27 @@ class HomeWorkController extends Controller
         }
         return $this->ReS(["message"=>"HomeWork Added",'teacher_homework'=>$this->getHomeWorksTeacher($school_id,$year_id,$teacher_id)]);
     }
-    public function getClasswiseCurrentHomeWork(Request $request,$class_id){
-        
+    public function getClasswisePastHomeWork(Request $request,$class_id){
         $school_id = $this->getSchoolId($request);
         $year_id = $this->getSchoolYearId($request);
         $data = StudentHomeWork::with('classes','teacher','studenthomework','subject','attachments')->where([
             'school_id'=>$school_id,
             'class_id'=>$class_id,
             'year_id'=>$year_id,
-        ])->orderBy('created_at')->get();
+        ])->where('submission_date','>',\Carbon\Carbon::now())->orderBy('created_at')->get();
+        return $this->ReS(["homework_classwise"=>$data]);
+    }
+    public function getClasswiseCurrentHomeWork(Request $request,$class_id){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $data = StudentHomeWork::with('classes','teacher','studenthomework','subject','attachments')->where([
+            'school_id'=>$school_id,
+            'class_id'=>$class_id,
+            'year_id'=>$year_id,
+        ])->where('submission_date','<=',\Carbon\Carbon::now())->orderBy('created_at')->get();
         return $this->ReS(["homework_classwise"=>$data]);
     }
     public function teacherHomeWork(Request $request){
-        
         $school_id = $this->getSchoolId($request);
         $year_id = $this->getSchoolYearId($request);
         $teacher_id = $this->getTeacherId();
@@ -248,14 +256,14 @@ class HomeWorkController extends Controller
             'school_id'=>$school_id,
             'teacher_id'=>$teacher_id,
             'year_id'=>$year_id,
-        ])->orderBy('created_at')->get();
+        ])->where('submission_date','<=',\Carbon\Carbon::now())->orderBy('created_at')->get();
     }
     private function getPastHomeWorksTeacher($school_id,$year_id,$teacher_id){
         return StudentHomeWork::with('classes','teacher','studenthomework','subject','attachments')->where([
             'school_id'=>$school_id,
             'teacher_id'=>$teacher_id,
             'year_id'=>$year_id,
-        ])->where('submission_date','<',\Carbon\Carbon::now())->orderBy('created_at')->get();
+        ])->where('submission_date','>',\Carbon\Carbon::now())->orderBy('created_at')->get();
     }
 
 

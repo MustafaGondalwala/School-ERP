@@ -4,7 +4,7 @@ import { Table, Thead,Button } from "../../utils/Components"
 
 const AddEditMaterial = React.lazy(() => import("./AddEditMaterial")) 
 import api from "../../api";
-import { setTeacherGroup } from "../../actions/study_material";
+import { setTeacherGroup,setTeacherGroupDispatch } from "../../actions/study_material";
 import { connect } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -20,12 +20,7 @@ class ViewEditLession extends Component{
         this.editLession = this.editLession.bind(this)
         this.deleteLession = this.deleteLession.bind(this)
     }
-    componentDidMount(){
-        const {show_lessions} = this.props
-        this.setState({
-            lessions:show_lessions
-        })
-    }
+    
     viewLession(view_lession){
         this.setState({
             view_lession:"",
@@ -38,12 +33,23 @@ class ViewEditLession extends Component{
     }
     deleteLession(lession_id){
         const {setTeacherGroup} = this.props
-        api.adminteacher.study_material.teacher.material.delete(lession_id).then(data => {
-            const {message,groups} = data
-            setTeacherGroup(groups)
-            Swal.fire("Success",message,"success")
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+                api.adminteacher.study_material.teacher.material.delete(lession_id).then(data => {
+                    const {message,groups} = data
+                    setTeacherGroup(groups)
+                    Swal.fire("Success",message,"success")
+                })
+            }
         })
-        
     }
     editLession(edit_lession){
         this.setState({
@@ -57,7 +63,15 @@ class ViewEditLession extends Component{
     }
     render(){
         const {lessions,view_lession,edit_lession} = this.state
-        const {type} = this.props
+        const {type,teacher_groups,show_type,show_lession_id,groups} = this.props
+        var our_material = [];
+        if(show_type == 2){
+            const {class_id} = this.props
+            var classwise_groups = groups[class_id]
+            our_material = classwise_groups.filter(item => item.id == show_lession_id)[0].material;
+        }else{
+            our_material = teacher_groups.filter(item => item.id == show_lession_id)[0].material;
+        }
         return(
             <div>
                 <CardComponent title={"Lessions List"}>
@@ -76,7 +90,7 @@ class ViewEditLession extends Component{
                         </Thead>
                         <tbody>
                         {
-                            lessions && lessions.map((item,id) => {
+                            our_material && our_material.map((item,id) => {
                                 return <tr key={id}>
                                     <td>{id+1}</td>
                                     <td>{item.title}</td>
@@ -109,4 +123,11 @@ class ViewEditLession extends Component{
     }
 }
 
-export default connect(null,{setTeacherGroup})(ViewEditLession);
+function mapStateToProps(state) {
+    return {
+        teacher_groups:state.teacher_groups,
+        groups:state.studyMaterialGroup
+    };
+}
+
+export default connect(mapStateToProps,{setTeacherGroupDispatch,setTeacherGroup})(ViewEditLession);

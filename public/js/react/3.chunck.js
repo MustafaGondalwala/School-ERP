@@ -70,7 +70,8 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
       total_none: 0,
       chart_type: "pie",
       student_details: "",
-      details_fetch: ""
+      details_fetch: "",
+      loading: true
     };
     return _this;
   }
@@ -144,7 +145,7 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return _api__WEBPACK_IMPORTED_MODULE_3__["default"].adminteacher.student_attendance.get_individual(student_id, select_month).then(function (data) {
+                return _api__WEBPACK_IMPORTED_MODULE_3__["default"].student_attendance.get_individual(student_id, select_month).then(function (data) {
                   var attendance_details = data.attendance_details,
                       student_details = data.student_details,
                       details_fetch = data.details_fetch;
@@ -153,7 +154,8 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
 
                   _this2.setState({
                     student_details: student_details,
-                    details_fetch: details_fetch
+                    details_fetch: details_fetch,
+                    loading: false
                   });
                 });
 
@@ -184,7 +186,8 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
                 student_id = data.student_id, select_month = data.select_month;
                 this.setState({
                   student_id: student_id,
-                  select_month: select_month
+                  select_month: select_month,
+                  loading: true
                 });
                 this.fetchData(student_id, select_month);
 
@@ -257,7 +260,8 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
 
       var _this$state = this.state,
           student_details = _this$state.student_details,
-          details_fetch = _this$state.details_fetch;
+          details_fetch = _this$state.details_fetch,
+          loading = _this$state.loading;
       var _this$state2 = this.state,
           student_id = _this$state2.student_id,
           select_month = _this$state2.select_month,
@@ -284,7 +288,7 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
         y: total_none,
         label: "Total None Entry"
       }];
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, details_fetch && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StudentAttendancePanel, {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, loading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Loading Component ...")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, details_fetch && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StudentAttendancePanel, {
         details_fetch: details_fetch
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_utils_CardComponent__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Student Attendance Report"
@@ -358,7 +362,7 @@ var StudentIndividualReport = /*#__PURE__*/function (_Component) {
         filename: "individual_student",
         type: chart_type,
         dataPoints: dataPoints
-      }))));
+      })))));
     }
   }]);
 

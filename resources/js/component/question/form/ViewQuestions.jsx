@@ -3,8 +3,34 @@ import CardComponent from "../../utils/CardComponent"
 import { connect } from "react-redux";
 import { render } from "react-dom";
 import { Table, Thead, Col, FormGroup, FormLabel, Button, Input } from "../../utils/Components";
+import Swal from "sweetalert2"
+import api from "../../api";
+import {setQuestionPaperDispatch,setQuestionPaper} from "../../actions/questionpaper"
+
 
 class ViewQuestions extends Component{
+    constructor(props){
+        super(props)
+        this.deleteQuestionPaper = this.deleteQuestionPaper.bind(this)
+    }
+    deleteQuestionPaper(question_id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Remove it!'
+          }).then((result) => {
+            if (result) {
+                api.adminteacher.questionbank.question.remove(question_id).then(data => {
+                    this.props.setQuestionPaper(data.questionpaper);
+                    Swal.fire("sucess","Question Deleted !!","success");
+                })
+            }
+          })
+    }
     render(){
         const {questionpaper,title,question_id} = this.props
         return(
@@ -16,12 +42,11 @@ class ViewQuestions extends Component{
                         <th width="100px">Question</th>
                         <th>Teacher Prevention</th>
                         <th>Marks</th>
-                        <th>Edit</th>
                         <th>Delete</th>
                     </Thead>
                     {questionpaper && questionpaper.map(item => {
                         if(item.id == question_id){
-                            return <ViewEachQuestions questions={item.question}/>
+                            return <ViewEachQuestions deleteQuestionPaper={this.deleteQuestionPaper} questions={item.question}/>
                         }
                     })}
                 </Table>
@@ -49,7 +74,7 @@ const getQuestType = (question_type) => {
             break
     }
 }
-const ViewEachQuestions = ({questions}) => {
+const ViewEachQuestions = ({questions,deleteQuestionPaper}) => {
     return (
         <tbody>
             {questions && questions.map((item,id) => {
@@ -76,8 +101,7 @@ const ViewEachQuestions = ({questions}) => {
                     </td>
                     <td>{ (item.question_type == 4 || item.question_type == 5) ? <span>Yes</span> : <span>No</span> }</td>
                     <td>{item.marks}</td>
-                    <td><Button warning sm>Edit</Button></td>
-                    <td><Button danger sm>Delete</Button></td>
+                    <td><Button onClick={e => deleteQuestionPaper(item.id)} danger sm>Delete</Button></td>
                 </tr>
             })}
         </tbody>
@@ -163,6 +187,6 @@ function mapStateToProps(state) {
     };
   }
   
-export default connect(mapStateToProps)(
+  export default connect(mapStateToProps, { setQuestionPaperDispatch,setQuestionPaper })(
     ViewQuestions
 );

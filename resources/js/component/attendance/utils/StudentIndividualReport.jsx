@@ -16,7 +16,8 @@ class StudentIndividualReport extends Component {
       total_none: 0,
       chart_type: "pie",
       student_details: "",
-      details_fetch:""
+      details_fetch:"",
+      loading:true
     };
   }
 
@@ -53,15 +54,15 @@ class StudentIndividualReport extends Component {
       total_none,
     });
   }
-   async fetchData(student_id, select_month) {
-      await api.adminteacher.student_attendance
-      .get_individual(student_id, select_month)
+  async fetchData(student_id, select_month) {
+      await api.student_attendance.get_individual(student_id, select_month)
       .then((data) => {
         const { attendance_details, student_details,details_fetch } = data;
         this.updateDatapoints(attendance_details);
         this.setState({
           student_details,
-          details_fetch
+          details_fetch,
+          loading:false
         });
       });
   }
@@ -71,17 +72,18 @@ class StudentIndividualReport extends Component {
     this.setState({
       student_id,
       select_month,
+      loading:true
     });
      this.fetchData(student_id, select_month);
   }
   async componentWillMount() {
-     this.updateStudentInfo();
+    this.updateStudentInfo();
   }
   async componentWillReceiveProps() {
     this.updateStudentInfo();
   }
   render() {
-    const { student_details,details_fetch } = this.state;
+    const { student_details,details_fetch,loading } = this.state;
     const { student_id, select_month, chart_type } = this.state;
     const {
       total_present,
@@ -98,6 +100,9 @@ class StudentIndividualReport extends Component {
       { y: total_none, label: "Total None Entry" },
     ];
     return (
+      <div>
+      {loading ? <CardComponent><h3>Loading Component ...</h3></CardComponent>
+      :
       <div>
         {details_fetch && <StudentAttendancePanel  details_fetch={details_fetch}/> }
         <CardComponent title="Student Attendance Report">
@@ -160,7 +165,6 @@ class StudentIndividualReport extends Component {
             />
           </div>
         </div>
-
         <br />
         <div className="row">
           <label className="form-control-label">Chart Type</label>
@@ -192,9 +196,9 @@ class StudentIndividualReport extends Component {
           />
         </div>
       </CardComponent>
-   
       </div>
-   
+      }
+     </div>
    );
   }
 }

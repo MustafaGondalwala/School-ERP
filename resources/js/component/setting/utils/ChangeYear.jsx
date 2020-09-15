@@ -26,7 +26,7 @@ class ChangeYear extends Component{
             if (result.value) {
                 window.axios.defaults.headers.common['Auth-School-Year'] =  year_id;
                 location.reload();
-                 localStorage.year_id = year_id
+                localStorage.year_id = year_id
             }
           })
     }

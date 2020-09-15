@@ -16,6 +16,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _utils_Components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/Components */ "./resources/js/component/utils/Components.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../api */ "./resources/js/component/api/index.jsx");
+/* harmony import */ var _actions_questionpaper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../actions/questionpaper */ "./resources/js/component/actions/questionpaper.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44,20 +48,52 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+
+
 var ViewQuestions = /*#__PURE__*/function (_Component) {
   _inherits(ViewQuestions, _Component);
 
   var _super = _createSuper(ViewQuestions);
 
-  function ViewQuestions() {
+  function ViewQuestions(props) {
+    var _this;
+
     _classCallCheck(this, ViewQuestions);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.deleteQuestionPaper = _this.deleteQuestionPaper.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(ViewQuestions, [{
+    key: "deleteQuestionPaper",
+    value: function deleteQuestionPaper(question_id) {
+      var _this2 = this;
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Remove it!'
+      }).then(function (result) {
+        if (result) {
+          _api__WEBPACK_IMPORTED_MODULE_6__["default"].adminteacher.questionbank.question.remove(question_id).then(function (data) {
+            _this2.props.setQuestionPaper(data.questionpaper);
+
+            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire("sucess", "Question Deleted !!", "success");
+          });
+        }
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var _this$props = this.props,
           questionpaper = _this$props.questionpaper,
           title = _this$props.title,
@@ -66,9 +102,10 @@ var ViewQuestions = /*#__PURE__*/function (_Component) {
         title: title
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Table"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Thead"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Question Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
         width: "100px"
-      }, "Question"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Teacher Prevention"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Marks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Edit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Delete")), questionpaper && questionpaper.map(function (item) {
+      }, "Question"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Teacher Prevention"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Marks"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Delete")), questionpaper && questionpaper.map(function (item) {
         if (item.id == question_id) {
           return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ViewEachQuestions, {
+            deleteQuestionPaper: _this3.deleteQuestionPaper,
             questions: item.question
           });
         }
@@ -104,14 +141,15 @@ var getQuestType = function getQuestType(question_type) {
 };
 
 var ViewEachQuestions = function ViewEachQuestions(_ref) {
-  var questions = _ref.questions;
+  var questions = _ref.questions,
+      deleteQuestionPaper = _ref.deleteQuestionPaper;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, questions && questions.map(function (item, id) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
       key: id
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, getQuestType(item.question_type)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.question_type == 1 && ShowQuestionType1(item), item.question_type == 2 && ShowQuestionType2(item), item.question_type == 3 && ShowQuestionType3(item), (item.question_type == 4 || item.question_type == 5) && ShowQuestionType4or5(item)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.question_type == 4 || item.question_type == 5 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Yes") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "No")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.marks), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
-      warning: true,
-      sm: true
-    }, "Edit")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Components__WEBPACK_IMPORTED_MODULE_4__["Button"], {
+      onClick: function onClick(e) {
+        return deleteQuestionPaper(item.id);
+      },
       danger: true,
       sm: true
     }, "Delete")));
@@ -160,7 +198,10 @@ function mapStateToProps(state) {
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(ViewQuestions));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
+  setQuestionPaperDispatch: _actions_questionpaper__WEBPACK_IMPORTED_MODULE_7__["setQuestionPaperDispatch"],
+  setQuestionPaper: _actions_questionpaper__WEBPACK_IMPORTED_MODULE_7__["setQuestionPaper"]
+})(ViewQuestions));
 
 /***/ })
 

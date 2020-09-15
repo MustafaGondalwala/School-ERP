@@ -15,7 +15,13 @@ class TeacherClassHomeWorkHomePage extends Component{
                         title="View Current HomeWork"
                         description="View Current HomeWork of Class"
                         link={"/teacher/homework/view-current-homework/"+class_id}
-                        button_text="Set"
+                        button_text="View"
+                    />
+                    <ColComponent
+                        title="View Past HomeWork"
+                        description="View Past HomeWork of Class"
+                        link={"/teacher/homework/view-past-homework/"+class_id}
+                        button_text="View"
                     />
                 </BodyComponent>
             </div>

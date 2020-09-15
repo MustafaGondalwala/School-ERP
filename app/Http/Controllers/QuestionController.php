@@ -4,8 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\QuestionPaper;
+use App\Questions;
 class QuestionController extends Controller
 {
+    public function removeQuestion(Request $request,$question_id){
+        Questions::find($question_id)->delete();
+        $year_id = $this->getSchoolYearId($request);
+        return $this->ReS(['questionpaper'=>$this->userAllQuestionPaper($year_id)]);
+    }
+    public function removeQuestionPaper(Request $request,$questionpaper_id){
+        $questionPaper = QuestionPaper::find($questionpaper_id);
+        $questionPaper->question()->delete();
+        $questionPaper->delete();
+        $year_id = $this->getSchoolYearId($request);
+        return $this->ReS(['questionpaper'=>$this->userAllQuestionPaper($year_id)]);
+    }
     public function addQuestionPaper(Request $request){
         $request->validate([
             'class_id'=>'required|integer',
@@ -35,7 +48,6 @@ class QuestionController extends Controller
     public function addQuestion(Request $request,$question_id,$question_type){
         $findOne = QuestionPaper::find($request->question_id);
         $year_id = $this->getSchoolYearId($request);
-
         switch($question_type){
             case 1:
                 $request->validate([

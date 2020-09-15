@@ -8,12 +8,12 @@ import CardComponent from "../../utils/CardComponent"
 import Row from "../../utils/Row"
 import Col from "../../utils/Col"
 
-import {setQuestionPaperDispatch} from "../../actions/questionpaper"
-
+import {setQuestionPaperDispatch,setQuestionPaper} from "../../actions/questionpaper"
 import { connect } from "react-redux";
 import { Select, SelectOption, FormGroup, FormLabel, Input, Button, RedLabel, Table, Thead } from "../../utils/Components"
 import api from "../../api"
 import Swal from "sweetalert2"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 const AddQuestionForm = React.lazy(() => import("../form/AddQuestionForm"))
 const ViewQuestions = React.lazy(() => import("../form/ViewQuestions"))
@@ -53,6 +53,25 @@ class TeacherQuestionPaperAdd extends Component{
             })
         })
     }
+
+    removeQuestionShow(questionpaper_id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Remove it!'
+          }).then((result) => {
+            if (result) {
+                api.adminteacher.questionbank.remove(questionpaper_id).then(data => {
+                    this.props.setQuestionPaper(data.questionpaper);
+                    Swal.fire("sucess","QuestionPaper Deleted !!","success");
+                })
+            }
+          })
+    }
     render(){
         const title="Manage Question Paper"
         var back_link = ""
@@ -69,9 +88,7 @@ class TeacherQuestionPaperAdd extends Component{
         const {classwiseSubject,questionpaper} = this.props
         return(
             <div>
-                <TopBreadCrumb mainHeader="Question Paper" header="Manage">
-                    <QuestionPaperHeader />
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="Question Paper" header="Manage" />
                 <BodyComponent>
                 <CardComponent title={title} back_link={back_link}>
                     <Table>
@@ -83,7 +100,6 @@ class TeacherQuestionPaperAdd extends Component{
                             <th>Section</th>
                             <th>Add Question</th>
                             <th>View Questions</th>
-                            <th>Edit</th>
                             <th>Remove</th>
                         </Thead>
                         <tbody>
@@ -96,8 +112,7 @@ class TeacherQuestionPaperAdd extends Component{
                                     <td>{item.class.section}</td>
                                     <td><Button success onClick={e => this.viewQuestionShow(item.id)} sm>View Questions </Button></td>
                                     <td><Button primary onClick={e => this.addQuestionsShow(item.id)} sm>Add Question</Button></td>
-                                    <td><Button primary sm>Edit</Button></td>
-                                    <td><Button danger sm>Remove</Button></td>
+                                    <td><Button danger onClick={e => this.removeQuestionShow(item.id)} sm>Remove</Button></td>
                                 </tr>
                             })}
                         </tbody>
@@ -105,7 +120,7 @@ class TeacherQuestionPaperAdd extends Component{
                 </CardComponent>
                 {addQuestion_id && 
                     <Suspense fallback={<h1>Loading Component</h1>}>
-                        <AddQuestionForm question_id= {addQuestion_id}/>
+                        <AddQuestionForm question_id={addQuestion_id}/>
                     </Suspense>
                 }
                 {
@@ -126,7 +141,7 @@ function mapStateToProps(state) {
     };
   }
   
-  export default connect(mapStateToProps, { setQuestionPaperDispatch })(
+  export default connect(mapStateToProps, { setQuestionPaperDispatch,setQuestionPaper })(
     TeacherQuestionPaperAdd
   );
   

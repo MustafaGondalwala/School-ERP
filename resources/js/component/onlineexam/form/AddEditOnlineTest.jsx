@@ -33,12 +33,12 @@ class AddEditOnlineTest extends Component{
         this.sendClassId = this.sendClassId.bind(this)
         this.submit = this.submit.bind(this)
     }
-    componentDidMount(){
-        const {class_id,classwiseMonthlyTest,questionpaper} = this.props
-        // this.props.teacherWiseOnlineTestDispatch();
+    async componentDidMount(){
+        const {class_id,classwiseMonthlyTest,questionpaper,type} = this.props
         if(Object.keys(questionpaper).length == 0)
-            this.props.setQuestionPaperDispatch(class_id)
+            await this.props.setQuestionPaperDispatch(class_id)
     }
+
     submit(){
         const {type} = this.props
         const {data} = this.state
@@ -103,7 +103,6 @@ class AddEditOnlineTest extends Component{
                                            <SelectOption value=""> -- Select --</SelectOption>
                                             {classwiseMonthlyTest[data.class_id] !== undefined &&
                                                 classwiseMonthlyTest[data.class_id].map((item, id) => {
-                                                    console.log
                                                     return (
                                                     <SelectOption key={id} value={item.id}>
                                                         {item.monthly_test}

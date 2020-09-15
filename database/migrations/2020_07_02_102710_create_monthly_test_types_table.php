@@ -22,6 +22,7 @@ class CreateMonthlyTestTypesTable extends Migration
             $table->integer('test_type')->comment('1 => Oral 2=> Written');
             $table->integer('school_id');
             $table->integer('year_id');
+            $table->datetime('monthly_test_date')->nullable();
             $table->datetime('publish_at')->nullable();
             $table->boolean('publish')->default(0);
             $table->timestamps();

@@ -12,6 +12,11 @@ use App\StudentInfo;
 class TeacherController extends Controller
 {
 
+    public function getClasses(Request $request,$class_id){
+        $school_id = $this->getSchoolId($request);
+        
+        return $this->ReS("done");
+    }
     public function getClassInfo(Request $request,$class_id){
         $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
@@ -37,12 +42,13 @@ class TeacherController extends Controller
         ]);
         $class_id = $request->class_id;
         $teacher_id = $request->teacher_id;
+        $year_id = $this->getSchoolYearId($request);
         $school_id = $this->getSchoolId($request);
 
         $data = Classes::find($class_id)->update(['assigned_teacher_id'=>$teacher_id]);
         $teacher_data = Teacher::find($teacher_id)->update(['assign_class_id'=>$class_id]);
         if($data == true && $teacher_data == true){
-            $classes = Classes::with('teacher')->where('school_id',$school_id)->get();
+            $classes = Classes::with('teacher')->where(['school_id'=>$school_id,"year_id"=>$year_id])->get();
             return $this->ReS(["message"=>"Teacher Assigned to Class","classes"=>$classes]);
         }
     }

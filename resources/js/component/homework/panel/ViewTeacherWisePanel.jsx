@@ -27,7 +27,7 @@ const ViewTeacherWisePanel = ({teacherwise_homework,setTeacherwiseHomeWorkDispat
                         <td>{item.title}</td>
                         <td><Button primary sm onClick={e => sendEventType("view",item)}>View</Button></td>
                         {type == "editdelete" && [<td><Button warning sm onClick={e => sendEventType("edit",item) }>Edit</Button></td>,<td><Button onClick={e => sendEventType("delete",item) } danger sm>Delete</Button></td>]}
-                        {type == "check" && [<td><Button primary sm onClick={e => sendEventType("check",item) }>View</Button></td>]}
+                        {type == "check" && [<td><Button primary sm onClick={e => sendEventType("check",item.id) }>View</Button></td>]}
                     </tr> 
                 })}
             </tbody>

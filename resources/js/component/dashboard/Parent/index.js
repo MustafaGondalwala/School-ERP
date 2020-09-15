@@ -84,6 +84,12 @@ export const ParentLeftSide = ({parent_childs}) => {
                                 <span className="sidenav-normal"> Student Info </span>
                               </Link>
                             </li>
+                            <li className="nav-item">
+                              <Link to={`/parent/student_info/${item.id}`} className="nav-link">
+                                <span className="sidenav-mini-icon"> R</span>
+                                <span className="sidenav-normal"> Report </span>
+                              </Link>
+                            </li>
                           </ul>
                         </div>
                       </li>

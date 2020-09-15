@@ -42,7 +42,9 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::get('/parent/fee/receipts/{receipt_id}',"FeeController@getReceiptDetails");
     Route::post('/empid',"EmpIDController@getCurrentEmpID");
     Route::get("/grade_type","GradeController@getCurrentGradesType");
-
+    Route::post("/student/getindividual","AttendanceController@getStudentIndividualReport");
+    Route::post("/student/getclasswise","AttendanceController@getClasswiseReport");
+    
 
     Route::group(["prefix"=>"parentstudent"],function(){
         Route::group(["prefix"=>"leave"],function(){
@@ -71,6 +73,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::post("/homework/submit","HomeWorkController@submitHomeWork");
     });
     Route::group(["prefix"=>"adminteacher","middleware"=>"adminOrTeacherCheck"],function(){
+        Route::get("classes/{class_id}","TeacherController@getClasses");
         Route::group(["prefix"=>"leave"],function(){
             Route::get("viewcurrent/{class_id}","LeaveController@viewAllCurrentRequest");
             Route::get("changeStatus/{leave_id}/{status}","LeaveController@changeLeaveStatus");
@@ -114,6 +117,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::group(["prefix"=>"monthlytest"],function(){
                 Route::post("","OnlineExamController@addOnlineExamMonthlyTest");
                 Route::get("","OnlineExamController@getOnlineExamMonthlyTest");
+                Route::delete("{onlinetest_id}","OnlineExamController@getOnlineExamMonthlyTestRemove");
                 Route::post('/withanswers',"OnlineExamController@monthlyTestWithStudentAnswers");
                 Route::post('/update_marksheet',"OnlineExamController@update_marksheet");
             });
@@ -121,9 +125,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::group(["prefix"=>"questionbank"],function(){
             Route::post("","QuestionController@addQuestionPaper");
             Route::get("","QuestionController@getQuestionPaper");
-
+            Route::delete("{questionpaper_id}","QuestionController@removeQuestionPaper");
             Route::group(["prefix"=>"question"],function(){
                 Route::post("{question_id}/{question_type}","QuestionController@addQuestion");
+                Route::delete("{question_id}","QuestionController@removeQuestion");
             });
         });
         Route::group(["prefix"=>"attendance"],function(){
@@ -131,8 +136,6 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::put("student","AttendanceController@updateAttendanceStudent");
             Route::post("staff","AttendanceController@getAttendanceStaff");
             Route::put("staff","AttendanceController@updateAttendanceStaff");
-            Route::post("student/getclasswise","AttendanceController@getClasswiseReport");
-            Route::post("student/getindividual","AttendanceController@getStudentIndividualReport");
             Route::post("staff/getindividual","AttendanceController@getStaffIndividualReport");
         });
         Route::group(["prefix"=>"exam"],function(){
@@ -237,6 +240,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
 
             Route::group(["prefix"=>"classwise"],function(){
                 Route::get("{class_id}","HomeWorkController@getClasswiseCurrentHomeWork");
+                Route::get("/past/{class_id}","HomeWorkController@getClasswisePastHomeWork");
             });
         });
     });

@@ -19,7 +19,7 @@ class ClassSectionWise extends Component {
     };
   }
   fetchData(class_id, select_month) {
-    api.adminteacher.student_attendance
+    api.student_attendance
       .get_classwise(class_id, select_month)
       .then((data) => {
         const { attendance_details } = data;

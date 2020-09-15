@@ -19,12 +19,24 @@ export default class AdminAttendanceClassWiseEdit extends Component{
                 select_month:""
             },
             fetch_button:"Fetch",
+            notshow_class:false,
             errors:{},
             open_panel:false
         }
         this.sendClassId = this.sendClassId.bind(this)
         this.getClassAttendance = this.getClassAttendance.bind(this)
         this.onChange = this.onChange.bind(this)
+    }
+    componentDidMount(){
+        const {student_id} = this.props.match.params
+        if(student_id != undefined){
+            var data = JSON.parse(localStorage.getItem('userAccount'))
+            var class_id = data.info.filter(item => item.id == student_id)[0].class_id
+            this.setState({
+                data: {...this.state.data,["class_id"]:class_id},
+                notshow_class:true
+              });
+        }
     }
 
     sendClassId(class_id){
@@ -57,13 +69,18 @@ export default class AdminAttendanceClassWiseEdit extends Component{
         }
     }
     render(){
-        const {fetch_button,errors,open_panel,data} = this.state
+        const {fetch_button,errors,open_panel,data,notshow_class} = this.state
         return(
             <div>
                 <AdminHeader mainHeader="Attendance" header="Class/Sectio Wise" sub_header="View" />
                 <BodyComponent>
                     <CardComponent title="Select Class/Section" back_link="/admin/attendance">
-                        <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />
+                        {
+                            notshow_class == false &&
+                            <div>
+                            <GetClassId class_id={data.class_id} errors={errors} sendClassId={this.sendClassId} />
+                            </div>
+                        }
                         <Row>
                             <Col md="6" sm="6">
                             <FormGroup>

@@ -18,7 +18,7 @@ class StudyMaterialHome extends Component{
     constructor(props){
         super(props)
         this.state = {
-            show_lessions:""
+            show_lession_id:""
         }
         this.showLessions = this.showLessions.bind(this)
     }
@@ -27,14 +27,14 @@ class StudyMaterialHome extends Component{
             show_lessions:""
         })
     }
-    showLessions(show_lessions){
+    showLessions(show_lession_id){
         this.setState({
-            show_lessions:"",
+            show_lession_id:"",
         }, () => {
             this.setState({
-                show_lessions
+                show_lession_id
             })
-        })
+        })  
     }
 
     render(){
@@ -42,7 +42,7 @@ class StudyMaterialHome extends Component{
         const {setGroupDispatch,groups} = this.props
         if(groups[class_id] == undefined)
             setGroupDispatch(class_id)
-        const {show_lessions} = this.state
+        const {show_lession_id} = this.state
         return(
             <div>
                 <TopBreadCrumb  mainHeader="Student Matrial" header="Home">
@@ -66,15 +66,15 @@ class StudyMaterialHome extends Component{
                                             <td>{item.class.section}</td>
                                             <td>{item.subject.subject_name}</td>
                                             <td>{item.group_name}</td>
-                                            <td><Button primary onClick={e => this.showLessions(item.material)} sm>View Lession</Button></td>
+                                            <td><Button primary onClick={e => this.showLessions(item.id)} sm>View Lession</Button></td>
                                         </tr>
                                 })}
                                 </tbody>
                             </Table>
                         </CardComponent>
-                        {show_lessions && 
+                        {show_lession_id && 
                             <Suspense fallback={<h1>Loading Component ... </h1>}>
-                                <ViewEditLessions type={2} show_lessions={show_lessions}/>
+                                <ViewEditLessions class_id={class_id} type={2} show_type={2} show_lession_id={show_lession_id}/>
                             </Suspense>
                         }
                     </BodyComponent>
@@ -90,28 +90,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps,{setGroupDispatch})(StudyMaterialHome);
-
-//     const {class_id} = props.match.params
-//     console.log(class_id)
-//         return(
-//             <div>
-               
-//                 <BodyComponent>
-//                     <ColComponent
-//                         title="Add Group"
-//                         description="Add/View/Edit Group for Study Matrial"
-//                         link={"/teacher/study-material/group/"+class_id}
-//                         button_text="View"
-//                     />
-//                     <ColComponent
-//                         title="Add Study Material"
-//                         description="Add/View/Edit Study Matrial"
-//                         link={"/teacher/study-material/material/"+class_id}
-//                         button_text="View"
-//                     />
-//                 </BodyComponent>
-//             </div>
-//         )
-// }
-
-// export default StudyMaterialHome

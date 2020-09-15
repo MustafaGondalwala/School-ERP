@@ -16,7 +16,7 @@ class StudyMaterialTeacherMaterial extends Component{
         super(props)
         this.state = {
             add_group_id:"",
-            show_lessions:""
+            show_lession_id:""
         }
     }
     componentDidMount(){
@@ -24,13 +24,13 @@ class StudyMaterialTeacherMaterial extends Component{
         if(Object.keys(teacher_groups).length == 0)
             setTeacherGroupDispatch()
     }
-    showLessions(show_lessions){
+    showLessions(show_lession_id){
         this.setState({
-            show_lessions:"",
+            show_lession_id:"",
             add_group_id:"",
         }, () => {
             this.setState({
-                show_lessions
+                show_lession_id
             })
         })
     }
@@ -47,7 +47,7 @@ class StudyMaterialTeacherMaterial extends Component{
 
     render(){
         const {teacher_groups} = this.props
-        const {add_group_id,show_lessions} = this.state
+        const {add_group_id,show_lession_id} = this.state
         return(
             <div>
                 <EmptyHeader mainHeader="Study Material" header="Teacher" sub_header="Add Material"/>
@@ -71,16 +71,16 @@ class StudyMaterialTeacherMaterial extends Component{
                                         <td>{item.class.section}</td>
                                         <td>{item.subject.subject_name}</td>
                                         <td>{item.group_name}</td>
-                                        <td><Button primary onClick={e => this.showLessions(item.material)} sm>View Lession</Button></td>
+                                        <td><Button primary onClick={e => this.showLessions(item.id)} sm>View Lession</Button></td>
                                         <td><Button primary sm onClick={e => this.addLession(item.id)}>Add Lession</Button></td>
                                     </tr>
                                 }) }
                             </tbody>
                         </Table>
                     </CardComponent>
-                    {show_lessions && 
+                    {show_lession_id && 
                         <Suspense fallback={<h1>Loading Component ... </h1>}>
-                            <ViewEditLessions show_lessions={show_lessions}/>
+                            <ViewEditLessions type={1} show_lession_id={show_lession_id}/>
                         </Suspense>
                     }
                     {add_group_id &&

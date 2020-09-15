@@ -5,6 +5,15 @@ import { render } from "react-dom"
 import { Player } from 'video-react';
 import shortid from "shortid";
 
+
+export const userTypeString = (userTypeInt) => {
+    switch(userTypeInt){
+        case "3":
+        case 3:
+            return "parent";            
+    }
+}
+
 export const getOnlineTestStatusText = (status) => {
     switch(status){
         case 1:

@@ -1,36 +1,40 @@
-import React from "react"
+import React,{Component} from "react"
 
 import { connect } from "react-redux";
 import {setPastHomeWorksDispatch} from "../../actions/homework"
 import { Table, Thead, Button } from "../../utils/Components";
 
 
-
-const ViewTeacherWisePanel = ({teacherwise_past_homework,setPastHomeWorksDispatch,type,sendEventType}) => {
-    if(Object.keys(teacherwise_past_homework).length == 0)
-    setPastHomeWorksDispatch()
-    return(
+class ViewTeacherWisePanel extends Component{
+    componentDidMount(){
+        if(Object.keys(this.props.teacherwise_past_homework).length == 0)
+            this.props.setPastHomeWorksDispatch()
+    }
+    render(){
+        return(
         <Table>
             <Thead>
                 <th>Sr no.</th>
                 <th>Class/Section</th>
                 <th>Title</th>
                 <th>View</th>
-                {type == "check" && [ <th>Check</th>]}
+                {this.props.type == "check" && [ <th>Check</th>]}
             </Thead>
             <tbody>
-                {Object.keys(teacherwise_past_homework).length > 0 && teacherwise_past_homework.map((item,id) => {
+                {Object.keys(this.props.teacherwise_past_homework).length > 0 && this.props.teacherwise_past_homework.map((item,id) => {
                     return <tr>
                         <td>{id+1}</td>
                         <td>{item.classes.class_title} {item.classes.section}</td>
                         <td>{item.title}</td>
-                        <td><Button primary sm onClick={e => sendEventType("view",item)}>View</Button></td>
+                        <td><Button primary sm onClick={e => this.props.sendEventType("view",item)}>View</Button></td>
                     </tr> 
                 })}
             </tbody>
         </Table>
-    )
+        )
+    }
 }
+
 
 
 

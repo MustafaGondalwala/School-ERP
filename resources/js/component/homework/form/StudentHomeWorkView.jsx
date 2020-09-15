@@ -47,37 +47,59 @@ class StudentHomeWorkView extends Component{
             }
           })
     }
-    componentDidMount(){
-        const {data} = this.props
-        const {studenthomework} = data
-        var pending = 0,completed = 0,submitted = 0,rejected = 0,closed = 0;
-        studenthomework.map(item => {
-            switch(item.status){
-                case 1:
-                    pending++;
-                break;
-                case 2:
-                    completed++;
-                    break;
-                case 4:
-                    submitted++;
-                    break;
-                case 5:
-                    rejected++;
-                    break;
-                case 6:
-                    closed++
-                break;
-            }
-        })
-        this.setState({
-            pending,completed,submitted,rejected,closed
-        })
-    }
+    
     render(){
-        const {data,view_type} = this.props
-        const {homework,pending,completed,submitted,rejected,closed} = this.state
-        const {studenthomework} = data
+        const {check_id,view_type,teacherwise_homework} = this.props
+        const {homework} = this.state
+        var studenthomework = [];
+        var pending = 0,completed = 0,submitted = 0,rejected = 0,closed = 0;
+        if(Object.keys(teacherwise_homework).length != 0){
+            studenthomework = teacherwise_homework.filter(item => item.id == check_id)[0].studenthomework
+            studenthomework.map(item => {
+                switch(item.status){
+                    case 1:
+                        pending++;
+                    break;
+                    case 2:
+                        completed++;
+                        break;
+                    case 4:
+                        submitted++;
+                        break;
+                    case 5:
+                        rejected++;
+                        break;
+                    case 6:
+                        closed++
+                    break;
+                }
+            })
+        
+        
+        
+        }
+        if(this.props.data !=null){
+            studenthomework = this.props.data.studenthomework
+            studenthomework.map(item => {
+                switch(item.status){
+                    case 1:
+                        pending++;
+                    break;
+                    case 2:
+                        completed++;
+                        break;
+                    case 4:
+                        submitted++;
+                        break;
+                    case 5:
+                        rejected++;
+                        break;
+                    case 6:
+                        closed++
+                    break;
+                }
+            })
+        }
         var i = 0;
         const dataPoints = [{'y':pending,"label":"Pending"},{'y':completed,"label":"Completed"},{'y':submitted,"label":"Submitted"},{'y':rejected,'label':"Rejected"},{'y':closed,'label':"Closed"}];
         return(
@@ -153,5 +175,11 @@ class StudentHomeWorkView extends Component{
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        teacherwise_homework:state.teacherwise_homework
+    };
+}
 
-export default connect(null,{setTeacherwiseHomeWorkDispatch,setTeacherHomeWork})(StudentHomeWorkView);
+
+export default connect(mapStateToProps,{setTeacherwiseHomeWorkDispatch,setTeacherHomeWork})(StudentHomeWorkView);

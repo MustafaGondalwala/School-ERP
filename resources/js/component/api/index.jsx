@@ -196,6 +196,7 @@ export default {
             }
         },
     adminteacher:{
+        classes: (class_id) => api("/api/v1/adminteacher/classes/"+class_id).then(response => response.data.success),
         leave:{
             viewAll: class_id => api("/api/v1/adminteacher/leave/viewall/"+class_id).then(response => response.data.success),
             viewCurrent: class_id => api("/api/v1/adminteacher/leave/viewcurrent/"+class_id).then(response => response.data.success),
@@ -212,6 +213,7 @@ export default {
             },
             classwise:{
                 current: (class_id) => api("/api/v1/teacher/homework/classwise/"+class_id).then(response => response.data.success),
+                past: (class_id) => api("/api/v1/teacher/homework/classwise/past/"+class_id).then(response => response.data.success),
             },
             get_submission: homework_id => api("/api/v1/teacher/homework/submission/"+homework_id).then(response => response.data.success),
             homework_check: (type,student_homework_id) => api.put("/api/v1/teacher/homework/submission",{type,student_homework_id}).then(response => response.data.success),
@@ -222,7 +224,6 @@ export default {
             get: data => api.post("/api/v1/adminteacher/attendance/student",data).then(response => response.data.success),
             update: student_attendance => api.put("/api/v1/adminteacher/attendance/student",{student_attendance}).then(response => response.data.success),
             get_classwise: (class_id,select_month) => api.post("/api/v1/adminteacher/attendance/student/getclasswise",{class_id,select_month}).then(response => response.data.success),
-            get_individual: (student_id,select_month) => api.post("/api/v1/adminteacher/attendance/student/getindividual",{student_id,select_month}).then(response => response.data.success),
         },
         staff_attendance:{
             get: data => api.post("/api/v1/adminteacher/attendance/staff",data).then(response => response.data.success),
@@ -264,6 +265,7 @@ export default {
                 get: () => api("/api/v1/adminteacher/onlineexam/monthlytest").then(response => response.data.success),
                 getDetailsWithStudentAnswers: () => api.post('/api/v1/adminteacher/onlineexam/monthlytest/withanswers').then(response => response.data.success),
                 update_marksheet: (answers,onlinetest_id) => api.post('/api/v1/adminteacher/onlineexam/monthlytest/update_marksheet',{answers,onlinetest_id}).then(response => response.data.success),
+                remove:onlinetest_id => api.delete("/api/v1/adminteacher/onlineexam/monthlytest/"+onlinetest_id).then(response => response.data.success),
             },
         },
         questionbank:{
@@ -271,7 +273,9 @@ export default {
             get: () => api("/api/v1/adminteacher/questionbank").then(response => response.data.success),
             question:{
                 add: (data,question_id,question_type) => api.post("/api/v1/adminteacher/questionbank/question/"+question_id+"/"+question_type,data).then(response => response.data.success),
+                remove: (question_id) => api.delete("/api/v1/adminteacher/questionbank/question/"+question_id).then(response => response.data.success),
             },
+            remove: questionpaper_id => api.delete("/api/v1/adminteacher/questionbank/"+questionpaper_id).then(response => response.data.success),
         },
         exam:{
             monthly_test:{
@@ -306,6 +310,11 @@ export default {
             get_receipts: (student_id) => api.post("/api/v1/parent/fee/receipts",{student_id}).then(response => response.data.success),
             view_receipt: (receipt_id) => api("/api/v1/parent/fee/receipts/"+receipt_id).then(response => response.data.success),
         },
+    },
+    
+    student_attendance:{
+        get_individual: (student_id,select_month) => api.post("/api/v1/student/getindividual",{student_id,select_month}).then(response => response.data.success),
+        get_classwise: (class_id,select_month) => api.post("/api/v1/student/getclasswise",{class_id,select_month}).then(response => response.data.success),
     },
     get_years: () => api("/api/v1/year").then(response => response.data.success),
     class: () => api("/api/v1/class").then(response => response.data.success),

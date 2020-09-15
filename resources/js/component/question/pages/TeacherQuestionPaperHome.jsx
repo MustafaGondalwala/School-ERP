@@ -4,12 +4,11 @@ import QuestionPaperHeader from "../../header/teacher/QuestionPaperHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import ColComponent from "../../utils/ColComponent"
 import Row from "../../utils/Row"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 const TeacherQuestionPaperHome = () => (
     <div>
-        <TopBreadCrumb mainHeader="Question Paper" header="Home">
-            <QuestionPaperHeader />
-        </TopBreadCrumb>
+        <EmptyHeader mainHeader="Question Paper" header="Home" />
         <BodyComponent>
         <Row>
             <ColComponent

@@ -4,20 +4,40 @@ import ExamHeader from "../../header/parent/ExamHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import ColComponent from "../../utils/ColComponent"
 import Row from "../../utils/Row"
+import EmptyHeader from "../../utils/EmptyHeader"
 
-const ParentExamHomePage = () => (
+const ParentExamHomePage = (props) => {
+    const {student_id} = props.match.params
+    return(
     <div>
-        <TopBreadCrumb mainHeader="Exam" header="Home">
-            <ExamHeader />
-        </TopBreadCrumb>
+        <EmptyHeader mainHeader="Exam" header="Home" />
         <BodyComponent>
             <Row>
                 <ColComponent
-                    title="View Result"
+                    title="View Monthly Test Result"
                     description="View Student Result"
+                    link={"/parent/exam/monthly-test-result/"+student_id}
+                    button_text="View"
+                />
+                <ColComponent
+                    title="View Exam Result"
+                    description="View Student Result"
+                    link={"/parent/exam/exam-result/"+student_id}
+                    button_text="View"
+                />
+                <ColComponent
+                    title="Upcoming Monthly Test Result"
+                    description="View Monthy Test Result"
+                    link={"/parent/exam/monthlytest/"+student_id}
+                    button_text="View"
+                />
+                <ColComponent
+                    title="Upcoming Exam Result"
+                    description="View Exam Result"
                     link="/parent/exam/view-current-result"
                     button_text="View"
                 />
+
                 <ColComponent
                     title="View/Print Marksheet"
                     description="View/Print Past Year/Exam Marksheet"
@@ -39,6 +59,7 @@ const ParentExamHomePage = () => (
             </Row>
         </BodyComponent>
     </div>
-)
+    )
+}
 
 export default ParentExamHomePage

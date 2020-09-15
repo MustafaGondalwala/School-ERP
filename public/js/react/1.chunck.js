@@ -71,7 +71,7 @@ var ClassSectionWise = /*#__PURE__*/function (_Component) {
     value: function fetchData(class_id, select_month) {
       var _this2 = this;
 
-      _api__WEBPACK_IMPORTED_MODULE_1__["default"].adminteacher.student_attendance.get_classwise(class_id, select_month).then(function (data) {
+      _api__WEBPACK_IMPORTED_MODULE_1__["default"].student_attendance.get_classwise(class_id, select_month).then(function (data) {
         var attendance_details = data.attendance_details;
         var total_present = 0;
         var total_absent = 0;
