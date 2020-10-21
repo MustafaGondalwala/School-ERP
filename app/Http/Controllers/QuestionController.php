@@ -27,18 +27,32 @@ class QuestionController extends Controller
             'marks'=>'required|integer'
         ]);
         $year_id = $this->getSchoolYearId($request);
-        $request->user()->questionpapers()->create([
-            'title'=>$request->title,
-            'class_id'=>$request->class_id,
-            'subject_id'=>$request->subject_id,
-            'school_id'=>$this->getSchoolId($request),
-            'year_id'=>$year_id,
-            'marks'=>$request->marks
-        ]);
+        $teacher = $request->user()->teacher()->first();
+        $questionpaper = new QuestionPaper;
+        $questionpaper->title = $request->title;
+        $questionpaper->class_id = $request->class_id;
+        $questionpaper->subject_id = $request->subject_id;
+        $questionpaper->year_id = $year_id;
+        $questionpaper->school_id = $this->getSchoolId($request);
+        $questionpaper->created_by_id = $teacher->id;
+        $questionpaper->created_by_type = "App\Teacher";
+        $questionpaper->marks = $request->marks;
+
+        $questionpaper->save();
+
+        // $request->user()->questionpapers()->create([
+        //     'title'=>$request->title,
+        //     'class_id'=>$request->class_id,
+        //     'subject_id'=>$request->subject_id,
+        //     'school_id'=>$this->getSchoolId($request),
+        //     'year_id'=>$year_id,
+        //     'marks'=>$request->marks
+        // ]);
         return $this->ReS(['questionpaper'=>$this->userAllQuestionPaper($year_id)]);
     }
     public function userAllQuestionPaper($year_id){
-        return Auth()->user()->questionpapers()->where('year_id',$year_id)->get();
+        $teacher = Auth()->user()->teacher()->first();
+        return QuestionPaper::with('class','subject','question')->where(['year_id'=>$year_id,"created_by_id"=>$teacher->id])->get();
     }
     public function getQuestionPaper(Request $request){
         $year_id = $this->getSchoolYearId($request);

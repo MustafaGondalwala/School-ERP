@@ -28,8 +28,10 @@ export default {
             student:{
                 register:{
                     add: data => api.post("/api/v1/adminclerk/student/register",data,formDataConfig).then(response => response.data.success),
+                    update: data => api.post("/api/v1/adminclerk/student/register/update",data,formDataConfig).then(response => response.data.success),
                     list: class_string => api.post("/api/v1/adminclerk/student/register/list",{class_string}).then(response => response.data.success),
                     bulk_add: data => api.post("/api/v1/adminclerk/student/register/bulk_add",{data}).then(response => response.data.success),
+                    drop:(register_id) => api.delete("/api/v1/adminclerk/student/register/"+register_id).then(response => response.data.success),
                 },
                 listAll : () => api("/api/v1/adminclerk/student/listAll").then(response => response.data.success),
                 listByClassId: class_id => api("/api/v1/adminclerk/student/list/"+class_id).then(response => response.data.success),
@@ -91,6 +93,9 @@ export default {
             },
         },
         admin: {
+            school_info: () => api("/api/v1/admin/school-info").then(response => response.data.success),
+            update_schoolInfo: data => api.post("/api/v1/admin/school-info",data,formDataConfig).then(response => response.data.success),
+            dashboard:() => api("/api/v1/admin/dashboard").then(response => response.data.success),
             empid:{
                 get: () => api.post('/api/v1/admin/empid').then(response => response.data.success),
                 update: tempEmpID => api.put('/api/v1/admin/empid',{tempEmpID}).then(response => response.data.success),
@@ -154,6 +159,9 @@ export default {
                 get_student_searchable: () => api("/api/v1/adminteacher/student/searchable").then(response => response.data.success),
                 get_student_searchable: searchText => api("/api/v1/adminteacher/student/searchable/"+searchText).then(response => response.data.success),
                 setrollno: (rollno_string,roll_id,id) => api.post("/api/v1/admin/student/set_rollno",{rollno_string,roll_id,id}).then(response => response.data.success),
+                get_individual_register_student:(register_id) => api("/api/v1/admin/student/register_no-student/"+register_id).then(response => response.data.success),
+                setRegisterNo:(register_no) => api.post("/api/v1/admin/student/register_no",{register_no}).then(response => response.data.success),
+                getRegisterNo:()=>api("/api/v1/admin/student/register_no").then(response => response.data.success),
             },
             add_class: (new_class) => api.post("/api/v1/admin/class",{new_class}).then(response => response.data.success),
             rename_class: (new_class_name,old_classname) => api.put("/api/v1/admin/class",{new_class_name,old_classname}).then(response => response.data.success),
@@ -196,6 +204,7 @@ export default {
             }
         },
     adminteacher:{
+        dashboard:() => api.post("/api/v1/adminteacher/dashboard").then(response => response.data.success),
         classes: (class_id) => api("/api/v1/adminteacher/classes/"+class_id).then(response => response.data.success),
         leave:{
             viewAll: class_id => api("/api/v1/adminteacher/leave/viewall/"+class_id).then(response => response.data.success),

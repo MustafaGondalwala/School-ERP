@@ -17,7 +17,6 @@ class CreateStudentAddressesTable extends Migration
             $table->id();
             $table->integer('student_info_id');
             $table->string('student_address');
-            $table->string('place',50);
             $table->string('block',50)->nullable();
             $table->string('district',50)->nullable();
             $table->string('state',50)->nullable();

@@ -15,17 +15,24 @@ class SetRollNo extends Component{
         super(props)
         this.state = {
             model_status: "model fade",
-            show_id:""
+            show_id:"",
+            register_no:""
         }
         this.updateRollNo = this.updateRollNo.bind(this)
     }
     componentDidMount(){
-        const {classes,getClassSection} = this.props
-        if(Object.keys(classes).length == 0){
-            getClassSection()
-        } 
+        api.admin.student.getRegisterNo().then(data => {
+            const {register_no} = data
+            this.setState({register_no:register_no})
+        });
     }
-    updateRollNo(rollno_string,roll_id,id){
+    updateRollNo(){
+        const {register_no} = this.state
+        console.log(register_no)
+        if(register_no == "" || register_no == 0 || register_no == null){
+            Swal.fire("Validation Error","Please Enter Register No","error");
+            return false
+        }
         Swal.fire({
             title: 'Are you sure?',
             text: "Roll No serials will be updated",
@@ -36,12 +43,7 @@ class SetRollNo extends Component{
             confirmButtonText: 'Yes, Update it!'
           }).then((result) => {
             if (result.value) {
-              return api.admin.student.setrollno(rollno_string,roll_id,id).then(data => {
-                const {classes} = data
-                this.props.setClassSection(classes)
-                this.setState({
-                    show_id:""
-                })
+              return api.admin.student.setRegisterNo(this.state.register_no).then(data => {
                 Swal.fire("Data Updated","Roll No Serials Updated !!","success");
             });
             }
@@ -66,29 +68,16 @@ class SetRollNo extends Component{
                     <AdminStudentHeader />
                 </TopBreadCrumb>
                 <BodyComponent>
-                 <CardComponent title="Set Roll No" back_link="/admin/student">
-                        <Table>
-                            <Thead>
-                                <th>Sr no.</th>
-                                <th>Class</th>
-                                <th>Section</th>
-                                <th>Current Roll No</th>
-                                <th>Action</th>
-                            </Thead>
-                            <tbody>
-                                {Object.keys(classes).length > 0 && classes.map((item,id) =>{
-                                    return <tr>
-                                        <td>{id+1}</td>
-                                        <td>{item.class_title}</td>
-                                        <td>{item.section}</td>
-                                        <td><Input disabled value={getProperRollNo(item.roll_no)}/></td>
-                                        <td> <Button primary sm onClick={() => this.setState({ show_id : item})}> Update </Button></td>
-                                    </tr>
-                                })}
-                            </tbody>
-                        </Table>
+                    <CardComponent title="Set Roll No" back_link="/admin/student">
+                            <FormGroup>
+                                <FormLabel>Register No</FormLabel>
+                                <Input value={this.state.register_no} type="number" onChange={e => this.setState({ register_no:e.target.value })} />
+                            </FormGroup>
+                            <FormGroup>
+                            <Button primary sm onClick={e => this.updateRollNo()}>Update</Button>
+                            </FormGroup>
                     </CardComponent>
-                    {show_id && <UpdateRollNo updateRollNo={this.updateRollNo} item={show_id} unique_id_code={unique_id_code}/>}
+                    {/* {show_id && <UpdateRollNo updateRollNo={this.updateRollNo} item={show_id} unique_id_code={unique_id_code}/>} */}
                 </BodyComponent>
              </div>
         );

@@ -5,6 +5,7 @@ import CardComponent from "../../utils/CardComponent"
 import BodyComponent from "../../utils/BodyComponent"
 import api from "../../api"
 import { Table, Thead } from "../../utils/Components"
+import EmptyHeader from "../../utils/EmptyHeader"
 
 class TeacherOnlineTestPastClassView extends Component{
     constructor(props){
@@ -27,9 +28,7 @@ class TeacherOnlineTestPastClassView extends Component{
         const {onlineTest} = this.state
         return(
             <div>
-                <TopBreadCrumb mainHeader="OnlineExam" header="View Current OnlineTest" back_link={"/teacher/online-exam/class/"+class_id}>
-                    <TeacherHeader />
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="OnlineExam" header="View Past OnlineTest" back_link={"/teacher/online-exam/class/"+class_id} />
                 <BodyComponent>
                    <CardComponent title="View Past Online Test">
                         {

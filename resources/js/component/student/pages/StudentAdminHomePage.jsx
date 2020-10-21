@@ -65,12 +65,12 @@ const StudentHomePage = () => {
         <div className="card-deck flex-column flex-xl-row">
           <CardComponent title="Profile Update">
             <div className="row card-wrapper">
-              <ColComponent
+              {/* <ColComponent
                 title="Profile Update"
                 description="Student Profile Update in System"
                 link="/admin/student/student-profile-update"
                 button_text="Enter"
-              />
+              /> */}
               <ColComponent
                 title="Profile Images"
                 description="Image Update of Student in System"
@@ -96,12 +96,12 @@ const StudentHomePage = () => {
                 link="/admin/student/register-student-bulk"
                 button_text="View"
               />
-              <ColComponent
+              {/* <ColComponent
                 title="One Click Info"
                 description="Student Info by One Click"
                 link="/admin/student/student-oneclick-info"
                 button_text="View"
-              />
+              /> */}
             </div>
           </CardComponent>
         </div>
@@ -138,12 +138,12 @@ const StudentHomePage = () => {
                 link="/admin/student/register-student-bulk"
                 button_text="View"
               />
-              <ColComponent
+              {/* <ColComponent
                 title="Parent Annual Income"
                 description="View Income Report"
                 link="/admin/student/register-student-bulk"
                 button_text="View"
-              />
+              /> */}
             </div>
           </CardComponent>
         </div>

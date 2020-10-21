@@ -100,9 +100,6 @@ class GetClassId extends Component {
       if(classes.length > 0){
         classes.map(item => {
          if(item.id == class_id){
-          //  this.setState({
-          //    default_value:item.class_title
-          //  })
           default_value = item.class_title
          }
         })

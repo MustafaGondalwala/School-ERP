@@ -15,8 +15,8 @@ import StudentRoutes from "./routes/student/StudentRoutes"
 
 
 
-import Admin, {AdminDashboardHome} from "./dashboard/Admin"
-
+import Admin from "./dashboard/Admin"
+import AdminDashboard from "./dashboard/Admin/AdminDashboard"
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
@@ -64,7 +64,7 @@ import AdminSettingHomePage from "./setting/pages/AdminHomePage"
 import TeacherSettingHomePage from "./setting/pages/TeacherSettingHomePage"
 
 
-import {TeacherDashboardHome} from "./dashboard/Teacher"
+import TeacherDashboardHome from "./dashboard/Teacher/TeacherDashboardHome"
 import TeacherHomeWorkHomePage from "./homework/pages/TeacherHomeWorkHomePage"
 import TeacherClassCurrentHomeWork from "./homework/pages/TeacherClassCurrentHomeWork"
 import TeacherClassPastHomeWork from "./homework/pages/TeacherClassPastHomeWork"
@@ -330,7 +330,7 @@ class Index extends Component {
 
 
 
-            <AdminDashboardRoutes exact path="/admin/dashboard" component={AdminDashboardHome} />
+            <AdminDashboardRoutes exact path="/admin/dashboard" component={AdminDashboard} />
 
             <AdminDashboardRoutes exact path="/admin/noticeboard" component={AdminNoticeBoard} />
             <AdminDashboardRoutes exact path="/admin/noticeboard/add" component={AdminAddNoticeBoard} />

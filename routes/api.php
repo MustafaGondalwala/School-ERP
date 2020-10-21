@@ -44,7 +44,6 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     Route::get("/grade_type","GradeController@getCurrentGradesType");
     Route::post("/student/getindividual","AttendanceController@getStudentIndividualReport");
     Route::post("/student/getclasswise","AttendanceController@getClasswiseReport");
-    
 
     Route::group(["prefix"=>"parentstudent"],function(){
         Route::group(["prefix"=>"leave"],function(){
@@ -74,6 +73,7 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
     });
     Route::group(["prefix"=>"adminteacher","middleware"=>"adminOrTeacherCheck"],function(){
         Route::get("classes/{class_id}","TeacherController@getClasses");
+        Route::post("dashboard","TeacherController@dashboardHome");
         Route::group(["prefix"=>"leave"],function(){
             Route::get("viewcurrent/{class_id}","LeaveController@viewAllCurrentRequest");
             Route::get("changeStatus/{leave_id}/{status}","LeaveController@changeLeaveStatus");
@@ -165,7 +165,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         Route::group(["prefix"=>"student"],function(){
             Route::get("header","StudentController@getAdminStudentHeader");
             Route::post("/update","StudentController@updateStudentAdmission");
+            Route::post("/register/update","RegisterStudentController@updateRegisterStudent");
+            Route::delete("/register/{register_id}","RegisterStudentController@dropRegisterStudent");
             Route::post("/register","RegisterStudentController@newRegisterStudent");
+
             Route::post("/register/list","RegisterStudentController@registerStudentList");
             Route::post("/register/list","RegisterStudentController@registerStudentList");
             Route::post("/register/bulk_add","RegisterStudentController@registerBulkAdd");
@@ -245,6 +248,10 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
         });
     });
     Route::group(["prefix"=>"admin","middleware"=>"adminCheck"],function(){
+        Route::get("dashboard","UserApiController@getDashboard");
+        Route::get("school-info","UserApiController@getSchoolInfo");
+        Route::post("school-info","UserApiController@updateSchoolInfo");
+        
         Route::post("empid","EmpIDController@getCurrentEmpid");
         Route::put("empid","EmpIDController@updateCurrentEmpid");
         Route::get("/teacher/header","HeaderController@getAdminTeacherHeader");
@@ -277,6 +284,9 @@ Route::group(["prefix"=>"v1","middleware" => "auth:api"],function(){
             Route::get("/searchable/{searchText}","StudentController@studentsSearchable");
             Route::get("/searchable","StudentController@studentsSearchableLimit");
             Route::post("/set_rollno","StudentController@setRollNo");
+            Route::post("/register_no","StudentController@setRegisterno");
+            Route::get("/register_no-student/{register_od}","StudentController@getRegisterStudent");
+            Route::get("/register_no","StudentController@getRegisterno");
         });
         Route::group(["prefix"=>"staff"],function(){
             Route::get("/searchable/{searchText}","StaffController@staffSearchable");

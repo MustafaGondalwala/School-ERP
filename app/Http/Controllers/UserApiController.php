@@ -7,13 +7,39 @@ use \Auth;
 use \DB;
 use App\Teacher;
 use App\StudentInfo;
+use App\SchoolInfo;
 use App\AdminInfo;
 use App\Classes;
 use App\ParentInfo;
+use App\RegisterStudent;
 use App\Clerk;
+use App\MonthlyTestType;
+use App\Subjects;
 class UserApiController extends Controller
 {
-    //
+    public function updateSchoolInfo(Request $request){
+        $school_id = $this->getSchoolId($request);
+        $request->front_pic = $this->uploadFile($request->front_pic)['url'];
+        SchoolInfo::find($school_id)->update($request->all());
+        $schoolInfo = SchoolInfo::find($school_id)->update(["front_pic"=>$request->front_pic]);
+        return $this->ReS(["message"=>"Data Updated !!"]);
+    }
+    public function getSchoolInfo(Request $request){
+        $school_id = $this->getSchoolId($request);
+        $schoolInfo = SchoolInfo::find($school_id);
+        return $this->ReS(["schoolInfo"=>$schoolInfo]);
+    }
+    public function getDashboard(Request $request){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        $classes = Classes::where(["school_id"=>$school_id,"year_id"=>$year_id])->get();
+        $registered_students = RegisterStudent::where(["school_id"=>$school_id,"year_id"=>$year_id])->count();
+        $admission_students = StudentInfo::where(["school_id"=>$school_id,"year_id"=>$year_id])->count();
+        $teacher = Teacher::where(["school_id"=>$school_id,"year_id"=>$year_id])->get();
+        $subjects = Subjects::select('subject_name')->where(["school_id"=>$school_id,"year_id"=>$year_id])->get();
+        $monthly_test = MonthlyTestType::where(["school_id"=>$school_id,"year_id"=>$year_id])->count();
+        return $this->ReS(["classes"=>$classes,"registered_students"=>$registered_students,"admission_students"=>$admission_students,"teacher"=>$teacher,"subjects"=>$subjects,"monthly_test"=>$monthly_test]);
+    }
     public function login(Request $request){
         $request->validate([
             'credential'=>'required|array'

@@ -16,6 +16,7 @@ use App\RegisterStudent;
 use App\SchoolInfo;
 use App\StudentPhoto;
 use App\StudentMedicalInfo;
+use App\SetRegisterno;
 class StudentController extends Controller
 {  
     public function studentAdvancedSearch(Request $request){
@@ -115,6 +116,14 @@ class StudentController extends Controller
         $photos = StudentInfo::with(['photos'])->where(["class_id"=>$class_id,"school_id"=>$school_id,"year_id"=>$year_id])->get();
         return $this->ReS(["class_wise"=>$photos]);
     }
+    public function getRegisterStudent(Request $request,$register_id){
+        if($register_id == null || $register_id == "")
+            return $this->ReE(["message"=>"Invalid Register Id"]);
+            
+        $find = RegisterStudent::find(["register_id"=>$register_id])->first();
+        return $this->ReS(["register_student"=>$find]);
+    }
+
     public function updateMedicalInfo(Request $request){
         $request->validate([
             'checkup_date'=>'required|date',
@@ -256,6 +265,38 @@ class StudentController extends Controller
             return $this->ReS(["classes"=>$classes]);
         }
     }
+    public function getRegisterno(Request $request){
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        if(SetRegisterno::where(['school_id'=>$school_id,'year_id'=>$year_id])->count() == 0){
+            $new_registerno = new SetRegisterno;
+            $new_registerno->school_id = $school_id;
+            $new_registerno->year_id = $year_id;
+            $new_registerno->register_no = 0;
+            $new_registerno->save();
+            return $this->ReS(["register_no"=>0]);
+        }
+        else
+            return $this->ReS(["register_no"=>SetRegisterno::where(['school_id'=>$school_id,'year_id'=>$year_id])->first()->register_no]);
+    }
+    public function setRegisterno(Request $request){
+        // SetRegisterno
+        $request->validate([
+            'register_no'=>'required|integer'
+        ]);
+        $school_id = $this->getSchoolId($request);
+        $year_id = $this->getSchoolYearId($request);
+        if(SetRegisterno::where(['school_id'=>$school_id,'year_id'=>$year_id])->count() == 0){
+            $new_registerno = new SetRegisterno;
+            $new_registerno->school_id = $school_id;
+            $new_registerno->year_id = $year_id;
+            $new_registerno->register_no = $request->register_no;
+            $new_registerno->save();
+        }
+        else
+            SetRegisterno::where(['school_id'=>$school_id,'year_id'=>$year_id])->update(['register_no'=>$request->register_no]);
+        return $this->ReS(["message"=>"Register no Updated"]);
+    }
     public function updateParticularCell(Request $request){
         $request->validate([
             'id'=>'required|integer',
@@ -366,7 +407,7 @@ class StudentController extends Controller
                 array_push($notDone,$data);
             }
         }
-        // DB::commit();
+        DB::commit();
         return $this->ReS(["message"=>"Data Inserted",'notDone'=>$notDone]);
     }
     public function addStudentAdmission(Request $request){
@@ -391,10 +432,15 @@ class StudentController extends Controller
         $new_addmission->student_name = $request->student_name;
         $new_addmission->father_name = $request->father_name;
         $new_addmission->mother_name = $request->mother_name;
+        $new_addmission->last_name = $request->last_name;
         $new_addmission->father_contact_no1 = $request->father_contact_no1;
         $new_addmission->father_contact_no2 = $request->father_contact_no2;
+        $new_addmission->father_qualification = $request->father_qualification;
+        $new_addmission->mother_qualification = $request->mother_qualification;
+
         $new_addmission->father_email = $request->father_email;
         $new_addmission->student_email = $request->student_email;
+        $new_addmission->mother_email = $request->mother_email;
         $new_addmission->dob = $request->dob;
         $new_addmission->age = $request->age;
         $new_addmission->gender = $request->gender;
@@ -408,7 +454,6 @@ class StudentController extends Controller
 
         $new_addmission->address()->create([
             'student_address'=>$request->student_address,
-            'place'=>$request->place,
             'block'=>$request->block,
             'district'=>$request->district,
             'state'=>$request->state,
@@ -531,6 +576,7 @@ class StudentController extends Controller
             'handicapped'=>'required|string',
             'father_contact_no1'=>'required|string',
         ]);
+
         if($request->id){
         $new_addmission = StudentInfo::find($request->id);
         $school_id = $this->getSchoolId($request);
@@ -542,6 +588,7 @@ class StudentController extends Controller
         $new_addmission->student_name = $request->student_name;
         $new_addmission->father_name = $request->father_name;
         $new_addmission->mother_name = $request->mother_name;
+        $new_addmission->last_name = $request->last_name;
         $new_addmission->father_contact_no1 = $request->father_contact_no1;
         $new_addmission->father_contact_no2 = $request->father_contact_no2;
         $new_addmission->father_email = $request->father_email;
@@ -554,12 +601,11 @@ class StudentController extends Controller
         $new_addmission->guardian_name = $request->guardian_name;
         $new_addmission->guardian_occupation = $request->guardian_occupation;
         $new_addmission->dob = $request->dob;
-        $new_addmission->year_id = $this->getSchoolYearId($request);
+        $new_addmission->year_id = $request->year_id;
         $new_addmission->save();
 
         $new_addmission->address()->update([
             'student_address'=>$request->student_address,
-            'place'=>$request->place,
             'block'=>$request->block,
             'district'=>$request->district,
             'state'=>$request->state,
@@ -577,50 +623,85 @@ class StudentController extends Controller
             'student_info_id'=>$new_addmission->id
         ]);
         
-        $student_photo = $request->student_photo;
-        $father_photo = $request->father_photo;
-        $mother_photo = $request->mother_photo;
-        $last_marksheet = $request->last_marksheet;
-        $income_certificate = $request->income_certificate;
-        $transfer_certificate = $request->transfer_certificate;
-        $caste_certificate = $request->caste_certificate;
-        $dob_certificate = $request->dob_certificate;
-        $student_aadhar_card_photo = $request->student_aadhar_card_photo;
-        $father_aadhar_card_photo = $request->father_aadhar_card_photo;
+        // $student_photo = $request->student_photo;
+        // $father_photo = $request->father_photo;
+        // $mother_photo = $request->mother_photo;
+        // $last_marksheet = $request->last_marksheet;
+        // $income_certificate = $request->income_certificate;
+        // $transfer_certificate = $request->transfer_certificate;
+        // $caste_certificate = $request->caste_certificate;
+        // $dob_certificate = $request->dob_certificate;
+        // $student_aadhar_card_photo = $request->student_aadhar_card_photo;
+        // $father_aadhar_card_photo = $request->father_aadhar_card_photo;
 
-        if($request->hasFile('student_photo'))
+        if($request->hasFile('student_photo')){
             $student_photo = $this->uploadFile($request->student_photo)['url'];
-        if($request->hasFile('father_photo'))
-            $father_photo = $this->uploadFile($request->father_photo)['url'];
-        if($request->hasFile('mother_photo'))
-            $mother_photo = $this->uploadFile($request->mother_photo)['url'];
-        if($request->hasFile('income_certificate'))
-            $income_certificate = $this->uploadFile($request->income_certificate)['url'];
-        if($request->hasFile('transfer_certificate'))
-            $transfer_certificate = $this->uploadFile($request->transfer_certificate)['url'];
-        if($request->hasFile('caste_certificate'))
-            $caste_certificate = $this->uploadFile($request->caste_certificate)['url'];
-        if($request->hasFile('dob_certificate'))
-            $dob_certificate = $this->uploadFile($request->dob_certificate)['url'];
-        if($request->hasFile('student_aadhar_card_photo'))
-            $student_aadhar_card_photo = $this->uploadFile($request->student_aadhar_card_photo)['url'];
-        if($request->hasFile('father_aadhar_card_photo'))
-            $father_aadhar_card_photo = $this->uploadFile($request->father_aadhar_card_photo)['url'];
-
             $new_addmission->photos()->update([
-                'student_photo'=>$student_photo,
-                'father_photo'=>$father_photo,
-                'mother_photo'=>$mother_photo,
-                'last_marksheet'=>$last_marksheet,
-                'income_certificate'=>$income_certificate,
-                'transfer_certificate'=>$transfer_certificate,
-                'caste_certificate'=>$caste_certificate,
-                'transfer_certificate'=>$transfer_certificate,
-                'dob_certificate'=>$dob_certificate,
-                'student_aadhar_card_photo'=>$student_aadhar_card_photo,
-                'father_aadhar_card_photo'=>$father_aadhar_card_photo,
-                'student_info_id'=>$new_addmission->id
+                'student_photo'=>$student_photo
             ]);
+        }
+        if($request->hasFile('father_photo')){
+            $father_photo = $this->uploadFile($request->father_photo)['url'];
+            $new_addmission->photos()->update([
+                'father_photo'=>$father_photo
+            ]);
+        }
+        if($request->hasFile('mother_photo')){
+            $mother_photo = $this->uploadFile($request->mother_photo)['url'];
+            $new_addmission->photos()->update([
+                'mother_photo'=>$mother_photo
+            ]);
+        }
+        if($request->hasFile('income_certificate')){
+            $income_certificate = $this->uploadFile($request->income_certificate)['url'];
+            $new_addmission->photos()->update([
+                'income_certificate'=>$income_certificate
+            ]);
+        }
+        if($request->hasFile('transfer_certificate')){
+            $transfer_certificate = $this->uploadFile($request->transfer_certificate)['url'];
+            $new_addmission->photos()->update([
+                'transfer_certificate'=>$transfer_certificate
+            ]);
+        }
+        if($request->hasFile('caste_certificate')){
+            $caste_certificate = $this->uploadFile($request->caste_certificate)['url'];
+            $new_addmission->photos()->update([
+                'caste_certificate'=>$caste_certificate
+            ]);
+        }
+        if($request->hasFile('dob_certificate')){
+            $dob_certificate = $this->uploadFile($request->dob_certificate)['url'];
+            $new_addmission->photos()->update([
+                'dob_certificate'=>$dob_certificate
+            ]);
+        }
+        if($request->hasFile('student_aadhar_card_photo')){
+            $student_aadhar_card_photo = $this->uploadFile($request->student_aadhar_card_photo)['url'];
+            $new_addmission->photos()->update([
+                'student_aadhar_card_photo'=>$student_aadhar_card_photo
+            ]);
+        }
+        if($request->hasFile('father_aadhar_card_photo')){
+            $father_aadhar_card_photo = $this->uploadFile($request->father_aadhar_card_photo)['url'];
+            $new_addmission->photos()->update([
+                'father_aadhar_card_photo'=>$father_aadhar_card_photo
+            ]);
+        }
+            // $new_addmission->photos()->update([
+            //     'student_photo'=>$student_photo,
+            //     'father_photo'=>$father_photo,
+            //     'mother_photo'=>$mother_photo,
+            //     'last_marksheet'=>$last_marksheet,
+            //     'income_certificate'=>$income_certificate,
+            //     'transfer_certificate'=>$transfer_certificate,
+            //     'caste_certificate'=>$caste_certificate,
+            //     'transfer_certificate'=>$transfer_certificate,
+            //     'dob_certificate'=>$dob_certificate,
+            //     'student_aadhar_card_photo'=>$student_aadhar_card_photo,
+            //     'father_aadhar_card_photo'=>$father_aadhar_card_photo,
+            //     'student_info_id'=>$new_addmission->id
+            // ]);
             return $this->ReS(["message"=>"Data Updated !!"]);
         }
     }

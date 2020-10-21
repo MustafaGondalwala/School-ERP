@@ -31,6 +31,7 @@ const AdminStudentRoutes = () => (
         <AdminDashboardRoutes exact path="/admin/student" component={StudentAdminHomePage} />
         <AdminDashboardRoutes exact path="/admin/student/clerk" component={ViewEditClerk} />
         <AdminDashboardRoutes exact path="/admin/student/set-roll_no" component={SetRollNo} />
+        <AdminDashboardRoutes exact path="/admin/student/register-student/:register_id" component={RegisterPage} />
         <AdminDashboardRoutes exact path="/admin/student/register-student" component={RegisterPage} />
         <AdminDashboardRoutes exact path="/admin/student/register-student-list" component={RegisterListPage} />
         <AdminDashboardRoutes exact path="/admin/student/register-student-bulk" component={BulkStudentRegister} />

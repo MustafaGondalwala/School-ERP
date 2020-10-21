@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\RegisterStudent;
 use \Carbon\Carbon;
+use App\SetRegisterno;
+
 class RegisterStudentController extends Controller
 {
     public function registerBulkAdd(Request $request){
@@ -37,6 +39,45 @@ class RegisterStudentController extends Controller
         else
             $sendData = RegisterStudent::where('year_id',$year_id)->where('class',$request->class_string)->orderBy('created_at')->get();
         return $this->ReS(["register_students"=>$sendData]);    
+    }
+    public function updateRegisterStudent(Request $request){
+        $request->validate([
+            'register_no'=>"required|string",
+            'classes'=>'required|string',
+            'student_name'=>'required|string',
+            'father_name'=>'required|string',
+            'father_contact_no1'=>'required|string',
+            'dob'=>'required|date',
+            'gender'=>'required|string',
+            'student_address'=>'required|string'
+        ]);
+        $new_register = RegisterStudent::find($request->id);
+        \DB::beginTransaction();
+        // $new_register->register_no = $register_no;
+        $new_register->class = $request->classes;
+        $new_register->student_name =  $request->student_name;
+        $new_register->father_name =  $request->father_name;
+        $new_register->mother_name =  $request->mother_name;
+        $new_register->father_contact_no1 =  $request->father_contact_no1;
+        $new_register->father_contact_no2 =  $request->father_contact_no2;
+        $new_register->dob = $request->dob;
+        $new_register->student_address = $request->student_address;
+        $new_register->gender = $request->gender;
+        $new_register->doA = $request->doA;
+        $new_register->block = $request->block;
+        $new_register->district = $request->district;
+        // $new_register->year_id = $this->getSchoolYearId($request);
+        // $new_register->school_id = $this->getSchoolId($request);
+        if($request->hasFile('student_photo')){
+            $new_register->student_photo = $this->uploadFile($request->student_photo)['url'];
+        }if($request->hasFile('mother_photo')){
+            $new_register->mother_photo = $this->uploadFile($request->mother_photo)['url'];
+        }if($request->hasFile('father_photo')){
+            $new_register->father_photo = $this->uploadFile($request->father_photo)['url'];
+        }
+        $new_register->update();
+        \DB::commit();
+
     }
     public function newRegisterStudent(Request $request){
         $request->validate([
@@ -71,7 +112,7 @@ class RegisterStudentController extends Controller
         $new_register->district = $request->district;
         $new_register->year_id = $this->getSchoolYearId($request);
         $new_register->school_id = $this->getSchoolId($request);
-        if($request->hasFile('student_name')){
+        if($request->hasFile('student_photo')){
             $new_register->student_photo = $this->uploadFile($request->student_photo)['url'];
         }if($request->hasFile('mother_photo')){
             $new_register->mother_photo = $this->uploadFile($request->mother_photo)['url'];
@@ -79,7 +120,15 @@ class RegisterStudentController extends Controller
             $new_register->father_photo = $this->uploadFile($request->father_photo)['url'];
         }
         $new_register->save();
+        SetRegisterno::where(['school_id'=>$this->getSchoolYearId($request),'year_id'=>$this->getSchoolId($request)])->increment('register_no');
         \DB::commit();
         return $this->ReS(["message"=>'Student Registered']);
     }   
+    public function dropRegisterStudent(Request $request,$register_id){
+        $delete = RegisterStudent::find($register_id)->delete();
+        if($delete)
+            return $this->ReS(["message"=>"Student Deleted"]);
+        else
+            return $this->ReE(["message"=>"Error Occured"]);
+    }
 }

@@ -24,8 +24,15 @@ export const TeacherLeftSide = ({assigned_class}) => {
         <div className="navbar-inner">
           <div className="collapse navbar-collapse" id="sidenav-collapse-main">
           <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link to="/teacher/dashboard" className="nav-link" >
+                    <i className="ni ni-ungroup text-orange" />
+                    <span className="nav-link-text">Dashboard</span>
+                  </Link>
+                </li>
+
              { assigned_class && assigned_class.map((classes,key) => {
-              return <li key={key} className="nav-item">
+                return <li key={key} className="nav-item">
                 <a className="nav-link collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls={key}>
                   <i className="ni ni-ungroup text-orange" />
                     {

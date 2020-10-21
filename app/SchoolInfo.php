@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SchoolInfo extends Model
 {
+    protected $fillable = [
+        'id','name', 'email', 'front_pic','location','message_code','package_type','unique_id_code','updated_at','year_id'
+    ];
     public function installments(){
         return $this->hasMany('App\FeeInstallments');
     }

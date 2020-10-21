@@ -6,7 +6,7 @@ import AddSubject from "../utils/AddSubject"
 import UpdateEmpID from "../utils/UpdateEmpID"
 import EmptyHeader from "../../utils/EmptyHeader"
 import ChangeYear from "../utils/ChangeYear"
-
+import SchoolChange from "../utils/SchoolChange"
 
 export default class AdminHomePage extends Component{
     render(){
@@ -15,6 +15,7 @@ export default class AdminHomePage extends Component{
              <EmptyHeader mainHeader="Setting"/>
                 <div className="container-fluid mt--6">
                 <div className="row">
+                    <SchoolChange />
                     <ChangeYear />
                     <UpdateEmpID />
                     <AddSubject />

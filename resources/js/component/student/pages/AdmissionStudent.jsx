@@ -22,11 +22,24 @@ import Swal from "sweetalert2";
 class AdmissionStudent extends Component {
   constructor(props) {
     super(props);
+    this.initialImages = {
+        student_photo: "",
+        father_photo: "",
+        mother_photo: "",
+        last_marksheet: "",
+        transfer_certificate: "",
+        income_certificate: "",
+        caste_certificate: "",
+        dob_certificate: "",
+        student_aadhar_card_photo: "",
+        father_aadhar_card_photo: "",
+    }
     this.initialData = {
       roll_no: "",
       class_id: "",
       student_name: "",
       father_name: "",
+      last_name:"",
       mother_name: "",
       father_qualification: "",
       mother_qualification: "",
@@ -57,9 +70,6 @@ class AdmissionStudent extends Component {
       dob_certificate: "",
       student_aadhar_card_photo: "",
       father_aadhar_card_photo: "",
-      remark1: "",
-      remark2: "",
-      remark3: "",
       age: "",
       student_address: "",
       block: "",
@@ -72,6 +82,7 @@ class AdmissionStudent extends Component {
     }
     this.state = {
       data: this.initialData,
+      images:this.initialImages,
       roll_no_placeholder:"Please Select Class",
       button_text: "Add Admission",
       title: "Admission Student",
@@ -105,18 +116,22 @@ class AdmissionStudent extends Component {
       }
     );
   }
-  onFileChange(e) {
+  async onFileChange(e) {
     const { name, files } = e.target;
     var value = files[0];
-    this.setState({
+    await this.setState({
       data: { ...this.state.data, [name]: value },
     });
+    await this.setState({
+      images: {...this.state.images,[name]: URL.createObjectURL(value)},
+    })
   }
   validate(data) {
     const errors = {};
     if (!data.roll_no) errors.roll_no = "Can't be blank";
     if (!data.father_name) errors.father_name = "Can't be blank";
     if (!data.mother_name) errors.mother_name = "Can't be blank";
+    if (!data.last_name) errors.last_name = "Can't be blank";
     if (!data.student_name) errors.student_name = "Can't be blank";
     if (!data.father_contact_no1) errors.father_contact_no1 = "Can't be blank";
     if (!data.class_id) errors.class_id = "Can't be blank";
@@ -130,7 +145,6 @@ class AdmissionStudent extends Component {
     if (!data.dob) errors.dob = "Can't be blank";
     if (!data.student_address) errors.student_address = "Can't be blank";
     if (!data.pincode) errors.pincode = "Can't be blank";
-    if (!data.place) errors.place = "Can't be blank";
     return errors;
   }
   async getRollNoSequence(class_id){
@@ -170,10 +184,12 @@ class AdmissionStudent extends Component {
       const { edit_student_id } = params;
       await api.adminclerk.student.getstudent(edit_student_id).then((data) => {
         const { studentInfo } = data;
+        var images = {};
         const temp_id = studentInfo.id;
         Object.keys(studentInfo["photos"]).map((item) => {
-          studentInfo[item] = studentInfo["photos"][item];
+          images[item] = studentInfo["photos"][item];
         });
+        console.log(images)
         Object.keys(studentInfo["documents"]).map((item) => {
           studentInfo[item] = studentInfo["documents"][item];
         });
@@ -186,17 +202,17 @@ class AdmissionStudent extends Component {
         delete studentInfo.photos;
         delete studentInfo.class;
 
-
         this.setState({
           data: studentInfo,
           update_student: true,
+          images:images,
           title: "Update Student",
           button_text: "Update Student",
         });
       });
     }
   }
-  submit() {
+  submit(){
     const { data,update_student } = this.state;
     const errors = this.validate(data);
     this.setState({ errors });
@@ -222,7 +238,7 @@ class AdmissionStudent extends Component {
         api.adminclerk.student.admission
           .add(formData)
           .then((data) => {
-            this.setState({ data:this.initialData, button_text: " Add Admission" });
+            this.setState({ data:this.initialData,images:this.initialImages,button_text: " Add Admission" });
             Swal.fire(
               "Data Inserted",
               "Student Successfully Added.",
@@ -237,7 +253,7 @@ class AdmissionStudent extends Component {
     }
   }
   render() {
-    const { data, errors, button_text, title, update_student,roll_no_placeholder } = this.state;
+    const { data, errors,images, button_text, title, update_student,roll_no_placeholder } = this.state;
     return (
       <div>
         <TopBreadCrumb mainHeader="Student" header="Admission" sub_header="Add">
@@ -290,6 +306,18 @@ class AdmissionStudent extends Component {
                     name="father_name"
                     onChange={this.onChange}
                     value={data.father_name}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md="4" sm="6">
+                <FormGroup>
+                  <FormLabel>Last Name*:</FormLabel>
+                  <Input
+                    errors={errors}
+                    placeholder="Last Name"
+                    name="last_name"
+                    onChange={this.onChange}
+                    value={data.last_name}
                   />
                 </FormGroup>
               </Col>
@@ -407,22 +435,10 @@ class AdmissionStudent extends Component {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4" sm="6">
-                <FormGroup>
-                  <FormLabel>Place*:</FormLabel>
-                  <Input
-                    name="place"
-                    errors={errors}
-                    onChange={this.onChange}
-                    placeholder="Place"
-                    value={data.place}
-                  />
-                </FormGroup>
-              </Col>
               {/* block */}
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Block:</FormLabel>
+                  <FormLabel>Block*:</FormLabel>
                   <Input
                     name="block"
                     errors={errors}
@@ -435,7 +451,7 @@ class AdmissionStudent extends Component {
               {/* district */}
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>District:</FormLabel>
+                  <FormLabel>District*:</FormLabel>
                   <Input
                     name="district"
                     errors={errors}
@@ -448,20 +464,53 @@ class AdmissionStudent extends Component {
               {/* state */}
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>State:</FormLabel>
-                  <Input
-                    name="state"
-                    errors={errors}
-                    onChange={this.onChange}
-                    placeholder="State"
-                    value={data.state}
-                  />
+                  <FormLabel>State*:</FormLabel>
+                  <Select errors={errors} name="state" onChange={this.onChange} value={data.state}>
+                    <option disabled={true} value="">-- Select --</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+                    <option value="Daman and Diu">Daman and Diu</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                    <option value="Puducherry">Puducherry</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                  </Select>
                 </FormGroup>
               </Col>
               {/* landmark */}
               <Col md="4" sm="6">
                 <FormGroup>
-                  <FormLabel>Landmark:</FormLabel>
+                  <FormLabel>Landmark*:</FormLabel>
                   <Input
                     name="landmark"
                     errors={errors}
@@ -716,7 +765,7 @@ class AdmissionStudent extends Component {
                   />
                 </FormGroup>
               </Col>
-              <Col md="4" sm="6">
+              {/* <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Father/Mother Login:</FormLabel>
                   <Input
@@ -727,160 +776,120 @@ class AdmissionStudent extends Component {
                     placeholder="Parent Login"
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
             </Row>
-            <Row>
-              <RedLabel>Remarks:</RedLabel>
-            </Row>
-            <Row>
-              <Col md="4" sm="6">
-                <FormGroup>
-                  <FormLabel>Remark 1:</FormLabel>
-                  <Input
-                    errors={errors}
-                    name="remark1"
-                    onChange={this.onChange}
-                    value={data.remark1}
-                    placeholder="Remark 1"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="4" sm="6">
-                <FormGroup>
-                  <FormLabel>Remark 2:</FormLabel>
-                  <Input
-                    errors={errors}
-                    name="remark2"
-                    onChange={this.onChange}
-                    value={data.remark2}
-                    placeholder="Remark 2"
-                  />
-                </FormGroup>
-              </Col>
-              <Col md="4" sm="6">
-                <FormGroup>
-                  <FormLabel>Remark 3:</FormLabel>
-                  <Input
-                    errors={errors}
-                    name="remark3"
-                    onChange={this.onChange}
-                    value={data.remark3}
-                    placeholder="Remark 3"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
+           <Row>
               <RedLabel>Student Photos:</RedLabel>
             </Row>
             <Row>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Student Photo:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="student_photo"
-                    value={data.student_photo}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.student_photo} />
+                  <PreviewSingleImage url={images.student_photo} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Father Photo:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="father_photo"
-                    value={data.father_photo}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.father_photo} />
+                  <PreviewSingleImage url={images.father_photo} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Mother Photo:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="mother_photo"
-                    value={data.mother_photo}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.mother_photo} />
+                  <PreviewSingleImage url={images.mother_photo} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Last Marksheet:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="last_marksheet"
-                    value={data.last_marksheet}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.last_marksheet} />
+                  <PreviewSingleImage url={images.last_marksheet} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Transfer Certificate:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="transfer_certificate"
-                    value={data.transfer_certificate}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.transfer_certificate} />
+                  <PreviewSingleImage url={images.transfer_certificate} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Income Certificate:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="income_certificate"
-                    value={data.income_certificate}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.income_certificate} />
+                  <PreviewSingleImage url={images.income_certificate} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Cast Certificate:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="caste_certificate"
-                    value={data.caste_certificate}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.caste_certificate} />
+                  <PreviewSingleImage url={images.caste_certificate} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>DOB Certificate:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="dob_certificate"
-                    value={data.income_certificate}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.income_certificate} />
+                  <PreviewSingleImage url={images.dob_certificate} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Student Aadhar Card:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="student_aadhar_card_photo"
-                    value={data.student_aadhar_card_photo}
                     onChange={this.onFileChange}
                   />
-                  <PreviewSingleImage url={data.student_aadhar_card_photo} />
+                  <PreviewSingleImage url={images.student_aadhar_card_photo} />
                 </FormGroup>
               </Col>
               <Col md="4" sm="6">
                 <FormGroup>
                   <FormLabel>Father Aadhar Card:</FormLabel>
-                  <UploadImage
+                  <Input
+                    type="file"
                     name="father_aadhar_card_photo"
-                    value={data.father_aadhar_card_photo}
                     onChange={this.onFileChange}
                   />
+                  <PreviewSingleImage url={images.father_aadhar_card_photo} />
                 </FormGroup>
               </Col>
             </Row>

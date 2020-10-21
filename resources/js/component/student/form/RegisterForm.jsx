@@ -5,20 +5,21 @@ import Col from "../../utils/Col"
 
 import CardComponent from "../../utils/CardComponent"
 import BodyComponent from "../../utils/BodyComponent"
-import {FormLabel,FormGroup,Input,UploadImage,UploadInput,Button, Select, SelectOption} from "../../utils/Components"
+import {FormLabel,FormGroup,Input,UploadImage,UploadInput,Button, Select, SelectOption,PreviewSingleImage} from "../../utils/Components"
 import AdminStudentHeader from "../../header/admin/AdminStudentHeader"
 import GetClassId from "../../utils/GetClassId"
 import {getClassSection} from "../../actions/classes"
 import { connect } from "react-redux";
 import Swal from "sweetalert2"
 import YearSelectComponent from "../../utils/YearSelectComponent"
-class RegisterPage extends Component{
+import api from "../../api"
+class RegisterForm extends Component{
     constructor(props){
         super(props)
         this.state = {
            button_text:"Register Student",
            data: {
-            register_no:"",
+            register_no:null,
             classes:"",
             student_name:"",
             mother_name:"",
@@ -37,17 +38,33 @@ class RegisterPage extends Component{
             mother_photo:"",
             father_photo:"",
             select_year:""
-        }
+            },
         }
         this.onChange = this.onChange.bind(this)
         this.fileChange = this.fileChange.bind(this)
         this.submit = this.submit.bind(this)
     }
-    componentDidMount(){
+    async componentWillReceiveProps(){
+        const {register_student} = this.props
+        console.log(register_student.father_photo)
+        if(register_student != null){
+            await this.setState({data:register_student,button_text:"Update Student"})
+            await this.setState({
+                data: {...this.state.data,["classes"]: register_student.class}
+            })   
+        }
+    }
+    async componentDidMount(){
         const {classes,getClassSection} = this.props
         if(Object.keys(classes).length == 0){
             getClassSection();
         }
+        await api.admin.student.getRegisterNo().then(data => {
+            const {register_no} = data
+            this.setState({
+                data: {...this.state.data,["register_no"]: register_no}
+            })
+        });
     }
 
     onChange(e){
@@ -65,13 +82,15 @@ class RegisterPage extends Component{
     validate(data){
         const errors = {};
         if (!data.classes) errors.classes = "Can't be blank";
-        if (!data.register_no) errors.register_no = "Can't be blank";
         if (!data.student_name) errors.student_name = "Can't be blank";
         if (!data.father_name) errors.father_name = "Can't be blank";
         if (!data.father_contact_no1) errors.father_contact_no1 = "Can't be blank";
         if (!data.dob) errors.dob = "Can't be blank";
         if (!data.gender) errors.gender = "Can't be blank";
         if (!data.student_address) errors.student_address = "Can't be blank";
+        if(data.register_no == null){
+            errors.register_no = "Invalid Register No";   
+        }
         return errors;
     }
     submit(){
@@ -79,39 +98,68 @@ class RegisterPage extends Component{
         const errors = this.validate(data)
         this.setState({ errors })
         if(Object.keys(errors).length == 0){
-            this.setState({
-              button_text:"Registering Student ..."
-            })
-            this.props.newRegisterStudent(data).then(data => {
+            if(this.props.register_student == null){
                 this.setState({
-                    button_text:"Register Student",
-                    data: {
-                        register_no:"",
-                        classes:"",
-                        student_name:"",
-                        mother_name:"",
-                        father_name:"",
-                        father_contact_no1:"",
-                        father_contact_no2:"",
-                        dob:"",
-                        gender:"male",
-                        doA:"",
-                        student_address:"",
-                        block:"",
-                        district:"",
-                        state:"",
-                        pincode:"",
-                        student_photo:"",
-                        mother_photo:"",
-                        father_photo:"",
-                    }
+                button_text:"Registering Student ..."
                 })
-                Swal.fire("Success","New Student Registered.","success");
-            })
+
+                this.props.newRegisterStudent(data).then(data => {
+                    this.setState({
+                        button_text:"Register Student",
+                        data: {
+                            register_no:"",
+                            classes:"",
+                            student_name:"",
+                            mother_name:"",
+                            father_name:"",
+                            father_contact_no1:"",
+                            father_contact_no2:"",
+                            dob:"",
+                            gender:"male",
+                            doA:"",
+                            student_address:"",
+                            block:"",
+                            district:"",
+                            state:"",
+                            pincode:"",
+                            student_photo:"",
+                            mother_photo:"",
+                            father_photo:"",
+                        }
+                    })
+                    Swal.fire("Success","New Student Registered.","success");
+                    api.admin.student.getRegisterNo().then(data => {
+                        const {register_no} = data
+                        this.setState({
+                            data: {...this.state.data,["register_no"]: register_no}
+                        })
+                    });
+                })
+            }
+            else{
+                this.setState({
+                    button_text:"Updating Student..."
+                })
+                this.props.updateRegisterStudent(data).then(data => {
+                    this.setState({
+                        button_text:"Update Student",
+                    })
+                    Swal.fire("Success","Student Updated.","success");
+                    // api.admin.student.getRegisterNo().then(data => {
+                    //     const {register_no} = data
+                    //     this.setState({
+                    //         data: {...this.state.data,["register_no"]: register_no}
+                    //     })
+                    // });
+                })
+            }
+
+            
         }
     }
     render(){
-        const {classes} = this.props
+        const {classes,register_student} = this.props
+        // console.log(register_student.father_photo)
         const {data,errors,button_text} = this.state
         return(
             <div>
@@ -121,19 +169,28 @@ class RegisterPage extends Component{
                                  <FormLabel>
                                     Select Class
                                  </FormLabel>
+
+                                 {register_student == null ?
                                  <Select errors={errors} name="classes" value={data.classes} onChange={this.onChange}>
                                      <SelectOption>-- Select --</SelectOption>
+                                    
                                     {Object.keys(classes).length > 0 && classes.map(data => {
                                         return <SelectOption value={data}>{data}</SelectOption>
                                     })}
                                  </Select>
+                                 :  
+                                    <div>
+                                        <FormGroup>
+                                           {this.props.register_student.class}
+                                        </FormGroup>
+                                    </div>
+                                }
                              </FormGroup>
                             </Col>
                             <Col md="4" sm="4">
                             <FormGroup>
                                 <FormLabel>Register No.</FormLabel>
-                                <Input  errors={errors} type="number" value={data.register_no} onChange={this.onChange} name="register_no"  placeholder="Register No." />
-
+                                <Input  errors={errors} disabled={true} type="number" value={data.register_no} onChange={this.onChange} name="register_no"  placeholder="Register No." />
                             </FormGroup>
                             </Col>   
                             <Col md="4" sm="4">
@@ -232,12 +289,16 @@ class RegisterPage extends Component{
                                 <FormGroup>
                                     <FormLabel>Student Photo</FormLabel>
                                     <UploadImage name="student_photo"  onChange={this.fileChange}/>
+                                {this.props.register_student != null && <img src={this.props.register_student.student_photo} className="img img-thumbnail img-fluid"/>}
+
                                 </FormGroup>
                             </Col>
                             <Col md="4" sm="4">
                                 <FormGroup>
                                     <FormLabel>Mother Photo</FormLabel>
                                     <UploadImage name="mother_photo" onChange={this.fileChange}/>
+                                {this.props.register_student != null && <img src={this.props.register_student.mother_photo} className="img img-thumbnail img-fluid"/>}
+
                                 </FormGroup>
                             </Col>
                             <Col md="4" sm="4">
@@ -245,6 +306,7 @@ class RegisterPage extends Component{
                                     <FormLabel>Father Photo</FormLabel>
                                     <UploadImage name="father_photo" onChange={this.fileChange}/>
                                 </FormGroup>
+                                {this.props.register_student != null && <img src={this.props.register_student.father_photo} className="img img-thumbnail img-fluid"/>}
                             </Col>
                         </Row>
                         <Row>
@@ -262,4 +324,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps,{getClassSection})(RegisterPage);
+export default connect(mapStateToProps,{getClassSection})(RegisterForm);

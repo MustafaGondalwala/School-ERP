@@ -8,10 +8,21 @@ use \DB;
 use App\User;
 use App\Classes;
 use App\StudentInfo;
+use App\StudentHomeWork;
+use App\QuestionPaper;
+use App\StudyMaterialGroups;
 
 class TeacherController extends Controller
 {
 
+    public function dashboardHome(Request $request){
+        $teacher = $request->user()->teacher()->first();
+        $classes = Classes::select('class_title','section','id','time_table_id')->where('assigned_teacher_id',$teacher->id)->get();
+        $homework = StudentHomeWork::where(["teacher_id"=>$teacher->id])->count();
+        $question = QuestionPaper::where(["created_by_id"=>$teacher->id])->count();
+        $studyMaterialGroups = StudyMaterialGroups::where(["teacher_id"=>$teacher->id])->count();
+        return $this->ReS(["teacher"=>$teacher,"classes"=>$classes,"homework"=>$homework,"question"=>$question,"studyMaterialGroups"=>$studyMaterialGroups]);
+    }
     public function getClasses(Request $request,$class_id){
         $school_id = $this->getSchoolId($request);
         

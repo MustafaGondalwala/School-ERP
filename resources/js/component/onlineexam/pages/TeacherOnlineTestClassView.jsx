@@ -3,6 +3,7 @@ import TopBreadCrumb from "../../utils/TopBreadcrumb"
 import TeacherHeader from "../header/TeacherHeader"
 import BodyComponent from "../../utils/BodyComponent"
 import CardComponent from "../../utils/CardComponent"
+import EmptyHeader from "../../utils/EmptyHeader"
 import api from "../../api"
 import { Table, Thead } from "../../utils/Components"
 
@@ -27,9 +28,7 @@ class TeacherOnlineTestClassView extends Component{
         const {class_id} = this.props.match.params
         return(
             <div>
-                <TopBreadCrumb mainHeader="OnlineExam" header="View Current OnlineTest">
-                    <TeacherHeader />
-                </TopBreadCrumb>
+                <EmptyHeader mainHeader="OnlineExam" header="View Current OnlineTest" />
                 <BodyComponent>
                     <CardComponent title="View Current Online Test" back_link={"/teacher/online-exam/class/"+class_id}>
                     { onlineExam ? <Table>

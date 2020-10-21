@@ -109,7 +109,7 @@ class OnlineExamController extends Controller
                 "school_id"=>$school_id,
                 'year_id'=>$year_id,
                 'exam_type'=> 1
-                ])->get();
+                ])->where("exam_date","<=",\Carbon\Carbon::now())->get();
     }
     function getOnlineExamMonthlyTest(Request $request){
         $school_id = $this->getSchoolId($request);

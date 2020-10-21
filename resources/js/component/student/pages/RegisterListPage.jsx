@@ -8,7 +8,7 @@ import Col from "../../utils/Col";
 import Row from "../../utils/Row";
 import SelectStudent from "../../utils/SelectStudent";
 import { CSVLink } from "react-csv";
-
+import Swal from "sweetalert2"
 import {
   FormGroup,
   FormLabel,
@@ -106,7 +106,7 @@ class RegisterListPage extends Component {
             </Row>
           </CardComponent>
           {register_students && (
-            <ViewRegisterTable register_students={register_students} />
+            <ViewRegisterTable history={this.props.history} register_students={register_students} />
           )}
         </BodyComponent>
       </div>
@@ -120,6 +120,7 @@ class ViewRegisterTable extends Component {
     this.state = {
       row:""
     }
+    this.buttonClick = this.buttonClick.bind(this)
   }
 
   onGridReady(params) {
@@ -131,8 +132,31 @@ class ViewRegisterTable extends Component {
     this.setState({row})
   }
   buttonClick(e){
-    // const type = e.target.getAttribute('type')
-    // const row_id = e.target
+    const type = e.target.getAttribute('type')
+    const row_id = e.target.getAttribute('row_id')
+    
+    console.log(type,row_id,this.prop,this.props)
+    if(type == 'edit'){
+      this.props.history.push('/admin/student/register-student/'+row_id);
+    }else if(type == "drop"){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, drop student!'
+      }).then((result) => {
+        if (result) {
+          api.adminclerk.student.register.drop(row_id).then(data => {
+            const {message} = data
+            Swal.fire("Success",message,"success")
+            window.location.reload();
+          })
+        }
+      })
+    }
   }
   render() {
     const { register_students } = this.props;

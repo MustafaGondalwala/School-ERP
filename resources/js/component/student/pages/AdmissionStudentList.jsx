@@ -45,6 +45,7 @@ class AdmissionStudentList extends React.Component {
     this.setState({
       loading: true,
       students: "",
+      class_id:class_id
     });
     api.adminclerk.student.listByClassId(class_id).then((data) => {
       const { students } = data;
@@ -55,7 +56,7 @@ class AdmissionStudentList extends React.Component {
     });
   }
   render() {
-    const { students, loading } = this.state;
+    const { students, loading,class_id } = this.state;
     return (
       <div>
         <TopBreadCrumb
@@ -67,7 +68,7 @@ class AdmissionStudentList extends React.Component {
         </TopBreadCrumb>
         <BodyComponent>
           <CardComponent title="Select Class" back_link="/admin/student">
-            <GetClassId sendClassId={this.sendClassId} errors="" />
+            <GetClassId class_id={class_id} sendClassId={this.sendClassId} errors="" />
           </CardComponent>
           {loading && (
             <CardComponent title="Loading ...">
@@ -253,12 +254,6 @@ class ViewRegisterTable extends React.Component {
       {
         headerName: "Student Address",
         field: "address.student_address",
-        sortable: true,
-        filter: true,
-      },
-      {
-        headerName: "Place",
-        field: "address.place",
         sortable: true,
         filter: true,
       },

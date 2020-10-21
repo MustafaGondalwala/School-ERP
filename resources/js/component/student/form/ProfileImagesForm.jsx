@@ -66,7 +66,6 @@ export default class ProfileImagesForm extends Component{
                                     <td><PreviewSingleImage url={photos.last_marksheet}/></td>
                                     <td><PreviewSingleImage url={photos.transfer_certificate}/></td>
                                     <td><PreviewSingleImage url={photos.income_certificate}/></td>
-
                                     <td><PreviewSingleImage url={photos.caste_certificate}/></td>
                                     <td><PreviewSingleImage url={photos.dob_certificate}/></td>
                                     <td><PreviewSingleImage url={photos.student_aadhar_card_photo}/></td>
